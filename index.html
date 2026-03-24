@@ -125,23 +125,24 @@ html, body {
   border-top: 1.5px solid var(--line);
   background: var(--g0);
   flex-shrink: 0;
+  min-height: 72px;
 }
 .ntab {
   flex: 1; display: flex; flex-direction: column;
-  align-items: center; gap: 4px;
-  padding: 11px 6px 10px; cursor: pointer;
+  align-items: center; gap: 6px;
+  padding: 15px 6px 13px; cursor: pointer;
   font-size: 9px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase;
-  color: rgba(255,255,255,0.35);
+  color: rgba(255,255,255,0.3);
   transition: color 0.16s; position: relative;
 }
-.ntab svg { width: 18px; height: 18px; stroke: currentColor; fill: none; transition: stroke 0.16s; }
+.ntab svg { width: 22px; height: 22px; stroke: currentColor; fill: none; transition: stroke 0.16s; }
 .ntab.on  { color: var(--w); }
 .ntab.on svg { stroke: var(--o); }
-.ntab.on::after { content: ''; position: absolute; bottom: 0; left: 25%; right: 25%; height: 1.5px; background: var(--o); }
+.ntab.on::after { content: ''; position: absolute; bottom: 0; left: 20%; right: 20%; height: 2px; background: var(--o); }
 .ntab .badge {
-  position: absolute; top: 8px; right: calc(50% - 16px);
+  position: absolute; top: 10px; right: calc(50% - 18px);
   background: var(--o); color: white;
-  width: 16px; height: 16px; border-radius: 50%;
+  width: 17px; height: 17px; border-radius: 50%;
   font-size: 9px; font-weight: 900; letter-spacing: 0;
   display: none; align-items: center; justify-content: center;
 }
@@ -265,26 +266,50 @@ html, body {
 /* Camp card */
 .camp-card {
   display: flex; align-items: center;
-  border-bottom: 1px solid rgba(232,72,28,0.18);
-  cursor: pointer; padding: 16px 0; transition: background 0.16s; gap: 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  cursor: pointer; padding: 20px 0; transition: background 0.16s; gap: 18px;
 }
-.camp-card:first-child { border-top: 1px solid rgba(232,72,28,0.18); }
-.camp-card:hover { background: var(--w1); margin: 0 -12px; padding: 16px 12px; }
-.card-box { width: 68px; height: 68px; border: 1.5px solid var(--w2); background: var(--g1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.card-body    { flex: 1; }
-.card-type    { font-size: 9px; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; color: var(--o); margin-bottom: 3px; }
-.card-name    { font-size: 18px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 3px; }
-.card-loc     { font-size: 11px; color: var(--w5); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 8px; }
-.card-foot    { display: flex; justify-content: space-between; align-items: center; }
-.card-stats   { font-size: 11px; color: var(--w5); font-weight: 600; }
-.card-pnum    { font-size: 19px; font-weight: 800; color: var(--o); line-height: 1; text-align: right; }
-.card-punit   { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; color: var(--w5); text-transform: uppercase; text-align: right; }
-.card-chevron { width: 28px; height: 28px; border: 1.5px solid var(--w2); flex-shrink: 0; position: relative; transition: border-color 0.15s; }
-.card-chevron::before { content:''; position:absolute; width:10px; height:1.5px; background:rgba(255,255,255,0.4); top:50%; left:50%; transform:translate(-50%,-50%); }
-.card-chevron::after  { content:''; position:absolute; width:1.5px; height:10px; background:rgba(255,255,255,0.4); top:50%; left:50%; transform:translate(-50%,-50%); }
+.camp-card:first-child { border-top: 1px solid rgba(255,255,255,0.07); }
+.camp-card:hover { background: var(--w1); margin: 0 -12px; padding: 20px 12px; }
+.card-box {
+  width: 64px; height: 64px; flex-shrink: 0;
+  background: var(--g1);
+  border-left: 2.5px solid var(--o);
+  display: flex; align-items: center; justify-content: center;
+}
+.card-body    { flex: 1; min-width: 0; }
+.card-type    { font-size: 8px; font-weight: 900; letter-spacing: 0.26em; text-transform: uppercase; color: var(--o); margin-bottom: 5px; }
+.card-name    { font-size: 19px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card-loc     { font-size: 10px; color: rgba(255,255,255,0.38); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; }
+.card-foot    { display: flex; justify-content: space-between; align-items: baseline; }
+.card-stats   { font-size: 11px; color: rgba(255,255,255,0.45); font-weight: 600; letter-spacing: 0.02em; }
+.card-pnum    { font-size: 22px; font-weight: 800; color: var(--o); line-height: 1; text-align: right; letter-spacing: -0.02em; }
+.card-punit   { font-size: 8px; font-weight: 800; letter-spacing: 0.14em; color: rgba(255,255,255,0.35); text-transform: uppercase; text-align: right; margin-top: 2px; }
+.card-chevron {
+  width: 32px; height: 32px; flex-shrink: 0;
+  border: 1.5px solid rgba(255,255,255,0.14);
+  position: relative; transition: border-color 0.15s;
+  display: flex; align-items: center; justify-content: center;
+}
+/* Arrow → shaft + head */
+.card-chevron::before {
+  content:''; position:absolute;
+  width:10px; height:1.5px;
+  background:rgba(255,255,255,0.35);
+  left:8px; top:50%; transform:translateY(-50%);
+}
+.card-chevron::after {
+  content:''; position:absolute;
+  width:6px; height:6px;
+  border-right:1.5px solid rgba(255,255,255,0.35);
+  border-top:1.5px solid rgba(255,255,255,0.35);
+  background:transparent;
+  right:9px; top:50%;
+  transform:translateY(-50%) rotate(45deg);
+}
 .camp-card:hover .card-chevron { border-color: var(--o); }
-.camp-card:hover .card-chevron::before,
-.camp-card:hover .card-chevron::after { background: var(--o); }
+.camp-card:hover .card-chevron::before { background: var(--o); }
+.camp-card:hover .card-chevron::after  { border-color: var(--o); }
 
 /* ══════════════════════════════════════════════
    MAP SCREEN  — map fills the whole screen,
