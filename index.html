@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Campgrounder — Find Your Perfect Campsite</title>
+<meta name="description" content="Find campgrounds at state parks, private sites, glamping and more.">
+<meta name="theme-color" content="#0C1F15">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Campgrounder">
+<link rel="manifest" href="/manifest.json">
+<meta property="og:title" content="Campgrounder — Find Your Perfect Campsite">
+<meta property="og:description" content="Find your perfect campsite. State parks, private, glamping and more.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://campgrounder.io">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<!--
+  MAP PROVIDER NOTE:
+  Currently using ESRI World Dark Gray (free, no API key required).
+  To switch to Google Maps, replace initMap() with Google Maps JS API:
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE&callback=initMap" async></script>
+  For Apple MapKit JS:
+    <script src="https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js"></script>
+    mapkit.init({ authorizationCallback: done => done('YOUR_JWT_TOKEN') })
+-->
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --g0: #0C1F15;
+  --g1: #132B1C;
+  --g2: #1E3D2A;
+  --o:  #E8481C;
+  --w:  #FFFFFF;
+  --w5: rgba(255,255,255,0.5);
+  --w2: rgba(255,255,255,0.18);
+  --w1: rgba(255,255,255,0.07);
+  --line: rgba(232,72,28,0.55);
+}
+
+html, body {
+  height: 100%; overflow: hidden;
+  background: var(--g0);
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: var(--w);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── SCREENS ─────────────────────────────────── */
+.screen {
+  position: fixed; inset: 0;
+  display: flex; flex-direction: column;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  transform: translateY(8px);
+  overflow: hidden;
+  background: var(--g0);
+}
+.screen.active { opacity: 1; pointer-events: all; transform: translateY(0); z-index: 10; }
+
+/* ── PLUS / X BUTTONS ────────────────────────── */
+.xbtn {
+  width: 40px; height: 40px; flex-shrink: 0;
+  border: 1.5px solid var(--w2);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; position: relative;
+  transition: border-color 0.16s, background 0.16s;
+  background: transparent;
+}
+.xbtn::before, .xbtn::after {
+  content: ''; position: absolute;
+  background: rgba(255,255,255,0.7);
+  transition: background 0.16s;
+}
+.xbtn::before { width: 15px; height: 1.5px; }
+.xbtn::after  { width: 1.5px; height: 15px; }
+.xbtn:hover   { border-color: var(--o); background: rgba(232,72,28,0.07); }
+.xbtn:hover::before, .xbtn:hover::after { background: var(--o); }
+.xbtn.is-close { transform: rotate(45deg); }
+.xbtn.dark-bg  { background: rgba(12,31,21,0.88); backdrop-filter: blur(12px); }
+
+/* ── PILLS ────────────────────────────────────── */
+.pill {
+  padding: 8px 16px; border: 1.5px solid var(--w2);
+  font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--w5); cursor: pointer; white-space: nowrap;
+  transition: all 0.15s; background: transparent; flex-shrink: 0;
+}
+.pill:hover { border-color: rgba(255,255,255,0.5); color: var(--w); }
+.pill.on    { background: var(--o); border-color: var(--o); color: var(--w); }
+
+/* ── SEARCH BAR ───────────────────────────────── */
+.sbar {
+  flex: 1; display: flex; align-items: center;
+  border: 1.5px solid var(--w2);
+  transition: border-color 0.16s;
+}
+.sbar:focus-within { border-color: var(--o); }
+.sbar input {
+  flex: 1; background: none; border: none;
+  padding: 13px 0 13px 16px;
+  font-family: inherit; font-size: 15px; font-weight: 500;
+  color: var(--w); outline: none; letter-spacing: 0.01em;
+}
+.sbar input::placeholder { color: rgba(255,255,255,0.28); font-weight: 400; }
+.sbar-icon { padding: 0 14px; display: flex; align-items: center; }
+
+/* ── BOTTOM NAV ───────────────────────────────── */
+.bnav {
+  display: flex;
+  border-top: 1.5px solid var(--line);
+  background: var(--g0);
+  flex-shrink: 0;
+}
+.ntab {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; gap: 4px;
+  padding: 11px 6px 10px; cursor: pointer;
+  font-size: 9px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  transition: color 0.16s; position: relative;
+}
+.ntab svg { width: 18px; height: 18px; stroke: currentColor; fill: none; transition: stroke 0.16s; }
+.ntab.on  { color: var(--w); }
+.ntab.on svg { stroke: var(--o); }
+.ntab.on::after { content: ''; position: absolute; bottom: 0; left: 25%; right: 25%; height: 1.5px; background: var(--o); }
+.ntab .badge {
+  position: absolute; top: 8px; right: calc(50% - 16px);
+  background: var(--o); color: white;
+  width: 16px; height: 16px; border-radius: 50%;
+  font-size: 9px; font-weight: 900; letter-spacing: 0;
+  display: none; align-items: center; justify-content: center;
+}
+.ntab .badge.show { display: flex; }
+
+/* ── SAVE ANIMATION ─────────────────────────── */
+@keyframes savePop { 0%{transform:scale(1)} 40%{transform:scale(1.4)} 100%{transform:scale(1)} }
+.save-pop { animation: savePop 0.26s ease; }
+
+/* ── TOAST ───────────────────────────────────── */
+#toast {
+  position: fixed; bottom: 88px; left: 50%;
+  transform: translateX(-50%) translateY(16px);
+  background: var(--o); color: white;
+  padding: 10px 22px;
+  font-size: 11px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase;
+  opacity: 0; transition: opacity 0.2s, transform 0.2s;
+  pointer-events: none; z-index: 9999; white-space: nowrap;
+}
+#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ── USER LOCATION PULSE ─────────────────────── */
+@keyframes locPulse { 0%{transform:scale(1);opacity:0.7} 100%{transform:scale(2.8);opacity:0} }
+.loc-dot-wrap { position: relative; width: 18px; height: 18px; }
+.loc-pulse {
+  position: absolute; inset: 0;
+  background: #E8481C; border-radius: 50%; opacity: 0.7;
+  animation: locPulse 1.6s ease-out infinite;
+}
+.loc-dot {
+  position: absolute; inset: 3px;
+  background: var(--o); border: 2px solid white;
+  border-radius: 50%; z-index: 1;
+}
+
+/* ══════════════════════════════════════════════
+   HOME
+══════════════════════════════════════════════ */
+#home { background: var(--g0); }
+
+.home-top {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  padding: 52px 24px 0;
+}
+.wordmark { font-size: 10px; font-weight: 800; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-top: 6px; }
+
+.home-hero { flex: 1; padding: 16px 24px 0; display: flex; flex-direction: column; justify-content: center; }
+.hero-title {
+  font-size: clamp(60px, 16vw, 100px);
+  font-weight: 800; line-height: 0.87; letter-spacing: -0.04em;
+  margin-bottom: 28px; margin-top: 8px;
+}
+.hero-title .o { color: var(--o); }
+
+.home-search-row { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.filter-scroll { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+.filter-scroll::-webkit-scrollbar { display: none; }
+
+.cat-section { padding: 18px 0 0; }
+.section-eyebrow { font-size: 10px; font-weight: 800; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.35); padding: 0 24px; }
+.cat-grid { display: grid; grid-template-columns: 1fr 1fr; border-top: 1.5px solid var(--line); margin-top: 14px; }
+.cat-cell {
+  padding: 22px 20px 20px;
+  border-right: 1.5px solid var(--line); border-bottom: 1.5px solid var(--line);
+  cursor: pointer; transition: background 0.18s;
+  display: flex; flex-direction: column; justify-content: space-between;
+  min-height: 108px; position: relative;
+}
+.cat-cell:nth-child(even) { border-right: none; }
+.cat-cell:hover { background: rgba(232,72,28,0.05); }
+.cat-name { font-size: 17px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; margin-top: 12px; }
+.cat-plus { position: absolute; top: 12px; right: 14px; width: 18px; height: 18px; opacity: 0.3; transition: opacity 0.18s; }
+.cat-plus::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 1.5px; background: var(--o); transform: translateY(-50%); }
+.cat-plus::after  { content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 1.5px; background: var(--o); transform: translateX(-50%); }
+.cat-cell:hover .cat-plus { opacity: 1; }
+
+/* ══════════════════════════════════════════════
+   SEARCH OVERLAY
+══════════════════════════════════════════════ */
+#search-overlay { z-index: 200; }
+.search-ov-top { padding: 52px 24px 20px; display: flex; align-items: center; gap: 12px; }
+.sug-eyebrow { font-size: 10px; font-weight: 800; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.35); padding: 0 24px 12px; }
+.sug-item {
+  display: flex; align-items: center; gap: 16px;
+  padding: 14px 24px; border-bottom: 1px solid rgba(255,255,255,0.05);
+  cursor: pointer; transition: background 0.14s;
+}
+.sug-item:hover { background: var(--w1); }
+.sug-box { width: 36px; height: 36px; border: 1.5px solid var(--w2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.sug-name { font-size: 16px; font-weight: 700; letter-spacing: -0.01em; }
+.sug-sub  { font-size: 11px; color: var(--w5); margin-top: 3px; letter-spacing: 0.05em; text-transform: uppercase; }
+
+/* ══════════════════════════════════════════════
+   RESULTS
+══════════════════════════════════════════════ */
+#results { background: var(--g0); }
+.results-top { padding: 52px 24px 0; display: flex; align-items: center; gap: 10px; }
+.results-meta {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 16px 24px 12px; border-bottom: 1px solid var(--line);
+}
+.results-count { font-size: 11px; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+.view-toggle { display: flex; border: 1.5px solid var(--w2); }
+.vbtn { padding: 7px 16px; font-size: 10px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--w5); cursor: pointer; transition: all 0.15s; }
+.vbtn.on { background: var(--o); color: var(--w); }
+.results-filters { display: flex; gap: 8px; padding: 14px 24px 0; overflow-x: auto; scrollbar-width: none; }
+.results-filters::-webkit-scrollbar { display: none; }
+.results-scroll { flex: 1; overflow-y: auto; padding: 0 24px 24px; display: flex; flex-direction: column; scrollbar-width: thin; scrollbar-color: rgba(232,72,28,0.2) transparent; }
+
+/* No results state */
+.no-results {
+  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 0; padding: 40px 24px; text-align: center;
+}
+.no-results-x { width: 44px; height: 44px; position: relative; margin-bottom: 22px; opacity: 0.2; }
+.no-results-x::before { content:''; position:absolute; width:100%; height:3px; background:var(--o); top:50%; transform:translateY(-50%) rotate(45deg); border-radius:2px; }
+.no-results-x::after  { content:''; position:absolute; width:100%; height:3px; background:var(--o); top:50%; transform:translateY(-50%) rotate(-45deg); border-radius:2px; }
+.no-results-title { font-size: 20px; font-weight: 800; letter-spacing: -0.02em; color: rgba(255,255,255,0.5); margin-bottom: 8px; }
+.no-results-sub   { font-size: 13px; color: rgba(255,255,255,0.3); }
+
+/* Camp card */
+.camp-card {
+  display: flex; align-items: center;
+  border-bottom: 1px solid rgba(232,72,28,0.18);
+  cursor: pointer; padding: 16px 0; transition: background 0.16s; gap: 16px;
+}
+.camp-card:first-child { border-top: 1px solid rgba(232,72,28,0.18); }
+.camp-card:hover { background: var(--w1); margin: 0 -12px; padding: 16px 12px; }
+.card-box { width: 68px; height: 68px; border: 1.5px solid var(--w2); background: var(--g1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.card-body    { flex: 1; }
+.card-type    { font-size: 9px; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; color: var(--o); margin-bottom: 3px; }
+.card-name    { font-size: 18px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 3px; }
+.card-loc     { font-size: 11px; color: var(--w5); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 8px; }
+.card-foot    { display: flex; justify-content: space-between; align-items: center; }
+.card-stats   { font-size: 11px; color: var(--w5); font-weight: 600; }
+.card-pnum    { font-size: 19px; font-weight: 800; color: var(--o); line-height: 1; text-align: right; }
+.card-punit   { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; color: var(--w5); text-transform: uppercase; text-align: right; }
+.card-chevron { width: 28px; height: 28px; border: 1.5px solid var(--w2); flex-shrink: 0; position: relative; transition: border-color 0.15s; }
+.card-chevron::before { content:''; position:absolute; width:10px; height:1.5px; background:rgba(255,255,255,0.4); top:50%; left:50%; transform:translate(-50%,-50%); }
+.card-chevron::after  { content:''; position:absolute; width:1.5px; height:10px; background:rgba(255,255,255,0.4); top:50%; left:50%; transform:translate(-50%,-50%); }
+.camp-card:hover .card-chevron { border-color: var(--o); }
+.camp-card:hover .card-chevron::before,
+.camp-card:hover .card-chevron::after { background: var(--o); }
+
+/* ══════════════════════════════════════════════
+   MAP SCREEN  — map fills the whole screen,
+   topbar + drawer float over it as overlays
+══════════════════════════════════════════════ */
+#map-screen { background: var(--g0); }
+
+/* The actual Leaflet map — absolute fill behind overlays */
+#leaflet-map {
+  position: absolute;
+  inset: 0;
+  bottom: 0; /* will be adjusted by JS once we know nav/drawer heights */
+}
+
+.map-topbar {
+  position: absolute; top: 0; left: 0; right: 0; z-index: 500;
+  padding: 52px 24px 16px;
+  background: linear-gradient(to bottom, rgba(12,31,21,0.97) 55%, transparent);
+  display: flex; align-items: center; gap: 12px;
+}
+
+/* Compass / locate-me button on map */
+.compass-btn {
+  position: absolute; right: 18px; z-index: 500;
+  width: 44px; height: 44px;
+  background: rgba(12,31,21,0.92); backdrop-filter: blur(12px);
+  border: 1.5px solid var(--w2);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: border-color 0.16s, background 0.16s;
+}
+.compass-btn:hover { border-color: var(--o); background: rgba(232,72,28,0.1); }
+.compass-btn.locating { border-color: var(--o); animation: compassSpin 1s linear infinite; }
+@keyframes compassSpin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+
+.map-drawer {
+  position: absolute; bottom: 0; left: 0; right: 0; z-index: 500;
+  background: var(--g0); border-top: 1.5px solid var(--line);
+  padding: 0 24px 12px;
+}
+.drawer-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; }
+.drawer-label { font-size: 10px; font-weight: 800; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+.drawer-scroll { display: flex; overflow-x: auto; scrollbar-width: none; }
+.drawer-scroll::-webkit-scrollbar { display: none; }
+.mini-card { min-width: 168px; flex-shrink: 0; border-right: 1.5px solid var(--line); padding: 0 16px 4px 0; cursor: pointer; transition: opacity 0.15s; }
+.mini-card+.mini-card { padding-left: 16px; }
+.mini-card:last-child { border-right: none; }
+.mini-card:hover { opacity: 0.72; }
+.mini-type  { font-size: 9px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: var(--o); margin-bottom: 3px; }
+.mini-name  { font-size: 14px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 8px; }
+.mini-price { font-size: 15px; font-weight: 800; color: var(--o); }
+.mini-price span { font-size: 10px; font-weight: 600; color: var(--w5); }
+
+/* Shared bottom nav for map (positioned above drawer) */
+.map-bnav {
+  position: absolute; left: 0; right: 0; z-index: 600;
+  display: flex;
+  border-top: 1.5px solid var(--line);
+  background: var(--g0);
+}
+
+/* Leaflet overrides */
+.leaflet-control-attribution { display: none !important; }
+.leaflet-control-zoom { display: none !important; }
+
+/* ══════════════════════════════════════════════
+   SAVED SCREEN
+══════════════════════════════════════════════ */
+#saved { background: var(--g0); }
+.saved-top {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  padding: 52px 24px 18px; border-bottom: 1.5px solid var(--line);
+}
+.saved-heading { font-size: 36px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; }
+.saved-count   { font-size: 10px; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-top: 6px; }
+.saved-scroll  { flex: 1; overflow-y: auto; padding: 0 24px 24px; display: flex; flex-direction: column; }
+
+.empty-state { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 24px; text-align: center; }
+.empty-x { width: 52px; height: 52px; position: relative; margin-bottom: 26px; opacity: 0.22; }
+.empty-x::before { content:''; position:absolute; width:100%; height:3px; background:var(--o); top:50%; transform:translateY(-50%) rotate(45deg); border-radius:2px; }
+.empty-x::after  { content:''; position:absolute; width:100%; height:3px; background:var(--o); top:50%; transform:translateY(-50%) rotate(-45deg); border-radius:2px; }
+.empty-title { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 10px; color: rgba(255,255,255,0.55); }
+.empty-sub   { font-size: 13px; color: rgba(255,255,255,0.3); line-height: 1.6; margin-bottom: 28px; }
+.empty-cta   { padding: 14px 28px; border: 1.5px solid var(--o); color: var(--o); font-size: 11px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; cursor: pointer; background: transparent; transition: all 0.18s; font-family: inherit; }
+.empty-cta:hover { background: var(--o); color: white; }
+
+.saved-card { display: flex; align-items: center; border-bottom: 1px solid rgba(232,72,28,0.18); border-left: 3px solid var(--o); cursor: pointer; padding: 16px 0 16px 14px; transition: background 0.16s; gap: 14px; }
+.saved-card:first-child { margin-top: 16px; border-top: 1px solid rgba(232,72,28,0.18); }
+.saved-card:hover { background: var(--w1); }
+.unsave-btn { width: 30px; height: 30px; border: 1.5px solid rgba(232,72,28,0.35); display: flex; align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer; position: relative; transition: all 0.15s; }
+.unsave-btn::before { content:''; position:absolute; width:12px; height:1.5px; background:var(--o); transform:rotate(45deg); }
+.unsave-btn::after  { content:''; position:absolute; width:1.5px; height:12px; background:var(--o); transform:rotate(45deg); }
+.unsave-btn:hover   { background: rgba(232,72,28,0.12); border-color: var(--o); }
+
+/* ══════════════════════════════════════════════
+   DETAIL
+══════════════════════════════════════════════ */
+#detail { overflow-y: auto; -webkit-overflow-scrolling: touch; }
+.d-hero { height: 240px; background: var(--g2); display: flex; align-items: center; justify-content: center; position: relative; flex-shrink: 0; }
+.d-hero-glyph { position: relative; z-index: 2; }
+.d-hero-grad  { position: absolute; bottom: 0; left: 0; right: 0; height: 120px; background: linear-gradient(to top, var(--g0), transparent); }
+.d-topbar     { position: absolute; top: 52px; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 0 22px; z-index: 20; }
+.topbar-btn   { width: 40px; height: 40px; background: rgba(0,0,0,0.45); backdrop-filter: blur(10px); border: 1.5px solid var(--w2); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.16s; }
+.topbar-btn:hover { border-color: var(--o); }
+.topbar-btn.saved svg { color: var(--o) !important; }
+
+.d-body  { padding: 16px 24px 140px; }
+.d-type  { font-size: 10px; font-weight: 800; letter-spacing: 0.22em; text-transform: uppercase; color: var(--o); margin-bottom: 10px; }
+.d-name  { font-size: 34px; font-weight: 800; letter-spacing: -0.03em; line-height: 0.95; margin-bottom: 8px; }
+.d-loc   { font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--w5); margin-bottom: 20px; }
+.d-rating { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; padding-bottom: 22px; border-bottom: 1px solid var(--line); }
+.d-rnum   { font-size: 28px; font-weight: 800; color: var(--o); }
+.d-rstars { color: #E8C21C; letter-spacing: 2px; font-size: 14px; }
+.d-rct    { font-size: 11px; color: var(--w5); letter-spacing: 0.06em; text-transform: uppercase; }
+
+.stat-row { display: grid; grid-template-columns: repeat(3,1fr); border-top: 1.5px solid var(--line); border-left: 1.5px solid var(--line); margin-bottom: 26px; }
+.stat-box { padding: 14px 10px; text-align: center; border-right: 1.5px solid var(--line); border-bottom: 1.5px solid var(--line); }
+.stat-val { font-size: 22px; font-weight: 800; line-height: 1; margin-bottom: 5px; }
+.stat-lbl { font-size: 9px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--w5); }
+
+.d-eyebrow { font-size: 10px; font-weight: 800; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 10px; }
+.d-divider { height: 1px; background: rgba(232,72,28,0.2); margin: 22px 0; }
+.d-desc    { font-size: 15px; line-height: 1.7; color: rgba(255,255,255,0.68); }
+
+.amenity-grid { display: grid; grid-template-columns: 1fr 1fr; border-top: 1.5px solid var(--line); border-left: 1.5px solid var(--line); }
+.amenity-cell { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-right: 1.5px solid var(--line); border-bottom: 1.5px solid var(--line); }
+.amenity-lbl  { font-size: 12px; font-weight: 600; }
+
+.season-row  { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+.season-chip { padding: 8px 16px; border: 1.5px solid; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+.season-chip.on  { border-color: var(--o); color: var(--o); }
+.season-chip.off { border-color: var(--w2); color: var(--w5); }
+
+.d-cta-bar { position: fixed; bottom: 0; left: 0; right: 0; z-index: 100; padding: 16px 24px 28px; background: linear-gradient(to top, var(--g0) 78%, transparent); display: flex; gap: 10px; }
+.cta-main  { flex: 1; background: var(--o); color: white; border: none; padding: 17px; font-family: inherit; font-size: 12px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; cursor: pointer; transition: opacity 0.18s; text-decoration: none; display: flex; align-items: center; justify-content: center; }
+.cta-main:hover { opacity: 0.85; }
+.cta-sq { width: 54px; border: 1.5px solid var(--w2); background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.16s; }
+.cta-sq:hover { border-color: var(--o); }
+</style>
+</head>
+<body>
+
+<!-- ── SVG SYMBOLS ──────────────────────────── -->
+<svg width="0" height="0" style="position:absolute;pointer-events:none;">
+<defs>
+<symbol id="ic-tree"      viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3 L27 19 H20 L27 27 H5 L12 19 H5 Z"/><line x1="16" y1="27" x2="16" y2="31"/></symbol>
+<symbol id="ic-tent"      viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 27 L16 5 L29 27 Z"/><path d="M12 27 L16 18 L20 27"/></symbol>
+<symbol id="ic-mountain"  viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 28 L12 8 L18 18 L22 12 L30 28 Z"/></symbol>
+<symbol id="ic-rv"        viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="10" width="26" height="14"/><circle cx="8" cy="25" r="2.5"/><circle cx="22" cy="25" r="2.5"/><line x1="2" y1="16" x2="28" y2="16"/><rect x="20" y="12" width="5" height="4"/></symbol>
+<symbol id="ic-gem"       viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4 L28 13 L16 28 L4 13 Z"/><line x1="4" y1="13" x2="28" y2="13"/></symbol>
+<symbol id="ic-wave"      viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 16 Q7 10 12 16 Q17 22 22 16 Q27 10 30 14"/></symbol>
+<symbol id="ic-fire"      viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 28 C8 28 6 20 10 15 C11 19 14 20 14 20 C14 14 18 9 14 4 C22 8 24 17 20 20 C20 20 24 18 24 14 C27 19 26 28 16 28 Z"/></symbol>
+<symbol id="ic-moon"      viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M22 20 A10 10 0 1 1 12 4 A8 8 0 1 0 22 20 Z"/></symbol>
+<symbol id="ic-star"      viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="16,3 20,12 30,13 22,21 24,30 16,25 8,30 10,21 2,13 12,12"/></symbol>
+<symbol id="ic-heart"     viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 27 L4 14 C2 10 4 4 9 4 C12 4 14 7 16 9 C18 7 20 4 23 4 C28 4 30 10 28 14 Z"/></symbol>
+<symbol id="ic-map"       viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="2 8 2 28 11 23 21 28 30 23 30 3 21 8 11 3"/><line x1="11" y1="3" x2="11" y2="23"/><line x1="21" y1="8" x2="21" y2="28"/></symbol>
+<symbol id="ic-home"      viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14 L16 4 L28 14 V28 H20 V20 H12 V28 H4 Z"/></symbol>
+<symbol id="ic-user"      viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="10" r="6"/><path d="M4 28 C4 22 9 18 16 18 C23 18 28 22 28 28"/></symbol>
+<symbol id="ic-search"    viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="14" cy="14" r="9"/><line x1="21" y1="21" x2="28" y2="28"/></symbol>
+<symbol id="ic-share"     viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="6" r="3"/><circle cx="8" cy="16" r="3"/><circle cx="24" cy="26" r="3"/><line x1="10.5" y1="14.5" x2="21.5" y2="7.5"/><line x1="10.5" y1="17.5" x2="21.5" y2="24.5"/></symbol>
+<symbol id="ic-shower"    viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10 4 L10 14 Q16 10 22 14"/><circle cx="8"  cy="20" r="1.2" fill="currentColor"/><circle cx="14" cy="20" r="1.2" fill="currentColor"/><circle cx="20" cy="20" r="1.2" fill="currentColor"/><circle cx="8"  cy="26" r="1.2" fill="currentColor"/><circle cx="14" cy="26" r="1.2" fill="currentColor"/><circle cx="20" cy="26" r="1.2" fill="currentColor"/></symbol>
+<symbol id="ic-electric"  viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="18,3 10,18 16,18 14,29 22,14 16,14"/></symbol>
+<symbol id="ic-pet"       viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="10" cy="8" r="3"/><circle cx="22" cy="8" r="3"/><circle cx="6" cy="17" r="3"/><circle cx="26" cy="17" r="3"/><path d="M16 17 C10 17 8 21 8 24 C8 28 12 28 16 28 C20 28 24 28 24 24 C24 21 22 17 16 17 Z"/></symbol>
+<symbol id="ic-fish"      viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16 Q8 8 20 16 Q8 24 4 16 Z"/><path d="M24 10 L28 16 L24 22"/><circle cx="13" cy="14" r="1.5" fill="currentColor"/></symbol>
+<symbol id="ic-kayak"     viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 16 Q16 8 30 16 Q16 24 2 16 Z"/><line x1="16" y1="4" x2="16" y2="28"/></symbol>
+<symbol id="ic-parking"   viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="7" y="4" width="18" height="24"/><path d="M13 9 H18 C21 9 23 11 23 14 C23 17 21 19 18 19 H13 Z"/><line x1="13" y1="19" x2="13" y2="27"/></symbol>
+<symbol id="ic-toilet"    viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="9" y="10" width="6" height="14"/><line x1="9" y1="17" x2="15" y2="17"/><circle cx="12" cy="6" r="3"/><path d="M20 10 H26 L24 18 H22 Z"/><line x1="23" y1="18" x2="23" y2="24"/><circle cx="23" cy="6" r="3"/></symbol>
+<symbol id="ic-climbing"  viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 28 L14 14 L18 20 L22 12 L28 4"/><circle cx="28" cy="4" r="2" fill="currentColor"/></symbol>
+<symbol id="ic-wifi"      viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 14 Q16 4 28 14"/><path d="M8 19 Q16 11 24 19"/><path d="M12 23 Q16 19 20 23"/><circle cx="16" cy="28" r="2" fill="currentColor"/></symbol>
+<symbol id="ic-beach"     viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 8 C8 8 14 12 20 24"/><path d="M8 8 C12 4 22 8 20 24"/><line x1="4" y1="26" x2="28" y2="26"/></symbol>
+<symbol id="ic-bed"       viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="16" width="24" height="10"/><path d="M4 16 L4 9"/><path d="M4 9 H28 V16"/><rect x="8" y="11" width="5" height="5"/><rect x="19" y="11" width="5" height="5"/></symbol>
+<symbol id="ic-store"     viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13 H28 L26 7 H6 Z"/><rect x="6" y="13" width="20" height="15"/><rect x="12" y="19" width="8" height="9"/></symbol>
+<symbol id="ic-spa"       viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M16 6 C16 6 8 12 8 18 C8 22 12 26 16 26 C20 26 24 22 24 18 C24 12 16 6 16 6 Z"/><path d="M8 18 C6 16 4 12 4 12 C7 12 10 14 10 14"/><path d="M24 18 C26 16 28 12 28 12 C25 12 22 14 22 14"/></symbol>
+<symbol id="ic-breakfast" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 14 Q6 7 16 7 Q26 7 26 14 L26 22 H6 Z"/><line x1="4" y1="22" x2="28" y2="22"/><path d="M22 7 Q24 5 26 7 Q28 9 26 11"/></symbol>
+<symbol id="ic-wine"      viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10 4 H22 L20 14 C20 18 16 20 16 20 C16 20 12 18 12 14 Z"/><line x1="16" y1="20" x2="16" y2="28"/><line x1="11" y1="28" x2="21" y2="28"/></symbol>
+<symbol id="ic-accessible" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="16" cy="5" r="3"/><line x1="16" y1="8" x2="16" y2="18"/><line x1="10" y1="12" x2="22" y2="12"/><line x1="12" y1="18" x2="10" y2="27"/><line x1="20" y1="18" x2="22" y2="27"/></symbol>
+<!-- Compass glyph: outer ring, tick marks, orange north needle, white south needle -->
+<symbol id="ic-compass" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="16" cy="16" r="12" stroke-width="1.6"/>
+  <!-- Cardinal ticks -->
+  <line x1="16" y1="4"  x2="16" y2="7"  stroke-width="2"/>
+  <line x1="16" y1="25" x2="16" y2="28" stroke-width="1.2" stroke-opacity="0.45"/>
+  <line x1="4"  y1="16" x2="7"  y2="16" stroke-width="1.2" stroke-opacity="0.45"/>
+  <line x1="25" y1="16" x2="28" y2="16" stroke-width="1.2" stroke-opacity="0.45"/>
+  <!-- North needle (orange) -->
+  <polygon points="16,7 14,17 16,15 18,17" fill="#E8481C" stroke="none"/>
+  <!-- South needle (dim) -->
+  <polygon points="16,25 14,15 16,17 18,15" fill="rgba(255,255,255,0.25)" stroke="none"/>
+  <!-- Center dot -->
+  <circle cx="16" cy="16" r="2" fill="currentColor" stroke="none"/>
+</symbol>
+</defs>
+</svg>
+
+<!-- ── TOAST ────────────────────────────── -->
+<div id="toast"></div>
+
+<!-- ══════════════════════════════════════
+  HOME
+══════════════════════════════════════ -->
+<div class="screen active" id="home">
+  <div class="home-top">
+    <div>
+      <svg width="38" height="38" viewBox="0 0 38 38" fill="none">
+        <line x1="4" y1="4" x2="34" y2="34" stroke="#E8481C" stroke-width="5.5" stroke-linecap="round"/>
+        <line x1="34" y1="4" x2="4" y2="34" stroke="#E8481C" stroke-width="5.5" stroke-linecap="round"/>
+      </svg>
+      <div class="wordmark">Campgrounder</div>
+    </div>
+    <div class="xbtn" onclick="openSearch()"></div>
+  </div>
+  <div class="home-hero">
+    <h1 class="hero-title">Find<br>your<br><span class="o">camp.</span></h1>
+    <div class="home-search-row">
+      <div class="sbar" onclick="openSearch()" style="cursor:pointer;">
+        <input placeholder="Where are you headed?" readonly style="cursor:pointer;">
+        <div class="sbar-icon"><svg width="17" height="17" style="color:rgba(255,255,255,0.3);stroke:currentColor;fill:none;"><use href="#ic-search"/></svg></div>
+      </div>
+      <div class="xbtn" onclick="openSearch()"></div>
+    </div>
+    <div class="filter-scroll">
+      <div class="pill on"  onclick="homeFilter(this,'all')">Any type</div>
+      <div class="pill"     onclick="homeFilter(this,'State Park')">State parks</div>
+      <div class="pill"     onclick="homeFilter(this,'Private')">Private</div>
+      <div class="pill"     onclick="homeFilter(this,'Glamping')">Glamping</div>
+      <div class="pill"     onclick="homeFilter(this,'National Park')">National</div>
+    </div>
+  </div>
+  <div class="cat-section">
+    <div class="section-eyebrow">Browse by type</div>
+    <div class="cat-grid">
+      <div class="cat-cell" onclick="goFiltered('State Park')">
+        <svg width="26" height="26" style="color:rgba(255,255,255,0.6);stroke:currentColor;fill:none;"><use href="#ic-tree"/></svg>
+        <div class="cat-name">State Parks</div><div class="cat-plus"></div>
+      </div>
+      <div class="cat-cell" onclick="goFiltered('rv')">
+        <svg width="26" height="26" style="color:rgba(255,255,255,0.6);stroke:currentColor;fill:none;"><use href="#ic-rv"/></svg>
+        <div class="cat-name">RV Parks</div><div class="cat-plus"></div>
+      </div>
+      <div class="cat-cell" onclick="goFiltered('Glamping')">
+        <svg width="26" height="26" style="color:rgba(255,255,255,0.6);stroke:currentColor;fill:none;"><use href="#ic-gem"/></svg>
+        <div class="cat-name">Rare Finds</div><div class="cat-plus"></div>
+      </div>
+      <div class="cat-cell" onclick="goFiltered('Private')">
+        <svg width="26" height="26" style="color:rgba(255,255,255,0.6);stroke:currentColor;fill:none;"><use href="#ic-tent"/></svg>
+        <div class="cat-name">Private Campgrounds</div><div class="cat-plus"></div>
+      </div>
+    </div>
+  </div>
+  <nav class="bnav">
+    <div class="ntab on"><svg><use href="#ic-home"/></svg>Explore</div>
+    <div class="ntab" onclick="go('map-screen','home')"><svg><use href="#ic-map"/></svg>Map</div>
+    <div class="ntab" id="saved-tab-home" onclick="go('saved','home')">
+      <svg><use href="#ic-heart"/></svg>Saved<span class="badge" id="badge-home"></span>
+    </div>
+    <div class="ntab"><svg><use href="#ic-user"/></svg>Profile</div>
+  </nav>
+</div>
+
+<!-- ══════════════════════════════════════
+  SEARCH OVERLAY
+══════════════════════════════════════ -->
+<div class="screen" id="search-overlay" style="z-index:200;">
+  <div class="search-ov-top">
+    <div class="xbtn is-close" onclick="closeSearch()"></div>
+    <div class="sbar">
+      <input id="search-input" placeholder="Search parks, trails, cities…">
+      <div class="sbar-icon"><svg width="17" height="17" style="color:rgba(255,255,255,0.3);stroke:currentColor;fill:none;"><use href="#ic-search"/></svg></div>
+    </div>
+  </div>
+  <div class="sug-eyebrow">Popular destinations</div>
+  <div class="sug-item" onclick="go('results','search-overlay')"><div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="#ic-mountain"/></svg></div><div><div class="sug-name">Yosemite National Park</div><div class="sug-sub">California · National Park</div></div></div>
+  <div class="sug-item" onclick="go('results','search-overlay')"><div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="#ic-wave"/></svg></div><div><div class="sug-name">Big Sur Coast</div><div class="sug-sub">California · State Park</div></div></div>
+  <div class="sug-item" onclick="go('results','search-overlay')"><div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="#ic-tree"/></svg></div><div><div class="sug-name">Great Smoky Mountains</div><div class="sug-sub">Tennessee · National Park</div></div></div>
+  <div class="sug-item" onclick="go('results','search-overlay')"><div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="#ic-mountain"/></svg></div><div><div class="sug-name">Olympic Peninsula</div><div class="sug-sub">Washington · National Park</div></div></div>
+  <div class="sug-item" onclick="go('results','search-overlay')"><div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="#ic-moon"/></svg></div><div><div class="sug-name">Joshua Tree</div><div class="sug-sub">California · National Park</div></div></div>
+  <div class="sug-item" onclick="go('results','search-overlay')"><div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="#ic-fire"/></svg></div><div><div class="sug-name">Lassen Volcanic</div><div class="sug-sub">California · National Park</div></div></div>
+</div>
+
+<!-- ══════════════════════════════════════
+  RESULTS
+══════════════════════════════════════ -->
+<div class="screen" id="results">
+  <div class="results-top">
+    <div class="xbtn is-close" onclick="go('home','results')"></div>
+    <div class="sbar"><input value="California" id="results-input"></div>
+    <div class="xbtn" onclick="openSearch()"></div>
+  </div>
+  <div class="results-meta">
+    <div class="results-count" id="results-count">8 Campgrounds</div>
+    <div class="view-toggle">
+      <div class="vbtn on" id="vbtn-list" onclick="setView('list')">List</div>
+      <div class="vbtn"    id="vbtn-map"  onclick="setView('map')">Map</div>
+    </div>
+  </div>
+  <div class="results-filters" id="results-filters">
+    <div class="pill on" onclick="setFilter(this,'all')">All types</div>
+    <div class="pill"    onclick="setFilter(this,'State Park')">State parks</div>
+    <div class="pill"    onclick="setFilter(this,'National Park')">National</div>
+    <div class="pill"    onclick="setFilter(this,'Private')">Private</div>
+    <div class="pill"    onclick="setFilter(this,'Glamping')">Glamping</div>
+    <div class="pill"    onclick="setFilter(this,'pet')">Pet friendly</div>
+    <div class="pill"    onclick="setFilter(this,'avail')">Available now</div>
+  </div>
+  <div class="results-scroll" id="results-list"></div>
+  <nav class="bnav">
+    <div class="ntab" onclick="go('home','results')"><svg><use href="#ic-home"/></svg>Explore</div>
+    <div class="ntab on" onclick="setView('map')"><svg><use href="#ic-map"/></svg>Map</div>
+    <div class="ntab" id="saved-tab-results" onclick="go('saved','results')">
+      <svg><use href="#ic-heart"/></svg>Saved<span class="badge" id="badge-results"></span>
+    </div>
+    <div class="ntab"><svg><use href="#ic-user"/></svg>Profile</div>
+  </nav>
+</div>
+
+<!-- ══════════════════════════════════════
+  MAP SCREEN
+══════════════════════════════════════ -->
+<div class="screen" id="map-screen">
+  <!-- Leaflet map fills the entire screen -->
+  <div id="leaflet-map"></div>
+
+  <!-- Floating topbar overlay -->
+  <div class="map-topbar">
+    <div class="xbtn is-close dark-bg" onclick="go('home','map-screen')"></div>
+    <div class="sbar" style="background:rgba(12,31,21,0.88);backdrop-filter:blur(12px);" onclick="openSearch()">
+      <input placeholder="Search the map…" readonly style="cursor:pointer;">
+      <div class="sbar-icon"><svg width="17" height="17" style="color:rgba(255,255,255,0.3);stroke:currentColor;fill:none;"><use href="#ic-search"/></svg></div>
+    </div>
+  </div>
+
+  <!-- Compass / locate-me button -->
+  <div class="compass-btn" id="compass-btn" onclick="locateMe()">
+    <svg width="22" height="22" style="color:white;stroke:currentColor;fill:none;"><use href="#ic-compass"/></svg>
+  </div>
+
+  <!-- Bottom drawer with mini cards -->
+  <div class="map-drawer" id="map-drawer">
+    <div class="drawer-row">
+      <div class="drawer-label" id="drawer-label">8 campgrounds nearby</div>
+      <div class="xbtn" onclick="go('results','map-screen')"></div>
+    </div>
+    <div class="drawer-scroll" id="drawer-cards"></div>
+  </div>
+
+  <!-- Bottom nav (sits above drawer) -->
+  <nav class="map-bnav bnav" id="map-bnav">
+    <div class="ntab" onclick="go('home','map-screen')"><svg><use href="#ic-home"/></svg>Explore</div>
+    <div class="ntab on"><svg><use href="#ic-map"/></svg>Map</div>
+    <div class="ntab" id="saved-tab-map" onclick="go('saved','map-screen')">
+      <svg><use href="#ic-heart"/></svg>Saved<span class="badge" id="badge-map"></span>
+    </div>
+    <div class="ntab"><svg><use href="#ic-user"/></svg>Profile</div>
+  </nav>
+</div>
+
+<!-- ══════════════════════════════════════
+  SAVED SCREEN
+══════════════════════════════════════ -->
+<div class="screen" id="saved">
+  <div class="saved-top">
+    <div>
+      <div class="saved-heading">Saved</div>
+      <div class="saved-count" id="saved-count">0 campgrounds</div>
+    </div>
+    <div class="xbtn is-close" onclick="go('home','saved')"></div>
+  </div>
+  <div class="saved-scroll" id="saved-list"></div>
+  <nav class="bnav">
+    <div class="ntab" onclick="go('home','saved')"><svg><use href="#ic-home"/></svg>Explore</div>
+    <div class="ntab" onclick="go('map-screen','saved')"><svg><use href="#ic-map"/></svg>Map</div>
+    <div class="ntab on"><svg><use href="#ic-heart"/></svg>Saved</div>
+    <div class="ntab"><svg><use href="#ic-user"/></svg>Profile</div>
+  </nav>
+</div>
+
+<!-- ══════════════════════════════════════
+  DETAIL
+══════════════════════════════════════ -->
+<div class="screen" id="detail">
+  <div class="d-hero" id="d-hero">
+    <div class="d-hero-glyph" id="d-glyph"></div>
+    <div class="d-hero-grad"></div>
+    <div class="d-topbar">
+      <div class="topbar-btn xbtn is-close" onclick="goBack()"></div>
+      <div class="topbar-btn" id="save-btn" onclick="toggleSave()">
+        <svg id="save-svg" width="17" height="17" style="color:rgba(255,255,255,0.7);stroke:currentColor;fill:none;"><use href="#ic-heart"/></svg>
+      </div>
+    </div>
+  </div>
+  <div class="d-body">
+    <div class="d-type"   id="d-type">National Park</div>
+    <div class="d-name"   id="d-name">Yosemite Valley</div>
+    <div class="d-loc"    id="d-loc">Yosemite NP · California</div>
+    <div class="d-rating">
+      <div class="d-rnum"  id="d-rating">4.8</div>
+      <div class="d-rstars">★★★★★</div>
+      <div class="d-rct"   id="d-reviews">1,240 Reviews</div>
+    </div>
+    <div class="stat-row">
+      <div class="stat-box"><div class="stat-val" id="d-price" style="color:var(--o);">$35</div><div class="stat-lbl">Per night</div></div>
+      <div class="stat-box"><div class="stat-val" id="d-sites">240</div><div class="stat-lbl">Sites</div></div>
+      <div class="stat-box"><div class="stat-val" id="d-avail" style="color:#5EC26A;">12</div><div class="stat-lbl">Available</div></div>
+    </div>
+    <div class="d-eyebrow">About</div>
+    <div class="d-desc" id="d-desc"></div>
+    <div class="d-divider"></div>
+    <div class="d-eyebrow">Amenities</div>
+    <div class="amenity-grid" id="d-amenities"></div>
+    <div class="d-divider"></div>
+    <div class="d-eyebrow">Season</div>
+    <div class="season-row" id="d-seasons"></div>
+  </div>
+  <div class="d-cta-bar">
+    <a class="cta-main" id="d-cta-link" href="#" target="_blank" rel="noopener">Check Availability →</a>
+    <div class="cta-sq" onclick="shareCamp()">
+      <svg width="17" height="17" style="color:rgba(255,255,255,0.6);stroke:currentColor;fill:none;"><use href="#ic-share"/></svg>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  JAVASCRIPT
+══════════════════════════════════════ -->
+<script>
+// ─── GLYPH / BOOKING MAPS ──────────────────────
+const TYPE_GLYPH = { 'National Park':'#ic-mountain','State Park':'#ic-tree','Private':'#ic-tent','Glamping':'#ic-gem' };
+const AMEN_GLYPH = {
+  'Hot Showers':'#ic-shower','Flush Toilets':'#ic-toilet','Vault Toilets':'#ic-toilet',
+  'Fire Rings':'#ic-fire','Parking':'#ic-parking','Accessible':'#ic-accessible',
+  'Pet Friendly':'#ic-pet','Beach Access':'#ic-beach','Fishing':'#ic-fish',
+  'Electric Hookups':'#ic-electric','WiFi':'#ic-wifi','Stargazing':'#ic-star',
+  'Rock Climbing':'#ic-climbing','Kayaking':'#ic-kayak','Camp Store':'#ic-store',
+  'Luxury Beds':'#ic-bed','Wood Stove':'#ic-fire','Breakfast Incl.':'#ic-breakfast',
+  'Ocean Views':'#ic-wave','Welcome Wine':'#ic-wine','Spa Access':'#ic-spa',
+};
+const BOOK_LINKS = {
+  'National Park':'https://www.recreation.gov',
+  'State Park':'https://www.reserveamerica.com',
+  'Private':'https://www.hipcamp.com',
+  'Glamping':'https://www.hipcamp.com',
+};
+
+// ─── DATA ──────────────────────────────────────
+const CAMPS = [
+  { id:1, name:"Yosemite Valley",     loc:"Yosemite NP · California",
+    type:"National Park", price:35, sites:240, avail:12, rating:4.8, reviews:1240,
+    desc:"Experience camping in one of America's most iconic landscapes. Towering granite cliffs, ancient sequoias, and the rush of the Merced River — wilderness at its most breathtaking.",
+    amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Accessible","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:37.7456, lng:-119.5936 },
+  { id:2, name:"Big Sur Redwoods",    loc:"Big Sur Coast · California",
+    type:"State Park", price:42, sites:80, avail:5, rating:4.9, reviews:890,
+    desc:"Camp beneath ancient coastal redwoods just steps from the Pacific. Fall asleep to crashing waves and wake to morning fog drifting through towering trees.",
+    amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Beach Access","Fishing"],
+    seasons:["Spring","Summer","Fall","Winter"], lat:36.2704, lng:-121.8081 },
+  { id:3, name:"Hawk's Nest Reserve", loc:"Blue Ridge · North Carolina",
+    type:"Private", price:58, sites:32, avail:8, rating:4.7, reviews:432,
+    desc:"A boutique private campground carved into the Blue Ridge Mountains. Thoughtfully designed sites offer maximum privacy, breathtaking ridge views, and premium amenities.",
+    amenities:["Hot Showers","Electric Hookups","Fire Rings","WiFi","Parking","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:36.0, lng:-81.5 },
+  { id:4, name:"Lost Coast Glamping",  loc:"Mendocino · California",
+    type:"Glamping", price:149, sites:12, avail:3, rating:5.0, reviews:178,
+    desc:"Luxury canvas safari tents overlooking the wild California coastline. King beds, wood-burning stoves, and a chef-curated campfire breakfast. The most beautiful version of sleeping outside.",
+    amenities:["Luxury Beds","Wood Stove","Breakfast Incl.","Ocean Views","Welcome Wine","Spa Access"],
+    seasons:["Spring","Summer","Fall"], lat:39.4, lng:-123.8 },
+  { id:5, name:"Joshua Tree Desert",   loc:"Joshua Tree NP · California",
+    type:"National Park", price:25, sites:168, avail:24, rating:4.6, reviews:2100,
+    desc:"The high desert at its most otherworldly. Billions of stars overhead, twisted Joshua Trees silhouetted at dusk, and boulder formations sculpted by giants. Pure, absolute silence.",
+    amenities:["Vault Toilets","Fire Rings","Parking","Stargazing","Rock Climbing","Pet Friendly"],
+    seasons:["Fall","Winter","Spring"], lat:33.8734, lng:-115.9010 },
+  { id:6, name:"Olympic Peninsula",    loc:"Olympic NP · Washington",
+    type:"National Park", price:30, sites:105, avail:18, rating:4.8, reviews:763,
+    desc:"One of the most biodiverse ecosystems in North America. Temperate rainforest meets rugged Pacific coastline in a landscape so lush and green it feels like another world.",
+    amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Beach Access","Fishing"],
+    seasons:["Spring","Summer","Fall"], lat:47.8021, lng:-123.6044 },
+  { id:7, name:"Cascade Mountain",     loc:"Sisters · Oregon",
+    type:"Private", price:65, sites:45, avail:11, rating:4.7, reviews:321,
+    desc:"A family-run private reserve in the shadow of Oregon's Three Sisters volcanic peaks. Pristine meadows, crystal streams, old-growth forest, and a camp store with maps on arrival.",
+    amenities:["Hot Showers","Electric Hookups","Fire Rings","Camp Store","Parking","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:44.2, lng:-121.5 },
+  { id:8, name:"Manzanita Lake",        loc:"Lassen Volcanic NP · California",
+    type:"National Park", price:28, sites:179, avail:31, rating:4.5, reviews:558,
+    desc:"Camp beside a pristine volcanic lake with Lassen Peak reflected in still morning water. Geothermal features, abundant wildlife, and quiet trails wait just outside your tent door.",
+    amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Fishing","Kayaking"],
+    seasons:["Summer","Fall"], lat:40.5337, lng:-121.5722 },
+];
+
+// ─── STATE ──────────────────────────────────────
+let savedIds       = new Set();
+let prevScreen     = 'home';
+let currentFilter  = 'all';
+let currentDetailId = null;
+
+// ─── NAVIGATION ─────────────────────────────────
+function go(toId, fromId) {
+  prevScreen = fromId || document.querySelector('.screen.active')?.id || 'home';
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(toId).classList.add('active');
+  if (toId === 'map-screen') initMap();
+  if (toId === 'results')    renderResults();
+  if (toId === 'saved')      renderSaved();
+}
+function goBack() { go(prevScreen || 'home', null); }
+
+function openSearch() {
+  prevScreen = document.querySelector('.screen.active')?.id || 'home';
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('search-overlay').classList.add('active');
+  setTimeout(() => document.getElementById('search-input').focus(), 80);
+}
+function closeSearch() {
+  document.getElementById('search-overlay').classList.remove('active');
+  document.getElementById(prevScreen || 'home').classList.add('active');
+}
+function setView(v) {
+  if (v === 'map') { prevScreen = 'results'; go('map-screen','results'); }
+  else             { go('results','map-screen'); }
+}
+
+// ─── FILTERS ────────────────────────────────────
+function setFilter(el, key) {
+  currentFilter = key;
+  el.closest('.results-filters').querySelectorAll('.pill').forEach(p => p.classList.remove('on'));
+  el.classList.add('on');
+  renderResults();
+  updateMapMarkers();
+}
+
+// Home pills just set filter and navigate
+function homeFilter(el, key) {
+  el.closest('.filter-scroll').querySelectorAll('.pill').forEach(p => p.classList.remove('on'));
+  el.classList.add('on');
+  currentFilter = key;
+}
+
+function goFiltered(type) {
+  currentFilter = type;
+  // Sync the pill in results
+  go('results', 'home');
+  // After render, highlight the right pill
+  setTimeout(() => {
+    const pills = document.querySelectorAll('#results-filters .pill');
+    pills.forEach(p => p.classList.remove('on'));
+    pills.forEach(p => {
+      const match = { 'State Park':'State parks','National Park':'National','Private':'Private','Glamping':'Glamping','rv':'All types','all':'All types' };
+      if (p.textContent.trim() === (match[type] || 'All types')) p.classList.add('on');
+    });
+    if (!['State Park','National Park','Private','Glamping'].includes(type)) {
+      pills[0].classList.add('on');
+    }
+  }, 10);
+}
+
+function getFilteredCamps() {
+  return CAMPS.filter(c => {
+    if (currentFilter === 'all')          return true;
+    if (currentFilter === 'pet')          return c.amenities.includes('Pet Friendly');
+    if (currentFilter === 'avail')        return c.avail > 0;
+    return c.type === currentFilter;
+  });
+}
+
+// ─── GLYPH HELPER ───────────────────────────────
+function glyph(href, size, color) {
+  return `<svg width="${size}" height="${size}" style="color:${color||'rgba(255,255,255,0.55)'};stroke:currentColor;fill:none;display:block;"><use href="${href}"/></svg>`;
+}
+
+// ─── RENDER RESULTS ─────────────────────────────
+function renderResults() {
+  const camps = getFilteredCamps();
+  document.getElementById('results-count').textContent = `${camps.length} Campground${camps.length !== 1 ? 's':  ''}`;
+
+  if (camps.length === 0) {
+    document.getElementById('results-list').innerHTML = `
+      <div class="no-results">
+        <div class="no-results-x"></div>
+        <div class="no-results-title">No matches.</div>
+        <div class="no-results-sub">Try a different filter.</div>
+      </div>`;
+    return;
+  }
+
+  document.getElementById('results-list').innerHTML = camps.map(c => `
+    <div class="camp-card" onclick="openDetail(${c.id})">
+      <div class="card-box">${glyph(TYPE_GLYPH[c.type]||'#ic-tent',30)}</div>
+      <div class="card-body">
+        <div class="card-type">${c.type}</div>
+        <div class="card-name">${c.name}</div>
+        <div class="card-loc">${c.loc}</div>
+        <div class="card-foot">
+          <div class="card-stats">★ ${c.rating} &nbsp;·&nbsp; ${c.avail} open</div>
+          <div><div class="card-pnum">$${c.price}</div><div class="card-punit">/ Night</div></div>
+        </div>
+      </div>
+      <div class="card-chevron"></div>
+    </div>`).join('');
+}
+
+// ─── RENDER SAVED ───────────────────────────────
+function renderSaved() {
+  const camps = CAMPS.filter(c => savedIds.has(c.id));
+  document.getElementById('saved-count').textContent = `${camps.length} campground${camps.length !== 1 ? 's':''}`;
+  if (camps.length === 0) {
+    document.getElementById('saved-list').innerHTML = `
+      <div class="empty-state">
+        <div class="empty-x"></div>
+        <div class="empty-title">Nothing saved yet.</div>
+        <div class="empty-sub">Tap the heart on any campground<br>to save it here.</div>
+        <button class="empty-cta" onclick="go('results','saved')">Start Exploring</button>
+      </div>`;
+    return;
+  }
+  document.getElementById('saved-list').innerHTML = camps.map(c => `
+    <div class="saved-card" onclick="openDetail(${c.id})">
+      <div class="card-box">${glyph(TYPE_GLYPH[c.type]||'#ic-tent',28)}</div>
+      <div class="card-body" style="flex:1;">
+        <div class="card-type">${c.type}</div>
+        <div class="card-name">${c.name}</div>
+        <div class="card-loc">${c.loc}</div>
+        <div class="card-stats" style="font-size:11px;color:rgba(255,255,255,0.5);">★ ${c.rating} &nbsp;·&nbsp; $${c.price} / night</div>
+      </div>
+      <div class="unsave-btn" onclick="unsave(${c.id},event)"></div>
+    </div>`).join('');
+}
+
+// ─── SAVE / UNSAVE ──────────────────────────────
+function updateBadges() {
+  const n = savedIds.size;
+  document.querySelectorAll('.badge').forEach(b => { b.textContent = n; b.classList.toggle('show', n > 0); });
+}
+function toggleSave() {
+  if (currentDetailId === null) return;
+  const btn = document.getElementById('save-btn');
+  const svg = document.getElementById('save-svg');
+  btn.classList.add('save-pop');
+  btn.addEventListener('animationend', () => btn.classList.remove('save-pop'), {once:true});
+  if (savedIds.has(currentDetailId)) {
+    savedIds.delete(currentDetailId);
+    svg.style.color = 'rgba(255,255,255,0.7)';
+    btn.classList.remove('saved');
+    showToast('Removed from saved');
+  } else {
+    savedIds.add(currentDetailId);
+    svg.style.color = '#E8481C';
+    btn.classList.add('saved');
+    showToast('Saved  ＋');
+  }
+  updateBadges();
+}
+function unsave(id, e) {
+  e.stopPropagation(); savedIds.delete(id); updateBadges(); renderSaved(); showToast('Removed');
+}
+
+// ─── TOAST ──────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(t._tid);
+  t._tid = setTimeout(() => t.classList.remove('show'), 2100);
+}
+
+// ─── OPEN DETAIL ────────────────────────────────
+function openDetail(id) {
+  const c = CAMPS.find(x => x.id === id);
+  if (!c) return;
+  prevScreen = document.querySelector('.screen.active')?.id || 'results';
+  currentDetailId = id;
+
+  const heroTints = {'National Park':'#172E1F','State Park':'#152B1C','Private':'#221E12','Glamping':'#21142A'};
+  document.getElementById('d-hero').style.background = heroTints[c.type] || '#1A3528';
+  document.getElementById('d-glyph').innerHTML = glyph(TYPE_GLYPH[c.type]||'#ic-tent', 88, 'rgba(255,255,255,0.13)');
+
+  document.getElementById('d-type').textContent    = c.type;
+  document.getElementById('d-name').textContent    = c.name;
+  document.getElementById('d-loc').textContent     = c.loc;
+  document.getElementById('d-rating').textContent  = c.rating;
+  document.getElementById('d-reviews').textContent = c.reviews.toLocaleString() + ' Reviews';
+  document.getElementById('d-price').textContent   = '$' + c.price;
+  document.getElementById('d-sites').textContent   = c.sites;
+  document.getElementById('d-avail').textContent   = c.avail;
+  document.getElementById('d-desc').textContent    = c.desc;
+
+  document.getElementById('d-amenities').innerHTML = c.amenities.map(a =>
+    `<div class="amenity-cell">${glyph(AMEN_GLYPH[a]||'#ic-star',17,'rgba(255,255,255,0.5)')}<span class="amenity-lbl">${a}</span></div>`
+  ).join('');
+
+  const ALL_S = ['Spring','Summer','Fall','Winter'];
+  document.getElementById('d-seasons').innerHTML = ALL_S.map(s =>
+    `<div class="season-chip ${c.seasons.includes(s)?'on':'off'}">${s}</div>`
+  ).join('');
+
+  const link = document.getElementById('d-cta-link');
+  const ctaLabels = {'National Park':'Recreation.gov','State Park':'Reserve America','Private':'Hipcamp','Glamping':'Hipcamp'};
+  link.href = BOOK_LINKS[c.type] || 'https://www.recreation.gov';
+  link.textContent = `Check Availability — ${ctaLabels[c.type]} →`;
+
+  const svg = document.getElementById('save-svg');
+  const btn = document.getElementById('save-btn');
+  if (savedIds.has(id)) { svg.style.color='#E8481C'; btn.classList.add('saved'); }
+  else                  { svg.style.color='rgba(255,255,255,0.7)'; btn.classList.remove('saved'); }
+
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('detail').classList.add('active');
+  document.getElementById('detail').scrollTop = 0;
+}
+
+function shareCamp() {
+  if (!currentDetailId) return;
+  showToast('Link copied ＋');
+}
+
+// ─── MAP ────────────────────────────────────────
+let mapReady = false, lMap = null;
+let mapMarkerMap = {}; // id -> [pinMarker, priceMarker]
+let userLocMarker = null;
+
+function initMap() {
+  const mapEl  = document.getElementById('leaflet-map');
+  const navEl  = document.getElementById('map-bnav');
+  const drawEl = document.getElementById('map-drawer');
+
+  if (mapReady) {
+    positionMapOverlays();
+    setTimeout(() => lMap && lMap.invalidateSize(), 80);
+    return;
+  }
+  mapReady = true;
+
+  // Position the compass button
+  positionMapOverlays();
+
+  // Give Leaflet explicit pixel dimensions
+  mapEl.style.position = 'absolute';
+  mapEl.style.top      = '0';
+  mapEl.style.left     = '0';
+  mapEl.style.right    = '0';
+  mapEl.style.bottom   = '0';
+
+  lMap = L.map('leaflet-map', {
+    center: [38.5, -119.5], zoom: 6,
+    zoomControl: false, attributionControl: false,
+  });
+
+  // ESRI World Dark Gray — reliable, no API key needed
+  L.tileLayer(
+    'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',
+    { maxZoom: 16, attribution: 'Esri' }
+  ).addTo(lMap);
+
+  // ESRI label overlay
+  L.tileLayer(
+    'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}',
+    { maxZoom: 16, opacity: 0.7 }
+  ).addTo(lMap);
+
+  // Add camp markers
+  CAMPS.forEach(c => addMarker(c));
+
+  // Drawer mini-cards
+  document.getElementById('drawer-cards').innerHTML = CAMPS.map(c => `
+    <div class="mini-card" onclick="openDetail(${c.id})">
+      <div style="margin-bottom:7px;">${glyph(TYPE_GLYPH[c.type]||'#ic-tent',18,'var(--o)')}</div>
+      <div class="mini-type">${c.type}</div>
+      <div class="mini-name">${c.name}</div>
+      <div class="mini-price">$${c.price}<span> / night</span></div>
+    </div>`).join('');
+
+  setTimeout(() => lMap.invalidateSize(), 100);
+}
+
+function addMarker(c) {
+  const pin = L.divIcon({
+    html: `<div style="width:20px;height:20px;background:#132B1C;border:2px solid #E8481C;border-radius:50% 50% 50% 0;transform:rotate(-45deg);box-shadow:0 2px 8px rgba(0,0,0,0.55);cursor:pointer;transition:transform .15s;"></div>`,
+    iconSize:[20,20], iconAnchor:[10,20], className:''
+  });
+  const price = L.divIcon({
+    html: `<div style="background:#E8481C;color:#fff;padding:4px 9px;font-family:Helvetica Neue,sans-serif;font-size:11px;font-weight:800;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,0.45);cursor:pointer;transform:translateX(-50%) translateY(-44px);">$${c.price}</div>`,
+    iconSize:[1,1], iconAnchor:[0,0], className:''
+  });
+  const pm = L.marker([c.lat,c.lng],{icon:pin  }).addTo(lMap).on('click',()=>openDetail(c.id));
+  const pr = L.marker([c.lat,c.lng],{icon:price}).addTo(lMap).on('click',()=>openDetail(c.id));
+  mapMarkerMap[c.id] = [pm, pr];
+}
+
+function updateMapMarkers() {
+  if (!mapReady || !lMap) return;
+  const visible = new Set(getFilteredCamps().map(c => c.id));
+  CAMPS.forEach(c => {
+    const [pm, pr] = mapMarkerMap[c.id] || [];
+    if (!pm) return;
+    if (visible.has(c.id)) { if (!lMap.hasLayer(pm)) { pm.addTo(lMap); pr.addTo(lMap); } }
+    else                   { lMap.removeLayer(pm); lMap.removeLayer(pr); }
+  });
+  const n = visible.size;
+  const lbl = document.getElementById('drawer-label');
+  if (lbl) lbl.textContent = `${n} campground${n!==1?'s':''} nearby`;
+}
+
+function positionMapOverlays() {
+  // Place compass button just below the topbar (~130px)
+  const cb = document.getElementById('compass-btn');
+  if (cb) cb.style.top = '138px';
+
+  // Stack nav above drawer
+  const nav  = document.getElementById('map-bnav');
+  const draw = document.getElementById('map-drawer');
+  if (nav && draw) {
+    const navH  = nav.getBoundingClientRect().height || 52;
+    draw.style.paddingBottom = '14px';
+    nav.style.bottom = '0';
+    draw.style.bottom = navH + 'px';
+  }
+}
+
+// ─── COMPASS / LOCATE ME ────────────────────────
+function locateMe() {
+  if (!mapReady || !lMap) { go('map-screen','home'); return; }
+  const btn = document.getElementById('compass-btn');
+  btn.classList.add('locating');
+  btn.style.borderColor = '#E8481C';
+
+  if (!navigator.geolocation) {
+    showToast('Geolocation not available');
+    btn.classList.remove('locating');
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      btn.classList.remove('locating');
+      btn.style.borderColor = '#E8481C';
+
+      const { latitude: lat, longitude: lng } = pos.coords;
+      lMap.flyTo([lat, lng], 10, { duration: 1.4 });
+
+      // Remove previous marker
+      if (userLocMarker) lMap.removeLayer(userLocMarker);
+
+      const locIcon = L.divIcon({
+        html: `<div style="width:18px;height:18px;position:relative;">
+          <div style="position:absolute;inset:0;background:#E8481C;border-radius:50%;opacity:0.6;animation:locPulse 1.6s ease-out infinite;"></div>
+          <div style="position:absolute;inset:3px;background:#E8481C;border:2px solid white;border-radius:50%;z-index:1;"></div>
+        </div>`,
+        iconSize:[18,18], iconAnchor:[9,9], className:''
+      });
+      userLocMarker = L.marker([lat,lng],{icon:locIcon}).addTo(lMap);
+      showToast('Found you ＋');
+    },
+    () => {
+      btn.classList.remove('locating');
+      btn.style.borderColor = '';
+      // Demo fallback — fly to California
+      lMap.flyTo([37.5, -119.5], 7, { duration: 1.4 });
+      showToast('Using demo location');
+    },
+    { timeout: 8000, enableHighAccuracy: true }
+  );
+}
+
+// ─── INIT ────────────────────────────────────────
+renderResults();
+renderSaved();
+
+// ─── PWA SERVICE WORKER ──────────────────────────
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  });
+}
+</script>
+</body>
+</html>
