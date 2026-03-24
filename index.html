@@ -709,30 +709,34 @@ html, body {
 .cal-trigger-val { font-size: 13px; font-weight: 700; letter-spacing: -0.01em; color: var(--w); }
 .cal-trigger-nights { font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.45); margin-left: auto; white-space: nowrap; }
 
-/* Calendar bottom sheet */
+/* Calendar compact card */
 .cal-backdrop {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.55);
+  position: fixed; inset: 0; background: rgba(0,0,0,0.45);
   z-index: 400; opacity: 0; pointer-events: none;
-  transition: opacity 0.22s;
+  transition: opacity 0.18s;
 }
 .cal-backdrop.open { opacity: 1; pointer-events: auto; }
 
 .cal-sheet {
-  position: fixed; bottom: 0; left: 0; right: 0;
-  background: var(--g1); border-top: 1.5px solid rgba(232,72,28,0.3);
-  z-index: 401; padding: 0 20px calc(28px + var(--safe-bot));
-  transform: translateY(100%);
-  transition: transform 0.28s cubic-bezier(0.32,0.72,0,1);
+  position: fixed; top: 50%; left: 50%;
+  transform: translate(-50%, -50%) scale(0.93);
+  width: min(350px, calc(100vw - 32px));
+  background: var(--g1);
+  border: 1.5px solid rgba(232,72,28,0.3);
+  box-shadow: 0 24px 64px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.04);
+  z-index: 401; padding: 0 16px 16px;
+  opacity: 0; pointer-events: none;
+  transition: transform 0.22s cubic-bezier(0.32,0.72,0,1), opacity 0.18s;
 }
-.cal-sheet.open { transform: translateY(0); }
+.cal-sheet.open {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1; pointer-events: auto;
+}
 
-.cal-sheet-handle {
-  width: 36px; height: 4px; background: rgba(255,255,255,0.15);
-  border-radius: 2px; margin: 12px auto 16px;
-}
+.cal-sheet-handle { display: none; }
 .cal-sheet-head {
   display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 18px;
+  padding-top: 14px; margin-bottom: 12px;
 }
 .cal-sheet-title {
   font-size: 10px; font-weight: 900; letter-spacing: 0.22em;
@@ -745,7 +749,7 @@ html, body {
 
 .cal-nav-row {
   display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 .cal-nav-btn {
   width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
@@ -785,7 +789,7 @@ html, body {
 
 .cal-nights-row {
   display: flex; align-items: center; justify-content: space-between;
-  border-top: 1.5px solid var(--line); padding-top: 16px; margin-bottom: 16px;
+  border-top: 1.5px solid var(--line); padding-top: 12px; margin-bottom: 12px;
 }
 .cal-nights-lbl {
   font-size: 10px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase;
