@@ -696,49 +696,133 @@ html, body {
   display: flex; align-items: stretch; gap: 8px;
   margin-bottom: 14px;
 }
-.date-chip {
-  display: flex; align-items: center; gap: 9px;
+.cal-trigger {
+  display: flex; align-items: center; gap: 10px;
   border: 1.5px solid var(--w2);
   padding: 10px 14px; cursor: pointer; flex: 1;
-  position: relative; transition: border-color 0.16s;
-  overflow: hidden;
+  transition: border-color 0.16s;
 }
-.date-chip.active { border-color: var(--o); }
-.date-chip input[type="date"] {
-  position: absolute; inset: 0; opacity: 0; cursor: pointer;
-  width: 100%; height: 100%; border: none; background: none;
-}
-.date-chip-inner { display: flex; flex-direction: column; gap: 1px; pointer-events: none; }
-.date-chip-lbl { font-size: 8px; font-weight: 900; letter-spacing: 0.2em; text-transform: uppercase; color: var(--w5); }
-.date-chip-val { font-size: 13px; font-weight: 700; letter-spacing: -0.01em; color: var(--w); }
-.date-chip.active .date-chip-lbl { color: var(--o); }
+.cal-trigger.active { border-color: var(--o); }
+.cal-trigger-inner { display: flex; flex-direction: column; gap: 2px; flex: 1; }
+.cal-trigger-lbl { font-size: 8px; font-weight: 900; letter-spacing: 0.2em; text-transform: uppercase; color: var(--w5); }
+.cal-trigger.active .cal-trigger-lbl { color: var(--o); }
+.cal-trigger-val { font-size: 13px; font-weight: 700; letter-spacing: -0.01em; color: var(--w); }
+.cal-trigger-nights { font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.45); margin-left: auto; white-space: nowrap; }
 
-.nights-ctrl {
-  display: flex; align-items: stretch; flex-shrink: 0;
+/* Calendar bottom sheet */
+.cal-backdrop {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.55);
+  z-index: 400; opacity: 0; pointer-events: none;
+  transition: opacity 0.22s;
+}
+.cal-backdrop.open { opacity: 1; pointer-events: auto; }
+
+.cal-sheet {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--g1); border-top: 1.5px solid rgba(232,72,28,0.3);
+  z-index: 401; padding: 0 20px calc(28px + var(--safe-bot));
+  transform: translateY(100%);
+  transition: transform 0.28s cubic-bezier(0.32,0.72,0,1);
+}
+.cal-sheet.open { transform: translateY(0); }
+
+.cal-sheet-handle {
+  width: 36px; height: 4px; background: rgba(255,255,255,0.15);
+  border-radius: 2px; margin: 12px auto 16px;
+}
+.cal-sheet-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 18px;
+}
+.cal-sheet-title {
+  font-size: 10px; font-weight: 900; letter-spacing: 0.22em;
+  text-transform: uppercase; color: rgba(255,255,255,0.45);
+}
+.cal-sheet-clear {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--o); cursor: pointer; padding: 4px 0;
+}
+
+.cal-nav-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 12px;
+}
+.cal-nav-btn {
+  width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 20px; color: rgba(255,255,255,0.6);
+  transition: color 0.15s; user-select: none;
+}
+.cal-nav-btn:hover { color: var(--w); }
+.cal-month-lbl {
+  font-size: 14px; font-weight: 800; letter-spacing: -0.01em; color: var(--w);
+}
+
+.cal-dow-row {
+  display: grid; grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 4px;
+}
+.cal-dow-row span {
+  text-align: center; font-size: 9px; font-weight: 800;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: rgba(255,255,255,0.25); padding-bottom: 8px;
+}
+
+.cal-grid {
+  display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px;
+  margin-bottom: 20px;
+}
+.cal-day {
+  aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  color: var(--w); transition: background 0.12s, color 0.12s;
+}
+.cal-day:hover:not(.cal-empty):not(.cal-past) { background: var(--w1); }
+.cal-day.cal-today { color: var(--o); font-weight: 900; }
+.cal-day.cal-selected { background: var(--o) !important; color: white; font-weight: 800; }
+.cal-day.cal-in-range { background: rgba(232,72,28,0.18); }
+.cal-day.cal-past { color: rgba(255,255,255,0.2); cursor: default; }
+.cal-day.cal-empty { cursor: default; }
+
+.cal-nights-row {
+  display: flex; align-items: center; justify-content: space-between;
+  border-top: 1.5px solid var(--line); padding-top: 16px; margin-bottom: 16px;
+}
+.cal-nights-lbl {
+  font-size: 10px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+}
+.cal-nights-ctrl {
+  display: flex; align-items: center; gap: 0;
   border: 1.5px solid var(--w2);
 }
 .nights-btn {
-  width: 34px; display: flex; align-items: center; justify-content: center;
-  cursor: pointer; font-size: 17px; font-weight: 300; color: var(--w5);
+  width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 18px; font-weight: 300; color: var(--w5);
   transition: color 0.15s, background 0.15s; user-select: none;
-  border: none; background: none;
+  background: none; border: none;
 }
 .nights-btn:hover { color: var(--o); background: rgba(232,72,28,0.07); }
 .nights-val {
-  padding: 0 10px; font-size: 10px; font-weight: 800; letter-spacing: 0.1em;
+  padding: 0 14px; font-size: 11px; font-weight: 800; letter-spacing: 0.1em;
   text-transform: uppercase; color: var(--w); white-space: nowrap;
   border-left: 1.5px solid var(--w2); border-right: 1.5px solid var(--w2);
-  display: flex; align-items: center;
+  display: flex; align-items: center; height: 36px;
 }
 
+.cal-done-btn {
+  width: 100%; padding: 14px; background: var(--o); color: white;
+  font-size: 11px; font-weight: 900; letter-spacing: 0.2em; text-transform: uppercase;
+  text-align: center; cursor: pointer; transition: opacity 0.15s;
+}
+.cal-done-btn:hover { opacity: 0.88; }
+
 .date-clear {
-  width: 36px; flex-shrink: 0; display: none;
+  width: 40px; flex-shrink: 0;
   align-items: center; justify-content: center;
   border: 1.5px solid var(--w2); cursor: pointer;
   color: var(--w5); transition: color 0.15s, border-color 0.15s;
 }
 .date-clear:hover { color: var(--o); border-color: var(--o); }
-.date-clear.show { display: flex; }
 
 /* Date badge in results meta */
 .date-badge {
@@ -908,20 +992,43 @@ html, body {
     </div>
     <!-- Date strip -->
     <div class="date-strip">
-      <div class="date-chip" id="date-chip">
-        <svg width="16" height="16" style="color:rgba(255,255,255,0.35);stroke:currentColor;fill:none;flex-shrink:0;"><use href="#ic-calendar"/></svg>
-        <div class="date-chip-inner">
-          <div class="date-chip-lbl">Check-in</div>
-          <div class="date-chip-val" id="date-chip-val">Any date</div>
+      <div class="cal-trigger" id="cal-trigger" onclick="openCal()">
+        <svg width="15" height="15" style="color:rgba(255,255,255,0.4);stroke:currentColor;fill:none;flex-shrink:0;"><use href="#ic-calendar"/></svg>
+        <div class="cal-trigger-inner">
+          <div class="cal-trigger-lbl">Check-in</div>
+          <div class="cal-trigger-val" id="date-chip-val">Any date</div>
         </div>
-        <input type="date" id="date-input" onchange="setCheckIn(this.value)">
+        <div class="cal-trigger-nights" id="cal-trigger-nights" style="display:none;"></div>
       </div>
-      <div class="nights-ctrl">
-        <div class="nights-btn" onclick="setNights(stayNights-1)">−</div>
-        <div class="nights-val" id="nights-val">1 night</div>
-        <div class="nights-btn" onclick="setNights(stayNights+1)">+</div>
+      <div class="date-clear" id="date-clear" onclick="clearDates()" style="font-size:16px;font-weight:300;display:none;align-items:center;justify-content:center;width:40px;border:1.5px solid var(--w2);cursor:pointer;color:var(--w5);">×</div>
+    </div>
+
+    <!-- Calendar bottom sheet (shared, lives here in DOM but fixed-positioned) -->
+    <div class="cal-backdrop" id="cal-backdrop" onclick="closeCal()"></div>
+    <div class="cal-sheet" id="cal-sheet">
+      <div class="cal-sheet-handle"></div>
+      <div class="cal-sheet-head">
+        <div class="cal-sheet-title">Check-in date</div>
+        <div class="cal-sheet-clear" id="cal-sheet-clear" onclick="clearDates();closeCal()">Clear</div>
       </div>
-      <div class="date-clear" id="date-clear" onclick="clearDates()" style="font-size:16px;font-weight:300;">×</div>
+      <div class="cal-nav-row">
+        <div class="cal-nav-btn" onclick="calNav(-1)">‹</div>
+        <div class="cal-month-lbl" id="cal-month-lbl"></div>
+        <div class="cal-nav-btn" onclick="calNav(1)">›</div>
+      </div>
+      <div class="cal-dow-row">
+        <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+      <div class="cal-nights-row">
+        <div class="cal-nights-lbl">Duration</div>
+        <div class="cal-nights-ctrl">
+          <div class="nights-btn" onclick="setNights(stayNights-1)">−</div>
+          <div class="nights-val" id="nights-val">1 night</div>
+          <div class="nights-btn" onclick="setNights(stayNights+1)">+</div>
+        </div>
+      </div>
+      <div class="cal-done-btn" onclick="closeCal()">Done</div>
     </div>
     <div class="filter-scroll">
       <div class="pill on"  onclick="homeFilter(this,'all')">Any type</div>
@@ -1684,23 +1791,25 @@ let userLng         = null;
 let checkInDate     = null;  // 'YYYY-MM-DD'
 let stayNights      = 1;
 const WX_CACHE      = {};
+let _calYear        = new Date().getFullYear();
+let _calMonth       = new Date().getMonth();
 
 // ─── DATE HELPERS ────────────────────────────────
 function setCheckIn(val) {
   checkInDate = val || null;
   updateDateStrip();
   renderResults();
-  // Bust weather cache since dates changed
   Object.keys(WX_CACHE).forEach(k => delete WX_CACHE[k]);
 }
 function setNights(n) {
   stayNights = Math.max(1, Math.min(14, n));
   updateDateStrip();
+  renderCal(); // refresh range highlight
 }
 function clearDates() {
   checkInDate = null; stayNights = 1;
-  const inp = document.getElementById('date-input');
-  if (inp) inp.value = '';
+  _calYear = new Date().getFullYear();
+  _calMonth = new Date().getMonth();
   updateDateStrip();
   renderResults();
   Object.keys(WX_CACHE).forEach(k => delete WX_CACHE[k]);
@@ -1717,25 +1826,27 @@ function checkoutDate() {
   return d.toISOString().split('T')[0];
 }
 function updateDateStrip() {
-  const chip    = document.getElementById('date-chip');
-  const valEl   = document.getElementById('date-chip-val');
-  const clearEl = document.getElementById('date-clear');
-  const nightsEl= document.getElementById('nights-val');
-  const badge   = document.getElementById('date-badge');
+  const trigger  = document.getElementById('cal-trigger');
+  const valEl    = document.getElementById('date-chip-val');
+  const clearEl  = document.getElementById('date-clear');
+  const nightsEl = document.getElementById('nights-val');
+  const trigNights = document.getElementById('cal-trigger-nights');
+  const badge    = document.getElementById('date-badge');
 
-  if (!chip) return;
+  if (!trigger) return;
   if (checkInDate) {
     valEl.textContent = fmtShort(checkInDate);
-    chip.classList.add('active');
-    clearEl.classList.add('show');
+    trigger.classList.add('active');
+    clearEl.style.display = 'flex';
+    if (trigNights) { trigNights.textContent = `· ${stayNights}n`; trigNights.style.display = ''; }
   } else {
     valEl.textContent = 'Any date';
-    chip.classList.remove('active');
-    clearEl.classList.remove('show');
+    trigger.classList.remove('active');
+    clearEl.style.display = 'none';
+    if (trigNights) trigNights.style.display = 'none';
   }
-  nightsEl.textContent = `${stayNights} night${stayNights !== 1 ? 's' : ''}`;
+  if (nightsEl) nightsEl.textContent = `${stayNights} night${stayNights !== 1 ? 's' : ''}`;
 
-  // Results date badge
   if (badge) {
     if (checkInDate) {
       const cout = checkoutDate();
@@ -1745,6 +1856,69 @@ function updateDateStrip() {
       badge.style.display = 'none';
     }
   }
+}
+
+// ─── CALENDAR PICKER ─────────────────────────────
+function openCal() {
+  // Jump to selected month if a date is already chosen
+  if (checkInDate) {
+    const d = new Date(checkInDate + 'T00:00:00');
+    _calYear = d.getFullYear(); _calMonth = d.getMonth();
+  }
+  renderCal();
+  document.getElementById('cal-backdrop').classList.add('open');
+  document.getElementById('cal-sheet').classList.add('open');
+}
+function closeCal() {
+  document.getElementById('cal-backdrop').classList.remove('open');
+  document.getElementById('cal-sheet').classList.remove('open');
+}
+function calNav(dir) {
+  _calMonth += dir;
+  if (_calMonth > 11) { _calMonth = 0; _calYear++; }
+  if (_calMonth < 0)  { _calMonth = 11; _calYear--; }
+  renderCal();
+}
+function renderCal() {
+  const lbl = document.getElementById('cal-month-lbl');
+  const grid = document.getElementById('cal-grid');
+  if (!lbl || !grid) return;
+
+  lbl.textContent = new Date(_calYear, _calMonth, 1)
+    .toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+  const today = new Date(); today.setHours(0,0,0,0);
+  const firstDay = new Date(_calYear, _calMonth, 1).getDay();
+  const daysInMonth = new Date(_calYear, _calMonth + 1, 0).getDate();
+
+  // Checkout date for range highlight
+  const cout = checkoutDate();
+
+  let html = '';
+  for (let i = 0; i < firstDay; i++) html += `<div class="cal-day cal-empty"></div>`;
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const date = new Date(_calYear, _calMonth, d);
+    const ds   = date.toISOString().split('T')[0];
+    const past = date < today;
+    const isT  = date.getTime() === today.getTime();
+    const isSel = ds === checkInDate;
+    const inRange = checkInDate && cout && ds > checkInDate && ds < cout;
+
+    let cls = 'cal-day';
+    if (past) cls += ' cal-past';
+    else if (isSel) cls += ' cal-selected';
+    else if (inRange) cls += ' cal-in-range';
+    else if (isT) cls += ' cal-today';
+
+    const click = past ? '' : `onclick="pickDay('${ds}')"`;
+    html += `<div class="${cls}" ${click}>${d}</div>`;
+  }
+  grid.innerHTML = html;
+}
+function pickDay(ds) {
+  setCheckIn(ds);
+  renderCal(); // re-render with selection + range
 }
 
 // ─── WEATHER ENGINE ─────────────────────────────
