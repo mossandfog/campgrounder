@@ -694,8 +694,13 @@ html, body {
   <div class="home-top">
     <div>
       <svg width="38" height="38" viewBox="0 0 38 38" fill="none">
+        <!-- Crossed logs -->
         <line x1="4" y1="4" x2="34" y2="34" stroke="#E8481C" stroke-width="5.5" stroke-linecap="round"/>
         <line x1="34" y1="4" x2="4" y2="34" stroke="#E8481C" stroke-width="5.5" stroke-linecap="round"/>
+        <!-- Outer flame — white, rising between the upper arms -->
+        <path d="M19,22 C15.5,20 14,16 15.5,12.5 C16.5,10 18,9 19,12.5 C20,9 21.5,10 22.5,12.5 C24,16 22.5,20 19,22 Z" fill="white"/>
+        <!-- Inner flame — orange glow for depth -->
+        <path d="M19,20 C17.5,18 17,15.5 18,13.5 C18.5,12 19,14 19,14 C19,14 19.5,12 20,13.5 C21,15.5 20.5,18 19,20 Z" fill="#E8481C" opacity="0.55"/>
       </svg>
       <div class="wordmark">Campgrounder</div>
     </div>
@@ -2008,11 +2013,48 @@ function locateMe() {
 renderResults();
 renderSaved();
 
-// ─── PWA SERVICE WORKER ──────────────────────────
+// ─── PWA: SERVICE WORKER + INSTALL HANDLING ──────
+
+// Register service worker
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').catch(() => {});
+    navigator.serviceWorker.register('/sw.js')
+      .then(reg => {
+        // Check for SW updates every time the app is focused
+        document.addEventListener('visibilitychange', () => {
+          if (!document.hidden) reg.update();
+        });
+      })
+      .catch(() => {});
   });
+}
+
+// Handle deep-link shortcuts from manifest.json
+(function handleLaunchParams() {
+  const params = new URLSearchParams(window.location.search);
+  const action = params.get('action');
+  if (action === 'saved') {
+    // Navigate to saved screen on launch
+    requestAnimationFrame(() => go('saved', 'home'));
+  } else if (action === 'browse') {
+    requestAnimationFrame(() => go('results', 'home'));
+  }
+})();
+
+// Capture the install prompt so we can trigger it from within the app later
+let _installPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  _installPrompt = e;
+});
+function promptInstall() {
+  if (_installPrompt) {
+    _installPrompt.prompt();
+    _installPrompt.userChoice.then(() => { _installPrompt = null; });
+  } else {
+    // iOS doesn't support install prompt — show instructions
+    showToast('Tap Share → Add to Home Screen');
+  }
 }
 </script>
 
