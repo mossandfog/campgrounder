@@ -153,7 +153,7 @@ html, body {
   align-items: center; gap: 6px;
   padding: 15px 6px 13px; cursor: pointer;
   font-size: 9px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase;
-  color: rgba(255,255,255,0.3);
+  color: rgba(255,255,255,0.55);
   transition: color 0.16s; position: relative;
 }
 .ntab svg { width: 22px; height: 22px; stroke: currentColor; fill: none; transition: stroke 0.16s; }
@@ -459,6 +459,198 @@ html, body {
 .unsave-btn::before { content:''; position:absolute; width:12px; height:1.5px; background:var(--o); transform:rotate(45deg); }
 .unsave-btn::after  { content:''; position:absolute; width:1.5px; height:12px; background:var(--o); transform:rotate(45deg); }
 .unsave-btn:hover   { background: rgba(232,72,28,0.12); border-color: var(--o); }
+
+/* ══════════════════════════════════════════════
+   PROFILE
+══════════════════════════════════════════════ */
+#profile { background: var(--g0); overflow-y: auto; -webkit-overflow-scrolling: touch; }
+
+/* Decorative campfire watermark */
+.profile-bg-mark {
+  position: fixed; right: -40px; top: 30%; width: 260px; height: 260px;
+  opacity: 0.04; pointer-events: none; z-index: 0;
+}
+
+.profile-scroll {
+  flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+  display: flex; flex-direction: column;
+  padding: var(--top-pad) 0 calc(90px + var(--safe-bot)) 0;
+  position: relative; z-index: 1;
+}
+
+/* ── Identity ── */
+.profile-identity {
+  padding: 32px 28px 28px;
+  border-bottom: 1.5px solid var(--line);
+  position: relative;
+}
+.profile-greeting {
+  font-size: 10px; font-weight: 800; letter-spacing: 0.28em;
+  text-transform: uppercase; color: var(--o);
+  margin-bottom: 12px;
+}
+.profile-name-wrap {
+  position: relative; margin-bottom: 6px;
+}
+.profile-name {
+  background: transparent; border: none; outline: none;
+  font-family: inherit; font-size: 46px; font-weight: 800;
+  letter-spacing: -0.03em; color: var(--w);
+  width: 100%; padding: 0; line-height: 1.05;
+  caret-color: var(--o);
+}
+.profile-name::placeholder { color: rgba(255,255,255,0.18); }
+.profile-name-underline {
+  height: 2px; background: var(--line); margin-top: 4px;
+  transition: background 0.18s;
+}
+.profile-name:focus ~ .profile-name-underline { background: var(--o); }
+.profile-since {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.12em;
+  text-transform: uppercase; color: rgba(255,255,255,0.35);
+  margin-top: 16px;
+}
+
+/* ── Section labels ── */
+.profile-section-label {
+  font-size: 10px; font-weight: 800; letter-spacing: 0.28em;
+  text-transform: uppercase; color: rgba(255,255,255,0.35);
+  padding: 28px 28px 0;
+}
+
+/* ── Vibe grid ── */
+.vibe-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  margin: 16px 28px 0;
+  border: 1.5px solid var(--line);
+  overflow: hidden;
+}
+.vibe-cell {
+  display: flex; flex-direction: column;
+  align-items: flex-start; justify-content: flex-end;
+  padding: 20px 18px 18px;
+  cursor: pointer; position: relative;
+  border-right: 1.5px solid var(--line);
+  border-bottom: 1.5px solid var(--line);
+  background: transparent;
+  transition: background 0.15s;
+  min-height: 100px;
+}
+.vibe-cell:nth-child(2n) { border-right: none; }
+.vibe-cell:nth-last-child(-n+2) { border-bottom: none; }
+/* 5th cell spans full width */
+.vibe-cell:last-child {
+  grid-column: 1 / -1;
+  flex-direction: row; align-items: center; justify-content: flex-start;
+  gap: 14px; min-height: 70px; padding: 18px 22px;
+  border-right: none;
+}
+.vibe-cell.on {
+  background: var(--o);
+}
+.vibe-cell-glyph {
+  width: 34px; height: 34px; flex-shrink: 0;
+  stroke: rgba(255,255,255,0.5); fill: none;
+  transition: stroke 0.15s;
+}
+.vibe-cell.on .vibe-cell-glyph { stroke: var(--w); }
+.vibe-cell-name {
+  font-size: 12px; font-weight: 800; letter-spacing: 0.06em;
+  text-transform: uppercase; color: rgba(255,255,255,0.5);
+  margin-top: 10px; line-height: 1.1;
+  transition: color 0.15s;
+}
+.vibe-cell:last-child .vibe-cell-name { margin-top: 0; }
+.vibe-cell.on .vibe-cell-name { color: var(--w); }
+.vibe-check {
+  position: absolute; top: 12px; right: 12px;
+  width: 18px; height: 18px;
+  border: 1.5px solid rgba(255,255,255,0.2);
+  border-radius: 50%;
+  transition: all 0.15s;
+  display: flex; align-items: center; justify-content: center;
+}
+.vibe-cell.on .vibe-check {
+  background: rgba(255,255,255,0.25); border-color: transparent;
+}
+.vibe-cell.on .vibe-check::after {
+  content: '';
+  width: 6px; height: 6px; border-radius: 50%;
+  background: white;
+}
+
+/* ── Stat row ── */
+.profile-stats {
+  display: flex; gap: 0;
+  margin: 24px 28px 0;
+  border: 1.5px solid var(--line);
+}
+.profile-stat {
+  flex: 1; padding: 18px 12px 16px;
+  text-align: center; border-right: 1.5px solid var(--line);
+}
+.profile-stat:last-child { border-right: none; }
+.profile-stat-num {
+  font-size: 28px; font-weight: 800; letter-spacing: -0.03em;
+  color: var(--w); line-height: 1;
+}
+.profile-stat-lbl {
+  font-size: 9px; font-weight: 800; letter-spacing: 0.22em;
+  text-transform: uppercase; color: rgba(255,255,255,0.35);
+  margin-top: 6px;
+}
+
+/* ── Your Story ── */
+.profile-bio-wrap {
+  margin: 24px 28px 0;
+  border: 1.5px solid var(--line);
+  padding: 18px 18px 14px;
+  position: relative;
+}
+.profile-bio-label {
+  font-size: 9px; font-weight: 800; letter-spacing: 0.28em;
+  text-transform: uppercase; color: var(--o);
+  margin-bottom: 12px;
+}
+.profile-bio {
+  background: transparent; border: none; outline: none;
+  font-family: inherit; font-size: 15px; font-weight: 400;
+  color: rgba(255,255,255,0.75); width: 100%; resize: none;
+  min-height: 64px; line-height: 1.6; caret-color: var(--o);
+}
+.profile-bio::placeholder { color: rgba(255,255,255,0.2); }
+
+/* ── Install CTA ── */
+.profile-install {
+  margin: 24px 28px 0;
+  border: 1.5px solid rgba(232,72,28,0.35);
+  padding: 20px 20px 20px;
+  display: flex; align-items: center; gap: 16px;
+  cursor: pointer; transition: border-color 0.15s;
+}
+.profile-install:hover { border-color: var(--o); }
+.profile-install-icon {
+  width: 36px; height: 36px; flex-shrink: 0;
+  stroke: var(--o); fill: none;
+}
+.profile-install-text {}
+.profile-install-title {
+  font-size: 12px; font-weight: 800; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--o);
+}
+.profile-install-sub {
+  font-size: 12px; color: rgba(255,255,255,0.45); margin-top: 3px;
+}
+
+/* ── Footer ── */
+.profile-footer {
+  margin: 32px 28px 0;
+  padding-bottom: 8px;
+  font-size: 10px; font-weight: 800; letter-spacing: 0.22em;
+  text-transform: uppercase; color: rgba(255,255,255,0.18);
+}
 
 /* ══════════════════════════════════════════════
    DETAIL
@@ -774,7 +966,7 @@ html, body {
     <div class="ntab" id="saved-tab-home" onclick="go('saved','home')">
       <svg><use href="#ic-heart"/></svg>Saved<span class="badge" id="badge-home"></span>
     </div>
-    <div class="ntab"><svg><use href="#ic-user"/></svg>Profile</div>
+    <div class="ntab" onclick="go('profile','home')"><svg><use href="#ic-user"/></svg>Profile</div>
   </nav>
 </div>
 
@@ -835,7 +1027,7 @@ html, body {
     <div class="ntab" id="saved-tab-results" onclick="go('saved','results')">
       <svg><use href="#ic-heart"/></svg>Saved<span class="badge" id="badge-results"></span>
     </div>
-    <div class="ntab"><svg><use href="#ic-user"/></svg>Profile</div>
+    <div class="ntab" onclick="go('profile','results')"><svg><use href="#ic-user"/></svg>Profile</div>
   </nav>
 </div>
 
@@ -876,7 +1068,7 @@ html, body {
     <div class="ntab" id="saved-tab-map" onclick="go('saved','map-screen')">
       <svg><use href="#ic-heart"/></svg>Saved<span class="badge" id="badge-map"></span>
     </div>
-    <div class="ntab"><svg><use href="#ic-user"/></svg>Profile</div>
+    <div class="ntab" onclick="go('profile','map-screen')"><svg><use href="#ic-user"/></svg>Profile</div>
   </nav>
 </div>
 
@@ -896,7 +1088,110 @@ html, body {
     <div class="ntab" onclick="go('home','saved')"><svg><use href="#ic-home"/></svg>Explore</div>
     <div class="ntab" onclick="go('map-screen','saved')"><svg><use href="#ic-map"/></svg>Map</div>
     <div class="ntab on"><svg><use href="#ic-heart"/></svg>Saved</div>
-    <div class="ntab"><svg><use href="#ic-user"/></svg>Profile</div>
+    <div class="ntab" onclick="go('profile','saved')"><svg><use href="#ic-user"/></svg>Profile</div>
+  </nav>
+</div>
+
+<!-- ══════════════════════════════════════
+  PROFILE SCREEN
+══════════════════════════════════════ -->
+<div class="screen" id="profile">
+  <!-- Decorative watermark campfire -->
+  <svg class="profile-bg-mark" viewBox="0 0 38 38" fill="none">
+    <line x1="4" y1="4" x2="34" y2="34" stroke="white" stroke-width="5.5" stroke-linecap="round"/>
+    <line x1="34" y1="4" x2="4" y2="34" stroke="white" stroke-width="5.5" stroke-linecap="round"/>
+    <path d="M19,22 C15.5,20 14,16 15.5,12.5 C16.5,10 18,9 19,12.5 C20,9 21.5,10 22.5,12.5 C24,16 22.5,20 19,22 Z" fill="white"/>
+  </svg>
+
+  <div class="profile-scroll">
+
+    <!-- Identity block -->
+    <div class="profile-identity">
+      <div class="profile-greeting">Hello,</div>
+      <div class="profile-name-wrap">
+        <input class="profile-name" id="profile-name" type="text" placeholder="Your Name" maxlength="28"
+          oninput="saveProfile()" autocomplete="off" spellcheck="false">
+        <div class="profile-name-underline"></div>
+      </div>
+      <div class="profile-since" id="profile-since"></div>
+    </div>
+
+    <!-- Your Vibe -->
+    <div class="profile-section-label">Your Vibe</div>
+    <div class="vibe-grid">
+      <div class="vibe-cell" id="vibe-national" onclick="toggleVibe('national',this)">
+        <div class="vibe-check"></div>
+        <svg class="vibe-cell-glyph" viewBox="0 0 24 24"><use href="#ic-mountain"/></svg>
+        <div class="vibe-cell-name">National Parks</div>
+      </div>
+      <div class="vibe-cell" id="vibe-state" onclick="toggleVibe('state',this)">
+        <div class="vibe-check"></div>
+        <svg class="vibe-cell-glyph" viewBox="0 0 24 24"><use href="#ic-tree"/></svg>
+        <div class="vibe-cell-name">State Parks</div>
+      </div>
+      <div class="vibe-cell" id="vibe-private" onclick="toggleVibe('private',this)">
+        <div class="vibe-check"></div>
+        <svg class="vibe-cell-glyph" viewBox="0 0 24 24"><use href="#ic-tent"/></svg>
+        <div class="vibe-cell-name">Private Camp</div>
+      </div>
+      <div class="vibe-cell" id="vibe-rare" onclick="toggleVibe('rare',this)">
+        <div class="vibe-check"></div>
+        <svg class="vibe-cell-glyph" viewBox="0 0 24 24"><use href="#ic-gem"/></svg>
+        <div class="vibe-cell-name">Rare Finds</div>
+      </div>
+      <div class="vibe-cell" id="vibe-rv" onclick="toggleVibe('rv',this)">
+        <div class="vibe-check"></div>
+        <svg class="vibe-cell-glyph" viewBox="0 0 24 24"><use href="#ic-rv"/></svg>
+        <div class="vibe-cell-name">RV Parks</div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="profile-stats">
+      <div class="profile-stat">
+        <div class="profile-stat-num" id="profile-stat-saved">0</div>
+        <div class="profile-stat-lbl">Saved</div>
+      </div>
+      <div class="profile-stat">
+        <div class="profile-stat-num" id="profile-stat-vibes">0</div>
+        <div class="profile-stat-lbl">Vibes</div>
+      </div>
+      <div class="profile-stat">
+        <div class="profile-stat-num">PNW</div>
+        <div class="profile-stat-lbl">Spirit</div>
+      </div>
+    </div>
+
+    <!-- Your Story -->
+    <div class="profile-section-label">Your Story</div>
+    <div class="profile-bio-wrap">
+      <div class="profile-bio-label">In my own words</div>
+      <textarea class="profile-bio" id="profile-bio" rows="3"
+        placeholder="Weekend warrior. Always chasing the next fire pit…"
+        oninput="saveProfile()"></textarea>
+    </div>
+
+    <!-- Install CTA (hidden when already standalone) -->
+    <div class="profile-install" id="profile-install-cta" onclick="promptInstall()" style="display:none;">
+      <svg class="profile-install-icon" viewBox="0 0 24 24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2v13m0 0l-3-3m3 3l3-3"/>
+        <rect x="3" y="16" width="18" height="5" rx="1"/>
+      </svg>
+      <div class="profile-install-text">
+        <div class="profile-install-title">Add to Home Screen</div>
+        <div class="profile-install-sub">Take Campgrounder everywhere you go</div>
+      </div>
+    </div>
+
+    <div class="profile-footer">Campgrounder · Built for the wild</div>
+
+  </div><!-- end .profile-scroll -->
+
+  <nav class="bnav">
+    <div class="ntab" onclick="go('home','profile')"><svg><use href="#ic-home"/></svg>Explore</div>
+    <div class="ntab" onclick="go('map-screen','profile')"><svg><use href="#ic-map"/></svg>Map</div>
+    <div class="ntab" onclick="go('saved','profile')"><svg><use href="#ic-heart"/></svg>Saved</div>
+    <div class="ntab on"><svg><use href="#ic-user"/></svg>Profile</div>
   </nav>
 </div>
 
@@ -1572,6 +1867,7 @@ function go(toId, fromId) {
   if (toId === 'map-screen') initMap();
   if (toId === 'results')    renderResults();
   if (toId === 'saved')      renderSaved();
+  if (toId === 'profile')    renderProfile();
   // Show global compass on results + saved screens only (home and map have their own; detail has CTA bar)
   const cg = document.getElementById('compass-global');
   if (cg) cg.classList.toggle('vis', toId === 'results' || toId === 'saved');
@@ -1733,6 +2029,91 @@ function renderSaved() {
       </div>
       <div class="unsave-btn" onclick="unsave(${c.id},event)"></div>
     </div>`).join('');
+}
+
+// ─── PROFILE ─────────────────────────────────────
+let profileVibes = new Set();
+
+function loadProfile() {
+  try {
+    const name = localStorage.getItem('cg_profile_name') || '';
+    const bio  = localStorage.getItem('cg_profile_bio')  || '';
+    const vibes = JSON.parse(localStorage.getItem('cg_profile_vibes') || '[]');
+    if (document.getElementById('profile-name')) {
+      document.getElementById('profile-name').value = name;
+    }
+    if (document.getElementById('profile-bio')) {
+      document.getElementById('profile-bio').value = bio;
+    }
+    profileVibes = new Set(vibes);
+  } catch(e) {}
+}
+
+function saveProfile() {
+  try {
+    const name = document.getElementById('profile-name')?.value || '';
+    const bio  = document.getElementById('profile-bio')?.value  || '';
+    localStorage.setItem('cg_profile_name', name);
+    localStorage.setItem('cg_profile_bio', bio);
+    localStorage.setItem('cg_profile_vibes', JSON.stringify([...profileVibes]));
+    if (!localStorage.getItem('cg_profile_since')) {
+      localStorage.setItem('cg_profile_since', new Date().toISOString());
+    }
+  } catch(e) {}
+}
+
+function toggleVibe(key, el) {
+  if (profileVibes.has(key)) {
+    profileVibes.delete(key);
+    el.classList.remove('on');
+  } else {
+    profileVibes.add(key);
+    el.classList.add('on');
+  }
+  document.getElementById('profile-stat-vibes').textContent = profileVibes.size;
+  saveProfile();
+}
+
+function renderProfile() {
+  // Restore persisted values
+  loadProfile();
+
+  // Re-apply name + bio fields
+  const name = localStorage.getItem('cg_profile_name') || '';
+  const bio  = localStorage.getItem('cg_profile_bio')  || '';
+  const el = document.getElementById('profile-name');
+  if (el && !el.value) el.value = name;
+  const bioEl = document.getElementById('profile-bio');
+  if (bioEl && !bioEl.value) bioEl.value = bio;
+
+  // Since label
+  const sinceRaw = localStorage.getItem('cg_profile_since');
+  if (sinceRaw) {
+    const d = new Date(sinceRaw);
+    const mo = d.toLocaleString('en-US',{month:'long'});
+    document.getElementById('profile-since').textContent = `Camper since ${mo} ${d.getFullYear()}`;
+  } else {
+    document.getElementById('profile-since').textContent = 'Just getting started ⛺';
+    // Set since on first render
+    try { if (!localStorage.getItem('cg_profile_since')) localStorage.setItem('cg_profile_since', new Date().toISOString()); } catch(e){}
+  }
+
+  // Re-apply vibe on-states
+  ['national','state','private','rare','rv'].forEach(key => {
+    const cell = document.getElementById('vibe-' + key);
+    if (cell) cell.classList.toggle('on', profileVibes.has(key));
+  });
+
+  // Stats
+  document.getElementById('profile-stat-saved').textContent = savedIds.size;
+  document.getElementById('profile-stat-vibes').textContent = profileVibes.size;
+
+  // Install CTA — show if not in standalone mode
+  const installCTA = document.getElementById('profile-install-cta');
+  if (installCTA) {
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+    installCTA.style.display = isStandalone ? 'none' : 'flex';
+  }
 }
 
 // ─── SAVE / UNSAVE ──────────────────────────────
@@ -2012,6 +2393,7 @@ function locateMe() {
 // ─── INIT ────────────────────────────────────────
 renderResults();
 renderSaved();
+loadProfile();
 
 // ─── PWA: SERVICE WORKER + INSTALL HANDLING ──────
 
