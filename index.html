@@ -353,6 +353,32 @@ html, body {
 .compass-btn.locating { border-color: var(--o); animation: compassSpin 1s linear infinite; }
 @keyframes compassSpin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
 
+/* Compass in home top-bar */
+.home-top-actions { display: flex; gap: 8px; align-items: center; }
+.compass-top-btn {
+  width: 40px; height: 40px; flex-shrink: 0;
+  border: 1.5px solid var(--w2);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: border-color 0.16s, background 0.16s;
+  background: transparent;
+}
+.compass-top-btn:hover { border-color: var(--o); background: rgba(232,72,28,0.07); }
+.compass-top-btn.locating { border-color: var(--o); animation: compassSpin 1s linear infinite; }
+
+/* Global persistent compass (all screens except home + map) */
+.compass-global {
+  position: fixed; top: 52px; right: 18px; z-index: 9999;
+  width: 44px; height: 44px;
+  background: rgba(12,31,21,0.92); backdrop-filter: blur(12px);
+  border: 1.5px solid var(--w2);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: border-color 0.16s, background 0.16s, opacity 0.2s;
+  opacity: 0; pointer-events: none;
+}
+.compass-global.vis { opacity: 1; pointer-events: all; }
+.compass-global:hover { border-color: var(--o); background: rgba(232,72,28,0.1); }
+.compass-global.locating { border-color: var(--o); animation: compassSpin 1s linear infinite; }
+
 .map-drawer {
   position: absolute; bottom: 0; left: 0; right: 0; z-index: 500;
   background: var(--g0); border-top: 1.5px solid var(--line);
@@ -527,7 +553,12 @@ html, body {
       </svg>
       <div class="wordmark">Campgrounder</div>
     </div>
-    <div class="xbtn" onclick="openSearch()"></div>
+    <div class="home-top-actions">
+      <div class="compass-top-btn" id="compass-top" onclick="locateMe()" title="Find camps near me">
+        <svg width="20" height="20" style="color:white;stroke:currentColor;fill:none;"><use href="#ic-compass"/></svg>
+      </div>
+      <div class="xbtn" onclick="openSearch()"></div>
+    </div>
   </div>
   <div class="home-hero">
     <h1 class="hero-title">Find<br>your<br><span class="o">camp.</span></h1>
@@ -1192,6 +1223,9 @@ function go(toId, fromId) {
   if (toId === 'map-screen') initMap();
   if (toId === 'results')    renderResults();
   if (toId === 'saved')      renderSaved();
+  // Show global compass on all screens except home and map (which have their own)
+  const cg = document.getElementById('compass-global');
+  if (cg) cg.classList.toggle('vis', toId !== 'home' && toId !== 'map-screen');
 }
 function goBack() { go(prevScreen || 'home', null); }
 
@@ -1507,21 +1541,33 @@ function positionMapOverlays() {
 
 // ─── COMPASS / LOCATE ME ────────────────────────
 function locateMe() {
-  if (!mapReady || !lMap) { go('map-screen','home'); return; }
-  const btn = document.getElementById('compass-btn');
-  btn.classList.add('locating');
-  btn.style.borderColor = '#E8481C';
+  // If map isn't ready yet, navigate there first then auto-locate once it's up
+  if (!mapReady || !lMap) {
+    const fromId = document.querySelector('.screen.active')?.id || 'home';
+    go('map-screen', fromId);
+    const poll = setInterval(() => {
+      if (mapReady && lMap) { clearInterval(poll); locateMe(); }
+    }, 150);
+    return;
+  }
+
+  // Animate whichever compass button is currently visible
+  const btn    = document.getElementById('compass-btn');
+  const btnTop = document.getElementById('compass-top');
+  const btnGlb = document.getElementById('compass-global');
+  [btn, btnTop, btnGlb].forEach(b => { if (b) { b.classList.add('locating'); } });
 
   if (!navigator.geolocation) {
     showToast('Geolocation not available');
-    btn.classList.remove('locating');
+    [btn, btnTop, btnGlb].forEach(b => { if (b) b.classList.remove('locating'); });
     return;
   }
 
   navigator.geolocation.getCurrentPosition(
     pos => {
-      btn.classList.remove('locating');
-      btn.style.borderColor = '#E8481C';
+      [btn, btnTop, btnGlb].forEach(b => {
+        if (b) { b.classList.remove('locating'); b.style.borderColor = '#E8481C'; }
+      });
 
       const { latitude: lat, longitude: lng } = pos.coords;
       lMap.flyTo([lat, lng], 10, { duration: 1.4 });
@@ -1540,10 +1586,11 @@ function locateMe() {
       showToast('Found you ＋');
     },
     () => {
-      btn.classList.remove('locating');
-      btn.style.borderColor = '';
-      // Demo fallback — fly to California
-      lMap.flyTo([37.5, -119.5], 7, { duration: 1.4 });
+      [btn, btnTop, btnGlb].forEach(b => {
+        if (b) { b.classList.remove('locating'); b.style.borderColor = ''; }
+      });
+      // Demo fallback — fly to Pacific Northwest
+      lMap.flyTo([47.6, -122.3], 7, { duration: 1.4 });
       showToast('Using demo location');
     },
     { timeout: 8000, enableHighAccuracy: true }
@@ -1561,5 +1608,10 @@ if ('serviceWorker' in navigator) {
   });
 }
 </script>
+
+<!-- Global persistent compass (shows on all screens except home + map) -->
+<div class="compass-global" id="compass-global" onclick="locateMe()">
+  <svg width="22" height="22" style="color:white;stroke:currentColor;fill:none;"><use href="#ic-compass"/></svg>
+</div>
 </body>
 </html>
