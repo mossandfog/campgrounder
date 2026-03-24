@@ -505,6 +505,14 @@ html, body {
   transition: background 0.18s;
 }
 .profile-name:focus ~ .profile-name-underline { background: var(--o); }
+.profile-saved-flash {
+  position: absolute; top: 32px; right: 28px;
+  display: flex; align-items: center; gap: 5px;
+  font-size: 9px; font-weight: 900; letter-spacing: 0.22em;
+  text-transform: uppercase; color: rgba(255,255,255,0.45);
+  opacity: 0; transition: opacity 0.25s; pointer-events: none;
+}
+.profile-saved-flash.show { opacity: 1; }
 .profile-since {
   font-size: 11px; font-weight: 600; letter-spacing: 0.12em;
   text-transform: uppercase; color: rgba(255,255,255,0.35);
@@ -1211,6 +1219,10 @@ html, body {
 
     <!-- Identity block -->
     <div class="profile-identity">
+      <div class="profile-saved-flash" id="profile-saved-flash">
+        <svg width="11" height="11" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2,7 5.5,11 12,3"/></svg>
+        Saved
+      </div>
       <div class="profile-greeting">Hello,</div>
       <div class="profile-name-wrap">
         <input class="profile-name" id="profile-name" type="text" placeholder="Your Name" maxlength="28"
@@ -2220,6 +2232,15 @@ function loadProfile() {
   } catch(e) {}
 }
 
+let _saveFlashTimer;
+function flashSaved() {
+  const el = document.getElementById('profile-saved-flash');
+  if (!el) return;
+  el.classList.add('show');
+  clearTimeout(_saveFlashTimer);
+  _saveFlashTimer = setTimeout(() => el.classList.remove('show'), 1600);
+}
+
 function saveProfile() {
   try {
     const name = document.getElementById('profile-name')?.value || '';
@@ -2230,6 +2251,7 @@ function saveProfile() {
     if (!localStorage.getItem('cg_profile_since')) {
       localStorage.setItem('cg_profile_since', new Date().toISOString());
     }
+    flashSaved();
   } catch(e) {}
 }
 
