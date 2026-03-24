@@ -219,6 +219,15 @@ html, body {
 .cat-plus::after  { content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 1.5px; background: var(--o); transform: translateX(-50%); }
 .cat-cell:hover .cat-plus { opacity: 1; }
 
+.pnw-footer {
+  text-align: center;
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: rgba(255,255,255,0.18);
+  padding: 20px 0 10px;
+  flex-shrink: 0;
+}
+
 /* ══════════════════════════════════════════════
    SEARCH OVERLAY
 ══════════════════════════════════════════════ */
@@ -558,6 +567,7 @@ html, body {
       </div>
     </div>
   </div>
+  <div class="pnw-footer">🌲 Born in the Pacific Northwest</div>
   <nav class="bnav">
     <div class="ntab on"><svg><use href="#ic-home"/></svg>Explore</div>
     <div class="ntab" onclick="go('map-screen','home')"><svg><use href="#ic-map"/></svg>Map</div>
@@ -1089,6 +1099,83 @@ const CAMPS = [
     desc:"Full-hookup resort on the shores of Grand Traverse Bay. Cherry orchards surround the property in spring bloom. The Leelanau wine trail and Sleeping Bear Dunes are a short drive.",
     amenities:["Hot Showers","Electric Hookups","WiFi","Pool","Beach Access","Pet Friendly"],
     seasons:["Spring","Summer","Fall"], lat:44.8, lng:-85.6 },
+
+  // ── PACIFIC NORTHWEST ─────────────────────────────────────────────
+  { id:66, name:"Cougar Rock",               loc:"Mt. Rainier NP · Washington",
+    type:"National Park", price:30, sites:173, avail:16, rating:4.9, reviews:820,
+    desc:"Camp beneath the eternal ice and fire of Mt. Rainier — the most glaciated peak in the contiguous US. Old-growth fir and hemlock surround the sites. The mountain fills your entire sky.",
+    amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Accessible","Pet Friendly"],
+    seasons:["Summer","Fall"], lat:46.7633, lng:-121.7814 },
+  { id:67, name:"Newhalem Creek",            loc:"North Cascades NP · Washington",
+    type:"National Park", price:20, sites:111, avail:22, rating:4.8, reviews:490,
+    desc:"Deep in the Cascade wilderness where the Skagit River carves through the heart of the range. Peaks rise on every side. Old-growth cedar and hemlock. The air smells like cold water and pine.",
+    amenities:["Flush Toilets","Fire Rings","Parking","Fishing","Accessible","Pet Friendly"],
+    seasons:["Summer","Fall"], lat:48.6826, lng:-121.2434 },
+  { id:68, name:"Sol Duc Hot Springs",       loc:"Olympic NP · Washington",
+    type:"National Park", price:32, sites:82, avail:10, rating:4.8, reviews:620,
+    desc:"Soak in geothermal hot spring pools surrounded by one of the last temperate rainforests in the world. Ancient Sitka spruce drip with moss. The Sol Duc Falls are a short walk from camp.",
+    amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Hot Springs","Fishing"],
+    seasons:["Spring","Summer","Fall"], lat:47.9720, lng:-123.8555 },
+  { id:69, name:"Deception Pass State Park", loc:"Oak Harbor · Washington",
+    type:"State Park", price:35, sites:167, avail:14, rating:4.9, reviews:1340,
+    desc:"Washington's most-visited state park, where a dramatic bridge spans a roiling tidal channel between Whidbey and Fidalgo Islands. Rocky beaches, Douglas fir forest, and kayak-ready coves.",
+    amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Beach Access","Fishing"],
+    seasons:["Spring","Summer","Fall"], lat:48.4029, lng:-122.6456 },
+  { id:70, name:"Moran State Park",          loc:"Orcas Island · Washington",
+    type:"State Park", price:35, sites:151, avail:12, rating:4.9, reviews:710,
+    desc:"On Orcas Island in the San Juans — only reachable by ferry — Moran crowns Mt. Constitution at 2,409 feet. The view across the island-studded Salish Sea on a clear day stops conversations cold.",
+    amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Fishing","Kayaking"],
+    seasons:["Spring","Summer","Fall"], lat:48.6644, lng:-122.8414 },
+  { id:71, name:"Oswald West State Park",    loc:"Manzanita · Oregon",
+    type:"State Park", price:22, sites:36, avail:9, rating:4.9, reviews:490,
+    desc:"No cars reach these sites — you wheel your gear in on a provided cart, through old-growth Sitka spruce to Short Sand Beach. The most atmospheric stretch of the Oregon coast.",
+    amenities:["Flush Toilets","Fire Rings","Beach Access","Fishing","Accessible","Pet Friendly"],
+    seasons:["Spring","Summer","Fall","Winter"], lat:45.7631, lng:-123.9634 },
+  { id:72, name:"Fort Stevens State Park",   loc:"Astoria · Oregon",
+    type:"State Park", price:26, sites:494, avail:55, rating:4.7, reviews:1180,
+    desc:"At the mouth of the Columbia River where it meets the Pacific. A historic military fort, a ghostly shipwreck on the beach, 9 miles of paved bike trails, and sunsets over the river bar.",
+    amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Beach Access","Pet Friendly"],
+    seasons:["Spring","Summer","Fall","Winter"], lat:46.1983, lng:-124.0079 },
+  { id:73, name:"Ponderosa State Park",      loc:"McCall · Idaho",
+    type:"State Park", price:24, sites:170, avail:28, rating:4.8, reviews:430,
+    desc:"A forested peninsula jutting into the crystal-clear waters of Payette Lake in the Idaho mountains. Ponderosa pines tower over the sites. Kayak, fish, or just breathe the high-altitude air.",
+    amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Fishing","Kayaking"],
+    seasons:["Spring","Summer","Fall"], lat:44.9202, lng:-116.1019 },
+  { id:74, name:"LOGE Camps Leavenworth",    loc:"Leavenworth · Washington",
+    type:"Private", price:68, sites:40, avail:10, rating:4.8, reviews:380,
+    desc:"A river-access camp on the Wenatchee River in a Bavarian mountain town surrounded by Cascade peaks. Gear storage, a bike wash station, and fire pits above the water. Adventure-ready.",
+    amenities:["Hot Showers","Fire Rings","WiFi","Parking","Kayaking","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:47.5963, lng:-120.6615 },
+  { id:75, name:"Mt. Hood Village Resort",   loc:"Welches · Oregon",
+    type:"Private", price:55, sites:400, avail:45, rating:4.6, reviews:760,
+    desc:"On the banks of the Sandy River at the base of Mt. Hood. Year-round access to skiing, hiking, and river swimming. A true basecamp for exploring Oregon's most iconic peak.",
+    amenities:["Hot Showers","Electric Hookups","Fire Rings","WiFi","Pool","Camp Store"],
+    seasons:["Spring","Summer","Fall","Winter"], lat:45.3710, lng:-121.9826 },
+  { id:76, name:"Deschutes River Camp",      loc:"Maupin · Oregon",
+    type:"Private", price:45, sites:30, avail:11, rating:4.8, reviews:310,
+    desc:"On the banks of the legendary Deschutes River — one of the best fly-fishing rivers in the West. Guided raft trips depart from camp. Golden canyon walls glow in the morning desert light.",
+    amenities:["Hot Showers","Fire Rings","Fishing","Parking","WiFi","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:45.1805, lng:-121.0845 },
+  { id:77, name:"Out'n'About Treehouse",     loc:"Cave Junction · Oregon",
+    type:"Glamping", price:165, sites:15, avail:4, rating:4.9, reviews:260,
+    desc:"Sleep 30 feet off the ground in a handcrafted treehouse in the Siskiyou Mountains. No two treehouses are alike — some have rope bridges, some have skylights, all have the forest below you.",
+    amenities:["Luxury Beds","Breakfast Incl.","Fire Rings","WiFi","Hiking","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:42.0982, lng:-123.5897 },
+  { id:78, name:"Basecamp Hood River",       loc:"Hood River · Oregon",
+    type:"Glamping", price:145, sites:18, avail:5, rating:4.8, reviews:290,
+    desc:"Outfitted canvas tents and tiny cabins on a hillside above the Columbia River Gorge. The gorge corridor is the windsurfing and kiteboarding capital of North America — and the views explain why.",
+    amenities:["Luxury Beds","Breakfast Incl.","Fire Rings","WiFi","Spa Access","Wine Tasting"],
+    seasons:["Spring","Summer","Fall"], lat:45.7054, lng:-121.5243 },
+  { id:79, name:"Oregon Dunes KOA",          loc:"Florence · Oregon",
+    type:"RV Park", price:62, sites:130, avail:28, rating:4.6, reviews:580,
+    desc:"At the edge of North America's largest coastal sand dunes. ATV rentals available on-site, and trails snake directly into the dune field. The Pacific crashes just beyond the ridgeline.",
+    amenities:["Hot Showers","Electric Hookups","WiFi","Pool","Pet Friendly","Camp Store"],
+    seasons:["Spring","Summer","Fall","Winter"], lat:43.9429, lng:-124.1075 },
+  { id:80, name:"Thousand Trails Pacific City", loc:"Pacific City · Oregon",
+    type:"RV Park", price:58, sites:95, avail:20, rating:4.7, reviews:430,
+    desc:"Perched above Cape Kiwanda on the Oregon coast, where a haystack rock and a dory fishing fleet share the same beach. Walk to the cape at sunrise for one of the coast's signature views.",
+    amenities:["Hot Showers","Electric Hookups","WiFi","Beach Access","Fishing","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:45.2126, lng:-123.9618 },
 ];
 
 // ─── STATE ──────────────────────────────────────
