@@ -460,6 +460,7 @@ html, body {
 .d-rct    { font-size: 11px; color: var(--w5); letter-spacing: 0.06em; text-transform: uppercase; }
 
 .stat-row { display: grid; grid-template-columns: repeat(3,1fr); border-top: 1.5px solid var(--line); border-left: 1.5px solid var(--line); margin-bottom: 26px; }
+.stat-row.has-dist { grid-template-columns: repeat(4,1fr); }
 .stat-box { padding: 14px 10px; text-align: center; border-right: 1.5px solid var(--line); border-bottom: 1.5px solid var(--line); }
 .stat-val { font-size: 22px; font-weight: 800; line-height: 1; margin-bottom: 5px; }
 .stat-lbl { font-size: 9px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--w5); }
@@ -652,8 +653,9 @@ html, body {
     <div class="pill"    onclick="setFilter(this,'Private')">Private</div>
     <div class="pill"    onclick="setFilter(this,'Glamping')">Glamping</div>
     <div class="pill"    onclick="setFilter(this,'RV Park')">RV Parks</div>
-    <div class="pill"    onclick="setFilter(this,'pet')">Pet friendly</div>
-    <div class="pill"    onclick="setFilter(this,'avail')">Available now</div>
+    <div class="pill"    onclick="setFilter(this,'pet')">Pet Friendly</div>
+    <div class="pill"    onclick="setFilter(this,'water')">Has Water</div>
+    <div class="pill"    id="nearby-pill" onclick="sortNearMe(this)">Near Me</div>
   </div>
   <div class="results-scroll" id="results-list"></div>
   <nav class="bnav">
@@ -754,6 +756,7 @@ html, body {
       <div class="stat-box"><div class="stat-val" id="d-price" style="color:var(--o);">$35</div><div class="stat-lbl">Per night</div></div>
       <div class="stat-box"><div class="stat-val" id="d-sites">240</div><div class="stat-lbl">Sites</div></div>
       <div class="stat-box"><div class="stat-val" id="d-avail" style="color:#5EC26A;">12</div><div class="stat-lbl">Available</div></div>
+      <div class="stat-box" id="d-dist-box" style="display:none;"><div class="stat-val" id="d-dist">—</div><div class="stat-lbl">Miles away</div></div>
     </div>
     <div class="d-eyebrow">About</div>
     <div class="d-desc" id="d-desc"></div>
@@ -1214,6 +1217,22 @@ let savedIds       = new Set();
 let prevScreen     = 'home';
 let currentFilter  = 'all';
 let currentDetailId = null;
+let userLat        = null;
+let userLng        = null;
+
+// ─── DISTANCE ───────────────────────────────────
+function calcDist(lat1, lng1, lat2, lng2) {
+  const R = 3958.8;
+  const dLat = (lat2-lat1)*Math.PI/180;
+  const dLng = (lng2-lng1)*Math.PI/180;
+  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+function distLabel(c) {
+  if (userLat === null) return '';
+  const mi = Math.round(calcDist(userLat, userLng, c.lat, c.lng));
+  return ` &nbsp;·&nbsp; ${mi < 1 ? '<1' : mi} mi`;
+}
 
 // ─── NAVIGATION ─────────────────────────────────
 function go(toId, fromId) {
@@ -1253,6 +1272,26 @@ function setFilter(el, key) {
   updateMapMarkers();
 }
 
+function sortNearMe(el) {
+  if (userLat !== null) {
+    // Already have location — sort immediately
+    setFilter(el, 'nearby');
+  } else {
+    // Locate first, then apply sort once we have coords
+    el.style.borderColor = 'var(--o)';
+    el.textContent = 'Locating…';
+    locateMe();
+    const poll = setInterval(() => {
+      if (userLat !== null) {
+        clearInterval(poll);
+        el.textContent = 'Near Me';
+        el.style.borderColor = '';
+        setFilter(el, 'nearby');
+      }
+    }, 200);
+  }
+}
+
 // Home pills just set filter and navigate
 function homeFilter(el, key) {
   el.closest('.filter-scroll').querySelectorAll('.pill').forEach(p => p.classList.remove('on'));
@@ -1278,13 +1317,26 @@ function goFiltered(type) {
   }, 10);
 }
 
+const WATER_AMENITIES = new Set(['Beach Access','Fishing','Kayaking','Hot Springs','Hot Tub','Boat Slips']);
+function hasWater(c) {
+  return c.amenities.some(a => WATER_AMENITIES.has(a)) ||
+    /river|lake|creek|coast|ocean|beach|spring|shore/i.test(c.desc + c.loc);
+}
+
 function getFilteredCamps() {
-  return CAMPS.filter(c => {
-    if (currentFilter === 'all')          return true;
-    if (currentFilter === 'pet')          return c.amenities.includes('Pet Friendly');
-    if (currentFilter === 'avail')        return c.avail > 0;
+  let list = CAMPS.filter(c => {
+    if (currentFilter === 'all')     return true;
+    if (currentFilter === 'pet')     return c.amenities.includes('Pet Friendly');
+    if (currentFilter === 'water')   return hasWater(c);
+    if (currentFilter === 'nearby')  return true; // sort-only, no exclusion
     return c.type === currentFilter;
   });
+  if (currentFilter === 'nearby' && userLat !== null) {
+    list = [...list].sort((a,b) =>
+      calcDist(userLat,userLng,a.lat,a.lng) - calcDist(userLat,userLng,b.lat,b.lng)
+    );
+  }
+  return list;
 }
 
 // ─── GLYPH HELPER ───────────────────────────────
@@ -1315,7 +1367,7 @@ function renderResults() {
         <div class="card-name">${c.name}</div>
         <div class="card-loc">${c.loc}</div>
         <div class="card-foot">
-          <div class="card-stats">★ ${c.rating} &nbsp;·&nbsp; ${c.avail} open</div>
+          <div class="card-stats">★ ${c.rating} &nbsp;·&nbsp; ${c.avail} open${distLabel(c)}</div>
           <div><div class="card-pnum">$${c.price}</div><div class="card-punit">/ Night</div></div>
         </div>
       </div>
@@ -1406,6 +1458,19 @@ function openDetail(id) {
   document.getElementById('d-sites').textContent   = c.sites;
   document.getElementById('d-avail').textContent   = c.avail;
   document.getElementById('d-desc').textContent    = c.desc;
+
+  // Distance stat — show only when user location is known
+  const distBox = document.getElementById('d-dist-box');
+  const statRow = distBox.closest('.stat-row');
+  if (userLat !== null) {
+    const mi = Math.round(calcDist(userLat, userLng, c.lat, c.lng));
+    document.getElementById('d-dist').textContent = mi < 1 ? '<1' : mi;
+    distBox.style.display = '';
+    statRow.classList.add('has-dist');
+  } else {
+    distBox.style.display = 'none';
+    statRow.classList.remove('has-dist');
+  }
 
   document.getElementById('d-amenities').innerHTML = c.amenities.map(a =>
     `<div class="amenity-cell">${glyph(AMEN_GLYPH[a]||'#ic-star',17,'rgba(255,255,255,0.5)')}<span class="amenity-lbl">${a}</span></div>`
@@ -1570,7 +1635,9 @@ function locateMe() {
       });
 
       const { latitude: lat, longitude: lng } = pos.coords;
+      userLat = lat; userLng = lng; // store for distance calculations
       lMap.flyTo([lat, lng], 10, { duration: 1.4 });
+      renderResults(); // refresh cards with distance labels
 
       // Remove previous marker
       if (userLocMarker) lMap.removeLayer(userLocMarker);
