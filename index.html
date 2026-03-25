@@ -1117,17 +1117,23 @@ html, body {
   <div class="search-ov-top">
     <div class="xbtn is-close" onclick="closeSearch()"></div>
     <div class="sbar">
-      <input id="search-input" placeholder="Search parks, trails, cities…">
+      <input id="search-input" placeholder="Parks, cities, or zip code…"
+        type="search" inputmode="search" enterkeyhint="search" autocomplete="off"
+        oninput="handleSearchInput(this.value)"
+        onkeydown="if(event.key==='Enter')submitSearch(this.value)">
       <div class="sbar-icon"><svg width="17" height="17" style="color:rgba(255,255,255,0.3);stroke:currentColor;fill:none;"><use href="#ic-search"/></svg></div>
     </div>
   </div>
-  <div class="sug-eyebrow">Popular destinations</div>
-  <div class="sug-item" onclick="go('results','search-overlay')"><div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="#ic-mountain"/></svg></div><div><div class="sug-name">Yosemite National Park</div><div class="sug-sub">California · National Park</div></div></div>
-  <div class="sug-item" onclick="go('results','search-overlay')"><div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="#ic-wave"/></svg></div><div><div class="sug-name">Big Sur Coast</div><div class="sug-sub">California · State Park</div></div></div>
-  <div class="sug-item" onclick="go('results','search-overlay')"><div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="#ic-tree"/></svg></div><div><div class="sug-name">Great Smoky Mountains</div><div class="sug-sub">Tennessee · National Park</div></div></div>
-  <div class="sug-item" onclick="go('results','search-overlay')"><div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="#ic-mountain"/></svg></div><div><div class="sug-name">Olympic Peninsula</div><div class="sug-sub">Washington · National Park</div></div></div>
-  <div class="sug-item" onclick="go('results','search-overlay')"><div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="#ic-moon"/></svg></div><div><div class="sug-name">Joshua Tree</div><div class="sug-sub">California · National Park</div></div></div>
-  <div class="sug-item" onclick="go('results','search-overlay')"><div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="#ic-fire"/></svg></div><div><div class="sug-name">Lassen Volcanic</div><div class="sug-sub">California · National Park</div></div></div>
+  <div id="search-dynamic" style="display:none;"></div>
+  <div id="search-popular">
+    <div class="sug-eyebrow">Popular destinations</div>
+    <div class="sug-item" onclick="submitSearch('Yosemite')"><div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="#ic-mountain"/></svg></div><div><div class="sug-name">Yosemite National Park</div><div class="sug-sub">California · National Park</div></div></div>
+    <div class="sug-item" onclick="submitSearch('Big Sur')"><div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="#ic-wave"/></svg></div><div><div class="sug-name">Big Sur Coast</div><div class="sug-sub">California · State Park</div></div></div>
+    <div class="sug-item" onclick="submitSearch('Smoky')"><div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="#ic-tree"/></svg></div><div><div class="sug-name">Great Smoky Mountains</div><div class="sug-sub">Tennessee · National Park</div></div></div>
+    <div class="sug-item" onclick="submitSearch('Olympic')"><div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="#ic-mountain"/></svg></div><div><div class="sug-name">Olympic Peninsula</div><div class="sug-sub">Washington · National Park</div></div></div>
+    <div class="sug-item" onclick="submitSearch('Joshua Tree')"><div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="#ic-moon"/></svg></div><div><div class="sug-name">Joshua Tree</div><div class="sug-sub">California · National Park</div></div></div>
+    <div class="sug-item" onclick="submitSearch('Lassen')"><div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="#ic-fire"/></svg></div><div><div class="sug-name">Lassen Volcanic</div><div class="sug-sub">California · National Park</div></div></div>
+  </div>
 </div>
 
 <!-- ══════════════════════════════════════
@@ -1135,7 +1141,7 @@ html, body {
 ══════════════════════════════════════ -->
 <div class="screen" id="results">
   <div class="results-top">
-    <div class="xbtn is-close" onclick="go('home','results')"></div>
+    <div class="xbtn is-close" onclick="clearSearch();go('home','results')"></div>
     <div class="sbar"><input value="California" id="results-input"></div>
     <div class="xbtn" onclick="openSearch()"></div>
   </div>
@@ -2178,15 +2184,96 @@ function go(toId, fromId) {
 }
 function goBack() { go(prevScreen || 'home', null); }
 
+let searchQuery = '';
+
 function openSearch() {
   prevScreen = document.querySelector('.screen.active')?.id || 'home';
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('search-overlay').classList.add('active');
-  setTimeout(() => document.getElementById('search-input').focus(), 80);
+  // Reset to popular view
+  document.getElementById('search-dynamic').style.display = 'none';
+  document.getElementById('search-popular').style.display = '';
+  const inp = document.getElementById('search-input');
+  inp.value = '';
+  setTimeout(() => inp.focus(), 80);
+}
+
+function handleSearchInput(val) {
+  const dyn = document.getElementById('search-dynamic');
+  const pop = document.getElementById('search-popular');
+  val = val.trim();
+  if (!val) {
+    dyn.style.display = 'none';
+    pop.style.display = '';
+    return;
+  }
+  pop.style.display = 'none';
+  dyn.style.display = '';
+  let html = '';
+  if (/^\d+$/.test(val)) {
+    // Numeric — zip code flow
+    if (val.length === 5) {
+      html = `<div class="sug-eyebrow">Zip code</div>
+        <div class="sug-item" onclick="submitSearch('${val}')">
+          <div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="#ic-compass"/></svg></div>
+          <div><div class="sug-name">Near ${val}</div><div class="sug-sub">Find campgrounds close to this zip</div></div>
+        </div>`;
+    } else {
+      html = `<div class="sug-eyebrow">Keep typing — zip codes are 5 digits</div>`;
+    }
+  } else {
+    // Text — live match against camp names + locations
+    const q = val.toLowerCase();
+    const matches = CAMPS.filter(c =>
+      c.name.toLowerCase().includes(q) ||
+      c.loc.toLowerCase().includes(q) ||
+      c.type.toLowerCase().includes(q)
+    ).slice(0, 6);
+    if (matches.length) {
+      html = `<div class="sug-eyebrow">Campgrounds</div>` +
+        matches.map(c => `
+          <div class="sug-item" onclick="submitSearch(${JSON.stringify(c.name)})">
+            <div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="${TYPE_GLYPH[c.type]||'#ic-tent'}"/></svg></div>
+            <div><div class="sug-name">${c.name}</div><div class="sug-sub">${c.loc}</div></div>
+          </div>`).join('');
+    } else {
+      html = `<div class="sug-eyebrow">No matches — try a different name or zip</div>`;
+    }
+  }
+  dyn.innerHTML = html;
+}
+
+async function submitSearch(query) {
+  query = (query || '').trim();
+  if (!query) return;
+  const isZip = /^\d{5}$/.test(query);
+  if (isZip) {
+    try {
+      const r = await fetch(`https://api.zippopotam.us/us/${query}`);
+      if (r.ok) {
+        const data = await r.json();
+        const place = data.places[0];
+        userLat = parseFloat(place.latitude);
+        userLng  = parseFloat(place.longitude);
+        searchQuery = `${place['place name']}, ${place['state abbreviation']}`;
+        currentFilter = 'nearby';
+      } else {
+        searchQuery = query;
+      }
+    } catch(e) { searchQuery = query; }
+  } else {
+    searchQuery = query;
+  }
+  document.getElementById('results-input').value = searchQuery;
+  go('results', 'search-overlay');
 }
 function closeSearch() {
   document.getElementById('search-overlay').classList.remove('active');
   document.getElementById(prevScreen || 'home').classList.add('active');
+}
+function clearSearch() {
+  searchQuery = '';
+  document.getElementById('results-input').value = '';
 }
 function setView(v) {
   if (v === 'map') { prevScreen = 'results'; go('map-screen','results'); }
@@ -2255,6 +2342,13 @@ function hasWater(c) {
 
 function getFilteredCamps() {
   let list = CAMPS.filter(c => {
+    // Text / name search — skip when zip-based (nearby handles that via distance sort)
+    if (searchQuery && currentFilter !== 'nearby') {
+      const q = searchQuery.toLowerCase();
+      if (!c.name.toLowerCase().includes(q) &&
+          !c.loc.toLowerCase().includes(q) &&
+          !c.type.toLowerCase().includes(q)) return false;
+    }
     if (currentFilter === 'all')     return true;
     if (currentFilter === 'pet')     return c.amenities.includes('Pet Friendly');
     if (currentFilter === 'water')   return hasWater(c);
