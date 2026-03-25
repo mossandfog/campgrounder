@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Campgrounder — Press Kit</title>
+<style>
+  :root {
+    --g0: #0C1F15;
+    --g1: #132B1C;
+    --g2: #1A3524;
+    --o: #E8481C;
+    --w: #FFFFFF;
+    --w2: rgba(255,255,255,0.12);
+    --w3: rgba(255,255,255,0.06);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0A0A0A;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 24px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+  }
+
+  /* ── HERO SECTION ─────────────────────── */
+  .hero {
+    text-align: center;
+    margin-bottom: 64px;
+  }
+
+  .hero-eyebrow {
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--o);
+    margin-bottom: 16px;
+  }
+
+  .hero-title {
+    font-size: clamp(42px, 8vw, 80px);
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    line-height: 0.9;
+    color: var(--w);
+    margin-bottom: 20px;
+  }
+
+  .hero-sub {
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+  }
+
+  /* ── PHONE MOCKUP ─────────────────────── */
+  .phones-row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 72px;
+    flex-wrap: wrap;
+  }
+
+  .phone-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .phone-label {
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+  }
+
+  .phone {
+    width: 220px;
+    height: 460px;
+    background: #1C1C1E;
+    border-radius: 40px;
+    padding: 10px;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.1),
+      0 40px 80px rgba(0,0,0,0.7),
+      0 0 0 8px #111,
+      0 0 0 9px rgba(255,255,255,0.06);
+    position: relative;
+  }
+
+  .phone.large {
+    width: 260px;
+    height: 540px;
+  }
+
+  /* Notch */
+  .phone::before {
+    content: '';
+    position: absolute;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 22px;
+    background: #1C1C1E;
+    border-radius: 0 0 16px 16px;
+    z-index: 10;
+  }
+
+  .phone-screen {
+    width: 100%;
+    height: 100%;
+    border-radius: 32px;
+    background: var(--g0);
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* ── SCREEN 1: HOME ─────────────────────── */
+  .screen-home {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .screen-home .status-bar {
+    height: 44px;
+    padding: 14px 16px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .status-time {
+    font-size: 10px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.9);
+    letter-spacing: 0.02em;
+  }
+
+  .status-icons {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+
+  .status-icons span {
+    width: 12px;
+    height: 8px;
+    background: rgba(255,255,255,0.8);
+    border-radius: 1px;
+  }
+
+  .screen-home .hero-area {
+    padding: 24px 16px 12px;
+    flex: 1;
+  }
+
+  .screen-home .app-eyebrow {
+    font-size: 7px;
+    font-weight: 900;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--o);
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .screen-home .app-title {
+    font-size: 36px;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    line-height: 0.9;
+    color: var(--w);
+    margin-bottom: 4px;
+  }
+
+  .screen-home .app-sub {
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 16px;
+  }
+
+  /* Search bar */
+  .search-bar {
+    background: var(--g2);
+    border: 1px solid var(--w2);
+    border-radius: 4px;
+    padding: 9px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .search-bar svg { flex-shrink: 0; opacity: 0.4; }
+
+  .search-bar span {
+    font-size: 8px;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 0.04em;
+    font-weight: 500;
+  }
+
+  /* Filter pills */
+  .pills {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+
+  .pill {
+    padding: 5px 10px;
+    border: 1px solid var(--w2);
+    border-radius: 2px;
+    font-size: 6.5px;
+    font-weight: 900;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    flex-shrink: 0;
+  }
+
+  .pill.active {
+    border-color: var(--o);
+    color: var(--o);
+  }
+
+  /* Camp cards */
+  .camp-card {
+    background: var(--g1);
+    border: 1px solid var(--w2);
+    border-radius: 3px;
+    padding: 10px 10px 8px;
+    margin-bottom: 6px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .camp-icon {
+    width: 28px;
+    height: 28px;
+    background: var(--g2);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .camp-info { flex: 1; min-width: 0; }
+
+  .camp-name {
+    font-size: 8.5px;
+    font-weight: 900;
+    color: var(--w);
+    letter-spacing: -0.01em;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .camp-loc {
+    font-size: 7px;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 0.06em;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  .camp-badge {
+    font-size: 6px;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--o);
+    border: 1px solid rgba(232,72,28,0.35);
+    padding: 2px 5px;
+    border-radius: 1px;
+    flex-shrink: 0;
+  }
+
+  /* Bottom nav */
+  .bottom-nav {
+    height: 52px;
+    background: var(--g1);
+    border-top: 1px solid var(--w2);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 8px 4px;
+  }
+
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .nav-dot {
+    width: 4px;
+    height: 4px;
+    background: var(--o);
+    border-radius: 50%;
+  }
+
+  .nav-dot.off { background: rgba(255,255,255,0.2); }
+
+  .nav-lbl {
+    font-size: 5.5px;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+  }
+
+  .nav-item.active .nav-dot { background: var(--o); }
+  .nav-item.active .nav-lbl { color: var(--o); }
+
+  /* ── SCREEN 2: DETAIL ───────────────────── */
+  .screen-detail {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .detail-hero {
+    height: 130px;
+    background: linear-gradient(160deg, #1A3D24 0%, #0C2515 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .detail-hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 30% 60%, rgba(232,72,28,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 30%, rgba(255,255,255,0.03) 0%, transparent 50%);
+  }
+
+  /* Tree silhouette */
+  .trees {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    padding: 0 8px;
+    opacity: 0.3;
+  }
+
+  .tree {
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 28px solid rgba(255,255,255,0.6);
+    position: relative;
+  }
+
+  .tree::before {
+    content: '';
+    position: absolute;
+    bottom: -28px;
+    left: -6px;
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 22px solid rgba(255,255,255,0.6);
+  }
+
+  .tree.tall { border-bottom-width: 36px; }
+  .tree.tall::before { border-bottom-width: 28px; bottom: -36px; }
+  .tree.sm { border-bottom-width: 20px; }
+  .tree.sm::before { border-bottom-width: 16px; bottom: -20px; }
+
+  .detail-back {
+    position: absolute;
+    top: 14px;
+    left: 12px;
+    width: 22px;
+    height: 22px;
+    background: rgba(0,0,0,0.35);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .detail-type-badge {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(0,0,0,0.5);
+    border: 1px solid rgba(232,72,28,0.4);
+    padding: 3px 7px;
+    font-size: 6px;
+    font-weight: 900;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--o);
+    border-radius: 2px;
+  }
+
+  .detail-body {
+    flex: 1;
+    padding: 14px 14px 0;
+    overflow: hidden;
+  }
+
+  .detail-name {
+    font-size: 16px;
+    font-weight: 900;
+    color: var(--w);
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .detail-loc {
+    font-size: 7px;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  .detail-stats {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .stat {
+    flex: 1;
+    background: var(--g2);
+    border: 1px solid var(--w2);
+    border-radius: 2px;
+    padding: 7px 6px;
+    text-align: center;
+  }
+
+  .stat-val {
+    font-size: 11px;
+    font-weight: 900;
+    color: var(--w);
+    letter-spacing: -0.01em;
+    display: block;
+  }
+
+  .stat-lbl {
+    font-size: 6px;
+    color: rgba(255,255,255,0.35);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+  }
+
+  .detail-desc {
+    font-size: 7.5px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+
+  .book-btn {
+    width: 100%;
+    background: var(--o);
+    color: var(--w);
+    border: none;
+    border-radius: 3px;
+    padding: 10px;
+    font-size: 8px;
+    font-weight: 900;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  /* ── SCREEN 3: CALENDAR ─────────────────── */
+  .screen-calendar {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .screen-calendar .status-bar {
+    height: 44px;
+    padding: 14px 16px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .cal-header {
+    padding: 16px 14px 8px;
+  }
+
+  .cal-title {
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--w);
+    letter-spacing: -0.02em;
+    margin-bottom: 2px;
+  }
+
+  .cal-sub {
+    font-size: 7px;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+
+  .cal-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+  }
+
+  .cal-month {
+    font-size: 10px;
+    font-weight: 900;
+    color: var(--w);
+    letter-spacing: 0.05em;
+  }
+
+  .cal-arrow {
+    width: 20px;
+    height: 20px;
+    background: var(--g2);
+    border: 1px solid var(--w2);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    color: rgba(255,255,255,0.5);
+  }
+
+  .cal-dow {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    padding: 0 14px;
+    margin-bottom: 4px;
+  }
+
+  .dow {
+    text-align: center;
+    font-size: 6px;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    padding: 4px 0;
+  }
+
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    padding: 0 14px;
+    gap: 2px;
+  }
+
+  .cal-day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 7.5px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.5);
+    border-radius: 2px;
+    position: relative;
+  }
+
+  .cal-day.other { color: rgba(255,255,255,0.15); }
+  .cal-day.today { color: var(--w); background: var(--g2); border: 1px solid var(--w2); }
+  .cal-day.selected-start, .cal-day.selected-end {
+    background: var(--o);
+    color: var(--w);
+    font-weight: 900;
+    border-radius: 2px;
+  }
+  .cal-day.in-range {
+    background: rgba(232,72,28,0.12);
+    color: rgba(255,255,255,0.7);
+    border-radius: 0;
+  }
+  .cal-day.selected-start { border-radius: 2px 0 0 2px; }
+  .cal-day.selected-end { border-radius: 0 2px 2px 0; }
+
+  .cal-confirm {
+    margin: 12px 14px 0;
+    background: var(--o);
+    color: var(--w);
+    border: none;
+    border-radius: 3px;
+    padding: 10px;
+    font-size: 8px;
+    font-weight: 900;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  .cal-selected-dates {
+    margin: 8px 14px 0;
+    padding: 8px 10px;
+    background: var(--g2);
+    border: 1px solid rgba(232,72,28,0.2);
+    border-radius: 2px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .date-range-text {
+    font-size: 7px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.6);
+    letter-spacing: 0.05em;
+  }
+
+  .nights-badge {
+    font-size: 6px;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--o);
+  }
+
+  /* ── FEATURES STRIP ─────────────────────── */
+  .features {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 56px;
+    max-width: 800px;
+  }
+
+  .feature-pill {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 3px;
+    padding: 10px 18px;
+    text-align: center;
+  }
+
+  .fp-icon {
+    font-size: 18px;
+    margin-bottom: 6px;
+    display: block;
+    line-height: 1;
+  }
+
+  .fp-text {
+    font-size: 8px;
+    font-weight: 900;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+  }
+
+  /* ── BRAND COLORS ───────────────────────── */
+  .brand-section {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .brand-label {
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+    margin-bottom: 20px;
+  }
+
+  .color-swatches {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .swatch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .swatch-block {
+    width: 64px;
+    height: 64px;
+    border-radius: 3px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  }
+
+  .swatch-name {
+    font-size: 8px;
+    font-weight: 900;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+  }
+
+  .swatch-hex {
+    font-size: 8px;
+    color: rgba(255,255,255,0.2);
+    font-family: 'Courier New', monospace;
+  }
+
+  /* ── FOOTER ─────────────────────────────── */
+  .footer {
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding-top: 32px;
+  }
+
+  .footer-logo {
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    color: var(--w);
+    margin-bottom: 4px;
+  }
+
+  .footer-logo span { color: var(--o); }
+
+  .footer-url {
+    font-size: 10px;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 0.1em;
+    margin-bottom: 20px;
+  }
+
+  .footer-contact {
+    font-size: 9px;
+    color: rgba(255,255,255,0.2);
+    line-height: 1.8;
+  }
+
+  .footer-contact a {
+    color: rgba(232,72,28,0.7);
+    text-decoration: none;
+  }
+
+  /* ── TOP NAV ─────────────────────────────── */
+  .top-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    height: 56px;
+    background: rgba(10,10,10,0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .top-nav-logo {
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: -0.01em;
+    color: rgba(255,255,255,0.85);
+  }
+
+  .top-nav-logo span { color: var(--o); }
+
+  .top-nav-back {
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.15s;
+  }
+
+  .top-nav-back:hover { color: var(--o); }
+
+  .top-nav-pill {
+    font-size: 8px;
+    font-weight: 900;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(232,72,28,0.7);
+    border: 1px solid rgba(232,72,28,0.3);
+    padding: 5px 12px;
+    border-radius: 2px;
+  }
+
+  /* ── DOWNLOAD SECTION ───────────────────── */
+  .download-section {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 64px;
+  }
+
+  .dl-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--g1);
+    border: 1.5px solid rgba(232,72,28,0.35);
+    border-radius: 3px;
+    padding: 14px 22px;
+    text-decoration: none;
+    transition: border-color 0.15s, background 0.15s;
+    cursor: pointer;
+  }
+
+  .dl-btn:hover {
+    border-color: var(--o);
+    background: var(--g2);
+  }
+
+  .dl-btn-icon {
+    width: 32px;
+    height: 32px;
+    background: rgba(232,72,28,0.12);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .dl-btn-text { text-align: left; }
+
+  .dl-btn-label {
+    font-size: 8px;
+    font-weight: 900;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--o);
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .dl-btn-sub {
+    font-size: 10px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.6);
+    letter-spacing: 0.02em;
+  }
+
+  .dl-section-label {
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+    text-align: center;
+    margin-bottom: 20px;
+  }
+</style>
+</head>
+<body>
+
+  <!-- ── TOP NAV ───────────────────────────── -->
+  <nav class="top-nav">
+    <a href="index.html" class="top-nav-back">
+      <svg width="8" height="8" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 2L3 5L7 8"/></svg>
+      Back to App
+    </a>
+    <div class="top-nav-logo">CAMP<span>X</span>GROUNDER</div>
+    <div class="top-nav-pill">Press Kit</div>
+  </nav>
+
+  <!-- ── HERO ──────────────────────────────── -->
+  <div class="hero" style="padding-top: 96px;">
+    <div class="hero-eyebrow">Press Kit · campgrounder.io</div>
+    <div class="hero-title">Find Your<br>Camp.</div>
+    <div class="hero-sub">Coming Soon · Free · No Account Required</div>
+  </div>
+
+  <!-- ── THREE PHONE SCREENS ───────────────── -->
+  <div class="phones-row">
+
+    <!-- Phone 1: Home Screen -->
+    <div class="phone-wrap">
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="screen-home">
+            <div class="status-bar">
+              <span class="status-time">9:41</span>
+              <div class="status-icons">
+                <span style="width:14px;height:7px;border-radius:1px;background:rgba(255,255,255,0.7)"></span>
+                <span style="width:10px;height:7px;border-radius:1px;background:rgba(255,255,255,0.5)"></span>
+                <span style="width:7px;height:7px;border-radius:1px;background:rgba(255,255,255,0.3)"></span>
+              </div>
+            </div>
+
+            <div class="hero-area">
+              <span class="app-eyebrow">Campgrounder</span>
+              <div class="app-title">Find<br>your<br>camp.</div>
+              <div class="app-sub">130+ campgrounds · all 50 states</div>
+
+              <div class="search-bar">
+                <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="2">
+                  <circle cx="6.5" cy="6.5" r="4.5"/><line x1="10.5" y1="10.5" x2="14" y2="14"/>
+                </svg>
+                <span>Parks, cities, or zip code…</span>
+              </div>
+
+              <div class="pills">
+                <div class="pill active">All</div>
+                <div class="pill">National</div>
+                <div class="pill">State</div>
+                <div class="pill">Forest</div>
+                <div class="pill">Glamping</div>
+              </div>
+
+              <!-- Camp Cards -->
+              <div class="camp-card">
+                <div class="camp-icon">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2">
+                    <path d="M2 20 L12 4 L22 20Z"/><line x1="12" y1="4" x2="12" y2="20"/>
+                  </svg>
+                </div>
+                <div class="camp-info">
+                  <div class="camp-name">Olympic National Park</div>
+                  <div class="camp-loc">Port Angeles, WA</div>
+                </div>
+                <div class="camp-badge">National</div>
+              </div>
+
+              <div class="camp-card">
+                <div class="camp-icon">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2">
+                    <path d="M3 9L5 6L8 9L12 4L16 9L19 6L21 9"/>
+                    <rect x="3" y="9" width="18" height="10" rx="1"/>
+                  </svg>
+                </div>
+                <div class="camp-info">
+                  <div class="camp-name">Crater Lake NP</div>
+                  <div class="camp-loc">Crater Lake, OR</div>
+                </div>
+                <div class="camp-badge">National</div>
+              </div>
+
+              <div class="camp-card">
+                <div class="camp-icon">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2">
+                    <circle cx="12" cy="8" r="3"/><path d="M12 11 L12 20"/>
+                    <path d="M8 14 L12 11 L16 14"/>
+                  </svg>
+                </div>
+                <div class="camp-info">
+                  <div class="camp-name">Ponderosa Pine</div>
+                  <div class="camp-loc">Boise, ID</div>
+                </div>
+                <div class="camp-badge">Forest</div>
+              </div>
+            </div>
+
+            <div class="bottom-nav">
+              <div class="nav-item active">
+                <div class="nav-dot"></div>
+                <div class="nav-lbl">Camps</div>
+              </div>
+              <div class="nav-item">
+                <div class="nav-dot off"></div>
+                <div class="nav-lbl">Saved</div>
+              </div>
+              <div class="nav-item">
+                <div class="nav-dot off"></div>
+                <div class="nav-lbl">Profile</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-label">Discovery</div>
+    </div>
+
+    <!-- Phone 2: Camp Detail (LARGE / CENTER) -->
+    <div class="phone-wrap">
+      <div class="phone large">
+        <div class="phone-screen">
+          <div class="screen-detail">
+            <div class="detail-hero">
+              <div class="detail-hero-bg"></div>
+              <div class="trees">
+                <div class="tree sm"></div>
+                <div class="tree tall"></div>
+                <div class="tree"></div>
+                <div class="tree tall"></div>
+                <div class="tree sm"></div>
+                <div class="tree"></div>
+                <div class="tree tall"></div>
+                <div class="tree sm"></div>
+                <div class="tree"></div>
+                <div class="tree tall"></div>
+                <div class="tree sm"></div>
+                <div class="tree"></div>
+              </div>
+              <div class="detail-back">
+                <svg width="8" height="8" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2">
+                  <path d="M7 2L3 5L7 8"/>
+                </svg>
+              </div>
+              <!-- Fake status bar -->
+              <div style="position:absolute;top:14px;left:50%;transform:translateX(-50%);font-size:9px;font-weight:700;color:rgba(255,255,255,0.6)">9:41</div>
+              <div class="detail-type-badge">National Park</div>
+            </div>
+
+            <div class="detail-body">
+              <div class="detail-name">Yosemite<br>National Park</div>
+              <div class="detail-loc">Yosemite Valley, CA</div>
+
+              <div class="detail-stats">
+                <div class="stat">
+                  <span class="stat-val">4</span>
+                  <span class="stat-lbl">Campgrounds</span>
+                </div>
+                <div class="stat">
+                  <span class="stat-val">800+</span>
+                  <span class="stat-lbl">Sites</span>
+                </div>
+                <div class="stat">
+                  <span class="stat-val">$26</span>
+                  <span class="stat-lbl">Per Night</span>
+                </div>
+              </div>
+
+              <div class="detail-desc">Iconic granite walls, ancient sequoias, and thundering waterfalls. One of America's most beloved wilderness destinations, open year-round with reservations required.</div>
+
+              <div class="book-btn">Book on Recreation.gov →</div>
+
+              <!-- Tags -->
+              <div style="display:flex;gap:5px;margin-top:10px;flex-wrap:wrap;">
+                <span style="font-size:6px;font-weight:900;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.35);border:1px solid rgba(255,255,255,0.12);padding:3px 6px;border-radius:1px;">Hookups</span>
+                <span style="font-size:6px;font-weight:900;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.35);border:1px solid rgba(255,255,255,0.12);padding:3px 6px;border-radius:1px;">Pet Friendly</span>
+                <span style="font-size:6px;font-weight:900;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.35);border:1px solid rgba(255,255,255,0.12);padding:3px 6px;border-radius:1px;">Reservations</span>
+              </div>
+            </div>
+
+            <div class="bottom-nav" style="margin-top:auto;">
+              <div class="nav-item">
+                <div class="nav-dot off"></div>
+                <div class="nav-lbl">Camps</div>
+              </div>
+              <div class="nav-item active">
+                <div class="nav-dot"></div>
+                <div class="nav-lbl">Detail</div>
+              </div>
+              <div class="nav-item">
+                <div class="nav-dot off"></div>
+                <div class="nav-lbl">Profile</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-label">Camp Detail</div>
+    </div>
+
+    <!-- Phone 3: Calendar -->
+    <div class="phone-wrap">
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="screen-calendar">
+            <div class="status-bar">
+              <span class="status-time">9:41</span>
+              <div class="status-icons">
+                <span style="width:14px;height:7px;border-radius:1px;background:rgba(255,255,255,0.7)"></span>
+              </div>
+            </div>
+
+            <div class="cal-header">
+              <div class="cal-title">Dates</div>
+              <div class="cal-sub">When are you going?</div>
+            </div>
+
+            <div class="cal-nav">
+              <div class="cal-arrow">‹</div>
+              <div class="cal-month">July 2025</div>
+              <div class="cal-arrow">›</div>
+            </div>
+
+            <div class="cal-dow">
+              <div class="dow">S</div><div class="dow">M</div><div class="dow">T</div>
+              <div class="dow">W</div><div class="dow">T</div><div class="dow">F</div>
+              <div class="dow">S</div>
+            </div>
+
+            <div class="cal-grid">
+              <!-- Week 1 (partial) -->
+              <div class="cal-day other">29</div>
+              <div class="cal-day other">30</div>
+              <div class="cal-day">1</div>
+              <div class="cal-day">2</div>
+              <div class="cal-day">3</div>
+              <div class="cal-day">4</div>
+              <div class="cal-day">5</div>
+              <!-- Week 2 -->
+              <div class="cal-day">6</div>
+              <div class="cal-day">7</div>
+              <div class="cal-day">8</div>
+              <div class="cal-day">9</div>
+              <div class="cal-day">10</div>
+              <div class="cal-day selected-start">11</div>
+              <div class="cal-day in-range">12</div>
+              <!-- Week 3 -->
+              <div class="cal-day in-range">13</div>
+              <div class="cal-day in-range">14</div>
+              <div class="cal-day selected-end">15</div>
+              <div class="cal-day">16</div>
+              <div class="cal-day">17</div>
+              <div class="cal-day">18</div>
+              <div class="cal-day">19</div>
+              <!-- Week 4 -->
+              <div class="cal-day today">20</div>
+              <div class="cal-day">21</div>
+              <div class="cal-day">22</div>
+              <div class="cal-day">23</div>
+              <div class="cal-day">24</div>
+              <div class="cal-day">25</div>
+              <div class="cal-day">26</div>
+              <!-- Week 5 -->
+              <div class="cal-day">27</div>
+              <div class="cal-day">28</div>
+              <div class="cal-day">29</div>
+              <div class="cal-day">30</div>
+              <div class="cal-day">31</div>
+              <div class="cal-day other">1</div>
+              <div class="cal-day other">2</div>
+            </div>
+
+            <div class="cal-selected-dates">
+              <div class="date-range-text">Jul 11 → Jul 15</div>
+              <div class="nights-badge">4 Nights</div>
+            </div>
+
+            <div class="cal-confirm">Confirm Dates →</div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-label">Date Picker</div>
+    </div>
+
+  </div><!-- /phones-row -->
+
+  <!-- ── DOWNLOADS ────────────────────────────── -->
+  <div class="dl-section-label">Press Assets</div>
+  <div class="download-section">
+
+    <a href="Campgrounder_PressKit.docx" download class="dl-btn">
+      <div class="dl-btn-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E8481C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="12" y1="12" x2="12" y2="18"/>
+          <polyline points="9 15 12 18 15 15"/>
+        </svg>
+      </div>
+      <div class="dl-btn-text">
+        <span class="dl-btn-label">Download</span>
+        <span class="dl-btn-sub">Full Press Kit (.docx)</span>
+      </div>
+    </a>
+
+    <a href="presskit_mockup.html" target="_blank" class="dl-btn" onclick="return false;" style="cursor:default;opacity:0.5;" title="Right-click → Save As to download this page">
+      <div class="dl-btn-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E8481C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2"/>
+          <circle cx="8.5" cy="8.5" r="1.5"/>
+          <polyline points="21 15 16 10 5 21"/>
+        </svg>
+      </div>
+      <div class="dl-btn-text">
+        <span class="dl-btn-label">This Page</span>
+        <span class="dl-btn-sub">UI Mockup Visual (.html)</span>
+      </div>
+    </a>
+
+    <a href="mailto:benvanderveen@gmail.com?subject=Campgrounder Press Inquiry" class="dl-btn">
+      <div class="dl-btn-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E8481C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+          <polyline points="22,6 12,13 2,6"/>
+        </svg>
+      </div>
+      <div class="dl-btn-text">
+        <span class="dl-btn-label">Contact</span>
+        <span class="dl-btn-sub">Press Inquiry →</span>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- ── FEATURES STRIP ─────────────────────── -->
+  <div class="features">
+    <div class="feature-pill">
+      <span class="fp-icon">🔍</span>
+      <div class="fp-text">Smart Search</div>
+    </div>
+    <div class="feature-pill">
+      <span class="fp-icon">🏕</span>
+      <div class="fp-text">130+ Camps</div>
+    </div>
+    <div class="feature-pill">
+      <span class="fp-icon">📍</span>
+      <div class="fp-text">Zip Code Search</div>
+    </div>
+    <div class="feature-pill">
+      <span class="fp-icon">📅</span>
+      <div class="fp-text">Trip Calendar</div>
+    </div>
+    <div class="feature-pill">
+      <span class="fp-icon">🎒</span>
+      <div class="fp-text">Camper Profile</div>
+    </div>
+    <div class="feature-pill">
+      <span class="fp-icon">📱</span>
+      <div class="fp-text">Works Offline</div>
+    </div>
+  </div>
+
+  <!-- ── BRAND COLORS ───────────────────────── -->
+  <div class="brand-section">
+    <div class="brand-label">Brand Colors</div>
+    <div class="color-swatches">
+      <div class="swatch">
+        <div class="swatch-block" style="background:#0C1F15;border:1px solid rgba(255,255,255,0.1)"></div>
+        <div class="swatch-name">Forest</div>
+        <div class="swatch-hex">#0C1F15</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-block" style="background:#132B1C;border:1px solid rgba(255,255,255,0.08)"></div>
+        <div class="swatch-name">Canopy</div>
+        <div class="swatch-hex">#132B1C</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-block" style="background:#E8481C"></div>
+        <div class="swatch-name">Ember</div>
+        <div class="swatch-hex">#E8481C</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-block" style="background:#FFFFFF;border:1px solid rgba(255,255,255,0.15)"></div>
+        <div class="swatch-name">Smoke</div>
+        <div class="swatch-hex">#FFFFFF</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FOOTER ─────────────────────────────── -->
+  <div class="footer">
+    <div class="footer-logo">CAMPGROUNDER<span style="color:var(--o)">.</span></div>
+    <div class="footer-url">campgrounder.io · Coming Soon</div>
+    <div class="footer-contact">
+      Press inquiries: <a href="mailto:benvanderveen@gmail.com">benvanderveen@gmail.com</a><br>
+      As featured on: <a href="https://mossandfog.com" target="_blank">mossandfog.com</a>
+    </div>
+    <div style="margin-top:24px;">
+      <a href="index.html" style="font-size:8px;font-weight:900;letter-spacing:0.22em;text-transform:uppercase;color:rgba(232,72,28,0.5);text-decoration:none;">← Back to App</a>
+    </div>
+  </div>
+
+</body>
+</html>
