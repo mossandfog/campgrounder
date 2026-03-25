@@ -1140,12 +1140,13 @@ html, body {
   <div id="search-dynamic" style="display:none;"></div>
   <div id="search-popular">
     <div class="sug-eyebrow">Popular destinations</div>
+    <div class="sug-item" onclick="submitSearch('free remote BLM')"><div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="#ic-fire"/></svg></div><div><div class="sug-name">Free remote camping</div><div class="sug-sub">BLM public land · dispersed sites</div></div></div>
+    <div class="sug-item" onclick="submitSearch('lake fishing')"><div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="#ic-wave"/></svg></div><div><div class="sug-name">Lake camping with fishing</div><div class="sug-sub">Army Corps reservoirs · nationwide</div></div></div>
     <div class="sug-item" onclick="submitSearch('Yosemite')"><div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="#ic-mountain"/></svg></div><div><div class="sug-name">Yosemite National Park</div><div class="sug-sub">California · National Park</div></div></div>
-    <div class="sug-item" onclick="submitSearch('Big Sur')"><div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="#ic-wave"/></svg></div><div><div class="sug-name">Big Sur Coast</div><div class="sug-sub">California · State Park</div></div></div>
-    <div class="sug-item" onclick="submitSearch('Smoky')"><div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="#ic-tree"/></svg></div><div><div class="sug-name">Great Smoky Mountains</div><div class="sug-sub">Tennessee · National Park</div></div></div>
-    <div class="sug-item" onclick="submitSearch('Olympic')"><div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="#ic-mountain"/></svg></div><div><div class="sug-name">Olympic Peninsula</div><div class="sug-sub">Washington · National Park</div></div></div>
-    <div class="sug-item" onclick="submitSearch('Joshua Tree')"><div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="#ic-moon"/></svg></div><div><div class="sug-name">Joshua Tree</div><div class="sug-sub">California · National Park</div></div></div>
-    <div class="sug-item" onclick="submitSearch('Lassen')"><div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="#ic-fire"/></svg></div><div><div class="sug-name">Lassen Volcanic</div><div class="sug-sub">California · National Park</div></div></div>
+    <div class="sug-item" onclick="submitSearch('remote canyon Utah')"><div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="#ic-mountain"/></svg></div><div><div class="sug-name">Remote canyon camping</div><div class="sug-sub">Utah · BLM desert</div></div></div>
+    <div class="sug-item" onclick="submitSearch('pet dog friendly hiking')"><div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="#ic-pet"/></svg></div><div><div class="sug-name">Dog-friendly hiking camps</div><div class="sug-sub">Pet friendly · trails nearby</div></div></div>
+    <div class="sug-item" onclick="submitSearch('stargazing dark sky desert')"><div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="#ic-moon"/></svg></div><div><div class="sug-name">Dark sky stargazing</div><div class="sug-sub">Remote desert · no light pollution</div></div></div>
+    <div class="sug-item" onclick="submitSearch('glamping luxury')"><div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="#ic-gem"/></svg></div><div><div class="sug-name">Glamping & luxury sites</div><div class="sug-sub">Yurts · cabins · bell tents</div></div></div>
   </div>
 </div>
 
@@ -2660,6 +2661,134 @@ function goBack() { go(prevScreen || 'home', null); }
 
 let searchQuery = '';
 
+// ─── SEMANTIC SEARCH ENGINE ──────────────────────────────────
+// Each rule has a list of trigger phrases and a scoring function.
+// Scores are additive — a query can match many rules at once.
+const SEMANTIC_RULES = [
+  // ── Price ──
+  { tags:['free','no fee','no cost','zero cost','$0'],           score: c => c.price === 0 ? 9 : 0 },
+  { tags:['cheap','budget','affordable','inexpensive'],          score: c => c.price < 15 ? 6 : c.price < 25 ? 2 : 0 },
+  // ── Camp type shortcuts ──
+  { tags:['blm','public land','dispersed','primitive','boondocking','off-grid','off grid','bureau of land'],
+                                                                 score: c => c.type === 'BLM' ? 10 : 0 },
+  { tags:['army corps','corps of engineers','reservoir','corps lake','dam'],
+                                                                 score: c => c.type === 'Army Corps' ? 10 : 0 },
+  { tags:['national park','nps'],                               score: c => c.type === 'National Park' ? 10 : 0 },
+  { tags:['state park','state forest'],                         score: c => c.type === 'State Park' ? 10 : 0 },
+  { tags:['forest service','national forest','usfs'],           score: c => c.type === 'Forest Service' ? 10 : 0 },
+  { tags:['glamping','luxury camping','glamp','yurt','cabin','bell tent','fancy'],
+                                                                 score: c => c.type === 'Glamping' ? 10 : 0 },
+  { tags:['rv','hookup','full hookup','trailer park'],          score: c => c.type === 'RV Park' ? 8 : c.amenities.includes('Electric Hookups') ? 3 : 0 },
+  // ── Activities ──
+  { tags:['fishing','fish','angling','trout','bass','fly fishing'],
+                                                                 score: c => (c.amenities.includes('Fishing') || c.desc.toLowerCase().includes('fish')) ? 7 : 0 },
+  { tags:['hiking','hike','trails','trail','trekking','backpacking'],
+                                                                 score: c => (c.amenities.includes('Hiking') || c.desc.toLowerCase().includes('hik')) ? 7 : 0 },
+  { tags:['swimming','swim','beach','swimming hole'],            score: c => (c.amenities.includes('Swimming') || c.amenities.includes('Beach Access') || c.desc.toLowerCase().includes('swim') || c.desc.toLowerCase().includes('beach')) ? 7 : 0 },
+  { tags:['boat','boating','kayak','canoe','paddling','paddle','rafting','raft'],
+                                                                 score: c => (c.amenities.includes('Boat Launch') || c.amenities.includes('River Access') || ['raft','kayak','canoe','boat'].some(w => c.desc.toLowerCase().includes(w))) ? 7 : 0 },
+  { tags:['pet','dog','dogs','pets','bring my dog'],             score: c => c.amenities.includes('Pet Friendly') ? 8 : 0 },
+  { tags:['stargazing','stars','dark sky','milky way','astronomy'],
+                                                                 score: c => (c.type === 'BLM' || ['star','dark sky','milky'].some(w => c.desc.toLowerCase().includes(w))) ? 7 : 0 },
+  { tags:['climbing','rock climbing','bouldering'],              score: c => c.desc.toLowerCase().includes('climb') || c.desc.toLowerCase().includes('boulder') ? 6 : 0 },
+  // ── Vibe ──
+  { tags:['remote','secluded','quiet','solitude','isolated','peaceful','off the beaten path'],
+                                                                 score: c => {
+                                                                   let s = 0;
+                                                                   if (['remote','secluded','solitude','isolated'].some(w => c.desc.toLowerCase().includes(w))) s += 5;
+                                                                   if (c.sites < 20) s += 3;
+                                                                   if (c.type === 'BLM') s += 4;
+                                                                   return s; }},
+  { tags:['family','kids','children','playground'],              score: c => (c.amenities.includes('Swimming') || c.amenities.includes('Hot Showers') || c.amenities.includes('Electric Hookups')) ? 4 : 0 },
+  { tags:['scenic','beautiful','views','stunning','gorgeous','spectacular'],
+                                                                 score: c => c.rating >= 4.8 ? 7 : c.rating >= 4.6 ? 4 : 0 },
+  { tags:['popular','iconic','famous','classic','bucket list'],  score: c => c.reviews > 800 ? 7 : c.reviews > 400 ? 4 : 0 },
+  // ── Terrain ──
+  { tags:['mountain','alpine','elevation','summit','peak','high altitude'],
+                                                                 score: c => ['mountain','peak','alpine','summit'].some(w => c.desc.toLowerCase().includes(w)) ? 6 : 0 },
+  { tags:['desert','canyon','sandstone','red rock','arid','southwest landscape'],
+                                                                 score: c => ['desert','canyon','sandstone','arid','red rock'].some(w => c.desc.toLowerCase().includes(w)) ? 6 : 0 },
+  { tags:['forest','woods','wooded','pine','redwood','old growth','trees'],
+                                                                 score: c => ['forest','pine','redwood','old growth','hemlock'].some(w => c.desc.toLowerCase().includes(w)) ? 6 : 0 },
+  { tags:['ocean','coast','coastal','seaside','pacific','atlantic','shore'],
+                                                                 score: c => (['ocean','coast','pacific','atlantic'].some(w => c.desc.toLowerCase().includes(w)) || c.amenities.includes('Beach Access')) ? 6 : 0 },
+  { tags:['lake','lakefront','lakeside','waterfront','lakeshore'],
+                                                                 score: c => (c.type === 'Army Corps' || ['lake','reservoir','lakefront'].some(w => c.desc.toLowerCase().includes(w)) || c.amenities.includes('Boat Launch')) ? 5 : 0 },
+  { tags:['river','riverside','creek','stream','gorge','rapids'],
+                                                                 score: c => (['river','creek','gorge','rapids'].some(w => c.desc.toLowerCase().includes(w)) || c.amenities.includes('River Access')) ? 6 : 0 },
+  { tags:['volcano','volcanic','geothermal','lava','crater'],   score: c => ['volcan','lava','geothermal','crater'].some(w => c.desc.toLowerCase().includes(w)) ? 8 : 0 },
+  { tags:['glacier','glacial'],                                  score: c => c.desc.toLowerCase().includes('glaci') ? 7 : 0 },
+  // ── Regions ──
+  { tags:['pacific northwest','pnw'],                           score: c => ['oregon','washington','idaho'].some(s => c.loc.toLowerCase().includes(s)) ? 9 : 0 },
+  { tags:['southwest','sonoran','mojave'],                      score: c => ['arizona','utah','nevada','new mexico'].some(s => c.loc.toLowerCase().includes(s)) ? 8 : 0 },
+  { tags:['rocky mountains','rockies'],                         score: c => ['colorado','wyoming','montana','idaho'].some(s => c.loc.toLowerCase().includes(s)) ? 7 : 0 },
+  { tags:['new england','northeast'],                           score: c => ['vermont','maine','new hampshire','massachusetts','connecticut'].some(s => c.loc.toLowerCase().includes(s)) ? 8 : 0 },
+  { tags:['appalachian','blue ridge','smoky mountains','appalachia'],
+                                                                 score: c => (['north carolina','tennessee','virginia','west virginia','kentucky'].some(s => c.loc.toLowerCase().includes(s)) || c.desc.toLowerCase().includes('appalachian') || c.desc.toLowerCase().includes('blue ridge')) ? 7 : 0 },
+  { tags:['midwest','great lakes','heartland'],                 score: c => ['michigan','minnesota','wisconsin','illinois','indiana','iowa','missouri','ohio'].some(s => c.loc.toLowerCase().includes(s)) ? 6 : 0 },
+  { tags:['south','southern','southeast','gulf coast'],         score: c => ['texas','florida','georgia','alabama','mississippi','louisiana','arkansas','south carolina'].some(s => c.loc.toLowerCase().includes(s)) ? 6 : 0 },
+  { tags:['alaska'],                                            score: c => c.loc.toLowerCase().includes('alaska') ? 10 : 0 },
+  { tags:['hawaii'],                                            score: c => ['hawaii','kauai','maui','hilo','oahu'].some(s => c.loc.toLowerCase().includes(s)) ? 10 : 0 },
+  // ── States (direct) ──
+  ...['california','colorado','utah','montana','oregon','washington','wyoming','arizona',
+       'nevada','idaho','florida','texas','tennessee','georgia','north carolina',
+       'michigan','minnesota','new york','virginia','maine'].map(st => ({
+    tags:[st], score: c => c.loc.toLowerCase().includes(st) ? 10 : 0
+  })),
+  // ── Seasons ──
+  { tags:['winter','cold','snow camping','snowshoeing'],        score: c => c.seasons.includes('Winter') ? 6 : -3 },
+  { tags:['summer','hot'],                                      score: c => c.seasons.includes('Summer') ? 4 : 0 },
+  { tags:['fall','autumn','foliage','leaf peeping'],            score: c => c.seasons.includes('Fall') ? 5 : 0 },
+  { tags:['spring','wildflowers'],                              score: c => c.seasons.includes('Spring') ? 4 : 0 },
+  // ── Facilities ──
+  { tags:['shower','showers','hot shower'],                     score: c => c.amenities.includes('Hot Showers') ? 6 : -2 },
+  { tags:['wifi','internet'],                                   score: c => c.amenities.includes('WiFi') ? 6 : 0 },
+  { tags:['accessible','wheelchair','ada'],                     score: c => c.amenities.includes('Accessible') ? 10 : 0 },
+  { tags:['electric','electricity','power','plug in'],          score: c => c.amenities.includes('Electric Hookups') ? 7 : 0 },
+];
+
+function semanticScore(camp, query) {
+  const q = query.toLowerCase();
+  let score = 0;
+  // Direct string matches — highest priority
+  if (camp.name.toLowerCase().includes(q))                      score += 14;
+  if (camp.loc.toLowerCase().includes(q))                       score += 11;
+  if (camp.type.toLowerCase().includes(q))                      score += 8;
+  if (camp.desc.toLowerCase().includes(q))                      score += 4;
+  if (camp.amenities.some(a => a.toLowerCase().includes(q)))    score += 4;
+  // Semantic rules
+  for (const rule of SEMANTIC_RULES) {
+    if (rule.tags.some(t => q.includes(t))) score += rule.score(camp);
+  }
+  return score;
+}
+
+// Returns a human-readable label for what the query means, e.g. "free · BLM · Oregon"
+function interpretQuery(query) {
+  const q = query.toLowerCase();
+  const concepts = [];
+  if (['free','no fee','$0','no cost'].some(t => q.includes(t)))                        concepts.push('free camping');
+  if (['blm','dispersed','primitive','boondocking','public land'].some(t => q.includes(t))) concepts.push('BLM');
+  if (['army corps','reservoir','corps'].some(t => q.includes(t)))                      concepts.push('Army Corps');
+  if (['national park','nps'].some(t => q.includes(t)))                                 concepts.push('National Parks');
+  if (['glamping','yurt','cabin','luxury'].some(t => q.includes(t)))                    concepts.push('Glamping');
+  if (['fishing','fish','angling'].some(t => q.includes(t)))                            concepts.push('fishing');
+  if (['hiking','hike','trail'].some(t => q.includes(t)))                               concepts.push('hiking');
+  if (['swimming','swim','beach'].some(t => q.includes(t)))                             concepts.push('swimming');
+  if (['dog','pet','pets'].some(t => q.includes(t)))                                    concepts.push('pet-friendly');
+  if (['remote','secluded','solitude','quiet'].some(t => q.includes(t)))                concepts.push('remote');
+  if (['star','dark sky','milky way'].some(t => q.includes(t)))                         concepts.push('stargazing');
+  if (['ocean','coast','beach'].some(t => q.includes(t)))                               concepts.push('coastal');
+  if (['mountain','alpine','summit'].some(t => q.includes(t)))                          concepts.push('mountain');
+  if (['desert','canyon','red rock'].some(t => q.includes(t)))                          concepts.push('desert');
+  if (['lake','reservoir','lakefront'].some(t => q.includes(t)))                        concepts.push('lakefront');
+  if (['river','creek','gorge'].some(t => q.includes(t)))                               concepts.push('riverside');
+  if (['pnw','pacific northwest'].some(t => q.includes(t)))                             concepts.push('Pacific Northwest');
+  if (['winter','snow'].some(t => q.includes(t)))                                       concepts.push('winter');
+  if (['fall','autumn','foliage'].some(t => q.includes(t)))                             concepts.push('fall');
+  return concepts.length ? concepts.join(' · ') : null;
+}
+
 function openSearch() {
   prevScreen = document.querySelector('.screen.active')?.id || 'home';
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -2676,16 +2805,13 @@ function handleSearchInput(val) {
   const dyn = document.getElementById('search-dynamic');
   const pop = document.getElementById('search-popular');
   val = val.trim();
-  if (!val) {
-    dyn.style.display = 'none';
-    pop.style.display = '';
-    return;
-  }
+  if (!val) { dyn.style.display = 'none'; pop.style.display = ''; return; }
   pop.style.display = 'none';
   dyn.style.display = '';
   let html = '';
+
   if (/^\d+$/.test(val)) {
-    // Numeric — zip code flow
+    // Zip code flow
     if (val.length === 5) {
       html = `<div class="sug-eyebrow">Zip code</div>
         <div class="sug-item" onclick="submitSearch('${val}')">
@@ -2696,22 +2822,34 @@ function handleSearchInput(val) {
       html = `<div class="sug-eyebrow">Keep typing — zip codes are 5 digits</div>`;
     }
   } else {
-    // Text — live match against camp names + locations
-    const q = val.toLowerCase();
-    const matches = CAMPS.filter(c =>
-      c.name.toLowerCase().includes(q) ||
-      c.loc.toLowerCase().includes(q) ||
-      c.type.toLowerCase().includes(q)
-    ).slice(0, 6);
-    if (matches.length) {
-      html = `<div class="sug-eyebrow">Campgrounds</div>` +
-        matches.map(c => `
-          <div class="sug-item" onclick="submitSearch(${JSON.stringify(c.name)})">
+    // Semantic scoring — rank all camps, show top matches
+    const scored = CAMPS
+      .map(c => ({ c, s: semanticScore(c, val) }))
+      .filter(x => x.s > 0)
+      .sort((a, b) => b.s - a.s)
+      .slice(0, 5);
+
+    const concept = interpretQuery(val);
+    const eyebrow = concept
+      ? concept.split(' · ').map(t => `<span style="color:rgba(232,72,28,0.8)">${t}</span>`).join('<span style="color:rgba(255,255,255,0.2)"> · </span>')
+      : 'Results';
+
+    if (scored.length) {
+      html = `<div class="sug-eyebrow">${eyebrow}</div>` +
+        scored.map(({ c }) => `
+          <div class="sug-item" onclick="submitSearch(${JSON.stringify(val)})">
             <div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="${TYPE_GLYPH[c.type]||'#ic-tent'}"/></svg></div>
-            <div><div class="sug-name">${c.name}</div><div class="sug-sub">${c.loc}</div></div>
-          </div>`).join('');
+            <div><div class="sug-name">${c.name}</div><div class="sug-sub">${c.loc} · ${c.type}</div></div>
+          </div>`).join('') +
+        `<div class="sug-item" onclick="submitSearch(${JSON.stringify(val)})" style="opacity:0.5;">
+          <div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="#ic-search"/></svg></div>
+          <div><div class="sug-name">See all results for "${val}"</div><div class="sug-sub">${scored.length < 5 ? scored.length : '5+'} ranked matches</div></div>
+        </div>`;
     } else {
-      html = `<div class="sug-eyebrow">No matches — try a different name or zip</div>`;
+      html = `<div class="sug-item" onclick="submitSearch(${JSON.stringify(val)})">
+        <div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="#ic-search"/></svg></div>
+        <div><div class="sug-name">Search "${val}"</div><div class="sug-sub">Explore all 158 campgrounds</div></div>
+      </div>`;
     }
   }
   dyn.innerHTML = html;
@@ -2815,23 +2953,24 @@ function hasWater(c) {
 }
 
 function getFilteredCamps() {
+  const hasSearch = searchQuery && currentFilter !== 'nearby';
+
   let list = CAMPS.filter(c => {
-    // Text / name search — skip when zip-based (nearby handles that via distance sort)
-    if (searchQuery && currentFilter !== 'nearby') {
-      const q = searchQuery.toLowerCase();
-      if (!c.name.toLowerCase().includes(q) &&
-          !c.loc.toLowerCase().includes(q) &&
-          !c.type.toLowerCase().includes(q)) return false;
-    }
-    if (currentFilter === 'all')     return true;
-    if (currentFilter === 'pet')     return c.amenities.includes('Pet Friendly');
-    if (currentFilter === 'water')   return hasWater(c);
-    if (currentFilter === 'nearby')  return true; // sort-only, no exclusion
+    // When there's a text search, include only camps with a positive semantic score
+    if (hasSearch) return semanticScore(c, searchQuery) > 0;
+    if (currentFilter === 'all')    return true;
+    if (currentFilter === 'pet')    return c.amenities.includes('Pet Friendly');
+    if (currentFilter === 'water')  return hasWater(c);
+    if (currentFilter === 'nearby') return true;
     return c.type === currentFilter;
   });
-  if (currentFilter === 'nearby' && userLat !== null) {
-    list = [...list].sort((a,b) =>
-      calcDist(userLat,userLng,a.lat,a.lng) - calcDist(userLat,userLng,b.lat,b.lng)
+
+  if (hasSearch) {
+    // Sort by semantic relevance score descending
+    list = list.slice().sort((a, b) => semanticScore(b, searchQuery) - semanticScore(a, searchQuery));
+  } else if (currentFilter === 'nearby' && userLat !== null) {
+    list = list.slice().sort((a, b) =>
+      calcDist(userLat, userLng, a.lat, a.lng) - calcDist(userLat, userLng, b.lat, b.lng)
     );
   }
   return list;
