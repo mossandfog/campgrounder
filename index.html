@@ -616,32 +616,54 @@ html, body {
 /* ── Outfit ── */
 .outfit-wrap {
   display: flex; flex-direction: column; align-items: center;
-  padding: 20px 24px 28px;
+  padding: 16px 24px 28px;
 }
 .outfit-stage {
   display: flex; justify-content: center; align-items: flex-end;
-  padding: 12px 0 20px; position: relative;
+  padding: 32px 0 22px; position: relative;
+  width: 100%; max-width: 340px;
+  border: 1.5px solid rgba(232,72,28,0.22);
+  background: var(--g1);
+  margin-bottom: 14px;
 }
-.outfit-svg { width: 80px; height: 132px; overflow: visible; }
+/* Corner label inside stage */
+.outfit-stage::before {
+  content: 'YOUR LOADOUT';
+  position: absolute; top: 10px; left: 14px;
+  font-size: 7px; font-weight: 900; letter-spacing: 0.24em;
+  text-transform: uppercase; color: rgba(255,255,255,0.2);
+}
+.outfit-svg { width: 88px; height: 145px; overflow: visible; }
 .outfit-sublabel {
   font-size: 9px; font-weight: 700; letter-spacing: 0.14em;
   text-transform: uppercase; color: rgba(255,255,255,0.22);
   padding: 3px 28px 0;
 }
+/* Accessories: hidden by default, blaze orange when equipped */
 .outfit-acc { display: none; }
-.outfit-acc.on { display: block; }
+.outfit-acc.on {
+  display: block;
+  stroke: var(--o);
+}
+/* Headlamp lamp bulb needs fill overridden too */
+#oa-headlamp.on circle { fill: var(--o); stroke: var(--o); }
+
+/* 3×2 symmetric grid for gear buttons */
 .outfit-options {
-  display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
-  max-width: 360px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  width: 100%; max-width: 340px;
 }
 .outfit-opt {
-  display: flex; flex-direction: column; align-items: center; gap: 7px;
-  border: 1.5px solid var(--w2); padding: 12px 14px 10px;
-  cursor: pointer; flex-shrink: 0;
-  transition: border-color 0.15s, color 0.15s;
-  color: rgba(255,255,255,0.4);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  border: 1.5px solid var(--w2); padding: 16px 8px 12px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+  color: rgba(255,255,255,0.35);
 }
-.outfit-opt.on { border-color: var(--o); color: var(--o); }
+.outfit-opt:hover { border-color: rgba(255,255,255,0.3); color: rgba(255,255,255,0.65); }
+.outfit-opt.on { border-color: var(--o); color: var(--o); background: rgba(232,72,28,0.07); }
 .outfit-opt-lbl {
   font-size: 8px; font-weight: 900; letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -1427,25 +1449,25 @@ html, body {
           <line x1="52" y1="112" x2="61" y2="112" stroke-width="3.5"/>
         </g>
 
-        <!-- Headlamp -->
+        <!-- Headlamp: band across forehead, lamp on front -->
         <g class="outfit-acc" id="oa-headlamp">
-          <path d="M17,10 Q30,3 43,10" stroke-width="2.8"/>
-          <circle cx="30" cy="4" r="3.2" fill="white" stroke="white" stroke-width="1"/>
+          <path d="M19,6 Q30,1 41,6" stroke-width="2.8"/>
+          <circle cx="30" cy="2" r="3.5" fill="white" stroke="white" stroke-width="1"/>
         </g>
 
-        <!-- Cheaters -->
+        <!-- Cheaters: sit squarely on the face -->
         <g class="outfit-acc" id="oa-shades">
-          <rect x="19" y="8" width="8" height="5.5" rx="2" stroke-width="2.8"/>
-          <rect x="33" y="8" width="8" height="5.5" rx="2" stroke-width="2.8"/>
-          <line x1="27" y1="10.8" x2="33" y2="10.8" stroke-width="2.2"/>
-          <line x1="15.5" y1="10.8" x2="19" y2="10.8" stroke-width="2.2"/>
-          <line x1="41" y1="10.8" x2="44.5" y2="10.8" stroke-width="2.2"/>
+          <rect x="18" y="9" width="9" height="6" rx="2.5" stroke-width="2.8"/>
+          <rect x="33" y="9" width="9" height="6" rx="2.5" stroke-width="2.8"/>
+          <line x1="27" y1="12" x2="33" y2="12" stroke-width="2.2"/>
+          <line x1="14" y1="12" x2="18" y2="12" stroke-width="2.2"/>
+          <line x1="42" y1="12" x2="46" y2="12" stroke-width="2.2"/>
         </g>
 
-        <!-- Fanny Pack -->
+        <!-- Fanny Pack: clipped to hip, strap wraps cleanly -->
         <g class="outfit-acc" id="oa-fanny">
-          <rect x="33" y="55" width="14" height="10" rx="3" stroke-width="3"/>
-          <path d="M33,60 C26,57 20,57 16,60" stroke-width="2.5"/>
+          <rect x="34" y="56" width="15" height="11" rx="3" stroke-width="3"/>
+          <path d="M34,61.5 C28,59 22,59 16,61.5" stroke-width="2.5"/>
         </g>
       </svg>
     </div><!-- /outfit-stage -->
