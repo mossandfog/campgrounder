@@ -1080,6 +1080,8 @@ html, body {
       <div class="pill on"  onclick="homeFilter(this,'all')">Any type</div>
       <div class="pill"     onclick="homeFilter(this,'National Park')">National Parks</div>
       <div class="pill"     onclick="homeFilter(this,'Forest Service')">Forest Service</div>
+      <div class="pill"     onclick="homeFilter(this,'BLM')">BLM</div>
+      <div class="pill"     onclick="homeFilter(this,'Army Corps')">Army Corps</div>
       <div class="pill"     onclick="homeFilter(this,'State Park')">State Parks</div>
       <div class="pill"     onclick="homeFilter(this,'Private')">Private</div>
       <div class="pill"     onclick="homeFilter(this,'Glamping')">Glamping</div>
@@ -1170,6 +1172,8 @@ html, body {
     <div class="pill on" onclick="setFilter(this,'all')">All types</div>
     <div class="pill"    onclick="setFilter(this,'National Park')">National Parks</div>
     <div class="pill"    onclick="setFilter(this,'Forest Service')">Forest Service</div>
+    <div class="pill"    onclick="setFilter(this,'BLM')">BLM</div>
+    <div class="pill"    onclick="setFilter(this,'Army Corps')">Army Corps</div>
     <div class="pill"    onclick="setFilter(this,'State Park')">State Parks</div>
     <div class="pill"    onclick="setFilter(this,'Private')">Private</div>
     <div class="pill"    onclick="setFilter(this,'Glamping')">Glamping</div>
@@ -1519,7 +1523,7 @@ html, body {
 ══════════════════════════════════════ -->
 <script>
 // ─── GLYPH / BOOKING MAPS ──────────────────────
-const TYPE_GLYPH = { 'National Park':'#ic-mountain','State Park':'#ic-tree','Forest Service':'#ic-compass','Private':'#ic-tent','Glamping':'#ic-gem','RV Park':'#ic-rv' };
+const TYPE_GLYPH = { 'National Park':'#ic-mountain','State Park':'#ic-tree','Forest Service':'#ic-compass','Private':'#ic-tent','Glamping':'#ic-gem','RV Park':'#ic-rv','BLM':'#ic-fire','Army Corps':'#ic-wave' };
 const AMEN_GLYPH = {
   'Hot Showers':'#ic-shower','Flush Toilets':'#ic-toilet','Vault Toilets':'#ic-toilet',
   'Fire Rings':'#ic-fire','Parking':'#ic-parking','Accessible':'#ic-accessible',
@@ -1535,6 +1539,8 @@ const BOOK_LINKS = {
   'State Park':'https://www.reserveamerica.com',
   'Private':'https://www.hipcamp.com',
   'Glamping':'https://www.hipcamp.com',
+  'BLM':'https://www.recreation.gov',
+  'Army Corps':'https://www.recreation.gov',
 };
 
 // ─── DATA ──────────────────────────────────────
@@ -2220,6 +2226,176 @@ const CAMPS = [
     desc:"A full-hookup RV village that books out every October during the Balloon Fiesta — the largest balloon event on earth, with 600 hot air balloons launching at dawn over the Sandia Mountains.",
     amenities:["Hot Showers","Electric Hookups","WiFi","Parking","Accessible","Pet Friendly"],
     seasons:["Spring","Fall","Winter"], lat:35.1397, lng:-106.6762 },
+
+  // ── BLM ────────────────────────────────────────
+  { id:131, name:"Goose Island Campground",   loc:"Moab · Utah",
+    type:"BLM", price:20, sites:18, avail:18, rating:4.9, reviews:890,
+    desc:"Arguably the most scenic campground in America, Goose Island sits right on the Colorado River with unobstructed views of 800-foot red sandstone walls. Sites are first-come, first-served and fill by Thursday afternoon in spring.",
+    amenities:["Vault Toilets","River Access","Pet Friendly","Parking"],
+    seasons:["Spring","Fall"], lat:38.6127, lng:-109.5499 },
+
+  { id:132, name:"Alabama Hills Recreation Area", loc:"Lone Pine · California",
+    type:"BLM", price:0, sites:99, avail:99, rating:4.8, reviews:1240,
+    desc:"Free dispersed camping in one of the most otherworldly landscapes in the West — the same jagged granite formations used as backdrops in over 400 films including Star Wars and Iron Man. The Sierra Nevada towers behind you.",
+    amenities:["Vault Toilets","Pet Friendly","Parking"],
+    seasons:["Spring","Summer","Fall","Winter"], lat:36.6077, lng:-118.1089 },
+
+  { id:133, name:"Mattole Beach Campground",   loc:"Humboldt · California",
+    type:"BLM", price:8, sites:14, avail:14, rating:4.7, reviews:320,
+    desc:"The most remote drive-in beach camp in California, at the end of a 23-mile dead-end road where the King Range mountains plunge straight into the Pacific. Bald eagles, Roosevelt elk, and zero cell signal.",
+    amenities:["Vault Toilets","Beach Access","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:40.2796, lng:-124.3494 },
+
+  { id:134, name:"Macks Canyon Recreation Site", loc:"Maupin · Oregon",
+    type:"BLM", price:15, sites:17, avail:17, rating:4.8, reviews:480,
+    desc:"A legendary trout fishing and whitewater rafting camp at the end of the Lower Deschutes River canyon. The camp sits at the confluence with the Columbia in a dramatic basalt gorge with petroglyphs nearby.",
+    amenities:["Vault Toilets","River Access","Fishing","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:45.3929, lng:-120.8512 },
+
+  { id:135, name:"Holter Lake Campground",     loc:"Craig · Montana",
+    type:"BLM", price:14, sites:34, avail:20, rating:4.6, reviews:370,
+    desc:"A serene reservoir camp in the Gates of the Mountains Wilderness area north of Helena. The Missouri River canyon here was described by Lewis & Clark as the most beautiful scenery of the entire expedition.",
+    amenities:["Hot Showers","Boat Launch","Fishing","Pet Friendly","Parking"],
+    seasons:["Spring","Summer","Fall"], lat:47.0173, lng:-111.9765 },
+
+  { id:136, name:"Hartman Rocks Recreation Area", loc:"Gunnison · Colorado",
+    type:"BLM", price:0, sites:50, avail:50, rating:4.7, reviews:560,
+    desc:"Free dispersed camping in a 14,000-acre sandstone wonderland just two miles from downtown Gunnison. World-class mountain biking, hiking, and stargazing — with the Elk Mountains as a backdrop.",
+    amenities:["Vault Toilets","Bike Trails","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:38.5070, lng:-106.9667 },
+
+  { id:137, name:"Burro Creek Campground",     loc:"Wikieup · Arizona",
+    type:"BLM", price:8, sites:30, avail:30, rating:4.5, reviews:290,
+    desc:"A hidden oasis along a perennial Sonoran Desert creek, where saguaro cacti tower 40 feet above your tent and bighorn sheep come to drink at dawn. One of the few BLM camps in Arizona with reliable year-round water.",
+    amenities:["Flush Toilets","Water","Pet Friendly","Fishing","Parking"],
+    seasons:["Fall","Winter","Spring"], lat:34.4852, lng:-113.5789 },
+
+  { id:138, name:"Virgin River Canyon Camp", loc:"St. George · Utah",
+    type:"BLM", price:15, sites:75, avail:40, rating:4.6, reviews:410,
+    desc:"A dramatic slot-canyon corridor camp where the Virgin River has carved through the Arizona Strip for two million years. The walls close in to just 50 feet wide in places; the sky becomes a ribbon of blue overhead.",
+    amenities:["Flush Toilets","Water","Pet Friendly","River Access","Parking"],
+    seasons:["Spring","Fall","Winter"], lat:36.9354, lng:-113.9066 },
+
+  { id:139, name:"Paria Canyon Campground",   loc:"Kanab · Utah",
+    type:"BLM", price:5, sites:20, avail:20, rating:4.9, reviews:680,
+    desc:"The trailhead camp for one of the Southwest's most celebrated slot canyon hikes — the 38-mile Paria Canyon/Vermilion Cliffs route that passes through 300-foot narrows and past eroded hoodoo formations.",
+    amenities:["Vault Toilets","Pet Friendly","Parking"],
+    seasons:["Spring","Fall"], lat:37.0927, lng:-111.9135 },
+
+  { id:140, name:"Steens Mountain Campground", loc:"Burns · Oregon",
+    type:"BLM", price:0, sites:80, avail:80, rating:4.8, reviews:520,
+    desc:"Free camping at 9,700 feet on Oregon's highest fault-block mountain, where four glacial gorges drop 5,000 feet to the Alvord Desert below. The summit view is one of the great panoramas of the American West.",
+    amenities:["Vault Toilets","Pet Friendly","Hiking"],
+    seasons:["Summer","Fall"], lat:42.6254, lng:-118.5708 },
+
+  { id:141, name:"Gunnison Gorge NCA",        loc:"Montrose · Colorado",
+    type:"BLM", price:0, sites:30, avail:30, rating:4.7, reviews:340,
+    desc:"Remote dispersed camping above and below the rim of a 2,000-foot gorge on the Gunnison River — a Gold Medal trout fishery. No roads reach the river; pack your camp in by trail or raft it in from Black Canyon.",
+    amenities:["Vault Toilets","Fishing","Hiking","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:38.5740, lng:-107.8190 },
+
+  { id:142, name:"Red Gulch Dinosaur Tracksite", loc:"Shell · Wyoming",
+    type:"BLM", price:0, sites:15, avail:15, rating:4.5, reviews:210,
+    desc:"Free dispersed camping adjacent to a 167-million-year-old Jurassic dinosaur tracksite in the Bighorn Basin. The BLM runs guided tours to the tracks on summer weekends — camp here and have it to yourself at dusk.",
+    amenities:["Vault Toilets","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:44.6263, lng:-107.7989 },
+
+  { id:143, name:"Lower Deschutes River Camps", loc:"Maupin · Oregon",
+    type:"BLM", price:14, sites:92, avail:50, rating:4.7, reviews:630,
+    desc:"Twenty-two dispersed camps strung along 100 miles of the Deschutes River canyon — Oregon's most popular rafting and steelhead fishing corridor. Sites range from drive-in to hike-in, with petroglyphs and raptors throughout.",
+    amenities:["Vault Toilets","River Access","Fishing","Rafting","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:45.1981, lng:-121.0894 },
+
+  { id:144, name:"Tuttle Creek Campground",   loc:"Lone Pine · California",
+    type:"BLM", price:8, sites:83, avail:50, rating:4.6, reviews:400,
+    desc:"An inexpensive base camp at the foot of Mount Whitney — the highest peak in the Lower 48 — with direct access to the Whitney Portal trail. At 5,100 feet, it stays cooler than Owens Valley and fills every weekend in summer.",
+    amenities:["Vault Toilets","Water","Pet Friendly","Hiking","Parking"],
+    seasons:["Spring","Summer","Fall"], lat:36.5697, lng:-118.1438 },
+
+  { id:145, name:"James Kipp Recreation Area", loc:"Winifred · Montana",
+    type:"BLM", price:7, sites:28, avail:28, rating:4.6, reviews:180,
+    desc:"A frontier-feeling Missouri River camp in the White Cliffs section — the same white sandstone formation Lewis & Clark called 'visionary enchantment' in their journals. Canoe-in primitive sites extend for 50 miles downstream.",
+    amenities:["Boat Launch","Fishing","Pet Friendly","Vault Toilets"],
+    seasons:["Spring","Summer","Fall"], lat:47.5502, lng:-108.9073 },
+
+  // ── ARMY CORPS ─────────────────────────────────
+  { id:146, name:"J. Percy Priest Lake — Poole Knobs", loc:"Nashville · Tennessee",
+    type:"Army Corps", price:28, sites:86, avail:30, rating:4.7, reviews:540,
+    desc:"The closest Army Corps campground to downtown Nashville — just 12 miles out — with lakefront sites, a swimming beach, and one of the best bass fishing lakes in Tennessee. Fills every summer weekend; book 6 months ahead.",
+    amenities:["Hot Showers","Electric Hookups","Boat Launch","Swimming","Pet Friendly","Accessible"],
+    seasons:["Spring","Summer","Fall"], lat:36.0946, lng:-86.5285 },
+
+  { id:147, name:"Lake Sidney Lanier — Bolding Mill", loc:"Gainesville · Georgia",
+    type:"Army Corps", price:34, sites:97, avail:35, rating:4.8, reviews:760,
+    desc:"The most beloved campground on Lake Lanier — Atlanta's 38,000-acre backyard lake — with wooded lakeside sites, a white sand swimming beach, and water that sparkles an unusual blue-green from the granite bottom.",
+    amenities:["Hot Showers","Electric Hookups","Swimming","Boat Launch","Fishing","Pet Friendly","Accessible"],
+    seasons:["Spring","Summer","Fall"], lat:34.2476, lng:-83.8918 },
+
+  { id:148, name:"Sam Rayburn Reservoir — Twin Dikes", loc:"Jasper · Texas",
+    type:"Army Corps", price:22, sites:48, avail:25, rating:4.5, reviews:380,
+    desc:"Deep East Texas piney woods lakeshore camping on the largest reservoir entirely within Texas. Alligators are common on the coves; the bass fishing is exceptional; and the sunsets over open water are pure Gulf Coast gold.",
+    amenities:["Hot Showers","Electric Hookups","Boat Launch","Fishing","Pet Friendly"],
+    seasons:["Spring","Summer","Fall","Winter"], lat:31.2088, lng:-94.1224 },
+
+  { id:149, name:"Lake Texoma — Cedar Creek Park", loc:"Denison · Texas",
+    type:"Army Corps", price:26, sites:65, avail:30, rating:4.6, reviews:490,
+    desc:"The 89,000-acre Red River reservoir straddling Texas and Oklahoma, with year-round striped bass fishing that draws anglers from across the country. Bald eagles winter here in numbers rarely seen south of the Dakotas.",
+    amenities:["Hot Showers","Electric Hookups","Boat Launch","Fishing","Pet Friendly","Accessible"],
+    seasons:["Spring","Summer","Fall","Winter"], lat:33.8423, lng:-96.6175 },
+
+  { id:150, name:"W. Kerr Scott Reservoir",     loc:"Wilkesboro · North Carolina",
+    type:"Army Corps", price:24, sites:120, avail:55, rating:4.7, reviews:430,
+    desc:"A 1,475-acre mountain reservoir in the Brushy Mountains of western North Carolina, ringed by three family campgrounds totaling 200 sites. Osprey nest on the dam; swimming beaches are packed every summer weekend.",
+    amenities:["Hot Showers","Electric Hookups","Swimming","Fishing","Boat Launch","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:36.1304, lng:-81.2046 },
+
+  { id:151, name:"Lake Amistad Recreation Area", loc:"Del Rio · Texas",
+    type:"Army Corps", price:16, sites:50, avail:40, rating:4.7, reviews:320,
+    desc:"An international reservoir on the Rio Grande where the US and Mexico share the water — and some of the most accessible cave paintings in North America. Seminole Canyon's 4,000-year-old pictographs are 10 minutes away.",
+    amenities:["Boat Launch","Fishing","Vault Toilets","Pet Friendly","Accessible"],
+    seasons:["Spring","Fall","Winter"], lat:29.4724, lng:-101.0549 },
+
+  { id:152, name:"Nolin River Lake — Wax Campground", loc:"Brownsville · Kentucky",
+    type:"Army Corps", price:20, sites:110, avail:50, rating:4.5, reviews:370,
+    desc:"A wooded Kentucky reservoir camp one hour south of Louisville and just 12 miles from Mammoth Cave National Park — the longest known cave system on Earth. Rent a paddleboard and explore the coves at dusk.",
+    amenities:["Hot Showers","Electric Hookups","Boat Launch","Swimming","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:37.2116, lng:-86.2682 },
+
+  { id:153, name:"Carlyle Lake — Boulder Recreation", loc:"Carlyle · Illinois",
+    type:"Army Corps", price:22, sites:74, avail:35, rating:4.4, reviews:280,
+    desc:"The largest man-made lake in Illinois, with 26,000 surface acres and the most reliable sailing winds in the Midwest. The campground sits on a wooded peninsula with lake views from nearly every site.",
+    amenities:["Hot Showers","Electric Hookups","Boat Launch","Marina","Pet Friendly","Accessible"],
+    seasons:["Spring","Summer","Fall"], lat:38.6151, lng:-89.4001 },
+
+  { id:154, name:"Beaver Lake — Dam Site",         loc:"Rogers · Arkansas",
+    type:"Army Corps", price:24, sites:60, avail:28, rating:4.6, reviews:420,
+    desc:"Northwest Arkansas's crown jewel reservoir in the Ozarks, where the crystal-clear water and limestone bluffs feel more like the Ozark highlands than a federal impoundment. The Bentonville mountain bike trail network is 20 minutes away.",
+    amenities:["Hot Showers","Electric Hookups","Boat Launch","Fishing","Pet Friendly","Accessible"],
+    seasons:["Spring","Summer","Fall"], lat:36.4293, lng:-94.0229 },
+
+  { id:155, name:"Lake Hartwell — Twin Lakes",     loc:"Anderson · South Carolina",
+    type:"Army Corps", price:28, sites:102, avail:45, rating:4.7, reviews:530,
+    desc:"A massive 56,000-acre reservoir on the Georgia-South Carolina border with 962 miles of shoreline — more than Lake Michigan. Camp here, fish for catfish and crappie, and watch Clemson fans congregate on football weekends.",
+    amenities:["Hot Showers","Electric Hookups","Swimming","Boat Launch","Fishing","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:34.4787, lng:-82.8293 },
+
+  { id:156, name:"Fort Gibson Lake — Flat Rock",   loc:"Fort Gibson · Oklahoma",
+    type:"Army Corps", price:20, sites:55, avail:30, rating:4.5, reviews:290,
+    desc:"Eastern Oklahoma's most popular Corps lake, where the Grand, Arkansas, and Neosho Rivers converge. Ancient cypress trees line the coves; blue herons stalk the shallows; and the largemouth bass fishing is among the best in the state.",
+    amenities:["Hot Showers","Electric Hookups","Boat Launch","Fishing","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:35.7987, lng:-95.2565 },
+
+  { id:157, name:"Okatibbee Lake — Twiltley Branch", loc:"Meridian · Mississippi",
+    type:"Army Corps", price:18, sites:64, avail:35, rating:4.4, reviews:220,
+    desc:"A quiet pine forest reservoir camp in central Mississippi, where the bass fishing is serious and the pace of life slows considerably. Fireflies light the campground in June in a display that draws visitors from across the South.",
+    amenities:["Hot Showers","Electric Hookups","Boat Launch","Fishing","Pet Friendly","Accessible"],
+    seasons:["Spring","Summer","Fall","Winter"], lat:32.3940, lng:-88.6990 },
+
+  { id:158, name:"Barren River Lake — Baileys Point", loc:"Glasgow · Kentucky",
+    type:"Army Corps", price:22, sites:45, avail:22, rating:4.5, reviews:250,
+    desc:"A secluded Appalachian foothills lake camp tucked into the knobs and hollows of Barren County. The dock fishing is excellent and the wooded campsites feel genuinely remote despite being two hours from Nashville.",
+    amenities:["Hot Showers","Electric Hookups","Boat Launch","Fishing","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:37.0476, lng:-85.9408 },
 ];
 
 // ─── STATE ──────────────────────────────────────
