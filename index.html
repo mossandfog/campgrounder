@@ -134,7 +134,11 @@ html, body {
 
   /* Desktop: constrain inner content widths */
   .home-search-row { max-width: 600px; }
+  .date-strip      { max-width: 600px; }
   .results-scroll  { max-width: 900px; align-self: stretch; }
+
+  /* Square-ish browse cells on desktop */
+  .cat-grid { max-width: 620px; }
 
   /* Taller pills on desktop */
   .pill { padding: 20px 22px; font-size: 12px; }
@@ -231,7 +235,7 @@ html, body {
   border-right: 1.5px solid var(--line); border-bottom: 1.5px solid var(--line);
   cursor: pointer; transition: background 0.18s;
   display: flex; flex-direction: column; justify-content: space-between;
-  min-height: 72px; position: relative;
+  aspect-ratio: 1.1 / 1; position: relative;
 }
 .cat-cell:nth-child(even) { border-right: none; }
 .cat-cell:hover { background: rgba(232,72,28,0.05); }
