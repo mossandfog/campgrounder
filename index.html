@@ -887,6 +887,63 @@ html, body {
 .wx-chip svg { opacity: 0.75; }
 .wx-chip span { font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.6); }
 
+/* ── FIRE STATUS BADGE ─────────────────────────── */
+.fire-chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  margin-left: 6px; vertical-align: middle;
+  font-size: 9.5px; font-weight: 800; letter-spacing: 0.08em;
+  text-transform: uppercase; white-space: nowrap;
+}
+.fire-chip.allowed  { color: #5EC26A; }
+.fire-chip.seasonal { color: #E8C21C; }
+.fire-chip.stove    { color: var(--o); }
+
+/* Campfire status block in detail view */
+.fire-status-block {
+  display: flex; align-items: flex-start; gap: 16px;
+  padding: 18px 20px;
+  border: 1.5px solid;
+  margin-bottom: 4px;
+}
+.fire-status-block.allowed  { border-color: rgba(94,194,106,0.35);  background: rgba(94,194,106,0.06); }
+.fire-status-block.seasonal { border-color: rgba(232,194,28,0.35);  background: rgba(232,194,28,0.06); }
+.fire-status-block.stove    { border-color: rgba(232,72,28,0.35);   background: rgba(232,72,28,0.06); }
+.fire-status-icon { flex-shrink: 0; width: 22px; height: 22px; margin-top: 1px; }
+.fire-status-icon.allowed  { color: #5EC26A; }
+.fire-status-icon.seasonal { color: #E8C21C; }
+.fire-status-icon.stove    { color: var(--o); }
+.fire-status-title {
+  font-size: 13px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase;
+  margin-bottom: 5px;
+}
+.fire-status-block.allowed  .fire-status-title { color: #5EC26A; }
+.fire-status-block.seasonal .fire-status-title { color: #E8C21C; }
+.fire-status-block.stove    .fire-status-title { color: var(--o); }
+.fire-status-desc {
+  font-size: 12px; line-height: 1.6; color: rgba(255,255,255,0.58);
+}
+.fire-status-link {
+  display: inline-block; margin-top: 8px;
+  font-size: 10px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase;
+  color: rgba(255,255,255,0.45); text-decoration: none;
+  border-bottom: 1px solid rgba(255,255,255,0.18);
+  transition: color 0.15s, border-color 0.15s;
+}
+.fire-status-link:hover { color: var(--o); border-color: rgba(232,72,28,0.5); }
+
+/* Fire season banner */
+.fire-season-banner {
+  display: none;
+  background: rgba(232,72,28,0.1); border-bottom: 1.5px solid rgba(232,72,28,0.3);
+  padding: 10px 24px; align-items: center; gap: 10px;
+  font-size: 10px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase;
+  color: rgba(255,255,255,0.65); flex-shrink: 0;
+}
+.fire-season-banner.show { display: flex; }
+.fire-season-banner svg { flex-shrink: 0; color: var(--o); stroke: currentColor; fill: none; }
+.fire-season-banner a { color: var(--o); text-decoration: none; margin-left: auto; white-space: nowrap; }
+.fire-season-banner a:hover { text-decoration: underline; }
+
 /* ── FORECAST STRIP ───────────────────────────── */
 .forecast-strip {
   display: flex; margin-bottom: 32px;
@@ -1159,6 +1216,12 @@ html, body {
     <div class="sbar"><input value="California" id="results-input"></div>
     <div class="xbtn" onclick="openSearch()"></div>
   </div>
+  <!-- Fire season advisory banner — shown June–September -->
+  <div class="fire-season-banner" id="fire-season-banner">
+    <svg width="15" height="15"><use href="#ic-fire"/></svg>
+    Fire season: Check restrictions before you go
+    <a href="https://inciweb.nwcg.gov/" target="_blank" rel="noopener">InciWeb →</a>
+  </div>
   <div class="results-meta">
     <div class="results-count" id="results-count">8 Campgrounds</div>
     <div style="display:flex;align-items:center;gap:8px;">
@@ -1181,6 +1244,7 @@ html, body {
     <div class="pill"    onclick="setFilter(this,'RV Park')">RV Parks</div>
     <div class="pill"    onclick="setFilter(this,'pet')">Pet Friendly</div>
     <div class="pill"    onclick="setFilter(this,'water')">Has Water</div>
+    <div class="pill"    onclick="setFilter(this,'fires-ok')">🔥 Fires OK</div>
     <div class="pill"    id="nearby-pill" onclick="sortNearMe(this)">Near Me</div>
   </div>
   <div class="results-scroll" id="results-list"></div>
@@ -1507,6 +1571,9 @@ html, body {
     <div class="d-divider"></div>
     <div class="d-eyebrow">Season</div>
     <div class="season-row" id="d-seasons"></div>
+    <div class="d-divider"></div>
+    <div class="d-eyebrow">Campfire Status</div>
+    <div id="d-fire-status"></div>
     <div class="d-divider" id="d-wx-divider" style="display:none;"></div>
     <div class="d-eyebrow" id="d-wx-eyebrow" style="display:none;">Forecast</div>
     <div class="forecast-strip" id="d-forecast" style="display:none;"></div>
@@ -2644,6 +2711,63 @@ function distLabel(c) {
   return ` &nbsp;·&nbsp; ${mi < 1 ? '<1' : mi} mi`;
 }
 
+// ─── CAMPFIRE STATUS ─────────────────────────────
+const WESTERN_STATES = [
+  'California','Oregon','Washington','Montana','Colorado','Utah',
+  'Arizona','Nevada','Idaho','Wyoming','New Mexico','Alaska','Hawaii'
+];
+const PUBLIC_TYPES = ['National Park','State Park','Forest Service','BLM','Army Corps'];
+
+function campState(camp) {
+  // loc format: "Place Name · State"
+  const parts = camp.loc.split('·');
+  return parts[parts.length - 1].trim();
+}
+
+function getCampfireStatus(camp) {
+  if (camp.type === 'Private' || camp.type === 'Glamping' || camp.type === 'RV Park') return 'allowed';
+  const state = campState(camp);
+  const isWestern = WESTERN_STATES.some(s => state.includes(s));
+  if (isWestern && PUBLIC_TYPES.includes(camp.type)) return 'seasonal';
+  return 'allowed';
+}
+
+function fireChipHTML(status) {
+  if (status === 'allowed')  return `<span class="fire-chip allowed">🔥 Fires OK</span>`;
+  if (status === 'seasonal') return `<span class="fire-chip seasonal">⚠ Seasonal</span>`;
+  return `<span class="fire-chip stove">🚫 Stove Only</span>`;
+}
+
+function fireStatusBlockHTML(status) {
+  const cfg = {
+    allowed: {
+      cls: 'allowed',
+      title: 'Campfires Allowed',
+      desc: 'This campground typically permits campfires in designated fire rings. Always check current conditions on arrival, as local restrictions can change.',
+    },
+    seasonal: {
+      cls: 'seasonal',
+      title: 'Seasonal Restrictions Possible',
+      desc: 'Fire restrictions are common here during dry summer months (June–October). Western public lands frequently issue fire bans during high-risk periods. Check before you go.',
+    },
+    stove: {
+      cls: 'stove',
+      title: 'Campfires Restricted — Stove Only',
+      desc: 'Open campfires are not permitted. Stove cooking with propane or gas is generally allowed. Confirm current rules with the land management agency.',
+    },
+  };
+  const { cls, title, desc } = cfg[status] || cfg.allowed;
+  return `
+    <div class="fire-status-block ${cls}">
+      <svg class="fire-status-icon ${cls}" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-fire"/></svg>
+      <div>
+        <div class="fire-status-title">${title}</div>
+        <div class="fire-status-desc">${desc}</div>
+        <a class="fire-status-link" href="https://inciweb.nwcg.gov/" target="_blank" rel="noopener">Live fire restrictions on InciWeb →</a>
+      </div>
+    </div>`;
+}
+
 // ─── NAVIGATION ─────────────────────────────────
 function go(toId, fromId) {
   prevScreen = fromId || document.querySelector('.screen.active')?.id || 'home';
@@ -2959,9 +3083,10 @@ function getFilteredCamps() {
     // When there's a text search, include only camps with a positive semantic score
     if (hasSearch) return semanticScore(c, searchQuery) > 0;
     if (currentFilter === 'all')    return true;
-    if (currentFilter === 'pet')    return c.amenities.includes('Pet Friendly');
-    if (currentFilter === 'water')  return hasWater(c);
-    if (currentFilter === 'nearby') return true;
+    if (currentFilter === 'pet')      return c.amenities.includes('Pet Friendly');
+    if (currentFilter === 'water')    return hasWater(c);
+    if (currentFilter === 'fires-ok') return getCampfireStatus(c) === 'allowed';
+    if (currentFilter === 'nearby')   return true;
     return c.type === currentFilter;
   });
 
@@ -3004,7 +3129,7 @@ function renderResults() {
         <div class="card-name">${c.name}</div>
         <div class="card-loc">${c.loc}</div>
         <div class="card-foot">
-          <div class="card-stats">★ ${c.rating} &nbsp;·&nbsp; ${c.avail} open${distLabel(c)}<span class="wx-chip" data-cid="${c.id}"></span></div>
+          <div class="card-stats">★ ${c.rating} &nbsp;·&nbsp; ${c.avail} open${distLabel(c)}${fireChipHTML(getCampfireStatus(c))}<span class="wx-chip" data-cid="${c.id}"></span></div>
           <div><div class="card-pnum">$${c.price}</div><div class="card-punit">/ Night</div></div>
         </div>
       </div>
@@ -3248,6 +3373,9 @@ function openDetail(id) {
     `<div class="season-chip ${c.seasons.includes(s)?'on':'off'}">${s}</div>`
   ).join('');
 
+  // Campfire status
+  document.getElementById('d-fire-status').innerHTML = fireStatusBlockHTML(getCampfireStatus(c));
+
   // CTA link — include dates when selected
   const link = document.getElementById('d-cta-link');
   const ctaLabels = {'National Park':'Recreation.gov','State Park':'Reserve America','Private':'Hipcamp','Glamping':'Hipcamp'};
@@ -3447,6 +3575,15 @@ function locateMe() {
 renderResults();
 renderSaved();
 loadProfile();
+
+// Show fire season banner June–September (months 5–8)
+(function() {
+  const m = new Date().getMonth();
+  if (m >= 5 && m <= 8) {
+    const b = document.getElementById('fire-season-banner');
+    if (b) b.classList.add('show');
+  }
+})();
 
 // ─── PWA: SERVICE WORKER + INSTALL HANDLING ──────
 
