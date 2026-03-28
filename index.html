@@ -137,27 +137,28 @@ html, body {
   .date-strip      { max-width: 600px; }
   .results-scroll  { max-width: 900px; align-self: stretch; }
 
-  /* Desktop: 4×2 grid — gap-based dividers, fully equal columns */
+  /* Desktop: 4×2 grid — equal columns, subtle white borders */
   .cat-section { padding: 16px 0 0; }
   .cat-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    border: none;
-    border-top: 1.5px solid var(--line);
-    background: var(--line);
-    gap: 1.5px;
+    width: 100%;
+    background: none;
+    gap: 0;
+    border-top: 1.5px solid var(--w2);
+    border-left: 1.5px solid var(--w2);
+    border-right: 1.5px solid var(--w2);
     margin-top: 10px;
   }
-  /* Every cell gets its own dark background; gaps show as dividers */
   .cat-cell {
-    background: var(--g0);
-    border: none;
     aspect-ratio: unset;
     height: 180px;
     min-height: unset;
     padding: 24px 28px 20px;
+    border-right: 1.5px solid var(--w2);
+    border-bottom: 1.5px solid var(--w2);
   }
-  /* Reset mobile nth-child border overrides */
-  .cat-cell:nth-child(2n) { border-right: none; }
+  /* 4-col: restore right border on even items, remove only on every 4th */
+  .cat-cell:nth-child(2n) { border-right: 1.5px solid var(--w2); }
   .cat-cell:nth-child(4n) { border-right: none; }
   .cat-name { font-size: 20px; }
   .cat-sub  { font-size: 11px; margin-top: 6px; }
