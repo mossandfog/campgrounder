@@ -137,8 +137,13 @@ html, body {
   .date-strip      { max-width: 600px; }
   .results-scroll  { max-width: 900px; align-self: stretch; }
 
-  /* Square-ish browse cells on desktop */
-  .cat-grid { max-width: 620px; }
+  /* Desktop: all 4 types in one row above the fold */
+  .cat-grid { grid-template-columns: repeat(4, 1fr); max-width: none; }
+  /* In 4-col layout every cell needs a right border except the last one */
+  .cat-cell:nth-child(2n)  { border-right: 1.5px solid var(--line); }
+  .cat-cell:nth-child(4n)  { border-right: none; }
+  /* No aspect-ratio — use a fixed comfortable height instead */
+  .cat-cell { aspect-ratio: unset; min-height: 140px; }
 
   /* Taller pills on desktop */
   .pill { padding: 20px 22px; font-size: 12px; }
@@ -229,7 +234,13 @@ html, body {
 
 .cat-section { padding: 10px 0 0; }
 .section-eyebrow { font-size: 10px; font-weight: 800; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.35); padding: 0 24px; }
-.cat-grid { display: grid; grid-template-columns: 1fr 1fr; border-top: 1.5px solid var(--line); margin-top: 10px; }
+.cat-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  border-top: 1.5px solid var(--line);
+  border-left: 1.5px solid var(--line);
+  border-right: 1.5px solid var(--line);
+  margin-top: 10px;
+}
 .cat-cell {
   padding: 14px 16px 12px;
   border-right: 1.5px solid var(--line); border-bottom: 1.5px solid var(--line);
@@ -237,7 +248,8 @@ html, body {
   display: flex; flex-direction: column; justify-content: space-between;
   aspect-ratio: 1.1 / 1; position: relative;
 }
-.cat-cell:nth-child(even) { border-right: none; }
+/* 2-col: right column has no right border (grid edge covers it) */
+.cat-cell:nth-child(2n) { border-right: none; }
 .cat-cell:hover { background: rgba(232,72,28,0.05); }
 .cat-name { font-size: 15px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; margin-top: 8px; }
 .cat-plus { position: absolute; top: 12px; right: 14px; width: 18px; height: 18px; opacity: 0.3; transition: opacity 0.18s; }
