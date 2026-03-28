@@ -119,7 +119,7 @@ html, body {
   /* Wider breathing room on desktop */
   .home-top    { padding: var(--top-pad) 40px 0; }
   .home-hero   { padding: 8px 40px 0; }
-  .section-eyebrow { padding: 0; }
+  .section-eyebrow { padding: 0 40px; }
   .results-top { padding: var(--top-pad) 40px 0; }
   .results-meta { padding: 16px 40px 12px; }
   .results-filters { padding: 14px 40px 0; }
@@ -137,14 +137,28 @@ html, body {
   .date-strip      { max-width: 600px; }
   .results-scroll  { max-width: 900px; align-self: stretch; }
 
-  /* Desktop: 4×2 grid, full width */
-  .cat-section { padding: 16px 40px 0; }
-  .cat-grid { grid-template-columns: repeat(4, 1fr); max-width: none; width: 100%; }
-  /* In 4-col layout every cell needs a right border except every 4th */
-  .cat-cell:nth-child(2n)  { border-right: 1.5px solid var(--line); }
-  .cat-cell:nth-child(4n)  { border-right: none; }
-  /* Tall, airy cells on desktop */
-  .cat-cell { aspect-ratio: unset; height: 200px; min-height: unset; padding: 22px 24px 20px; }
+  /* Desktop: 4×2 grid — gap-based dividers, fully equal columns */
+  .cat-section { padding: 16px 0 0; }
+  .cat-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    border: none;
+    border-top: 1.5px solid var(--line);
+    background: var(--line);
+    gap: 1.5px;
+    margin-top: 10px;
+  }
+  /* Every cell gets its own dark background; gaps show as dividers */
+  .cat-cell {
+    background: var(--g0);
+    border: none;
+    aspect-ratio: unset;
+    height: 180px;
+    min-height: unset;
+    padding: 24px 28px 20px;
+  }
+  /* Reset mobile nth-child border overrides */
+  .cat-cell:nth-child(2n) { border-right: none; }
+  .cat-cell:nth-child(4n) { border-right: none; }
   .cat-name { font-size: 20px; }
   .cat-sub  { font-size: 11px; margin-top: 6px; }
   .cat-cell svg { width: 32px; height: 32px; }
