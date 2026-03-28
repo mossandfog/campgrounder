@@ -1251,7 +1251,7 @@ html, body {
   <div class="search-ov-top">
     <div class="xbtn is-close" onclick="closeSearch()"></div>
     <div class="sbar">
-      <input id="search-input" placeholder="Parks, cities, or zip code…"
+      <input id="search-input" placeholder="Free camping, dog-friendly, waterfalls…"
         type="search" inputmode="search" enterkeyhint="search" autocomplete="off"
         oninput="handleSearchInput(this.value)"
         onkeydown="if(event.key==='Enter')submitSearch(this.value)">
@@ -2854,7 +2854,13 @@ let searchQuery = '';
 // Scores are additive — a query can match many rules at once.
 const SEMANTIC_RULES = [
   // ── Price ──
-  { tags:['free','no fee','no cost','zero cost','$0'],           score: c => c.price === 0 ? 9 : 0 },
+  { tags:['free','no fee','no cost','zero cost','$0','free camping'],
+                                                                 score: c => {
+                                                                   let s = 0;
+                                                                   if (c.price === 0) s += 9;
+                                                                   if (c.type === 'BLM') s += 5;
+                                                                   if (c.type === 'Forest Service') s += 3;
+                                                                   return s; }},
   { tags:['cheap','budget','affordable','inexpensive'],          score: c => c.price < 15 ? 6 : c.price < 25 ? 2 : 0 },
   // ── Camp type shortcuts ──
   { tags:['blm','public land','dispersed','primitive','boondocking','off-grid','off grid','bureau of land'],
@@ -2933,6 +2939,18 @@ const SEMANTIC_RULES = [
   { tags:['wifi','internet'],                                   score: c => c.amenities.includes('WiFi') ? 6 : 0 },
   { tags:['accessible','wheelchair','ada'],                     score: c => c.amenities.includes('Accessible') ? 10 : 0 },
   { tags:['electric','electricity','power','plug in'],          score: c => c.amenities.includes('Electric Hookups') ? 7 : 0 },
+  // ── Water features ──
+  { tags:['waterfall','falls','cascade'],                       score: c => ['waterfall','falls','cascade'].some(w => c.desc.toLowerCase().includes(w)) ? 8 : 0 },
+  { tags:['hot spring','hot springs','thermal','geothermal spring'],
+                                                                 score: c => ['hot spring','thermal','geothermal'].some(w => c.desc.toLowerCase().includes(w)) ? 9 : 0 },
+  // ── Trip vibe ──
+  { tags:['solo','alone','by myself','solo trip'],              score: c => c.sites < 20 ? 6 : c.sites < 50 ? 2 : 0 },
+  { tags:['group','large group','group camping','big group'],   score: c => c.sites >= 100 ? 6 : c.sites >= 50 ? 3 : 0 },
+  { tags:['hammock','hammocking'],                              score: c => ['forest','pine','redwood','old growth','hemlock','oak','maple'].some(w => c.desc.toLowerCase().includes(w)) ? 6 : 0 },
+  { tags:['photography','photographer','photo','sunrise','sunset','golden hour'],
+                                                                 score: c => (c.rating >= 4.7 || ['sunrise','sunset','golden','panoram','view','vista'].some(w => c.desc.toLowerCase().includes(w))) ? 6 : 0 },
+  { tags:['romantic','couples','anniversary','honeymoon'],      score: c => (c.sites < 50 && c.rating >= 4.5) ? 7 : 0 },
+  { tags:['weekend','quick trip','short trip','easy camping'],  score: c => c.rating >= 4.5 ? 4 : c.rating >= 4.0 ? 2 : 0 },
 ];
 
 function semanticScore(camp, query) {
@@ -2974,6 +2992,15 @@ function interpretQuery(query) {
   if (['pnw','pacific northwest'].some(t => q.includes(t)))                             concepts.push('Pacific Northwest');
   if (['winter','snow'].some(t => q.includes(t)))                                       concepts.push('winter');
   if (['fall','autumn','foliage'].some(t => q.includes(t)))                             concepts.push('fall');
+  if (['waterfall','falls','cascade'].some(t => q.includes(t)))                        concepts.push('waterfalls');
+  if (['hot spring','thermal'].some(t => q.includes(t)))                               concepts.push('hot springs');
+  if (['solo','alone'].some(t => q.includes(t)))                                       concepts.push('solo-friendly');
+  if (['group','large group'].some(t => q.includes(t)))                                concepts.push('group camping');
+  if (['hammock'].some(t => q.includes(t)))                                            concepts.push('hammock-friendly');
+  if (['rv','hookup','full hookup'].some(t => q.includes(t)))                          concepts.push('RV-friendly');
+  if (['shower','showers'].some(t => q.includes(t)))                                   concepts.push('with showers');
+  if (['romantic','couples','anniversary'].some(t => q.includes(t)))                   concepts.push('romantic');
+  if (['photo','photography','sunrise','sunset'].some(t => q.includes(t)))             concepts.push('scenic views');
   return concepts.length ? concepts.join(' · ') : null;
 }
 
@@ -3023,21 +3050,38 @@ function handleSearchInput(val) {
       : 'Results';
 
     if (scored.length) {
+      // Detect if this looks like a direct name/location search vs a semantic concept search
+      const isNameSearch = scored[0].s >= 11; // high score = direct name/location match
       html = `<div class="sug-eyebrow">${eyebrow}</div>` +
-        scored.map(({ c }) => `
-          <div class="sug-item" onclick="submitSearch(${JSON.stringify(val)})">
+        scored.map(({ c }) => {
+          // If top result is a name/location match, clicking it goes straight to the detail page
+          const action = isNameSearch && (c.name.toLowerCase().includes(val.toLowerCase()) || c.loc.toLowerCase().includes(val.toLowerCase()))
+            ? `openDetail(${c.id})`
+            : `submitSearch(${JSON.stringify(val)})`;
+          return `
+          <div class="sug-item" onclick="${action}">
             <div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="${TYPE_GLYPH[c.type]||'#ic-tent'}"/></svg></div>
             <div><div class="sug-name">${c.name}</div><div class="sug-sub">${c.loc} · ${c.type}</div></div>
-          </div>`).join('') +
-        `<div class="sug-item" onclick="submitSearch(${JSON.stringify(val)})" style="opacity:0.5;">
+          </div>`;
+        }).join('') +
+        `<div class="sug-item" onclick="submitSearch(${JSON.stringify(val)})" style="opacity:0.55; border-top: 1px solid rgba(255,255,255,0.06); margin-top: 4px; padding-top: 14px;">
           <div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="#ic-search"/></svg></div>
-          <div><div class="sug-name">See all results for "${val}"</div><div class="sug-sub">${scored.length < 5 ? scored.length : '5+'} ranked matches</div></div>
+          <div><div class="sug-name">See all results for "${val}"</div><div class="sug-sub">${scored.length < 5 ? scored.length : '5+'} matches found</div></div>
         </div>`;
     } else {
-      html = `<div class="sug-item" onclick="submitSearch(${JSON.stringify(val)})">
-        <div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="#ic-search"/></svg></div>
-        <div><div class="sug-name">Search "${val}"</div><div class="sug-sub">Explore all 158 campgrounds</div></div>
-      </div>`;
+      html = `<div class="sug-eyebrow">No exact matches</div>
+        <div class="sug-item" onclick="submitSearch(${JSON.stringify(val)})">
+          <div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="#ic-search"/></svg></div>
+          <div><div class="sug-name">Search for "${val}"</div><div class="sug-sub">Show all 158 campgrounds</div></div>
+        </div>
+        <div class="sug-item" onclick="submitSearch('free remote BLM')" style="opacity:0.5;">
+          <div class="sug-box"><svg width="17" height="17" style="color:rgba(255,255,255,0.3);stroke:currentColor;fill:none;"><use href="#ic-fire"/></svg></div>
+          <div><div class="sug-name">Try: free remote camping</div><div class="sug-sub">BLM · dispersed sites</div></div>
+        </div>
+        <div class="sug-item" onclick="submitSearch('dog friendly hiking')" style="opacity:0.5;">
+          <div class="sug-box"><svg width="17" height="17" style="color:rgba(255,255,255,0.3);stroke:currentColor;fill:none;"><use href="#ic-pet"/></svg></div>
+          <div><div class="sug-name">Try: dog-friendly hiking</div><div class="sug-sub">Pet friendly · trails</div></div>
+        </div>`;
     }
   }
   dyn.innerHTML = html;
