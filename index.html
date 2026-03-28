@@ -114,59 +114,145 @@ html, body {
 .sbar input::placeholder { color: rgba(255,255,255,0.28); font-weight: 400; }
 .sbar-icon { padding: 0 18px; display: flex; align-items: center; }
 
-/* ── DESKTOP overrides ────────────────────────── */
+/* ── DESKTOP: BAUHAUS GRID LAYOUT ──────────────── */
 @media (min-width: 768px) {
-  /* Wider breathing room on desktop */
-  .home-top    { padding: var(--top-pad) 40px 0; }
-  .home-hero   { padding: 8px 40px 0; }
-  .section-eyebrow { padding: 0 40px; }
-  .results-top { padding: var(--top-pad) 40px 0; }
-  .results-meta { padding: 16px 40px 12px; }
+
+  /* ── Non-home screens ── */
+  .results-top     { padding: var(--top-pad) 40px 0; }
+  .results-meta    { padding: 16px 40px 12px; }
   .results-filters { padding: 14px 40px 0; }
-  .results-scroll { padding: 0 40px 32px; }
-  .saved-top   { padding: var(--top-pad) 40px 18px; }
-  .saved-scroll { padding: 0 40px 32px; }
-  .d-body      { padding: 16px 40px 140px; }
-  .search-ov-top { padding: var(--top-pad) 40px 20px; }
-  .sug-eyebrow { padding: 0 40px 12px; }
-  .sug-item    { padding: 14px 40px; }
-  .d-topbar    { padding: 0 38px; }
+  .results-scroll  { padding: 0 40px 32px; max-width: 900px; align-self: stretch; }
+  .saved-top       { padding: var(--top-pad) 40px 18px; }
+  .saved-scroll    { padding: 0 40px 32px; }
+  .d-body          { padding: 16px 40px 140px; }
+  .search-ov-top   { padding: var(--top-pad) 40px 20px; }
+  .sug-eyebrow     { padding: 0 40px 12px; }
+  .sug-item        { padding: 14px 40px; }
+  .d-topbar        { padding: 0 38px; }
 
-  /* Desktop: constrain inner content widths */
-  .home-search-row { max-width: 600px; }
-  .date-strip      { max-width: 600px; }
-  .results-scroll  { max-width: 900px; align-self: stretch; }
-
-  /* Desktop: 4×2 grid — equal columns, subtle white borders */
-  .cat-section { padding: 16px 0 0; }
-  .cat-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    width: 100%;
-    background: none;
-    gap: 0;
-    border-top: 1.5px solid var(--w2);
-    border-left: 1.5px solid var(--w2);
-    border-right: 1.5px solid var(--w2);
-    margin-top: 10px;
+  /* ── HOME: full-viewport grid ── */
+  #home { overflow: hidden; }
+  .home-scroll {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
   }
-  .cat-cell {
-    aspect-ratio: unset;
-    height: 180px;
-    min-height: unset;
-    padding: 24px 28px 20px;
-    border-right: 1.5px solid var(--w2);
+
+  /* ── TOP BAR: logo lockup + actions ── */
+  .home-top {
+    padding: 18px 40px;
     border-bottom: 1.5px solid var(--w2);
+    align-items: center;
+    flex-shrink: 0;
   }
-  /* 4-col: restore right border on even items, remove only on every 4th */
-  .cat-cell:nth-child(2n) { border-right: 1.5px solid var(--w2); }
-  .cat-cell:nth-child(4n) { border-right: none; }
-  .cat-name { font-size: 20px; }
-  .cat-sub  { font-size: 11px; margin-top: 6px; }
-  .cat-cell svg { width: 32px; height: 32px; }
-  .cat-plus { top: 18px; right: 20px; width: 22px; height: 22px; }
+  .home-top > div:first-child {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .wordmark { margin-top: 0; font-size: 11px; letter-spacing: 0.26em; }
 
-  /* Taller pills on desktop */
-  .pill { padding: 20px 22px; font-size: 12px; }
+  /* ── HERO: left title / right search — strict 2-col grid ── */
+  .home-hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+      "title search"
+      "title date"
+      "title filters";
+    padding: 0;
+    border-bottom: 1.5px solid var(--w2);
+    flex-shrink: 0;
+  }
+
+  .hero-title {
+    grid-area: title;
+    font-size: clamp(52px, 5.8vw, 86px);
+    letter-spacing: -0.05em;
+    line-height: 0.86;
+    margin: 0;
+    padding: 40px 40px 44px;
+    border-right: 1.5px solid var(--w2);
+    display: flex;
+    align-items: flex-end;
+  }
+
+  .home-search-row {
+    grid-area: search;
+    max-width: none;
+    padding: 36px 40px 14px;
+    margin: 0;
+  }
+
+  .date-strip {
+    grid-area: date;
+    max-width: none;
+    padding: 0 40px 14px;
+    margin: 0;
+  }
+
+  .filter-scroll {
+    grid-area: filters;
+    overflow-x: visible;
+    flex-wrap: wrap;
+    padding: 0 40px 36px;
+    gap: 6px;
+  }
+
+  /* ── CATEGORY SECTION: fills remaining height ── */
+  .cat-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .section-eyebrow {
+    padding: 13px 40px;
+    border-bottom: 1.5px solid var(--w2);
+    flex-shrink: 0;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+  }
+
+  /* ── CAT GRID: 4 equal columns, fills height ── */
+  /* !important used to decisively override mobile nth-child border rules */
+  .cat-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    flex: 1;
+    border: none !important;
+    background: none !important;
+    gap: 0 !important;
+    margin: 0 !important;
+  }
+
+  .cat-cell {
+    aspect-ratio: unset !important;
+    height: auto !important;
+    min-height: 130px;
+    padding: 26px 32px 22px !important;
+    border: none !important;
+    border-top: 1.5px solid var(--w2) !important;
+    border-right: 1.5px solid var(--w2) !important;
+  }
+  .cat-cell:nth-child(2n) { border-right: 1.5px solid var(--w2) !important; }
+  .cat-cell:nth-child(4n) { border-right: none !important; }
+  .cat-cell:hover { background: rgba(232,72,28,0.06) !important; }
+
+  .cat-name { font-size: 18px; }
+  .cat-sub  { font-size: 10px; margin-top: 5px; }
+  .cat-cell svg { width: 26px; height: 26px; }
+  .cat-plus { top: 20px; right: 24px; }
+
+  /* ── FOOTER: hidden on desktop ── */
+  .pnw-footer { display: none; }
+
+  /* ── PILLS: compact, wrap layout ── */
+  .pill { padding: 9px 14px; font-size: 10px; letter-spacing: 0.1em; }
 }
 
 /* ── BOTTOM NAV ───────────────────────────────── */
