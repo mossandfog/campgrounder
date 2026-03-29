@@ -131,11 +131,13 @@ html, body {
   .d-topbar        { padding: 0 38px; }
 
   /* ── HOME: full-viewport grid ── */
-  #home { overflow: hidden; }
+  #home { overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
   .home-scroll {
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1;
+    min-height: 0;
   }
 
   /* ── TOP BAR: logo lockup + actions ── */
@@ -152,51 +154,52 @@ html, body {
   }
   .wordmark { margin-top: 0; font-size: 11px; letter-spacing: 0.26em; }
 
-  /* ── HERO: left title / right search — strict 2-col grid ── */
+  /* ── HERO: title left, search/filters right ── */
   .home-hero {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto auto;
-    grid-template-areas:
-      "title search"
-      "title date"
-      "title filters";
+    flex-direction: row !important;
     padding: 0;
     border-bottom: 1.5px solid var(--w2);
     flex-shrink: 0;
+    align-items: stretch;
   }
 
   .hero-title {
-    grid-area: title;
+    flex: 1;
     font-size: clamp(52px, 5.8vw, 86px);
     letter-spacing: -0.05em;
     line-height: 0.86;
     margin: 0;
-    padding: 40px 40px 44px;
+    padding: 120px 40px 44px;
     border-right: 1.5px solid var(--w2);
-    align-self: end;
+    display: block !important;
+  }
+
+  .hero-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   .home-search-row {
-    grid-area: search;
     max-width: none;
     padding: 36px 40px 14px;
     margin: 0;
   }
 
   .date-strip {
-    grid-area: date;
     max-width: none;
     padding: 0 40px 14px;
     margin: 0;
   }
 
   .filter-scroll {
-    grid-area: filters;
     overflow-x: visible;
     flex-wrap: wrap;
     padding: 0 40px 36px;
     gap: 6px;
+    flex: 1;
+    align-content: flex-start;
   }
 
   /* ── CATEGORY SECTION: fills remaining height ── */
@@ -206,7 +209,7 @@ html, body {
     flex-direction: column;
     padding: 0 0 20px;
     min-height: 0;
-    overflow: hidden;
+    overflow: visible;
   }
 
   .section-eyebrow {
@@ -227,6 +230,8 @@ html, body {
     background: none !important;
     gap: 0 !important;
     margin: 0 !important;
+    min-height: 0;
+    align-content: stretch;
   }
 
   .cat-cell {
@@ -253,6 +258,10 @@ html, body {
   /* ── PILLS: compact, wrap layout ── */
   .pill { padding: 9px 14px; font-size: 10px; letter-spacing: 0.1em; }
 }
+
+/* hero-right is a desktop layout wrapper — transparent on mobile */
+.hero-right { display: contents; }
+@media (min-width: 768px) { .hero-right { display: flex; } }
 
 /* ── BOTTOM NAV ───────────────────────────────── */
 .bnav {
@@ -1228,6 +1237,7 @@ html, body {
   </div>
   <div class="home-hero">
     <h1 class="hero-title">Find<br>your<br><span class="o">camp.</span></h1>
+    <div class="hero-right">
     <div class="home-search-row">
       <div class="sbar" onclick="openSearch()" style="cursor:pointer;">
         <input placeholder="Where are you headed?" readonly style="cursor:pointer;">
@@ -1285,6 +1295,7 @@ html, body {
       <div class="pill"     onclick="homeFilter(this,'Private')">Private</div>
       <div class="pill"     onclick="homeFilter(this,'Glamping')">Glamping</div>
     </div>
+    </div><!-- end .hero-right -->
   </div>
   <div class="cat-section">
     <div class="section-eyebrow">Browse by type</div>
