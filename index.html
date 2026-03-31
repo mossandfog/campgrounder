@@ -2641,6 +2641,30 @@ const CAMPS = [
     desc:"A secluded Appalachian foothills lake camp tucked into the knobs and hollows of Barren County. The dock fishing is excellent and the wooded campsites feel genuinely remote despite being two hours from Nashville.",
     amenities:["Hot Showers","Electric Hookups","Boat Launch","Fishing","Pet Friendly"],
     seasons:["Spring","Summer","Fall"], lat:37.0476, lng:-85.9408 },
+
+  { id:159, name:"Lost Lake Campground",              loc:"Mt. Hood · Hood River County · Oregon",
+    type:"National Forest", price:28, sites:125, avail:40, rating:4.9, reviews:2100,
+    desc:"The most iconic campground on Mt. Hood — Lost Lake offers the classic postcard reflection of the peak mirrored in still water at dawn. Old-growth forest surrounds the lake, hiking trails circle the shore, and boat rentals make lazy afternoons easy. One of the Pacific Northwest's most beloved camps.",
+    amenities:["Boat Rentals","Swimming","Fishing","Hiking","Pet Friendly","Hot Showers","Camp Store"],
+    seasons:["Summer","Fall"], lat:45.4938, lng:-121.8226 },
+
+  { id:160, name:"Timothy Lake — Hoodview Campground", loc:"Mt. Hood National Forest · Oregon",
+    type:"National Forest", price:24, sites:74, avail:30, rating:4.7, reviews:980,
+    desc:"A sprawling reservoir at 3,200 feet in Mt. Hood National Forest with views of the peak framed by Douglas fir. Hoodview is the most scenic of the four campgrounds ringing the lake — paddle-boarders, kayakers, and anglers share the calm water while hikers access the PCT just minutes away.",
+    amenities:["Boat Launch","Fishing","Swimming","Hiking","Pet Friendly","Flush Toilets"],
+    seasons:["Summer","Fall"], lat:45.1176, lng:-121.7810 },
+
+  { id:161, name:"Ramona Falls Trailhead Camp",        loc:"Sandy River · Mt. Hood · Oregon",
+    type:"National Forest", price:0, sites:8, avail:6, rating:4.6, reviews:410,
+    desc:"A small, free dispersed camp at the launch point for one of Mt. Hood's most spectacular hikes — the Ramona Falls Trail follows the rushing Sandy River through old-growth to a 120-foot basalt curtain waterfall. Primitive sites in a mossy forest clearing; the sound of the river never stops.",
+    amenities:["Hiking","Fishing","Pet Friendly","Fire Rings"],
+    seasons:["Spring","Summer","Fall"], lat:45.3906, lng:-121.8545 },
+
+  { id:162, name:"Mirror Lake Camp",                   loc:"Government Camp · Oregon",
+    type:"National Forest", price:0, sites:6, avail:4, rating:4.8, reviews:330,
+    desc:"A hike-in only camp reached by a 3.2-mile trail through old-growth fir. The lake holds a near-perfect reflection of Mt. Hood's summit and south face — arguably the finest view of the mountain anywhere. Pack in, set up, and watch the alpenglow turn the glaciers orange at dusk.",
+    amenities:["Hiking","Hike-In Only","Fishing","Pet Friendly"],
+    seasons:["Summer","Fall"], lat:45.2957, lng:-121.7836 },
 ];
 
 // ─── STATE ──────────────────────────────────────
@@ -3066,15 +3090,36 @@ const SEMANTIC_RULES = [
   { tags:['weekend','quick trip','short trip','easy camping'],  score: c => c.rating >= 4.5 ? 4 : c.rating >= 4.0 ? 2 : 0 },
 ];
 
+// Normalize text for fuzzy matching: lowercase, strip punctuation/periods, collapse spaces
+function normalize(s) {
+  return (s || '').toLowerCase().replace(/[.\-,'''!?]/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
 function semanticScore(camp, query) {
-  const q = query.toLowerCase();
+  const q     = normalize(query);
+  const nName = normalize(camp.name);
+  const nLoc  = normalize(camp.loc);
+  const nType = normalize(camp.type);
+  const nDesc = normalize(camp.desc);
   let score = 0;
+
   // Direct string matches — highest priority
-  if (camp.name.toLowerCase().includes(q))                      score += 14;
-  if (camp.loc.toLowerCase().includes(q))                       score += 11;
-  if (camp.type.toLowerCase().includes(q))                      score += 8;
-  if (camp.desc.toLowerCase().includes(q))                      score += 4;
-  if (camp.amenities.some(a => a.toLowerCase().includes(q)))    score += 4;
+  if (nName.includes(q))                                          score += 14;
+  if (nLoc.includes(q))                                           score += 11;
+  if (nType.includes(q))                                          score += 8;
+  if (nDesc.includes(q))                                          score += 4;
+  if (camp.amenities.some(a => normalize(a).includes(q)))         score += 4;
+
+  // Word-token matching: split query into individual words and check how many
+  // appear across name + loc + desc — handles "Mt Hood" matching "Mt. Hood" etc.
+  const tokens = q.split(/\s+/).filter(t => t.length > 1);
+  if (tokens.length > 1) {
+    const haystack = nName + ' ' + nLoc + ' ' + nDesc;
+    const matched  = tokens.filter(t => haystack.includes(t)).length;
+    if (matched === tokens.length)                                  score += 10;
+    else if (matched >= tokens.length - 1 && matched > 0)          score += 5;
+  }
+
   // Semantic rules
   for (const rule of SEMANTIC_RULES) {
     if (rule.tags.some(t => q.includes(t))) score += rule.score(camp);
@@ -3084,7 +3129,7 @@ function semanticScore(camp, query) {
 
 // Returns a human-readable label for what the query means, e.g. "free · BLM · Oregon"
 function interpretQuery(query) {
-  const q = query.toLowerCase();
+  const q = normalize(query);
   const concepts = [];
   if (['free','no fee','$0','no cost'].some(t => q.includes(t)))                        concepts.push('free camping');
   if (['blm','dispersed','primitive','boondocking','public land'].some(t => q.includes(t))) concepts.push('BLM');
