@@ -1120,6 +1120,58 @@ html, body {
 .cta-main:hover { opacity: 0.85; }
 .cta-sq { width: 54px; border: 1.5px solid var(--w2); background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.16s; }
 .cta-sq:hover { border-color: var(--o); }
+
+/* ── 3D FLYOVER ────────────────────────────────── */
+.flyover-hero-btn {
+  position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 7px;
+  background: rgba(0,0,0,0.42); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border: 1.5px solid rgba(255,255,255,0.22); border-radius: 30px;
+  padding: 9px 18px 9px 13px; color: #fff;
+  font-size: 12px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase;
+  cursor: pointer; white-space: nowrap; z-index: 5;
+  transition: border-color 0.15s, background 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.flyover-hero-btn:active { background: rgba(232,72,28,0.3); border-color: rgba(232,72,28,0.7); }
+.flyover-pulse {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--o);
+  animation: flyover-pulse 1.8s ease-in-out infinite;
+}
+@keyframes flyover-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(1.5); }
+}
+#flyover-overlay {
+  position: fixed; inset: 0; z-index: 600;
+  display: none; flex-direction: column;
+  background: #000;
+}
+#flyover-overlay.active { display: flex; }
+#flyover-map { position: absolute; inset: 0; }
+.flyover-topbar {
+  position: absolute; top: 0; left: 0; right: 0; z-index: 10;
+  padding: var(--top-pad) 22px 28px;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.72) 0%, transparent 100%);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.flyover-title { text-align: center; }
+.flyover-title-name { color: #fff; font-size: 15px; font-weight: 700; letter-spacing: 0.01em; }
+.flyover-title-loc  { color: rgba(255,255,255,0.55); font-size: 11px; margin-top: 2px; }
+.flyover-bottombar {
+  position: absolute; bottom: 0; left: 0; right: 0; z-index: 10;
+  padding: 28px 24px calc(28px + var(--safe-bot));
+  background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 100%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.flyover-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: rgba(0,0,0,0.38); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.14); border-radius: 20px;
+  padding: 6px 14px; color: rgba(255,255,255,0.88);
+  font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+}
+.flyover-hint { color: rgba(255,255,255,0.35); font-size: 11px; }
 </style>
 </head>
 <body>
@@ -1724,6 +1776,10 @@ html, body {
         <svg id="save-svg" width="17" height="17" style="color:rgba(255,255,255,0.7);stroke:currentColor;fill:none;"><use href="#ic-heart"/></svg>
       </div>
     </div>
+    <div class="flyover-hero-btn" onclick="openFlyover()">
+      <div class="flyover-pulse"></div>
+      3D Flyover
+    </div>
   </div>
   <div class="d-body">
     <div class="d-type"   id="d-type">National Park</div>
@@ -1760,6 +1816,26 @@ html, body {
     <div class="cta-sq" onclick="shareCamp()">
       <svg width="17" height="17" style="color:rgba(255,255,255,0.6);stroke:currentColor;fill:none;"><use href="#ic-share"/></svg>
     </div>
+  </div>
+</div>
+
+<!-- ── 3D FLYOVER OVERLAY ─────────────────────────── -->
+<div id="flyover-overlay">
+  <div id="flyover-map"></div>
+  <div class="flyover-topbar">
+    <div class="topbar-btn xbtn is-close dark-bg" onclick="closeFlyover()"></div>
+    <div class="flyover-title">
+      <div class="flyover-title-name" id="flyover-name"></div>
+      <div class="flyover-title-loc"  id="flyover-loc"></div>
+    </div>
+    <div style="width:40px;"></div>
+  </div>
+  <div class="flyover-bottombar">
+    <div class="flyover-badge">
+      <div class="flyover-pulse"></div>
+      3D Flyover
+    </div>
+    <div class="flyover-hint">Drag to explore · Pinch to zoom</div>
   </div>
 </div>
 
@@ -3901,6 +3977,136 @@ function promptInstall() {
     // iOS doesn't support install prompt — show instructions
     showToast('Tap Share → Add to Home Screen');
   }
+}
+
+// ─── 3D FLYOVER ─────────────────────────────────
+const MAPBOX_TOKEN = 'pk.eyJ1IjoibW9zc2FuZGZvZyIsImEiOiJjbW5lM3l1OTYxbG1lMnJuNTBvNWEwY2Z3In0.F9wcPxdfLL98yffvlnHmrA';
+let _flyMap        = null;
+let _flyAnimFrame  = null;
+let _flyActive     = false;
+let _mapboxLoaded  = false;
+
+function openFlyover() {
+  const c = CAMPS.find(x => x.id === currentDetailId);
+  if (!c) return;
+
+  document.getElementById('flyover-name').textContent = c.name;
+  document.getElementById('flyover-loc').textContent  = c.loc;
+  document.getElementById('flyover-overlay').classList.add('active');
+  _flyActive = true;
+
+  // Show a loading state on the map div while Mapbox JS loads
+  document.getElementById('flyover-map').innerHTML =
+    '<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#0a1a10;">' +
+    '<div style="color:rgba(255,255,255,0.45);font-size:13px;letter-spacing:0.08em;">Loading terrain…</div></div>';
+
+  if (_mapboxLoaded) {
+    _initFlyMap(c);
+  } else {
+    // Lazy-load Mapbox GL JS on first use
+    const link = document.createElement('link');
+    link.rel   = 'stylesheet';
+    link.href  = 'https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css';
+    document.head.appendChild(link);
+    const s    = document.createElement('script');
+    s.src      = 'https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js';
+    s.onload   = () => { _mapboxLoaded = true; _initFlyMap(c); };
+    s.onerror  = () => {
+      document.getElementById('flyover-map').innerHTML =
+        '<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#0a1a10;padding:40px;text-align:center;">' +
+        '<div style="color:rgba(255,255,255,0.5);font-size:13px;">3D Flyover requires an internet connection.</div></div>';
+    };
+    document.head.appendChild(s);
+  }
+}
+
+function closeFlyover() {
+  _flyActive = false;
+  if (_flyAnimFrame) { cancelAnimationFrame(_flyAnimFrame); _flyAnimFrame = null; }
+  if (_flyMap)       { _flyMap.remove(); _flyMap = null; }
+  document.getElementById('flyover-overlay').classList.remove('active');
+}
+
+function _initFlyMap(c) {
+  if (_flyMap) { _flyMap.remove(); _flyMap = null; }
+  if (_flyAnimFrame) { cancelAnimationFrame(_flyAnimFrame); _flyAnimFrame = null; }
+
+  mapboxgl.accessToken = MAPBOX_TOKEN;
+  _flyMap = new mapboxgl.Map({
+    container:  'flyover-map',
+    style:      'mapbox://styles/mapbox/satellite-streets-v12',
+    center:     [c.lng, c.lat],
+    zoom:       7.5,
+    pitch:      0,
+    bearing:    0,
+    antialias:  true,
+    interactive: true,
+  });
+
+  _flyMap.on('load', () => {
+    if (!_flyActive) return;
+
+    // 3D terrain
+    _flyMap.addSource('mapbox-dem', {
+      type: 'raster-dem',
+      url:  'mapbox://mapbox.mapbox-terrain-dem-v1',
+      tileSize: 512, maxzoom: 14,
+    });
+    _flyMap.setTerrain({ source: 'mapbox-dem', exaggeration: 1.6 });
+
+    // Atmospheric sky
+    _flyMap.addLayer({
+      id: 'sky', type: 'sky',
+      paint: {
+        'sky-type': 'atmosphere',
+        'sky-atmosphere-sun': [0.0, 90.0],
+        'sky-atmosphere-sun-intensity': 12,
+      },
+    });
+
+    // Campsite marker
+    const el = document.createElement('div');
+    el.style.cssText = 'width:14px;height:14px;border-radius:50%;background:#E8481C;border:2.5px solid #fff;box-shadow:0 0 0 4px rgba(232,72,28,0.35)';
+    new mapboxgl.Marker(el).setLngLat([c.lng, c.lat]).addTo(_flyMap);
+
+    // Cinematic swoop in after a short beat
+    setTimeout(() => {
+      if (!_flyActive) return;
+      _flyMap.flyTo({
+        center:   [c.lng, c.lat],
+        zoom:     13.2,
+        pitch:    72,
+        bearing:  20,
+        duration: 5000,
+        easing:   t => t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2,3)/2,
+      });
+      // Once the swoop lands, start the slow orbit
+      _flyMap.once('moveend', () => {
+        if (_flyActive) _startOrbit();
+      });
+    }, 400);
+  });
+}
+
+function _startOrbit() {
+  let bearing  = _flyMap.getBearing();
+  let lastTime = null;
+  const DEG_PER_SEC = 4.5; // gentle orbit speed
+
+  function frame(time) {
+    if (!_flyActive) return;
+    if (lastTime !== null) {
+      bearing = (bearing + DEG_PER_SEC * (time - lastTime) / 1000) % 360;
+      _flyMap.setBearing(bearing);
+    }
+    lastTime      = time;
+    _flyAnimFrame = requestAnimationFrame(frame);
+  }
+  _flyAnimFrame = requestAnimationFrame(frame);
+
+  // Pause orbit while user is dragging
+  _flyMap.on('mousedown',  () => { _flyActive = false; });
+  _flyMap.on('touchstart', () => { _flyActive = false; });
 }
 </script>
 
