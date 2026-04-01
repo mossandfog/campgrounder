@@ -1148,6 +1148,25 @@ html, body {
 .cta-sq { width: 54px; border: 1.5px solid var(--w2); background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.16s; }
 .cta-sq:hover { border-color: var(--o); }
 
+/* ── PACK LIST ─────────────────────────────────── */
+.pack-hint { font-size: 11px; color: rgba(255,255,255,0.25); margin-bottom: 14px; letter-spacing: 0.02em; }
+.pack-list  { display: flex; flex-direction: column; margin-bottom: 40px; }
+.pack-item  { display: flex; align-items: center; gap: 13px; padding: 11px 0;
+              border-bottom: 1px solid rgba(255,255,255,0.06); cursor: pointer;
+              transition: opacity 0.2s; -webkit-tap-highlight-color: transparent; }
+.pack-item:last-child { border-bottom: none; }
+.pack-check { width: 20px; height: 20px; border: 1.5px solid rgba(232,72,28,0.4);
+              border-radius: 4px; flex-shrink: 0; transition: background 0.15s, border-color 0.15s;
+              display: flex; align-items: center; justify-content: center; }
+.pack-item.packed .pack-check { background: var(--o); border-color: var(--o); }
+.pack-item.packed .pack-check::after { content: '✓'; color: #fff; font-size: 11px; font-weight: 900; }
+.pack-item.packed > span { opacity: 0.35; text-decoration: line-through; }
+.pack-item > span { font-size: 14px; color: rgba(255,255,255,0.8); line-height: 1.3; }
+
+/* ── AMBIENT SOUND ──────────────────────────────── */
+#ambient-btn { transition: opacity 0.3s; }
+#ambient-btn.muted { opacity: 0.35; }
+
 /* ── 3D FLYOVER ────────────────────────────────── */
 .flyover-hero-btn {
   position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%);
@@ -1235,6 +1254,8 @@ html, body {
 <symbol id="ic-store"     viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13 H28 L26 7 H6 Z"/><rect x="6" y="13" width="20" height="15"/><rect x="12" y="19" width="8" height="9"/></symbol>
 <symbol id="ic-spa"       viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M16 6 C16 6 8 12 8 18 C8 22 12 26 16 26 C20 26 24 22 24 18 C24 12 16 6 16 6 Z"/><path d="M8 18 C6 16 4 12 4 12 C7 12 10 14 10 14"/><path d="M24 18 C26 16 28 12 28 12 C25 12 22 14 22 14"/></symbol>
 <symbol id="ic-breakfast" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 14 Q6 7 16 7 Q26 7 26 14 L26 22 H6 Z"/><line x1="4" y1="22" x2="28" y2="22"/><path d="M22 7 Q24 5 26 7 Q28 9 26 11"/></symbol>
+<symbol id="ic-sound"    viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12 H12 L20 6 V26 L12 20 H6 Z"/><path d="M24 10 Q28 16 24 22"/></symbol>
+<symbol id="ic-sound-off" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12 H12 L20 6 V26 L12 20 H6 Z"/><line x1="24" y1="12" x2="30" y2="20"/><line x1="30" y1="12" x2="24" y2="20"/></symbol>
 <symbol id="ic-wine"      viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10 4 H22 L20 14 C20 18 16 20 16 20 C16 20 12 18 12 14 Z"/><line x1="16" y1="20" x2="16" y2="28"/><line x1="11" y1="28" x2="21" y2="28"/></symbol>
 <symbol id="ic-accessible" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="16" cy="5" r="3"/><line x1="16" y1="8" x2="16" y2="18"/><line x1="10" y1="12" x2="22" y2="12"/><line x1="12" y1="18" x2="10" y2="27"/><line x1="20" y1="18" x2="22" y2="27"/></symbol>
 <!-- Compass glyph: outer ring, tick marks, orange north needle, white south needle -->
@@ -1799,8 +1820,13 @@ html, body {
     <div class="d-hero-grad"></div>
     <div class="d-topbar">
       <div class="topbar-btn xbtn is-close" onclick="goBack()"></div>
-      <div class="topbar-btn" id="save-btn" onclick="toggleSave()">
-        <svg id="save-svg" width="17" height="17" style="color:rgba(255,255,255,0.7);stroke:currentColor;fill:none;"><use href="#ic-heart"/></svg>
+      <div style="display:flex;gap:8px;">
+        <div class="topbar-btn" id="ambient-btn" onclick="toggleAmbient()" title="Ambient sound">
+          <svg id="ambient-svg" width="17" height="17" style="color:rgba(255,255,255,0.7);stroke:currentColor;fill:none;"><use id="ambient-icon" href="#ic-sound"/></svg>
+        </div>
+        <div class="topbar-btn" id="save-btn" onclick="toggleSave()">
+          <svg id="save-svg" width="17" height="17" style="color:rgba(255,255,255,0.7);stroke:currentColor;fill:none;"><use href="#ic-heart"/></svg>
+        </div>
       </div>
     </div>
     <div class="flyover-hero-btn" onclick="openFlyover()">
@@ -1837,6 +1863,13 @@ html, body {
     <div class="d-divider" id="d-wx-divider" style="display:none;"></div>
     <div class="d-eyebrow" id="d-wx-eyebrow" style="display:none;">Forecast</div>
     <div class="forecast-strip" id="d-forecast" style="display:none;"></div>
+    <div class="d-divider"></div>
+    <div class="d-eyebrow" style="display:flex;align-items:center;justify-content:space-between;">
+      Pack List
+      <span id="d-pack-count" style="font-size:10px;color:rgba(255,255,255,0.25);font-weight:600;letter-spacing:0.06em;text-transform:none;"></span>
+    </div>
+    <div class="pack-hint">Generated for this site — tap to check off</div>
+    <div id="d-pack-list" class="pack-list"></div>
   </div>
   <div class="d-cta-bar">
     <a class="cta-main" id="d-cta-link" href="#" target="_blank" rel="noopener">Check Availability →</a>
@@ -3085,7 +3118,7 @@ function go(toId, fromId) {
   const cg = document.getElementById('compass-global');
   if (cg) cg.classList.toggle('vis', toId === 'results' || toId === 'saved');
 }
-function goBack() { go(prevScreen || 'home', null); }
+function goBack() { stopAmbient(false); go(prevScreen || 'home', null); }
 
 let searchQuery = '';
 
@@ -3772,6 +3805,12 @@ function openDetail(id) {
   // Trigger forecast load
   loadDetailForecast(c);
 
+  // Ambient sound — start gently when detail opens
+  startAmbient(c);
+
+  // Pack list
+  renderPackList(c);
+
   const svg = document.getElementById('save-svg');
   const btn = document.getElementById('save-btn');
   if (savedIds.has(id)) { svg.style.color='#E8481C'; btn.classList.add('saved'); }
@@ -4006,6 +4045,188 @@ function promptInstall() {
     // iOS doesn't support install prompt — show instructions
     showToast('Tap Share → Add to Home Screen');
   }
+}
+
+// ─── PARALLAX HERO SCROLL ────────────────────────
+(function initParallax() {
+  const detail = document.getElementById('detail');
+  const hero   = document.getElementById('d-hero');
+  if (!detail || !hero) return;
+  detail.addEventListener('scroll', () => {
+    const y = detail.scrollTop;
+    hero.style.backgroundPositionY = `calc(50% + ${y * 0.38}px)`;
+  }, { passive: true });
+})();
+
+// ─── AMBIENT SOUND ENGINE ────────────────────────
+let _ambCtx   = null;
+let _ambNodes = [];
+let _ambGain  = null;
+let _ambMuted = false;
+
+function _ambType(c) {
+  const txt = (c.loc + ' ' + c.desc).toLowerCase();
+  if (['coast','beach','ocean','pacific','atlantic','gulf','surf','shore'].some(w => txt.includes(w))) return 'ocean';
+  if (['river','creek','stream','rapids','gorge'].some(w => txt.includes(w))) return 'river';
+  return 'forest';
+}
+
+function _makeNoiseBuf(ctx, color) {
+  const len  = ctx.sampleRate * 3;
+  const buf  = ctx.createBuffer(1, len, ctx.sampleRate);
+  const data = buf.getChannelData(0);
+  let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
+  for (let i = 0; i < len; i++) {
+    const w = Math.random() * 2 - 1;
+    b0=0.99886*b0+w*0.0555179; b1=0.99332*b1+w*0.0750759;
+    b2=0.96900*b2+w*0.1538520; b3=0.86650*b3+w*0.3104856;
+    b4=0.55000*b4+w*0.5329522; b5=-0.7616*b5-w*0.0168980;
+    data[i] = color === 'pink'
+      ? (b0+b1+b2+b3+b4+b5+b6+w*0.5362) / 7
+      : (b0+b1+b2+b3+b4+b5+b6+w*0.5362) / 12; // brown = quieter/deeper
+    b6 = w * 0.115926;
+  }
+  return buf;
+}
+
+function startAmbient(c) {
+  stopAmbient(true);
+  try {
+    _ambCtx  = new (window.AudioContext || window.webkitAudioContext)();
+    _ambGain = _ambCtx.createGain();
+    _ambGain.gain.setValueAtTime(0, _ambCtx.currentTime);
+    _ambGain.gain.linearRampToValueAtTime(0.13, _ambCtx.currentTime + 2.5);
+    _ambGain.connect(_ambCtx.destination);
+
+    const type    = _ambType(c);
+    const noise   = _ambCtx.createBufferSource();
+    noise.buffer  = _makeNoiseBuf(_ambCtx, type === 'ocean' ? 'pink' : 'brown');
+    noise.loop    = true;
+
+    const filt    = _ambCtx.createBiquadFilter();
+    if      (type === 'ocean')  { filt.type = 'bandpass'; filt.frequency.value = 350; filt.Q.value = 0.4; }
+    else if (type === 'river')  { filt.type = 'bandpass'; filt.frequency.value = 800; filt.Q.value = 0.7; }
+    else                        { filt.type = 'lowpass';  filt.frequency.value = 550; }
+
+    // LFO gives ocean its wave pulse, forest its gentle swell
+    const lfo     = _ambCtx.createOscillator();
+    const lfoGain = _ambCtx.createGain();
+    lfo.frequency.value = type === 'ocean' ? 0.1 : type === 'river' ? 0.25 : 0.07;
+    lfoGain.gain.value  = type === 'ocean' ? 0.08 : 0.04;
+    lfo.connect(lfoGain);
+    lfoGain.connect(_ambGain.gain);
+
+    noise.connect(filt);
+    filt.connect(_ambGain);
+    noise.start();
+    lfo.start();
+    _ambNodes = [noise, lfo];
+    _ambMuted = false;
+    _updateAmbientBtn();
+  } catch(e) { /* audio not available */ }
+}
+
+function stopAmbient(immediate) {
+  if (_ambGain && _ambCtx) {
+    if (immediate) {
+      _ambNodes.forEach(n => { try { n.stop(); } catch(e){} });
+      try { _ambCtx.close(); } catch(e){}
+    } else {
+      _ambGain.gain.linearRampToValueAtTime(0, _ambCtx.currentTime + 1.2);
+      setTimeout(() => {
+        _ambNodes.forEach(n => { try { n.stop(); } catch(e){} });
+        try { _ambCtx.close(); } catch(e){}
+      }, 1300);
+    }
+  }
+  _ambCtx = null; _ambGain = null; _ambNodes = [];
+}
+
+function toggleAmbient() {
+  if (!_ambCtx) return;
+  _ambMuted = !_ambMuted;
+  _ambGain.gain.linearRampToValueAtTime(_ambMuted ? 0 : 0.13, _ambCtx.currentTime + 0.5);
+  _updateAmbientBtn();
+}
+
+function _updateAmbientBtn() {
+  const btn  = document.getElementById('ambient-btn');
+  const icon = document.getElementById('ambient-icon');
+  if (!btn || !icon) return;
+  btn.classList.toggle('muted', _ambMuted);
+  icon.setAttribute('href', _ambMuted ? '#ic-sound-off' : '#ic-sound');
+}
+
+// ─── SMART PACK LIST ─────────────────────────────
+function generatePackList(c) {
+  const items = [];
+  const has   = a => c.amenities.includes(a);
+  const txt   = (c.loc + ' ' + c.desc).toLowerCase();
+
+  // Sleep
+  if (c.type !== 'Glamping') items.push('Tent + rainfly + stakes', 'Ground tarp / footprint');
+  items.push('Sleeping bag', 'Sleeping pad', 'Pillow');
+
+  // Core kit — always
+  items.push('Headlamp + spare batteries', 'Pocket knife / multi-tool',
+             'First aid kit', 'Sunscreen SPF 30+', 'Bug repellent',
+             'Phone charger + cable', 'ID + cash');
+
+  // Water & food
+  items.push('Water bottle (×2)');
+  if (c.price === 0 || ['blm','dispersed','primitive'].some(w => txt.includes(w))) {
+    items.push('Water filter / purifier', 'Bear canister (check local rules)', 'Extra food — no services nearby');
+  }
+  if (!has('Camp Store')) items.push('Camp stove + fuel', 'Cookware + utensils', 'Food + snacks');
+  if (has('Fire Rings'))  items.push('Matches / lighter', 'Firewood (verify local rules)', 'S\'mores kit');
+
+  // Hygiene
+  if (!has('Hot Showers')) items.push('Dry shampoo', 'Biodegradable camp soap', 'Quick-dry camp towel');
+  if (!has('Flush Toilets') && !has('Vault Toilets')) items.push('Trowel (leave no trace)', 'Extra TP + hand sanitizer');
+
+  // Activities
+  if (has('Fishing') || has('Boat Launch')) items.push('Fishing license (required)', 'Rod + reel + tackle', 'Cooler + ice');
+  if (has('Hiking') || has('Rock Climbing')) items.push('Hiking boots', 'Trekking poles', 'Trail map + compass', 'Energy bars');
+  if (has('Swimming') || has('Beach Access') || has('Kayaking')) items.push('Swimsuit', 'Quick-dry towel', 'Water shoes', 'Dry bag');
+  if (has('Kayaking')) items.push('Life jacket (PFD)');
+  if (has('Stargazing')) items.push('Red-light headlamp (preserves night vision)', 'Star chart / app');
+
+  // Pets
+  if (has('Pet Friendly')) items.push('Dog food + collapsible bowl', 'Leash + collar + tags', 'Waste bags', 'Pet first aid');
+
+  // Power
+  if (has('Electric Hookups')) items.push('Extension cord / power strip');
+
+  // Season / weather
+  const month = checkInDate ? parseInt(checkInDate.split('-')[1]) : new Date().getMonth() + 1;
+  if (month <= 2 || month === 12 || c.seasons.includes('Winter')) {
+    items.push('Insulated base layers', 'Fleece or puffy jacket', 'Beanie + gloves', 'Hand warmers', 'Winter sleeping bag');
+  }
+  if (month >= 6 && month <= 8) {
+    items.push('Wide-brim hat', 'Cooling towel', 'Extra water (2 L+ per person per day)');
+  }
+  if (['rain','coast','pnw','rainforest','olympic'].some(w => txt.includes(w))) {
+    items.push('Rain jacket / poncho', 'Waterproof boots', 'Extra dry bags');
+  }
+
+  // Glamping — strip the rough stuff, add luxury
+  if (c.type === 'Glamping') {
+    const strip = new Set(['Tent + rainfly + stakes','Ground tarp / footprint','Trowel (leave no trace)','Extra TP + hand sanitizer','Camp stove + fuel','Cookware + utensils']);
+    return items.filter(i => !strip.has(i)).concat(['Camera + tripod (the light will be incredible)', 'Nice outfit for dinner']);
+  }
+
+  return items;
+}
+
+function renderPackList(c) {
+  const items = generatePackList(c);
+  document.getElementById('d-pack-count').textContent = `${items.length} items`;
+  document.getElementById('d-pack-list').innerHTML = items.map(item =>
+    `<div class="pack-item" onclick="this.classList.toggle('packed')">
+      <div class="pack-check"></div>
+      <span>${item}</span>
+    </div>`
+  ).join('');
 }
 
 // ─── 3D FLYOVER ─────────────────────────────────
