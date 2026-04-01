@@ -440,6 +440,17 @@ html, body {
   border-left: 2.5px solid var(--o);
   display: flex; align-items: center; justify-content: center;
 }
+.saved-sat-thumb {
+  width: 72px; height: 72px; flex-shrink: 0;
+  background-size: cover; background-position: center;
+  background-color: var(--g1);
+  border-left: 2.5px solid var(--o);
+  position: relative; overflow: hidden;
+}
+.saved-sat-thumb::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, transparent 55%, rgba(0,0,0,0.35) 100%);
+}
 .card-body    { flex: 1; min-width: 0; }
 .card-type    { font-size: 8px; font-weight: 900; letter-spacing: 0.26em; text-transform: uppercase; color: var(--o); margin-bottom: 5px; }
 .card-name    { font-size: 19px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -3506,7 +3517,7 @@ function renderSaved() {
   }
   document.getElementById('saved-list').innerHTML = camps.map(c => `
     <div class="saved-card" onclick="openDetail(${c.id})">
-      <div class="card-box">${glyph(TYPE_GLYPH[c.type]||'#ic-tent',28)}</div>
+      <div class="saved-sat-thumb" style="background-image:url(${mapboxStatic(c.lat, c.lng, 144, 144, 11, 20, 45)})"></div>
       <div class="card-body" style="flex:1;">
         <div class="card-type">${c.type}</div>
         <div class="card-name">${c.name}</div>
@@ -3688,8 +3699,10 @@ function openDetail(id) {
   currentDetailId = id;
 
   const heroTints = {'National Park':'#172E1F','State Park':'#152B1C','Private':'#221E12','Glamping':'#21142A'};
-  document.getElementById('d-hero').style.background = heroTints[c.type] || '#1A3528';
-  document.getElementById('d-glyph').innerHTML = glyph(TYPE_GLYPH[c.type]||'#ic-tent', 88, 'rgba(255,255,255,0.13)');
+  const fallbackBg = heroTints[c.type] || '#1A3528';
+  const dHero = document.getElementById('d-hero');
+  dHero.style.background = `${fallbackBg} url(${mapboxStatic(c.lat, c.lng, 800, 520)}) center/cover no-repeat`;
+  document.getElementById('d-glyph').innerHTML = ''; // real image replaces the glyph
 
   document.getElementById('d-type').textContent    = c.type;
   document.getElementById('d-name').textContent    = c.name;
@@ -3981,6 +3994,12 @@ function promptInstall() {
 
 // ─── 3D FLYOVER ─────────────────────────────────
 const MAPBOX_TOKEN = 'pk.eyJ1IjoibW9zc2FuZGZvZyIsImEiOiJjbW5lM3l1OTYxbG1lMnJuNTBvNWEwY2Z3In0.F9wcPxdfLL98yffvlnHmrA';
+
+// Mapbox Static Images API — pitched satellite still for any campsite coordinate
+// URL param order: lon, lat, zoom, bearing, pitch
+function mapboxStatic(lat, lng, w, h, zoom=12, bearing=20, pitch=60) {
+  return `https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/static/${lng},${lat},${zoom},${bearing},${pitch}/${w}x${h}@2x?access_token=${MAPBOX_TOKEN}`;
+}
 let _flyMap        = null;
 let _flyAnimFrame  = null;
 let _flyActive     = false;
