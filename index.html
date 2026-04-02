@@ -1936,15 +1936,77 @@ const AMEN_GLYPH = {
   'Luxury Beds':'#ic-bed','Wood Stove':'#ic-fire','Breakfast Incl.':'#ic-breakfast',
   'Ocean Views':'#ic-wave','Welcome Wine':'#ic-wine','Spa Access':'#ic-spa',
 };
-const BOOK_LINKS = {
-  'National Park':'https://www.recreation.gov',
-  'Forest Service':'https://www.recreation.gov',
-  'State Park':'https://www.reserveamerica.com',
-  'Private':'https://www.hipcamp.com',
-  'Glamping':'https://www.hipcamp.com',
-  'BLM':'https://www.recreation.gov',
-  'Army Corps':'https://www.recreation.gov',
-};
+// ─── SMART BOOKING URLS ─────────────────────────
+// Drops users directly onto a pre-filled search page for the specific campground
+// rather than a generic homepage — much smoother handoff.
+
+function _stateBookingPlatform(loc) {
+  if (loc.includes('california'))              return { url: 'reservecalifornia', label: 'ReserveCalifornia' };
+  if (loc.includes('minnesota'))               return { url: 'minnesota',         label: 'Reserve Minnesota' };
+  if (loc.includes('washington'))              return { url: 'washington',         label: 'Reserve Washington' };
+  if (loc.includes('florida'))                 return { url: 'florida',            label: 'ReserveAmerica' };
+  return                                              { url: 'default',            label: 'ReserveAmerica' };
+}
+
+function _stateBookingUrl(c, q) {
+  const loc = c.loc.toLowerCase();
+  if (loc.includes('california'))
+    return `https://www.reservecalifornia.com/CaliforniaWebHome/Facilities/AdvanceSearch.aspx#result/SearchKeyword=${q}`;
+  if (loc.includes('minnesota'))
+    return `https://mnreg.goingtocamp.com/search?q=${q}`;
+  if (loc.includes('washington') && !loc.includes('d.c'))
+    return `https://washington.goingtocamp.com/search?q=${q}`;
+  // All other states → ReserveAmerica search
+  return `https://www.reserveamerica.com/explore/search-results?term=${q}`;
+}
+
+function buildBookingUrl(c) {
+  const q   = encodeURIComponent(c.name);
+  const loc = c.loc.toLowerCase();
+
+  // Free / dispersed / primitive — no booking needed; link to info page
+  if (c.price === 0)
+    return `https://www.recreation.gov/search?q=${q}&entity_type=campground`;
+
+  // State Parks — state-aware routing
+  if (c.type === 'State Park') return _stateBookingUrl(c, q);
+
+  // Recreation.gov types — pre-fill campground name + dates if selected
+  if (['National Park','Forest Service','BLM','Army Corps'].includes(c.type)) {
+    let url = `https://www.recreation.gov/search?q=${q}&entity_type=campground`;
+    if (checkInDate) url += `&start_date=${checkInDate}&end_date=${checkoutDate()}`;
+    return url;
+  }
+
+  // Glamping — Glamping Hub
+  if (c.type === 'Glamping')
+    return `https://glampinghub.com/united-states/?q=${q}`;
+
+  // RV Parks — RVparky
+  if (c.type === 'RV Park')
+    return `https://www.rvparky.com/search?keyword=${q}`;
+
+  // Private → Hipcamp search
+  return `https://www.hipcamp.com/en-US/search?q=${q}`;
+}
+
+function buildCtaLabel(c) {
+  if (checkInDate)
+    return `Check ${fmtShort(checkInDate)}–${fmtShort(checkoutDate())} →`;
+  if (c.price === 0)
+    return 'View site info — no reservation needed →';
+  const platform = {
+    'National Park':  'Recreation.gov',
+    'Forest Service': 'Recreation.gov',
+    'BLM':            'Recreation.gov',
+    'Army Corps':     'Recreation.gov',
+    'State Park':     _stateBookingPlatform(c.loc.toLowerCase()).label,
+    'Glamping':       'Glamping Hub',
+    'RV Park':        'RVparky',
+    'Private':        'Hipcamp',
+  };
+  return `Book on ${platform[c.type] || 'Recreation.gov'} →`;
+}
 
 // ─── DATA ──────────────────────────────────────
 const CAMPS = [
@@ -3810,19 +3872,10 @@ function openDetail(id) {
   // Campfire status
   document.getElementById('d-fire-status').innerHTML = fireStatusBlockHTML(getCampfireStatus(c));
 
-  // CTA link — include dates when selected
+  // CTA link — smart URL + label per camp type, state, and dates
   const link = document.getElementById('d-cta-link');
-  const ctaLabels = {'National Park':'Recreation.gov','State Park':'Reserve America','Private':'Hipcamp','Glamping':'Hipcamp'};
-  let baseHref = BOOK_LINKS[c.type] || 'https://www.recreation.gov';
-  if (checkInDate && c.type === 'National Park') {
-    baseHref += `?start_date=${checkInDate}&end_date=${checkoutDate()}`;
-  }
-  link.href = baseHref;
-  if (checkInDate) {
-    link.textContent = `Check ${fmtShort(checkInDate)}–${fmtShort(checkoutDate())} →`;
-  } else {
-    link.textContent = `Check Availability — ${ctaLabels[c.type] || 'Book Now'} →`;
-  }
+  link.href        = buildBookingUrl(c);
+  link.textContent = buildCtaLabel(c);
 
   // Trigger forecast load
   loadDetailForecast(c);
