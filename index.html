@@ -541,10 +541,40 @@ html, body {
   border: 1.5px solid var(--w2);
   display: flex; align-items: center; justify-content: center;
   cursor: pointer; transition: border-color 0.16s, background 0.16s;
-  background: transparent;
+  background: transparent; position: relative;
 }
 .compass-top-btn:hover { border-color: var(--o); background: rgba(232,72,28,0.07); }
 .compass-top-btn.locating { border-color: var(--o); animation: compassSpin 1s linear infinite; }
+
+/* ── Compass hint: ping + tooltip ── */
+@keyframes compass-ping {
+  0%   { transform: scale(1);   opacity: 0.75; }
+  100% { transform: scale(2.6); opacity: 0;    }
+}
+.compass-ping {
+  position: absolute; inset: -2px; pointer-events: none;
+  border: 1.5px solid var(--o);
+  animation: compass-ping 1.8s ease-out infinite;
+}
+.compass-tip {
+  position: absolute; top: calc(100% + 11px); right: 0;
+  background: rgba(12,31,21,0.96); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border: 1.5px solid rgba(232,72,28,0.45); border-radius: 8px;
+  padding: 9px 14px; white-space: nowrap;
+  font-size: 12px; font-weight: 700; letter-spacing: 0.03em; color: rgba(255,255,255,0.92);
+  pointer-events: none; z-index: 50;
+  opacity: 0; transform: translateY(-5px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.compass-tip.vis { opacity: 1; transform: translateY(0); }
+.compass-tip::before {
+  content: ''; position: absolute; top: -5px; right: 11px;
+  width: 8px; height: 8px;
+  background: rgba(12,31,21,0.96);
+  border-left: 1.5px solid rgba(232,72,28,0.45);
+  border-top:  1.5px solid rgba(232,72,28,0.45);
+  transform: rotate(45deg);
+}
 
 /* Global persistent compass — visible on saved screen only, clear of all top-bar buttons */
 .compass-global {
@@ -1329,8 +1359,10 @@ html, body {
       <div class="wordmark">Campgrounder</div>
     </div>
     <div class="home-top-actions">
-      <div class="compass-top-btn" id="compass-top" onclick="locateMe()" title="Find camps near me">
+      <div class="compass-top-btn" id="compass-top" onclick="locateMe();dismissCompassHint();" title="Find camps near me">
         <svg width="20" height="20" style="color:white;stroke:currentColor;fill:none;"><use href="#ic-compass"/></svg>
+        <div id="compass-ping" class="compass-ping" style="display:none;"></div>
+        <div id="compass-tip"  class="compass-tip">Camps near you →</div>
       </div>
       <div class="xbtn" onclick="openSearch()"></div>
     </div>
@@ -4046,6 +4078,24 @@ function promptInstall() {
     showToast('Tap Share → Add to Home Screen');
   }
 }
+
+// ─── COMPASS HINT (shows once, never again) ──────
+function dismissCompassHint() {
+  document.getElementById('compass-ping').style.display = 'none';
+  document.getElementById('compass-tip').classList.remove('vis');
+  try { localStorage.setItem('cg_compass_seen','1'); } catch(e){}
+}
+(function initCompassHint() {
+  try { if (localStorage.getItem('cg_compass_seen')) return; } catch(e){}
+  // Show ping immediately, tooltip after a short breath
+  const ping = document.getElementById('compass-ping');
+  const tip  = document.getElementById('compass-tip');
+  if (!ping || !tip) return;
+  ping.style.display = '';
+  setTimeout(() => tip.classList.add('vis'), 900);
+  // Auto-dismiss after 5s
+  setTimeout(() => dismissCompassHint(), 5000);
+})();
 
 // ─── PARALLAX HERO SCROLL ────────────────────────
 (function initParallax() {
