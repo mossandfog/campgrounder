@@ -377,6 +377,7 @@ html, body {
 .cat-cell:nth-child(6) { animation-delay: 0.40s; }
 .cat-cell:nth-child(7) { animation-delay: 0.47s; }
 .cat-cell:nth-child(8) { animation-delay: 0.54s; }
+.cat-cell:nth-child(9) { animation-delay: 0.61s; }
 .cat-cell svg { width: 44px; height: 44px; }
 /* 2-col: right column has no right border (grid edge covers it) */
 .cat-cell:nth-child(2n) { border-right: none; }
@@ -387,6 +388,87 @@ html, body {
 .cat-plus { position: absolute; top: 12px; right: 14px; width: 18px; height: 18px; opacity: 0.3; transition: opacity 0.18s; }
 .cat-plus::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 1.5px; background: var(--o); transform: translateY(-50%); }
 .cat-plus::after  { content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 1.5px; background: var(--o); transform: translateX(-50%); }
+
+/* ── LAST MINUTE FINDS CELL ── */
+.lm-cell {
+  grid-column: 1 / -1;
+  aspect-ratio: auto;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 18px 20px 22px;
+  background: linear-gradient(160deg, rgba(232,72,28,0.07) 0%, rgba(232,72,28,0.02) 100%);
+  border-right: none;
+  border-bottom: none;
+  animation-delay: 0.61s !important;
+  position: relative;
+  overflow: hidden;
+}
+.lm-cell::after {
+  content: '⚡';
+  position: absolute;
+  right: 20px; bottom: 16px;
+  font-size: 52px;
+  opacity: 0.04;
+  pointer-events: none;
+  user-select: none;
+}
+.lm-cell:hover { background: rgba(232,72,28,0.11) !important; }
+.lm-left { display: flex; flex-direction: column; }
+.lm-live-row { display: flex; align-items: center; gap: 7px; margin-bottom: 2px; }
+.lm-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #E8481C;
+  flex-shrink: 0;
+  animation: lm-pulse 1.8s ease infinite;
+}
+@keyframes lm-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(232,72,28,0.55); }
+  65%  { box-shadow: 0 0 0 7px rgba(232,72,28,0); }
+  100% { box-shadow: 0 0 0 0 rgba(232,72,28,0); }
+}
+.lm-live-label {
+  font-size: 9px; font-weight: 900; letter-spacing: 0.18em;
+  text-transform: uppercase; color: #E8481C;
+}
+.lm-name { font-size: 22px; line-height: 1.05; }
+/* ── LAST MINUTE RESULTS BANNER ── */
+.lm-results-header {
+  padding: 14px 18px 0;
+}
+.lm-results-title {
+  font-size: 11px; font-weight: 800; letter-spacing: 0.2em;
+  text-transform: uppercase; color: #E8481C; margin-bottom: 10px;
+  display: flex; align-items: center; gap: 8px;
+}
+.lm-results-title .lm-dot { width: 7px; height: 7px; }
+.lm-banner {
+  display: flex; align-items: center; gap: 12px;
+  background: rgba(232,72,28,0.08);
+  border: 1.5px solid rgba(232,72,28,0.22);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin: 0 0 4px;
+  cursor: pointer;
+  transition: background 0.18s;
+}
+.lm-banner:hover { background: rgba(232,72,28,0.14); }
+.lm-banner-text { flex: 1; }
+.lm-banner-title {
+  font-size: 14px; font-weight: 800; letter-spacing: -0.02em;
+  color: rgba(255,255,255,0.9);
+}
+.lm-banner-sub {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.05em;
+  color: rgba(255,255,255,0.4); margin-top: 3px; text-transform: uppercase;
+}
+.lm-banner-arrow {
+  font-size: 18px; color: #E8481C; font-weight: 900;
+}
+.lm-picks-eyebrow {
+  font-size: 10px; font-weight: 800; letter-spacing: 0.18em;
+  text-transform: uppercase; color: rgba(255,255,255,0.28);
+  padding: 14px 0 6px;
+}
 .cat-cell:hover .cat-plus { opacity: 1; }
 
 .pnw-footer {
@@ -1461,6 +1543,14 @@ html, body {
         <svg width="44" height="44" style="color:#E8481C;stroke:currentColor;fill:none;"><use href="#ic-wave"/></svg>
         <div><div class="cat-name">Lake Camping</div><div class="cat-sub">Waterfront sites</div></div>
         <div class="cat-plus"></div>
+      </div>
+      <div class="cat-cell lm-cell" onclick="openLastMinute()">
+        <div class="lm-left">
+          <div class="lm-live-row"><span class="lm-dot"></span><span class="lm-live-label">This Weekend</span></div>
+          <svg width="40" height="40" style="color:#E8481C;stroke:currentColor;fill:none;margin:6px 0 4px;"><use href="#ic-electric"/></svg>
+          <div class="cat-name lm-name">Last Minute<br>Finds</div>
+          <div class="cat-sub" style="margin-top:5px;">Rare openings · act fast</div>
+        </div>
       </div>
     </div>
   </div>
@@ -3495,6 +3585,7 @@ function closeSearch() {
 }
 function clearSearch() {
   searchQuery = '';
+  lastMinuteMode = false;
   document.getElementById('results-input').value = '';
 }
 function setView(v) {
@@ -3504,6 +3595,7 @@ function setView(v) {
 
 // ─── FILTERS ────────────────────────────────────
 function setFilter(el, key) {
+  lastMinuteMode = false; // exit last-minute mode when filter is changed
   currentFilter = key;
   el.closest('.results-filters').querySelectorAll('.pill').forEach(p => p.classList.remove('on'));
   el.classList.add('on');
@@ -3570,6 +3662,60 @@ function hasWater(c) {
     /river|lake|creek|coast|ocean|beach|spring|shore/i.test(c.desc + c.loc);
 }
 
+// ─── LAST MINUTE FINDS ──────────────────────────
+let lastMinuteMode = false;
+
+function nextWeekendDates() {
+  const now = new Date();
+  const day = now.getDay(); // 0=Sun … 6=Sat
+  const daysToFri = ((5 - day) + 7) % 7 || 7; // days until next Friday (never 0)
+  const fri = new Date(now); fri.setDate(now.getDate() + daysToFri);
+  const sun = new Date(fri); sun.setDate(fri.getDate() + 2);
+  const fmt = d => d.toISOString().slice(0, 10);
+  return { fri: fmt(fri), sun: fmt(sun) };
+}
+
+function _lmInSeason(c) {
+  if (!c.open) return true;
+  const mo = new Date().getMonth() + 1; // 1-12
+  const monthIdx = { Jan:1,Feb:2,Mar:3,Apr:4,May:5,Jun:6,Jul:7,Aug:8,Sep:9,Oct:10,Nov:11,Dec:12 };
+  const parts = c.open.split(/[–\-]/);
+  if (parts.length < 2) return true;
+  const a = monthIdx[parts[0].trim().slice(0,3)];
+  const b = monthIdx[parts[1].trim().slice(0,3)];
+  if (!a || !b) return true;
+  return a <= b ? (mo >= a && mo <= b) : (mo >= a || mo <= b);
+}
+
+function lmScore(c, seedOffset) {
+  if (!c.avail || c.avail <= 0) return 0;
+  // Estimate a plausible total capacity and compute % availability
+  const totalEst = Math.max(c.avail + 4, Math.round(c.avail / 0.15));
+  const pct = c.avail / totalEst;
+  const rarity = (pct >= 0.04 && pct <= 0.28) ? 2.2 : 1.0;
+  const inSeason = _lmInSeason(c) ? 1.6 : 0.5;
+  // deterministic daily seed so picks stay stable all day
+  const seed = parseInt(new Date().toISOString().slice(0,10).replace(/-/g,''));
+  const rand = ((seed * 9301 + 49297 + (seedOffset||0) * 1013) % 233280) / 233280;
+  return c.rating * rarity * inSeason * (0.82 + rand * 0.36);
+}
+
+function getLastMinutePicks() {
+  return CAMPS
+    .map((c, i) => ({ c, score: lmScore(c, i) }))
+    .filter(x => x.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 8)
+    .map(x => x.c);
+}
+
+function openLastMinute() {
+  lastMinuteMode = true;
+  searchQuery = '';
+  currentFilter = 'all';
+  go('results', 'home');
+}
+
 function getFilteredCamps() {
   const hasSearch = searchQuery && currentFilter !== 'nearby';
 
@@ -3602,8 +3748,32 @@ function glyph(href, size, color) {
 
 // ─── RENDER RESULTS ─────────────────────────────
 function renderResults() {
-  const camps = getFilteredCamps();
-  document.getElementById('results-count').textContent = `${camps.length} Campground${camps.length !== 1 ? 's':  ''}`;
+  let camps, headerExtra = '', eyebrow = '';
+
+  if (lastMinuteMode) {
+    camps = getLastMinutePicks();
+    const { fri, sun } = nextWeekendDates();
+    const recUrl = `https://www.recreation.gov/camping/search?start_date=${fri}&end_date=${sun}&show_only_available=true`;
+    const friLabel = new Date(fri + 'T12:00:00').toLocaleDateString('en-US', { month:'short', day:'numeric' });
+    const sunLabel = new Date(sun + 'T12:00:00').toLocaleDateString('en-US', { month:'short', day:'numeric' });
+    document.getElementById('results-count').textContent = 'Last Minute Finds';
+    headerExtra = `
+      <div class="lm-results-header">
+        <div class="lm-results-title"><span class="lm-dot"></span>Rare openings detected</div>
+        <div class="lm-banner" onclick="window.open('${recUrl}','_blank')">
+          <span class="lm-dot" style="width:9px;height:9px;flex-shrink:0;"></span>
+          <div class="lm-banner-text">
+            <div class="lm-banner-title">See all live openings this weekend →</div>
+            <div class="lm-banner-sub">Recreation.gov · ${friLabel} – ${sunLabel}</div>
+          </div>
+          <div class="lm-banner-arrow">↗</div>
+        </div>
+        <div class="lm-picks-eyebrow">Our top picks</div>
+      </div>`;
+  } else {
+    camps = getFilteredCamps();
+    document.getElementById('results-count').textContent = `${camps.length} Campground${camps.length !== 1 ? 's' : ''}`;
+  }
 
   if (camps.length === 0) {
     document.getElementById('results-list').innerHTML = `
@@ -3615,7 +3785,7 @@ function renderResults() {
     return;
   }
 
-  document.getElementById('results-list').innerHTML = camps.map(c => `
+  document.getElementById('results-list').innerHTML = headerExtra + camps.map(c => `
     <div class="camp-card" onclick="openDetail(${c.id})">
       <div class="card-box">${glyph(TYPE_GLYPH[c.type]||'#ic-tent',30)}</div>
       <div class="card-body">
