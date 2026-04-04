@@ -1490,8 +1490,6 @@ html, body {
 .drive-error a { color: var(--o); cursor: pointer; }
 
 /* ── AMBIENT SOUND ──────────────────────────────── */
-#ambient-btn { transition: opacity 0.3s; }
-#ambient-btn.muted { opacity: 0.35; }
 
 /* ── 3D FLYOVER ────────────────────────────────── */
 .flyover-hero-btn {
@@ -1580,8 +1578,6 @@ html, body {
 <symbol id="ic-store"     viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13 H28 L26 7 H6 Z"/><rect x="6" y="13" width="20" height="15"/><rect x="12" y="19" width="8" height="9"/></symbol>
 <symbol id="ic-spa"       viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M16 6 C16 6 8 12 8 18 C8 22 12 26 16 26 C20 26 24 22 24 18 C24 12 16 6 16 6 Z"/><path d="M8 18 C6 16 4 12 4 12 C7 12 10 14 10 14"/><path d="M24 18 C26 16 28 12 28 12 C25 12 22 14 22 14"/></symbol>
 <symbol id="ic-breakfast" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 14 Q6 7 16 7 Q26 7 26 14 L26 22 H6 Z"/><line x1="4" y1="22" x2="28" y2="22"/><path d="M22 7 Q24 5 26 7 Q28 9 26 11"/></symbol>
-<symbol id="ic-sound"    viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12 H12 L20 6 V26 L12 20 H6 Z"/><path d="M24 10 Q28 16 24 22"/></symbol>
-<symbol id="ic-sound-off" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12 H12 L20 6 V26 L12 20 H6 Z"/><line x1="24" y1="12" x2="30" y2="20"/><line x1="30" y1="12" x2="24" y2="20"/></symbol>
 <symbol id="ic-wine"      viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10 4 H22 L20 14 C20 18 16 20 16 20 C16 20 12 18 12 14 Z"/><line x1="16" y1="20" x2="16" y2="28"/><line x1="11" y1="28" x2="21" y2="28"/></symbol>
 <symbol id="ic-accessible" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="16" cy="5" r="3"/><line x1="16" y1="8" x2="16" y2="18"/><line x1="10" y1="12" x2="22" y2="12"/><line x1="12" y1="18" x2="10" y2="27"/><line x1="20" y1="18" x2="22" y2="27"/></symbol>
 <!-- Compass glyph: outer ring, tick marks, orange north needle, white south needle -->
@@ -2229,10 +2225,7 @@ html, body {
     <div class="d-topbar">
       <div class="topbar-btn xbtn is-close" onclick="goBack()"></div>
       <div style="display:flex;gap:8px;">
-        <div class="topbar-btn" id="ambient-btn" onclick="toggleAmbient()" title="Ambient sound">
-          <svg id="ambient-svg" width="17" height="17" style="color:rgba(255,255,255,0.7);stroke:currentColor;fill:none;"><use id="ambient-icon" href="#ic-sound"/></svg>
-        </div>
-        <div class="topbar-btn" id="save-btn" onclick="toggleSave()">
+<div class="topbar-btn" id="save-btn" onclick="toggleSave()">
           <svg id="save-svg" width="17" height="17" style="color:rgba(255,255,255,0.7);stroke:currentColor;fill:none;"><use href="#ic-heart"/></svg>
         </div>
       </div>
@@ -3611,7 +3604,7 @@ function go(toId, fromId) {
   const cg = document.getElementById('compass-global');
   if (cg) cg.classList.toggle('vis', toId === 'results' || toId === 'saved');
 }
-function goBack() { stopAmbient(false); go(prevScreen || 'home', null); }
+function goBack() { go(prevScreen || 'home', null); }
 
 let searchQuery = '';
 
@@ -4369,9 +4362,6 @@ function openDetail(id) {
   // Trigger forecast load
   loadDetailForecast(c);
 
-  // Ambient sound — start gently when detail opens
-  startAmbient(c);
-
   // Pack list
   renderPackList(c);
 
@@ -4639,106 +4629,6 @@ function dismissCompassHint() {
     hero.style.backgroundPositionY = `calc(50% + ${y * 0.38}px)`;
   }, { passive: true });
 })();
-
-// ─── AMBIENT SOUND ENGINE ────────────────────────
-let _ambCtx   = null;
-let _ambNodes = [];
-let _ambGain  = null;
-let _ambMuted = false;
-
-function _ambType(c) {
-  const txt = (c.loc + ' ' + c.desc).toLowerCase();
-  if (['coast','beach','ocean','pacific','atlantic','gulf','surf','shore'].some(w => txt.includes(w))) return 'ocean';
-  if (['river','creek','stream','rapids','gorge'].some(w => txt.includes(w))) return 'river';
-  return 'forest';
-}
-
-function _makeNoiseBuf(ctx, color) {
-  const len  = ctx.sampleRate * 3;
-  const buf  = ctx.createBuffer(1, len, ctx.sampleRate);
-  const data = buf.getChannelData(0);
-  let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
-  for (let i = 0; i < len; i++) {
-    const w = Math.random() * 2 - 1;
-    b0=0.99886*b0+w*0.0555179; b1=0.99332*b1+w*0.0750759;
-    b2=0.96900*b2+w*0.1538520; b3=0.86650*b3+w*0.3104856;
-    b4=0.55000*b4+w*0.5329522; b5=-0.7616*b5-w*0.0168980;
-    data[i] = color === 'pink'
-      ? (b0+b1+b2+b3+b4+b5+b6+w*0.5362) / 7
-      : (b0+b1+b2+b3+b4+b5+b6+w*0.5362) / 12; // brown = quieter/deeper
-    b6 = w * 0.115926;
-  }
-  return buf;
-}
-
-function startAmbient(c) {
-  stopAmbient(true);
-  try {
-    _ambCtx  = new (window.AudioContext || window.webkitAudioContext)();
-    _ambGain = _ambCtx.createGain();
-    _ambGain.gain.setValueAtTime(0, _ambCtx.currentTime);
-    _ambGain.gain.linearRampToValueAtTime(0.13, _ambCtx.currentTime + 2.5);
-    _ambGain.connect(_ambCtx.destination);
-
-    const type    = _ambType(c);
-    const noise   = _ambCtx.createBufferSource();
-    noise.buffer  = _makeNoiseBuf(_ambCtx, type === 'ocean' ? 'pink' : 'brown');
-    noise.loop    = true;
-
-    const filt    = _ambCtx.createBiquadFilter();
-    if      (type === 'ocean')  { filt.type = 'bandpass'; filt.frequency.value = 350; filt.Q.value = 0.4; }
-    else if (type === 'river')  { filt.type = 'bandpass'; filt.frequency.value = 800; filt.Q.value = 0.7; }
-    else                        { filt.type = 'lowpass';  filt.frequency.value = 550; }
-
-    // LFO gives ocean its wave pulse, forest its gentle swell
-    const lfo     = _ambCtx.createOscillator();
-    const lfoGain = _ambCtx.createGain();
-    lfo.frequency.value = type === 'ocean' ? 0.1 : type === 'river' ? 0.25 : 0.07;
-    lfoGain.gain.value  = type === 'ocean' ? 0.08 : 0.04;
-    lfo.connect(lfoGain);
-    lfoGain.connect(_ambGain.gain);
-
-    noise.connect(filt);
-    filt.connect(_ambGain);
-    noise.start();
-    lfo.start();
-    _ambNodes = [noise, lfo];
-    _ambMuted = true;   // start muted by default — user opts in
-    _ambGain.gain.setValueAtTime(0, _ambCtx.currentTime);
-    _updateAmbientBtn();
-  } catch(e) { /* audio not available */ }
-}
-
-function stopAmbient(immediate) {
-  if (_ambGain && _ambCtx) {
-    if (immediate) {
-      _ambNodes.forEach(n => { try { n.stop(); } catch(e){} });
-      try { _ambCtx.close(); } catch(e){}
-    } else {
-      _ambGain.gain.linearRampToValueAtTime(0, _ambCtx.currentTime + 1.2);
-      setTimeout(() => {
-        _ambNodes.forEach(n => { try { n.stop(); } catch(e){} });
-        try { _ambCtx.close(); } catch(e){}
-      }, 1300);
-    }
-  }
-  _ambCtx = null; _ambGain = null; _ambNodes = [];
-}
-
-function toggleAmbient() {
-  if (!_ambCtx) return;
-  _ambMuted = !_ambMuted;
-  _ambGain.gain.linearRampToValueAtTime(_ambMuted ? 0 : 0.13, _ambCtx.currentTime + 0.5);
-  _updateAmbientBtn();
-}
-
-function _updateAmbientBtn() {
-  const btn  = document.getElementById('ambient-btn');
-  const icon = document.getElementById('ambient-icon');
-  if (!btn || !icon) return;
-  btn.classList.toggle('muted', _ambMuted);
-  icon.setAttribute('href', _ambMuted ? '#ic-sound-off' : '#ic-sound');
-}
 
 // ─── SMART PACK LIST ─────────────────────────────
 function generatePackList(c) {
