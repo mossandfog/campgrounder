@@ -258,6 +258,44 @@ html, body {
 
   /* ── PILLS: compact, wrap layout ── */
   .pill { padding: 9px 14px; font-size: 10px; letter-spacing: 0.1em; }
+
+  /* ══ ABOUT SCREEN: desktop layout ══════════════ */
+  /* Top bar: wider padding to match other screens */
+  .about-top { padding: calc(var(--safe-top) + 15px) 40px 15px; }
+
+  /* Center-constrain the scroll content */
+  .about-scroll { max-width: 900px; width: 100%; margin: 0 auto; }
+
+  /* Hero: bigger breathing room, larger display type */
+  .about-hero { padding: 52px 40px 58px; }
+  .about-hero-title { font-size: clamp(80px, 10vw, 124px); }
+  .about-hero-mark { width: 110px; height: 110px; right: 40px; bottom: 50px; opacity: 0.08; }
+  .about-hero-rule { margin: 30px 0 26px; }
+
+  /* Manifesto: widen padding, allow longer lines on desktop */
+  .about-manifesto { padding: 40px 40px 46px; }
+  .about-manifesto p { font-size: 17px; max-width: 60ch; }
+
+  /* Principle grid: 3-column on desktop — all cells equal weight */
+  .about-grid { grid-template-columns: 1fr 1fr 1fr; }
+
+  /* Remove mobile border rules, remap to 3-col logic */
+  .about-cell { padding: 30px 28px 34px; border-bottom: none; }
+  .about-cell:nth-child(2n) { border-right: 1.5px solid var(--line); } /* 2nd col gets border back */
+  .about-cell:nth-child(3n) { border-right: none; }                    /* 3rd col edge: no border */
+
+  /* Full-width cell collapses to regular 3rd cell on desktop */
+  .about-cell--full {
+    grid-column: auto;
+    border-right: none;
+    padding: 30px 28px 34px;
+    border-bottom: none;
+  }
+  .about-cell--full .about-cell-title { font-size: 20px; } /* matches sibling cells */
+
+  /* Signature: wider padding */
+  .about-sig { padding: 32px 40px 28px; }
+  .about-link { font-size: 10px; }
 }
 
 /* hero-right is a desktop layout wrapper — transparent on mobile */
@@ -984,6 +1022,145 @@ html, body {
   padding-bottom: 8px;
   font-size: 10px; font-weight: 800; letter-spacing: 0.22em;
   text-transform: uppercase; color: rgba(255,255,255,0.18);
+}
+
+/* ── ABOUT LINK (in profile) ── */
+.about-link {
+  display: block; text-align: center;
+  padding: 16px 24px 20px;
+  font-size: 10px; font-weight: 900; letter-spacing: 0.26em;
+  text-transform: uppercase; color: rgba(255,255,255,0.2);
+  cursor: pointer; transition: color 0.18s; text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.about-link:hover, .about-link:active { color: rgba(232,72,28,0.8); }
+
+/* ══════════════════════════════════════════════
+   ABOUT SCREEN
+══════════════════════════════════════════════ */
+
+/* ── Top bar ── */
+.about-top {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: calc(var(--safe-top) + 14px) 20px 14px;
+  border-bottom: 1.5px solid var(--line);
+  flex-shrink: 0;
+  background: var(--g0); /* prevent scroll bleed */
+}
+.about-top-label {
+  font-size: 10px; font-weight: 900; letter-spacing: 0.34em;
+  text-transform: uppercase; color: rgba(255,255,255,0.3);
+  pointer-events: none;
+}
+
+/* ── Scroll container ── */
+.about-scroll {
+  flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+  padding-bottom: calc(52px + var(--safe-bot));
+}
+
+/* ── Hero ── */
+.about-hero {
+  padding: 36px 24px 44px;
+  border-bottom: 1.5px solid var(--line);
+  position: relative; overflow: hidden;
+}
+.about-hero-eyebrow {
+  font-size: 10px; font-weight: 900; letter-spacing: 0.32em;
+  text-transform: uppercase; color: rgba(232,72,28,0.85);
+  margin-bottom: 20px; position: relative; z-index: 1;
+}
+.about-hero-title {
+  font-size: clamp(64px, 18vw, 96px);
+  font-weight: 900; letter-spacing: -0.055em; line-height: 0.87;
+  color: var(--w); position: relative; z-index: 1;
+}
+.about-hero-rule {
+  width: 100%; height: 2.5px;
+  background: var(--o); margin: 26px 0 22px;
+  position: relative; z-index: 1;
+}
+.about-hero-tagline {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.13em;
+  text-transform: uppercase; color: rgba(255,255,255,0.36);
+  position: relative; z-index: 1;
+}
+/* X watermark — bottom-right, out of flow */
+.about-hero-mark {
+  position: absolute; right: 20px; bottom: 32px;
+  width: 88px; height: 88px; opacity: 0.09; pointer-events: none;
+}
+.about-hero-mark svg { width: 100%; height: 100%; }
+
+/* ── Manifesto ── */
+.about-manifesto {
+  padding: 32px 24px 36px;
+  border-bottom: 1.5px solid var(--line);
+  display: flex; flex-direction: column; gap: 18px;
+}
+.about-manifesto-eyebrow {
+  font-size: 10px; font-weight: 900; letter-spacing: 0.32em;
+  text-transform: uppercase; color: rgba(232,72,28,0.85);
+}
+.about-manifesto p {
+  font-size: 16px; font-weight: 500; line-height: 1.72;
+  color: rgba(255,255,255,0.68); letter-spacing: 0.01em;
+  max-width: 52ch; /* keeps line length comfortable on wide screens */
+}
+.about-manifesto p strong { color: var(--w); font-weight: 800; }
+
+/* ── Principle grid ── */
+.about-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  border-bottom: 1.5px solid var(--line);
+}
+.about-cell {
+  padding: 26px 20px 30px;
+  border-right: 1.5px solid var(--line);
+  border-bottom: 1.5px solid var(--line);
+  display: flex; flex-direction: column; gap: 10px;
+}
+/* Right column: no right border */
+.about-cell:nth-child(2n) { border-right: none; }
+/* Full-width cell: no extra borders */
+.about-cell--full {
+  grid-column: 1 / -1;
+  border-right: none; border-bottom: none;
+  padding: 28px 24px 36px;
+}
+.about-cell-num {
+  font-size: 10px; font-weight: 900; letter-spacing: 0.24em;
+  text-transform: uppercase; color: #E8481C;
+  margin-bottom: 2px;
+}
+.about-cell-title {
+  font-size: 20px; font-weight: 900;
+  letter-spacing: -0.03em; line-height: 1.05; color: var(--w);
+}
+.about-cell--full .about-cell-title { font-size: 22px; }
+.about-cell-body {
+  font-size: 12px; font-weight: 500;
+  letter-spacing: 0.02em; line-height: 1.68;
+  color: rgba(255,255,255,0.48); /* legible but recessive */
+  margin-top: 3px;
+}
+
+/* ── Signature ── */
+.about-sig {
+  padding: 28px 24px 24px;
+  display: flex; align-items: center; gap: 16px;
+}
+.about-sig-mark {
+  width: 34px; height: 34px; flex-shrink: 0; opacity: 0.26;
+}
+.about-sig-text { display: flex; flex-direction: column; gap: 4px; }
+.about-sig-name {
+  font-size: 10px; font-weight: 900; letter-spacing: 0.3em;
+  text-transform: uppercase; color: rgba(255,255,255,0.22);
+}
+.about-sig-sub {
+  font-size: 9px; font-weight: 600; letter-spacing: 0.18em;
+  text-transform: uppercase; color: rgba(255,255,255,0.12);
 }
 
 /* ══════════════════════════════════════════════
@@ -1912,6 +2089,7 @@ html, body {
     </div>
 
     <div class="profile-footer">Campgrounder · Built for the wild</div>
+    <div class="about-link" onclick="go('about','profile')">About Campgrounder →</div>
 
   </div><!-- end .profile-scroll -->
 
@@ -1921,6 +2099,80 @@ html, body {
     <div class="ntab" onclick="go('saved','profile')"><svg><use href="#ic-heart"/></svg>Saved</div>
     <div class="ntab on"><svg><use href="#ic-user"/></svg>Profile</div>
   </nav>
+</div>
+
+<!-- ══════════════════════════════════════
+  ABOUT
+══════════════════════════════════════ -->
+<div class="screen" id="about">
+
+  <div class="about-top">
+    <div class="xbtn is-close" onclick="goBack()"></div>
+    <div class="about-top-label">About</div>
+    <div style="width:40px;"></div>
+  </div>
+
+  <div class="about-scroll">
+
+    <!-- Hero typographic block -->
+    <!-- Mark is positioned absolute bottom-right so it never crowds the title on any screen -->
+    <div class="about-hero">
+      <div class="about-hero-eyebrow">Why we exist</div>
+      <div class="about-hero-title">FIND<br>YOUR<br>CAMP.</div>
+      <div class="about-hero-rule"></div>
+      <div class="about-hero-tagline">A streamlined path to the outdoors</div>
+      <div class="about-hero-mark" aria-hidden="true">
+        <svg viewBox="0 0 60 60" fill="none">
+          <line x1="6" y1="6" x2="54" y2="54" stroke="#E8481C" stroke-width="8" stroke-linecap="round"/>
+          <line x1="54" y1="6" x2="6" y2="54" stroke="#E8481C" stroke-width="8" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Manifesto -->
+    <div class="about-manifesto">
+      <div class="about-manifesto-eyebrow">The Idea</div>
+      <p>The outdoors shouldn't require a spreadsheet. Recreation.gov, state parks, private sites, BLM land — each with its own system, its own calendar, its own friction. <strong>We built Campgrounder to fix that.</strong></p>
+      <p>One honest place to browse, decide, and go. No ads. No dark patterns. No algorithm nudging you somewhere you don't want to be. Just trees, trails, and the cleanest path between you and them.</p>
+    </div>
+
+    <!-- Principle cells -->
+    <div class="about-grid" role="list">
+
+      <div class="about-cell" role="listitem">
+        <div class="about-cell-num">01</div>
+        <div class="about-cell-title">Honest<br>Curation</div>
+        <div class="about-cell-body">Every listing is worth finding. Nothing is promoted or paid for.</div>
+      </div>
+
+      <div class="about-cell" role="listitem">
+        <div class="about-cell-num">02</div>
+        <div class="about-cell-title">One Tap<br>to Gone</div>
+        <div class="about-cell-body">From idea to booking in under a minute. That's the design goal.</div>
+      </div>
+
+      <div class="about-cell about-cell--full" role="listitem">
+        <div class="about-cell-num">03</div>
+        <div class="about-cell-title">Born in the PNW.<br>Built for Everywhere.</div>
+        <div class="about-cell-body">Started under tall firs and grey skies in the Pacific Northwest. Designed for every forest, desert, canyon, and shoreline that comes after.</div>
+      </div>
+
+    </div>
+
+    <!-- Signature -->
+    <div class="about-sig" aria-label="Campgrounder signature">
+      <svg class="about-sig-mark" viewBox="0 0 60 60" fill="none" aria-hidden="true">
+        <line x1="6" y1="6" x2="54" y2="54" stroke="white" stroke-width="8" stroke-linecap="round"/>
+        <line x1="54" y1="6" x2="6" y2="54" stroke="white" stroke-width="8" stroke-linecap="round"/>
+      </svg>
+      <div class="about-sig-text">
+        <div class="about-sig-name">Campgrounder</div>
+        <div class="about-sig-sub">Pacific Northwest · Est. 2025</div>
+      </div>
+    </div>
+
+  </div><!-- end .about-scroll -->
+
 </div>
 
 <!-- ══════════════════════════════════════
