@@ -1437,7 +1437,15 @@ html, body {
 .cta-sq { width: 54px; border: 1.5px solid var(--w2); background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.16s; }
 .cta-sq:hover { border-color: var(--o); }
 
+/* ── DETAIL BOTTOM GRID (pack + drive) ─────────── */
+.detail-bottom-grid { display: block; }
+@media (min-width: 768px) {
+  .detail-bottom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 40px; align-items: start; }
+}
+
 /* ── PACK LIST ─────────────────────────────────── */
+.pack-toggle { cursor: pointer; -webkit-tap-highlight-color: transparent; user-select: none; }
+.pack-toggle:hover #pack-chevron { color: rgba(255,255,255,0.6) !important; }
 .pack-hint { font-size: 11px; color: rgba(255,255,255,0.25); margin-bottom: 14px; letter-spacing: 0.02em; }
 .pack-list  { display: flex; flex-direction: column; margin-bottom: 40px; }
 .pack-item  { display: flex; align-items: center; gap: 13px; padding: 11px 0;
@@ -1451,6 +1459,35 @@ html, body {
 .pack-item.packed .pack-check::after { content: '✓'; color: #fff; font-size: 11px; font-weight: 900; }
 .pack-item.packed > span { opacity: 0.35; text-decoration: line-through; }
 .pack-item > span { font-size: 14px; color: rgba(255,255,255,0.8); line-height: 1.3; }
+
+/* ── DRIVE CARD ─────────────────────────────────── */
+.drive-body { display: flex; align-items: center; justify-content: center; margin-bottom: 32px; min-height: 110px; }
+.drive-idle { display: flex; flex-direction: column; align-items: center; justify-content: center;
+              gap: 6px; padding: 20px 16px; width: 100%; text-align: center;
+              border: 1.5px dashed rgba(232,72,28,0.3); border-radius: 12px;
+              cursor: pointer; transition: border-color 0.15s;
+              -webkit-tap-highlight-color: transparent; }
+.drive-idle:active { border-color: rgba(232,72,28,0.7); }
+.drive-locate-label { font-size: 13px; color: rgba(255,255,255,0.4); line-height: 1.45; }
+.drive-calculating { font-size: 13px; color: rgba(255,255,255,0.35); text-align: center; padding: 28px 0; }
+.drive-result { width: 100%; }
+.drive-stats { display: flex; border: 1.5px solid rgba(255,255,255,0.08); border-radius: 10px;
+               overflow: hidden; margin-bottom: 10px; }
+.drive-stat { flex: 1; padding: 14px 10px; text-align: center; }
+.drive-stat + .drive-stat { border-left: 1.5px solid rgba(255,255,255,0.08); }
+.drive-stat-val { font-size: 22px; font-weight: 700; color: #fff; letter-spacing: -0.02em;
+                  line-height: 1; margin-bottom: 4px; }
+.drive-stat-label { font-size: 10px; color: rgba(255,255,255,0.32); text-transform: uppercase;
+                    letter-spacing: 0.08em; font-weight: 600; }
+.drive-nav-btn { display: block; text-align: center; padding: 11px 16px; background: var(--o);
+                 color: #fff; border-radius: 8px; font-size: 13px; font-weight: 700;
+                 letter-spacing: 0.04em; text-decoration: none; -webkit-tap-highlight-color: transparent; }
+.drive-recalc { font-size: 11px; color: rgba(255,255,255,0.28); text-align: center;
+                margin-top: 10px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.drive-recalc:hover { color: var(--o); }
+.drive-error { font-size: 12px; color: rgba(255,255,255,0.32); text-align: center;
+               padding: 20px 8px; line-height: 1.6; }
+.drive-error a { color: var(--o); cursor: pointer; }
 
 /* ── AMBIENT SOUND ──────────────────────────────── */
 #ambient-btn { transition: opacity 0.3s; }
@@ -2235,12 +2272,35 @@ html, body {
     <div class="d-eyebrow" id="d-wx-eyebrow" style="display:none;">Forecast</div>
     <div class="forecast-strip" id="d-forecast" style="display:none;"></div>
     <div class="d-divider"></div>
-    <div class="d-eyebrow" style="display:flex;align-items:center;justify-content:space-between;">
-      Pack List
-      <span id="d-pack-count" style="font-size:10px;color:rgba(255,255,255,0.25);font-weight:600;letter-spacing:0.06em;text-transform:none;"></span>
+    <div class="detail-bottom-grid">
+      <!-- Pack List col -->
+      <div>
+        <div class="d-eyebrow pack-toggle" onclick="togglePackList()" style="display:flex;align-items:center;justify-content:space-between;">
+          Pack List
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span id="d-pack-count" style="font-size:10px;color:rgba(255,255,255,0.25);font-weight:600;letter-spacing:0.06em;text-transform:none;"></span>
+            <svg id="pack-chevron" width="14" height="14" viewBox="0 0 14 14" style="color:rgba(255,255,255,0.28);stroke:currentColor;fill:none;transition:transform 0.22s;flex-shrink:0;"><polyline points="3,5 7,9 11,5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+        <div id="pack-collapsible" style="display:none;">
+          <div class="pack-hint">Generated for this site — tap to check off</div>
+          <div id="d-pack-list" class="pack-list"></div>
+        </div>
+      </div>
+      <!-- Drive widget col -->
+      <div>
+        <div class="d-eyebrow" style="display:flex;align-items:center;justify-content:space-between;">
+          Your Drive
+          <span id="drive-dist-label" style="font-size:10px;color:rgba(255,255,255,0.25);font-weight:600;letter-spacing:0.06em;text-transform:none;"></span>
+        </div>
+        <div id="drive-body" class="drive-body">
+          <div class="drive-idle" onclick="calcDriveTime()">
+            <svg width="22" height="22" viewBox="0 0 24 24" style="color:rgba(232,72,28,0.55);stroke:currentColor;fill:none;margin-bottom:4px;" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
+            <div class="drive-locate-label">Tap to calculate<br>from your location</div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="pack-hint">Generated for this site — tap to check off</div>
-    <div id="d-pack-list" class="pack-list"></div>
   </div>
   <div class="d-cta-bar">
     <a class="cta-main" id="d-cta-link" href="#" target="_blank" rel="noopener">Check Availability →</a>
@@ -4749,6 +4809,80 @@ function renderPackList(c) {
       <span>${item}</span>
     </div>`
   ).join('');
+  // Always start collapsed when loading a new camp
+  const coll = document.getElementById('pack-collapsible');
+  const chev = document.getElementById('pack-chevron');
+  if (coll) { coll.style.display = 'none'; }
+  if (chev) { chev.style.transform = ''; }
+  // Reset drive widget
+  resetDriveWidget();
+}
+
+function togglePackList() {
+  const coll = document.getElementById('pack-collapsible');
+  const chev = document.getElementById('pack-chevron');
+  const open = coll.style.display !== 'none';
+  coll.style.display = open ? 'none' : 'block';
+  chev.style.transform = open ? '' : 'rotate(180deg)';
+}
+
+// ─── DRIVE CALCULATOR ───────────────────────────
+function haversine(lat1, lon1, lat2, lon2) {
+  const R = 3958.8; // miles
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dLat/2)**2 +
+            Math.cos(lat1 * Math.PI/180) * Math.cos(lat2 * Math.PI/180) * Math.sin(dLon/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+function calcDriveTime() {
+  const c = CAMPS.find(x => x.id === currentDetailId);
+  if (!c) return;
+  const body = document.getElementById('drive-body');
+  body.innerHTML = '<div class="drive-calculating">Finding your location…</div>';
+  if (!navigator.geolocation) {
+    body.innerHTML = '<div class="drive-error">Geolocation isn\'t supported on this device.</div>';
+    return;
+  }
+  navigator.geolocation.getCurrentPosition(pos => {
+    const straight = haversine(pos.coords.latitude, pos.coords.longitude, c.lat, c.lng);
+    const road = Math.round(straight * 1.3);
+    const mins = Math.round((road / 55) * 60);
+    const timeStr = mins < 60 ? `${mins} min`
+      : `${Math.floor(mins/60)}h${mins%60 > 0 ? ' ' + (mins%60) + 'm' : ''}`;
+    const mapsUrl = `https://maps.apple.com/?daddr=${c.lat},${c.lng}&dirflg=d`;
+    const gmapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${c.lat},${c.lng}`;
+    document.getElementById('drive-dist-label').textContent = `~${road} mi`;
+    body.innerHTML = `
+      <div class="drive-result">
+        <div class="drive-stats">
+          <div class="drive-stat">
+            <div class="drive-stat-val">${road}</div>
+            <div class="drive-stat-label">miles</div>
+          </div>
+          <div class="drive-stat">
+            <div class="drive-stat-val">${timeStr}</div>
+            <div class="drive-stat-label">est. drive</div>
+          </div>
+        </div>
+        <a class="drive-nav-btn" href="${mapsUrl}" target="_blank" rel="noopener">Navigate →</a>
+        <div class="drive-recalc" onclick="resetDriveWidget()">recalculate</div>
+      </div>`;
+  }, () => {
+    body.innerHTML = `<div class="drive-error">Location access denied.<br><a onclick="resetDriveWidget()">Try again</a></div>`;
+  }, { timeout: 8000 });
+}
+
+function resetDriveWidget() {
+  const body = document.getElementById('drive-body');
+  const label = document.getElementById('drive-dist-label');
+  if (label) label.textContent = '';
+  if (body) body.innerHTML = `
+    <div class="drive-idle" onclick="calcDriveTime()">
+      <svg width="22" height="22" viewBox="0 0 24 24" style="color:rgba(232,72,28,0.55);stroke:currentColor;fill:none;margin-bottom:4px;" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
+      <div class="drive-locate-label">Tap to calculate<br>from your location</div>
+    </div>`;
 }
 
 // ─── 3D FLYOVER ─────────────────────────────────
