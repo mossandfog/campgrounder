@@ -1601,6 +1601,17 @@ html, body {
   <rect x="9" y="18" width="4" height="4" rx="0.5" fill="currentColor" stroke="none" opacity="0.6"/>
   <rect x="15" y="18" width="4" height="4" rx="0.5" fill="currentColor" stroke="none" opacity="0.6"/>
 </symbol>
+<!--
+  CAMPGROUNDER TENT LOGO MARK
+  Orange circle + two crossing tent poles (right-foot→left-tip, left-foot→right-tip).
+  Use as: <svg><use href="#ic-logo"/></svg>
+  Supports currentColor override on the circle via CSS if needed.
+-->
+<symbol id="ic-logo" viewBox="0 0 100 100">
+  <circle cx="50" cy="48" r="37" fill="#E8481C"/>
+  <polygon fill="black" points="65,93 88,93 29,8 20,8"/>
+  <polygon fill="black" points="12,93 35,93 80,8 71,8"/>
+</symbol>
 </defs>
 </svg>
 
@@ -1614,7 +1625,7 @@ html, body {
 <div class="home-scroll">
   <div class="home-top">
     <div>
-      <img src="logo.png" width="38" height="38" style="object-fit:contain;" alt="Campgrounder logo">
+      <svg width="36" height="36" viewBox="0 0 100 100" aria-label="Campgrounder logo" role="img"><use href="#ic-logo"/></svg>
       <div class="wordmark">Campgrounder</div>
     </div>
     <div class="home-top-actions">
@@ -1890,9 +1901,8 @@ html, body {
 ══════════════════════════════════════ -->
 <div class="screen" id="profile">
   <!-- Decorative watermark campfire -->
-  <svg class="profile-bg-mark" viewBox="0 0 38 38" fill="none">
-    <line x1="4" y1="4" x2="34" y2="34" stroke="white" stroke-width="5.5" stroke-linecap="round"/>
-    <line x1="34" y1="4" x2="4" y2="34" stroke="white" stroke-width="5.5" stroke-linecap="round"/>
+  <svg class="profile-bg-mark" viewBox="0 0 100 100" aria-hidden="true">
+    <use href="#ic-logo"/>
   </svg>
 
   <div class="profile-scroll">
@@ -2122,10 +2132,7 @@ html, body {
       <div class="about-hero-rule"></div>
       <div class="about-hero-tagline">A streamlined path to the outdoors</div>
       <div class="about-hero-mark" aria-hidden="true">
-        <svg viewBox="0 0 60 60" fill="none">
-          <line x1="6" y1="6" x2="54" y2="54" stroke="#E8481C" stroke-width="8" stroke-linecap="round"/>
-          <line x1="54" y1="6" x2="6" y2="54" stroke="#E8481C" stroke-width="8" stroke-linecap="round"/>
-        </svg>
+        <svg viewBox="0 0 100 100"><use href="#ic-logo"/></svg>
       </div>
     </div>
 
@@ -2161,9 +2168,8 @@ html, body {
 
     <!-- Signature -->
     <div class="about-sig" aria-label="Campgrounder signature">
-      <svg class="about-sig-mark" viewBox="0 0 60 60" fill="none" aria-hidden="true">
-        <line x1="6" y1="6" x2="54" y2="54" stroke="white" stroke-width="8" stroke-linecap="round"/>
-        <line x1="54" y1="6" x2="6" y2="54" stroke="white" stroke-width="8" stroke-linecap="round"/>
+      <svg class="about-sig-mark" viewBox="0 0 100 100" aria-hidden="true">
+        <use href="#ic-logo"/>
       </svg>
       <div class="about-sig-text">
         <div class="about-sig-name">Campgrounder</div>
