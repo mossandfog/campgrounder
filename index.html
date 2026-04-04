@@ -124,7 +124,7 @@ html, body {
   .results-scroll  { padding: 0 40px 32px; max-width: 900px; align-self: stretch; }
   .saved-top       { padding: var(--top-pad) 40px 18px; }
   .saved-scroll    { padding: 0 40px 32px; }
-  .d-body          { padding: 16px 40px 140px; }
+  .d-body          { padding: 16px 40px calc(160px + var(--safe-bot)); }
   .search-ov-top   { padding: var(--top-pad) 40px 20px; }
   .sug-eyebrow     { padding: 0 40px 12px; }
   .sug-item        { padding: 14px 40px; }
@@ -1175,7 +1175,7 @@ html, body {
 .topbar-btn:hover { border-color: var(--o); }
 .topbar-btn.saved svg { color: var(--o) !important; }
 
-.d-body  { padding: 22px 24px 220px; }
+.d-body  { padding: 22px 24px calc(160px + var(--safe-bot)); }
 .d-type  { font-size: 10px; font-weight: 800; letter-spacing: 0.22em; text-transform: uppercase; color: var(--o); margin-bottom: 12px; }
 .d-name  { font-size: 34px; font-weight: 800; letter-spacing: -0.03em; line-height: 0.95; margin-bottom: 10px; }
 .d-loc   { font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--w5); margin-bottom: 24px; }
@@ -4703,7 +4703,8 @@ function startAmbient(c) {
     noise.start();
     lfo.start();
     _ambNodes = [noise, lfo];
-    _ambMuted = false;
+    _ambMuted = true;   // start muted by default — user opts in
+    _ambGain.gain.setValueAtTime(0, _ambCtx.currentTime);
     _updateAmbientBtn();
   } catch(e) { /* audio not available */ }
 }
