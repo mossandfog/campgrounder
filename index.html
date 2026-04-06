@@ -509,6 +509,67 @@ html, body {
 }
 .cat-cell:hover .cat-plus { opacity: 1; }
 
+/* ── WHERE TO START ─────────────────────────────── */
+.start-section { margin: 28px 0 0; }
+.start-section .section-eyebrow { margin-bottom: 12px; }
+.start-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  border-top: 1.5px solid rgba(255,255,255,0.08);
+}
+.start-cell {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 15px 24px;
+  border-bottom: 1.5px solid rgba(255,255,255,0.08);
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+  position: relative; overflow: hidden;
+  transition: background 0.14s;
+}
+.start-cell::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 2.5px; background: var(--o);
+  transform: scaleY(0); transform-origin: bottom;
+  transition: transform 0.18s ease;
+}
+.start-cell:hover::before, .start-cell:active::before { transform: scaleY(1); }
+.start-cell:active { background: rgba(232,72,28,0.05); }
+.start-num {
+  font-size: 9px; font-weight: 900; letter-spacing: 0.2em;
+  color: var(--o); min-width: 18px; padding-top: 2px; flex-shrink: 0;
+}
+.start-text { flex: 1; }
+.start-head {
+  font-size: 14px; font-weight: 800; letter-spacing: -0.01em;
+  color: rgba(255,255,255,0.88); margin-bottom: 3px; line-height: 1.2;
+}
+.start-body {
+  font-size: 11px; color: rgba(255,255,255,0.36);
+  line-height: 1.45; font-style: italic;
+}
+.start-arrow {
+  font-size: 15px; color: rgba(232,72,28,0.7); flex-shrink: 0;
+  padding-top: 1px; transition: transform 0.15s;
+}
+.start-cell:hover .start-arrow { transform: translateX(4px); color: var(--o); }
+
+@media (min-width: 768px) {
+  .start-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+    border: 1.5px solid rgba(255,255,255,0.08);
+    border-right: none; border-bottom: none;
+  }
+  .start-cell {
+    flex-direction: column; gap: 10px;
+    padding: 22px 20px 20px;
+    border-right: 1.5px solid rgba(255,255,255,0.08);
+    border-bottom: 1.5px solid rgba(255,255,255,0.08);
+  }
+  .start-cell::before { width: 100%; height: 2.5px; bottom: auto; transform: scaleX(0); transform-origin: left; }
+  .start-cell:hover::before, .start-cell:active::before { transform: scaleX(1); }
+  .start-arrow { margin-top: 8px; }
+  .start-head { font-size: 15px; }
+}
+
 .pnw-footer {
   text-align: center;
   font-size: 10px; font-weight: 700;
@@ -1444,9 +1505,17 @@ html, body {
 }
 
 /* ── PACK LIST ─────────────────────────────────── */
-.pack-toggle { cursor: pointer; -webkit-tap-highlight-color: transparent; user-select: none; }
-.pack-toggle:hover #pack-chevron { color: rgba(255,255,255,0.6) !important; }
+.pack-toggle { cursor: pointer; -webkit-tap-highlight-color: transparent; user-select: none; display: flex; align-items: center; gap: 6px; }
+.pack-toggle:hover #pack-chevron { color: rgba(255,255,255,0.7) !important; }
 .pack-hint { font-size: 11px; color: rgba(255,255,255,0.25); margin-bottom: 14px; letter-spacing: 0.02em; }
+/* ── PACK PREVIEW CHIPS ─────────────────────────── */
+.pack-preview { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 4px; }
+.pack-chip { font-size: 11px; color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.05);
+             border: 1px solid rgba(255,255,255,0.09); border-radius: 20px; padding: 4px 10px;
+             white-space: nowrap; letter-spacing: 0.01em; }
+.pack-more { font-size: 11px; color: var(--o); background: rgba(232,72,28,0.1);
+             border: 1px solid rgba(232,72,28,0.25); border-radius: 20px; padding: 4px 10px;
+             white-space: nowrap; font-weight: 600; letter-spacing: 0.02em; }
 .pack-list  { display: flex; flex-direction: column; margin-bottom: 40px; }
 .pack-item  { display: flex; align-items: center; gap: 13px; padding: 11px 0;
               border-bottom: 1px solid rgba(255,255,255,0.06); cursor: pointer;
@@ -1776,6 +1845,40 @@ html, body {
       </div>
     </div>
   </div>
+  <div class="start-section">
+    <div class="section-eyebrow">Where to start</div>
+    <div class="start-grid">
+
+      <div class="start-cell" onclick="openSearch()">
+        <div class="start-num">01</div>
+        <div class="start-text">
+          <div class="start-head">Search a place or vibe</div>
+          <div class="start-body">"Olympic Peninsula" · "free camping" · "beach Oregon"</div>
+        </div>
+        <div class="start-arrow">→</div>
+      </div>
+
+      <div class="start-cell" onclick="locateMe(); dismissCompassHint();">
+        <div class="start-num">02</div>
+        <div class="start-text">
+          <div class="start-head">Find camps near you</div>
+          <div class="start-body">Use your location to see what's close right now</div>
+        </div>
+        <div class="start-arrow">→</div>
+      </div>
+
+      <div class="start-cell" onclick="openLastMinute()">
+        <div class="start-num">03</div>
+        <div class="start-text">
+          <div class="start-head">See this weekend's openings</div>
+          <div class="start-body">Rare availability at top-rated sites — moves fast</div>
+        </div>
+        <div class="start-arrow">→</div>
+      </div>
+
+    </div>
+  </div>
+
   <div class="pnw-footer">
     🌲 Born in the Pacific Northwest
     <a href="presskit_mockup.html" target="_blank" style="display:block;margin-top:8px;font-size:8px;font-weight:900;letter-spacing:0.22em;color:rgba(232,72,28,0.55);text-decoration:none;text-transform:uppercase;transition:color 0.15s;" onmouseover="this.style.color='rgba(232,72,28,0.9)'" onmouseout="this.style.color='rgba(232,72,28,0.55)'">Press Kit →</a>
@@ -2268,15 +2371,14 @@ html, body {
     <div class="detail-bottom-grid">
       <!-- Pack List col -->
       <div>
-        <div class="d-eyebrow pack-toggle" onclick="togglePackList()" style="display:flex;align-items:center;justify-content:space-between;">
+        <div class="d-eyebrow pack-toggle" onclick="togglePackList()">
           Pack List
-          <div style="display:flex;align-items:center;gap:8px;">
-            <span id="d-pack-count" style="font-size:10px;color:rgba(255,255,255,0.25);font-weight:600;letter-spacing:0.06em;text-transform:none;"></span>
-            <svg id="pack-chevron" width="14" height="14" viewBox="0 0 14 14" style="color:rgba(255,255,255,0.28);stroke:currentColor;fill:none;transition:transform 0.22s;flex-shrink:0;"><polyline points="3,5 7,9 11,5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
+          <span id="d-pack-count" style="font-size:10px;color:rgba(255,255,255,0.22);font-weight:600;letter-spacing:0.06em;text-transform:none;"></span>
+          <svg id="pack-chevron" width="13" height="13" viewBox="0 0 14 14" style="color:rgba(255,255,255,0.35);stroke:currentColor;fill:none;transition:transform 0.22s;flex-shrink:0;"><polyline points="3,5 7,9 11,5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
+        <div id="pack-preview" class="pack-preview"></div>
         <div id="pack-collapsible" style="display:none;">
-          <div class="pack-hint">Generated for this site — tap to check off</div>
+          <div class="pack-hint">Tap any item to check it off</div>
           <div id="d-pack-list" class="pack-list"></div>
         </div>
       </div>
@@ -4693,28 +4795,44 @@ function generatePackList(c) {
 
 function renderPackList(c) {
   const items = generatePackList(c);
-  document.getElementById('d-pack-count').textContent = `${items.length} items`;
+  document.getElementById('d-pack-count').textContent = `· ${items.length} items`;
+
+  // Preview chips — first 4 items + overflow badge
+  const preview = document.getElementById('pack-preview');
+  const SHOW = 4;
+  const chips = items.slice(0, SHOW).map(item =>
+    `<span class="pack-chip">${item}</span>`
+  );
+  const leftover = items.length - SHOW;
+  if (leftover > 0) chips.push(`<span class="pack-more">+${leftover} more</span>`);
+  preview.innerHTML = chips.join('');
+  preview.style.display = 'flex';
+
+  // Full checklist
   document.getElementById('d-pack-list').innerHTML = items.map(item =>
     `<div class="pack-item" onclick="this.classList.toggle('packed')">
       <div class="pack-check"></div>
       <span>${item}</span>
     </div>`
   ).join('');
-  // Always start collapsed when loading a new camp
+
+  // Start collapsed, preview visible
   const coll = document.getElementById('pack-collapsible');
   const chev = document.getElementById('pack-chevron');
-  if (coll) { coll.style.display = 'none'; }
-  if (chev) { chev.style.transform = ''; }
-  // Reset drive widget
+  if (coll) coll.style.display = 'none';
+  if (chev) chev.style.transform = '';
+
   resetDriveWidget();
 }
 
 function togglePackList() {
   const coll = document.getElementById('pack-collapsible');
   const chev = document.getElementById('pack-chevron');
+  const preview = document.getElementById('pack-preview');
   const open = coll.style.display !== 'none';
   coll.style.display = open ? 'none' : 'block';
   chev.style.transform = open ? '' : 'rotate(180deg)';
+  if (preview) preview.style.display = open ? 'flex' : 'none';
 }
 
 // ─── DRIVE CALCULATOR ───────────────────────────
