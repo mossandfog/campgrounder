@@ -252,6 +252,7 @@ html, body {
   .cat-sub  { font-size: 10px; margin-top: 5px; }
   .cat-cell svg { width: 40px; height: 40px; }
   .cat-plus { top: 20px; right: 24px; }
+  .hero-tagline { margin-top: 28px; font-size: 9px; }
 
   /* ── FOOTER: hidden on desktop ── */
   .pnw-footer { display: none; }
@@ -380,6 +381,11 @@ html, body {
   margin-bottom: 16px; margin-top: 4px;
 }
 .hero-title .o { color: var(--o); }
+.hero-tagline {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.16em;
+  text-transform: uppercase; color: rgba(255,255,255,0.22);
+  margin-top: 18px; line-height: 1.6;
+}
 
 .home-search-row { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
 .filter-scroll { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
@@ -626,6 +632,11 @@ html, body {
 .card-box {
   width: 64px; height: 64px; flex-shrink: 0;
   background: var(--g1);
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgba(255,255,255,0.025) 0px, rgba(255,255,255,0.025) 1px,
+    transparent 1px, transparent 8px
+  );
   border-left: 2.5px solid var(--o);
   display: flex; align-items: center; justify-content: center;
 }
@@ -1641,6 +1652,9 @@ html, body {
 <symbol id="ic-breakfast" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 14 Q6 7 16 7 Q26 7 26 14 L26 22 H6 Z"/><line x1="4" y1="22" x2="28" y2="22"/><path d="M22 7 Q24 5 26 7 Q28 9 26 11"/></symbol>
 <symbol id="ic-wine"      viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10 4 H22 L20 14 C20 18 16 20 16 20 C16 20 12 18 12 14 Z"/><line x1="16" y1="20" x2="16" y2="28"/><line x1="11" y1="28" x2="21" y2="28"/></symbol>
 <symbol id="ic-accessible" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="16" cy="5" r="3"/><line x1="16" y1="8" x2="16" y2="18"/><line x1="10" y1="12" x2="22" y2="12"/><line x1="12" y1="18" x2="10" y2="27"/><line x1="20" y1="18" x2="22" y2="27"/></symbol>
+<symbol id="ic-drop"     viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4 C16 4 7 14 7 20 C7 25 11 29 16 29 C21 29 25 25 25 20 C25 14 16 4 16 4 Z"/></symbol>
+<symbol id="ic-hike"     viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="5" r="3"/><path d="M11 11 L16 9 L20 14 L24 20"/><path d="M16 9 L15 18 L11 26"/><path d="M15 18 L20 24"/><line x1="7" y1="20" x2="11" y2="20"/></symbol>
+<symbol id="ic-bike"     viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="22" r="6"/><circle cx="24" cy="22" r="6"/><path d="M8 22 L14 10 L18 10"/><path d="M14 10 L20 22 L24 22"/><line x1="18" y1="10" x2="24" y2="10"/></symbol>
 <!-- Compass glyph: outer ring, tick marks, orange north needle, white south needle -->
 <symbol id="ic-compass" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
   <circle cx="16" cy="16" r="12" stroke-width="1.6"/>
@@ -1734,6 +1748,7 @@ html, body {
   </div>
   <div class="home-hero">
     <h1 class="hero-title">Find<br>your<br><span class="o">camp.</span></h1>
+    <div class="hero-tagline">205 campgrounds · Pacific Northwest &amp; beyond</div>
     <div class="hero-right">
     <div class="home-search-row">
       <div class="sbar" onclick="openSearch()" style="cursor:pointer;">
@@ -2342,7 +2357,7 @@ html, body {
     <div class="stat-row">
       <div class="stat-box"><div class="stat-val" id="d-price" style="color:var(--o);">$35</div><div class="stat-lbl">Per night</div></div>
       <div class="stat-box"><div class="stat-val" id="d-sites">240</div><div class="stat-lbl">Sites</div></div>
-      <div class="stat-box"><div class="stat-val" id="d-avail" style="color:#5EC26A;">12</div><div class="stat-lbl">Available</div></div>
+      <div class="stat-box"><div class="stat-val" id="d-avail">12</div><div class="stat-lbl">Available</div></div>
       <div class="stat-box" id="d-dist-box" style="display:none;"><div class="stat-val" id="d-dist">—</div><div class="stat-lbl">Miles away</div></div>
     </div>
     <div class="d-eyebrow">About</div>
@@ -2424,13 +2439,26 @@ html, body {
 // ─── GLYPH / BOOKING MAPS ──────────────────────
 const TYPE_GLYPH = { 'National Park':'#ic-mountain','State Park':'#ic-tree','Forest Service':'#ic-compass','Private':'#ic-tent','Glamping':'#ic-gem','RV Park':'#ic-rv','BLM':'#ic-fire','Army Corps':'#ic-wave' };
 const AMEN_GLYPH = {
-  'Hot Showers':'#ic-shower','Flush Toilets':'#ic-toilet','Vault Toilets':'#ic-toilet',
-  'Fire Rings':'#ic-fire','Parking':'#ic-parking','Accessible':'#ic-accessible',
+  // Facilities
+  'Hot Showers':'#ic-shower','Showers':'#ic-shower','Restrooms':'#ic-toilet',
+  'Flush Toilets':'#ic-toilet','Vault Toilets':'#ic-toilet',
+  'Drinking Water':'#ic-drop','Fire Rings':'#ic-fire','Parking':'#ic-parking',
+  'Dump Station':'#ic-parking','Accessible':'#ic-accessible',
+  'Electric Hookups':'#ic-electric','Electrical Hookups':'#ic-electric',
+  'WiFi':'#ic-wifi','Camp Store':'#ic-store','Laundry':'#ic-store',
+  'Picnic Tables':'#ic-breakfast',
+  // Activities
   'Pet Friendly':'#ic-pet','Beach Access':'#ic-beach','Fishing':'#ic-fish',
-  'Electric Hookups':'#ic-electric','WiFi':'#ic-wifi','Stargazing':'#ic-star',
-  'Rock Climbing':'#ic-climbing','Kayaking':'#ic-kayak','Camp Store':'#ic-store',
+  'Hiking':'#ic-hike','Hike-In Only':'#ic-hike','Bike Trails':'#ic-bike',
+  'Horse Trails':'#ic-hike','Rock Climbing':'#ic-climbing',
+  'Kayaking':'#ic-kayak','Boating':'#ic-wave','Swimming':'#ic-wave',
+  'Wildlife Viewing':'#ic-moon',
+  // Views & extras
+  'Stargazing':'#ic-star','Ocean Views':'#ic-wave','Waterfall':'#ic-wave',
+  'Hot Springs':'#ic-shower',
+  // Glamping
   'Luxury Beds':'#ic-bed','Wood Stove':'#ic-fire','Breakfast Incl.':'#ic-breakfast',
-  'Ocean Views':'#ic-wave','Welcome Wine':'#ic-wine','Spa Access':'#ic-spa',
+  'Welcome Wine':'#ic-wine','Spa Access':'#ic-spa',
 };
 // ─── SMART BOOKING URLS ─────────────────────────
 // Drops users directly onto a pre-filled search page for the specific campground
@@ -4712,7 +4740,7 @@ function openDetail(id) {
   }
 
   document.getElementById('d-amenities').innerHTML = c.amenities.map(a =>
-    `<div class="amenity-cell">${glyph(AMEN_GLYPH[a]||'#ic-star',17,'rgba(255,255,255,0.5)')}<span class="amenity-lbl">${a}</span></div>`
+    `<div class="amenity-cell">${glyph(AMEN_GLYPH[a]||'#ic-star',17,'rgba(255,255,255,0.7)')}<span class="amenity-lbl">${a}</span></div>`
   ).join('');
 
   const ALL_S = ['Spring','Summer','Fall','Winter'];
