@@ -233,7 +233,7 @@ html, body {
     gap: 0 !important;
     margin: 0 !important;
     min-height: 0;
-    align-content: stretch;
+    align-content: start;
   }
 
   .cat-cell {
@@ -255,12 +255,11 @@ html, body {
   .cat-sub  { font-size: 9px; margin-top: 3px; }
   .cat-cell svg { width: 30px; height: 30px; }
   .cat-plus { top: 14px; right: 20px; }
-  /* Pull tagline out of flex row — centered below the hero divider */
+  /* Pull tagline out of flex row — sits at bottom-left of title column */
   .hero-tagline {
     position: absolute;
-    bottom: 22px;
-    left: 50%;
-    transform: translateX(-50%);
+    bottom: 24px;
+    left: 40px;
     margin: 0;
     font-size: 9px;
     white-space: nowrap;
