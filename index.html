@@ -161,6 +161,7 @@ html, body {
     border-bottom: 1.5px solid var(--w2);
     flex-shrink: 0;
     align-items: stretch;
+    position: relative;
   }
 
   .hero-title {
@@ -239,7 +240,7 @@ html, body {
     aspect-ratio: unset !important;
     height: auto !important;
     min-height: 0;
-    padding: 20px 28px 18px !important;
+    padding: 14px 28px 12px !important;
     border: none !important;
     border-top: 1.5px solid var(--w2) !important;
     border-right: 1.5px solid var(--w2) !important;
@@ -250,11 +251,19 @@ html, body {
   /* Hide "Last Minute" cell on desktop so 8 cells form clean 2×4 grid */
   .lm-cell { display: none !important; }
 
-  .cat-name { font-size: 18px; }
-  .cat-sub  { font-size: 10px; margin-top: 5px; }
-  .cat-cell svg { width: 40px; height: 40px; }
-  .cat-plus { top: 20px; right: 24px; }
-  .hero-tagline { margin-top: 28px; font-size: 9px; }
+  .cat-name { font-size: 16px; margin-top: 7px; }
+  .cat-sub  { font-size: 9px; margin-top: 3px; }
+  .cat-cell svg { width: 30px; height: 30px; }
+  .cat-plus { top: 14px; right: 20px; }
+  /* Pull tagline out of flex row — anchor to bottom of title column */
+  .hero-tagline {
+    position: absolute;
+    bottom: 26px;
+    left: 40px;
+    margin: 0;
+    font-size: 9px;
+    max-width: 320px;
+  }
 
   /* ── FOOTER: hidden on desktop ── */
   .pnw-footer { display: none; }
