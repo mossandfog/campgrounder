@@ -238,8 +238,8 @@ html, body {
   .cat-cell {
     aspect-ratio: unset !important;
     height: auto !important;
-    min-height: 130px;
-    padding: 26px 32px 22px !important;
+    min-height: 0;
+    padding: 20px 28px 18px !important;
     border: none !important;
     border-top: 1.5px solid var(--w2) !important;
     border-right: 1.5px solid var(--w2) !important;
@@ -247,6 +247,8 @@ html, body {
   .cat-cell:nth-child(2n) { border-right: 1.5px solid var(--w2) !important; }
   .cat-cell:nth-child(4n) { border-right: none !important; }
   .cat-cell:hover { background: rgba(232,72,28,0.06) !important; }
+  /* Hide "Last Minute" cell on desktop so 8 cells form clean 2×4 grid */
+  .lm-cell { display: none !important; }
 
   .cat-name { font-size: 18px; }
   .cat-sub  { font-size: 10px; margin-top: 5px; }
@@ -347,6 +349,116 @@ html, body {
   pointer-events: none; z-index: 9999; white-space: nowrap;
 }
 #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ── WELCOME MODAL ───────────────────────────── */
+#welcome-overlay {
+  position: fixed; inset: 0; z-index: 99999;
+  background: rgba(8,16,10,0.82);
+  display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  animation: wFadeIn 0.35s ease;
+}
+@keyframes wFadeIn { from { opacity: 0 } to { opacity: 1 } }
+#welcome-overlay.out { animation: wFadeOut 0.22s ease forwards; }
+@keyframes wFadeOut { to { opacity: 0; transform: scale(0.97); } }
+
+#welcome-modal {
+  background: var(--g1);
+  width: min(480px, 92vw);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Bauhaus top bar — thick orange accent stripe */
+.wm-bar {
+  height: 5px;
+  background: var(--o);
+  width: 100%;
+}
+
+/* Bauhaus rule line element */
+.wm-rule {
+  height: 1.5px;
+  background: rgba(255,255,255,0.1);
+  margin: 0 32px;
+}
+
+.wm-body {
+  padding: 32px 36px 36px;
+}
+
+.wm-close {
+  position: absolute; top: 16px; right: 20px;
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; opacity: 0.35;
+  font-size: 20px; font-weight: 300; color: white;
+  line-height: 1; letter-spacing: 0;
+  transition: opacity 0.15s;
+  background: none; border: none;
+}
+.wm-close:hover { opacity: 0.85; }
+
+/* Bauhaus geometric accent — two overlapping rectangles */
+.wm-geo {
+  display: flex; align-items: flex-end; gap: 0;
+  margin-bottom: 20px;
+}
+.wm-geo-tall {
+  width: 4px; height: 52px;
+  background: var(--o);
+}
+.wm-geo-wide {
+  width: 26px; height: 4px;
+  background: rgba(255,255,255,0.15);
+  margin-bottom: 8px;
+}
+
+.wm-headline {
+  font-size: 46px; font-weight: 800;
+  letter-spacing: -0.045em; line-height: 0.88;
+  color: white; margin-bottom: 6px;
+}
+.wm-headline .wm-o { color: var(--o); }
+
+.wm-sub {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.2em;
+  text-transform: uppercase; color: rgba(255,255,255,0.28);
+  margin-bottom: 28px;
+}
+
+.wm-props {
+  display: flex; flex-direction: column; gap: 0;
+  margin-bottom: 30px;
+}
+.wm-prop {
+  display: flex; align-items: baseline; gap: 12px;
+  padding: 11px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.wm-prop:first-child { border-top: 1px solid rgba(255,255,255,0.07); }
+.wm-prop-num {
+  font-size: 10px; font-weight: 800; letter-spacing: 0.1em;
+  color: var(--o); opacity: 0.7; flex-shrink: 0; width: 20px;
+}
+.wm-prop-text {
+  font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.7);
+  line-height: 1.4; letter-spacing: 0.01em;
+}
+.wm-prop-text strong { color: rgba(255,255,255,0.92); font-weight: 700; }
+
+.wm-cta {
+  width: 100%;
+  background: var(--o); color: white; border: none;
+  padding: 16px 24px;
+  font-size: 11px; font-weight: 800; letter-spacing: 0.2em;
+  text-transform: uppercase; cursor: pointer;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: background 0.15s;
+}
+.wm-cta:hover { background: #D03C12; }
+.wm-cta-arrow { font-size: 18px; font-weight: 300; }
 
 /* ── USER LOCATION PULSE ─────────────────────── */
 @keyframes locPulse { 0%{transform:scale(1);opacity:0.7} 100%{transform:scale(2.8);opacity:0} }
@@ -1748,7 +1860,7 @@ html, body {
   </div>
   <div class="home-hero">
     <h1 class="hero-title">Find<br>your<br><span class="o">camp.</span></h1>
-    <div class="hero-tagline">205 campgrounds · Pacific Northwest &amp; beyond</div>
+    <div class="hero-tagline" id="hero-tagline">205 campgrounds · Pacific Northwest &amp; beyond</div>
     <div class="hero-right">
     <div class="home-search-row">
       <div class="sbar" onclick="openSearch()" style="cursor:pointer;">
@@ -5324,7 +5436,68 @@ function _startOrbit() {
   _flyMap.on('mousedown',  () => { _flyActive = false; });
   _flyMap.on('touchstart', () => { _flyActive = false; });
 }
+
+// ── HERO TAGLINE: auto-sync camp count ──────────────
+(function() {
+  const el = document.getElementById('hero-tagline');
+  if (el && typeof CAMPS !== 'undefined') {
+    el.textContent = CAMPS.length + ' campgrounds · Pacific Northwest & beyond';
+  }
+})();
+
+// ── WELCOME MODAL ────────────────────────────────────
+(function() {
+  if (!localStorage.getItem('cg_welcomed')) {
+    const overlay = document.getElementById('welcome-overlay');
+    if (overlay) {
+      overlay.style.display = 'flex';
+    }
+  }
+})();
+
+function dismissWelcome() {
+  const overlay = document.getElementById('welcome-overlay');
+  if (!overlay) return;
+  overlay.classList.add('out');
+  localStorage.setItem('cg_welcomed', '1');
+  setTimeout(() => { overlay.style.display = 'none'; overlay.classList.remove('out'); }, 240);
+}
 </script>
+
+<!-- ── WELCOME MODAL ── -->
+<div id="welcome-overlay" style="display:none;" onclick="if(event.target===this)dismissWelcome()">
+  <div id="welcome-modal">
+    <div class="wm-bar"></div>
+    <div class="wm-body">
+      <button class="wm-close" onclick="dismissWelcome()" aria-label="Close">×</button>
+      <div class="wm-geo">
+        <div class="wm-geo-tall"></div>
+        <div class="wm-geo-wide"></div>
+      </div>
+      <div class="wm-headline">Find<br>your<br><span class="wm-o">camp.</span></div>
+      <div class="wm-sub">205 campgrounds · Handpicked</div>
+      <div class="wm-rule"></div>
+      <div class="wm-props">
+        <div class="wm-prop">
+          <div class="wm-prop-num">01</div>
+          <div class="wm-prop-text"><strong>Search by feel, not just name.</strong> Type "quiet lake Oregon" or "pet-friendly free camping" and find exactly what you're after.</div>
+        </div>
+        <div class="wm-prop">
+          <div class="wm-prop-num">02</div>
+          <div class="wm-prop-text"><strong>Every detail, before you go.</strong> Live weather, fire status, drive time, and a smart pack list — all in one place.</div>
+        </div>
+        <div class="wm-prop">
+          <div class="wm-prop-num">03</div>
+          <div class="wm-prop-text"><strong>One tap to book.</strong> We connect directly to recreation.gov, Reserve California, and state park systems.</div>
+        </div>
+      </div>
+      <button class="wm-cta" onclick="dismissWelcome()">
+        <span>Start Exploring</span>
+        <span class="wm-cta-arrow">→</span>
+      </button>
+    </div>
+  </div>
+</div>
 
 <!-- Global persistent compass (shows on all screens except home + map) -->
 <div class="compass-global" id="compass-global" onclick="locateMe()">
