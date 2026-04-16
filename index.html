@@ -133,7 +133,7 @@ html, body {
   /* ── HOME: full-viewport grid ── */
   #home { overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
   .home-scroll {
-    overflow: hidden;
+    overflow-y: auto;
     display: flex !important;
     flex-direction: column !important;
     flex: 1;
@@ -203,13 +203,12 @@ html, body {
     align-content: flex-start;
   }
 
-  /* ── CATEGORY SECTION: fills remaining height ── */
+  /* ── CATEGORY SECTION: natural height, no fill ── */
   .cat-section {
-    flex: 1;
+    flex: none;
     display: flex;
     flex-direction: column;
     padding: 0 0 20px;
-    min-height: 0;
     overflow: visible;
   }
 
@@ -222,12 +221,12 @@ html, body {
     text-align: center;
   }
 
-  /* ── CAT GRID: 4 equal columns, fills height ── */
+  /* ── CAT GRID: 4 equal columns, natural height ── */
   /* !important used to decisively override mobile nth-child border rules */
   .cat-grid {
     display: grid !important;
     grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-    flex: 1;
+    flex: none;
     border: none !important;
     background: none !important;
     gap: 0 !important;
@@ -247,6 +246,8 @@ html, body {
   }
   .cat-cell:nth-child(2n) { border-right: 1.5px solid var(--w2) !important; }
   .cat-cell:nth-child(4n) { border-right: none !important; }
+  /* Bottom border on last row of cells */
+  .cat-cell:nth-last-child(-n+4) { border-bottom: 1.5px solid var(--w2) !important; }
   .cat-cell:hover { background: rgba(232,72,28,0.06) !important; }
   /* Hide "Last Minute" cell on desktop so 8 cells form clean 2×4 grid */
   .lm-cell { display: none !important; }
@@ -255,8 +256,61 @@ html, body {
   .cat-sub  { font-size: 9px; margin-top: 3px; }
   .cat-cell svg { width: 30px; height: 30px; }
   .cat-plus { top: 14px; right: 20px; }
-/* ── FOOTER: hidden on desktop ── */
-  .pnw-footer { display: none; }
+
+  /* ── BROWSE BY REGION: desktop 4-col ── */
+  .region-section { padding: 0 0 20px; border-top: 1.5px solid var(--w2); }
+  .region-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 0 !important;
+    margin: 0 !important;
+  }
+  .region-cell {
+    padding: 18px 28px 16px !important;
+    border-right: 1.5px solid var(--w2);
+    border-top: 1.5px solid var(--w2);
+  }
+  .region-cell:nth-child(4n) { border-right: none; }
+  .region-cell:nth-last-child(-n+4) { border-bottom: 1.5px solid var(--w2); }
+  .region-cell:nth-child(-n+4) { border-top: none; }
+  .region-name { font-size: 14px; }
+  .region-sub  { font-size: 9px; }
+
+  /* ── FEATURED SPOT: desktop layout ── */
+  .featured-section { padding: 0 0 20px; border-top: 1.5px solid var(--w2); }
+  .featured-card {
+    margin: 24px 40px 0;
+    flex-direction: row !important;
+    align-items: center;
+    gap: 40px;
+    padding: 28px 36px !important;
+    border-top: none !important;
+    border: 1.5px solid var(--w2) !important;
+  }
+  .featured-card-body { flex: 1; }
+  .featured-card-cta  { flex-shrink: 0; }
+
+/* ── FOOTER: show on desktop with refined styling ── */
+  .pnw-footer {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    padding: 18px 40px !important;
+    border-top: 1.5px solid var(--w2);
+    font-size: 9px !important;
+    margin-top: 0 !important;
+  }
+  .pnw-footer a { display: inline !important; margin-top: 0 !important; }
+
+  /* ── ABOUT TOP NAV LINK (desktop only) ── */
+  .about-topnav-link {
+    font-size: 9px; font-weight: 900; letter-spacing: 0.22em;
+    text-transform: uppercase; color: rgba(255,255,255,0.3);
+    text-decoration: none; transition: color 0.15s;
+  }
+  .about-topnav-link:hover { color: rgba(255,255,255,0.7); }
 
   /* ── PILLS: compact, wrap layout ── */
   .pill { padding: 9px 14px; font-size: 10px; letter-spacing: 0.1em; }
@@ -622,6 +676,86 @@ html, body {
 }
 .cat-cell:hover .cat-plus { opacity: 1; }
 
+/* ── BROWSE BY REGION ─────────────────────────────── */
+.region-section { margin: 0; }
+.region-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-left: 1.5px solid var(--w2);
+  border-right: 1.5px solid var(--w2);
+  border-bottom: 1.5px solid var(--w2);
+  margin: 10px 0 0;
+}
+.region-cell {
+  padding: 16px 18px 14px;
+  border-top: 1.5px solid var(--w2);
+  border-right: 1.5px solid var(--w2);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.16s;
+}
+.region-cell:nth-child(2n) { border-right: none; }
+.region-cell:hover { background: rgba(232,72,28,0.05); }
+.region-icon { font-size: 22px; line-height: 1; margin-bottom: 7px; }
+.region-name {
+  font-size: 15px; font-weight: 800; letter-spacing: -0.02em;
+  line-height: 1.15; color: var(--w);
+}
+.region-sub {
+  font-size: 9px; font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; color: rgba(255,255,255,0.3); margin-top: 4px;
+}
+.region-cell:hover .region-sub { color: rgba(255,255,255,0.5); }
+
+/* ── FEATURED SPOT ─────────────────────────────── */
+.featured-section { margin: 0; }
+.featured-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px 24px 22px;
+  border-top: 1.5px solid var(--w2);
+  border-bottom: 1.5px solid var(--w2);
+  cursor: pointer;
+  transition: background 0.16s;
+}
+.featured-card:hover { background: rgba(232,72,28,0.04); }
+.featured-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 8px; font-weight: 900; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--o);
+  padding: 4px 8px; border: 1px solid rgba(232,72,28,0.4);
+  align-self: flex-start;
+}
+.featured-name {
+  font-size: 22px; font-weight: 800; letter-spacing: -0.03em;
+  line-height: 1.1; color: var(--w); margin: 0;
+}
+.featured-loc {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; color: rgba(255,255,255,0.35); margin-top: 2px;
+}
+.featured-desc {
+  font-size: 13px; line-height: 1.55; color: rgba(255,255,255,0.6);
+  margin: 2px 0 0;
+}
+.featured-meta {
+  display: flex; align-items: center; gap: 14px; margin-top: 4px;
+}
+.featured-rating {
+  font-size: 13px; font-weight: 800; letter-spacing: -0.01em; color: var(--w);
+}
+.featured-rating span { color: var(--o); }
+.featured-price {
+  font-size: 12px; font-weight: 600; letter-spacing: 0.04em;
+  color: rgba(255,255,255,0.45);
+}
+.featured-cta {
+  margin-top: 6px; font-size: 11px; font-weight: 800; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--o);
+  display: flex; align-items: center; gap: 5px;
+}
+
 /* ── WHERE TO START ─────────────────────────────── */
 .start-section { margin: 28px 0 0; }
 .start-section .section-eyebrow { margin-bottom: 12px; }
@@ -828,6 +962,7 @@ html, body {
 
 /* Compass in home top-bar */
 .home-top-actions { display: flex; gap: 8px; align-items: center; }
+.about-topnav-link { display: none; }
 .compass-top-btn {
   width: 40px; height: 40px; flex-shrink: 0;
   border: 1.5px solid var(--w2);
@@ -1846,6 +1981,7 @@ html, body {
       <div class="wordmark">Campgrounder</div>
     </div>
     <div class="home-top-actions">
+      <a href="#" onclick="go('about','home');return false;" class="about-topnav-link">About</a>
       <div class="compass-top-btn" id="compass-top" onclick="locateMe();dismissCompassHint();" title="Find camps near me">
         <svg width="20" height="20" style="color:white;stroke:currentColor;fill:none;"><use href="#ic-compass"/></svg>
         <div id="compass-ping" class="compass-ping" style="display:none;"></div>
@@ -1993,9 +2129,87 @@ html, body {
     </div>
   </div>
 
+  <!-- ── BROWSE BY REGION ────────────────────────── -->
+  <div class="region-section">
+    <div class="section-eyebrow" style="padding: 13px 24px; border-bottom: 1.5px solid var(--w2);">Browse by Region</div>
+    <div class="region-grid">
+
+      <div class="region-cell" onclick="submitSearch('Pacific Coast camping beaches')">
+        <div class="region-icon">🌊</div>
+        <div class="region-name">Pacific Coast</div>
+        <div class="region-sub">Oregon · California · Washington</div>
+      </div>
+
+      <div class="region-cell" onclick="submitSearch('desert southwest camping Arizona Utah')">
+        <div class="region-icon">🏜️</div>
+        <div class="region-name">Desert Southwest</div>
+        <div class="region-sub">Arizona · Utah · Nevada · NM</div>
+      </div>
+
+      <div class="region-cell" onclick="submitSearch('Rocky Mountains camping Colorado Wyoming')">
+        <div class="region-icon">🏔️</div>
+        <div class="region-name">Rocky Mountains</div>
+        <div class="region-sub">Colorado · Wyoming · Idaho</div>
+      </div>
+
+      <div class="region-cell" onclick="submitSearch('Pacific Northwest camping Washington Oregon')">
+        <div class="region-icon">🌲</div>
+        <div class="region-name">Pacific Northwest</div>
+        <div class="region-sub">Washington · Oregon</div>
+      </div>
+
+      <div class="region-cell" onclick="submitSearch('Great Lakes camping Michigan Minnesota Wisconsin')">
+        <div class="region-icon">💧</div>
+        <div class="region-name">Great Lakes</div>
+        <div class="region-sub">Michigan · Minnesota · Wisconsin</div>
+      </div>
+
+      <div class="region-cell" onclick="submitSearch('Appalachian mountains camping Tennessee North Carolina')">
+        <div class="region-icon">🍂</div>
+        <div class="region-name">Appalachians</div>
+        <div class="region-sub">TN · NC · VA · WV</div>
+      </div>
+
+      <div class="region-cell" onclick="submitSearch('New England camping Maine Vermont New Hampshire')">
+        <div class="region-icon">🦌</div>
+        <div class="region-name">New England</div>
+        <div class="region-sub">Maine · Vermont · NH</div>
+      </div>
+
+      <div class="region-cell" onclick="submitSearch('Texas Hill Country camping Big Bend')">
+        <div class="region-icon">⭐</div>
+        <div class="region-name">Texas &amp; Plains</div>
+        <div class="region-sub">Texas · Oklahoma · Kansas</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── FEATURED SPOT ──────────────────────────── -->
+  <!-- MONETIZATION HOOK: swap id + copy below for sponsored/editorial placement -->
+  <div class="featured-section">
+    <div class="section-eyebrow" style="padding: 13px 24px; border-bottom: 1.5px solid var(--w2);">Featured Spot</div>
+    <div class="featured-card" onclick="openDetail(268)">
+      <div class="featured-badge">⬡ Editor's Pick</div>
+      <div class="featured-card-body">
+        <div class="featured-name">Dead Horse Point</div>
+        <div class="featured-loc">Dead Horse Point SP · Utah</div>
+        <div class="featured-desc">Perched 2,000 feet above a dramatic Colorado River gooseneck — one of the most jaw-dropping campsites in the American West. Reserve early.</div>
+        <div class="featured-meta">
+          <div class="featured-rating"><span>★</span> 4.8</div>
+          <div class="featured-price">From $35 / night</div>
+        </div>
+      </div>
+      <div class="featured-card-cta">
+        <div class="featured-cta">View camp →</div>
+      </div>
+    </div>
+  </div>
+
   <div class="pnw-footer">
     🌲 Born in the Pacific Northwest
     <a href="presskit_mockup.html" target="_blank" style="display:block;margin-top:8px;font-size:8px;font-weight:900;letter-spacing:0.22em;color:rgba(232,72,28,0.55);text-decoration:none;text-transform:uppercase;transition:color 0.15s;" onmouseover="this.style.color='rgba(232,72,28,0.9)'" onmouseout="this.style.color='rgba(232,72,28,0.55)'">Press Kit →</a>
+    <a href="#" onclick="go('about','home');return false;" style="display:block;margin-top:6px;font-size:8px;font-weight:900;letter-spacing:0.22em;color:rgba(255,255,255,0.25);text-decoration:none;text-transform:uppercase;transition:color 0.15s;" onmouseover="this.style.color='rgba(255,255,255,0.55)'" onmouseout="this.style.color='rgba(255,255,255,0.25)'">About →</a>
   </div>
 </div><!-- end .home-scroll -->
   <nav class="bnav">
@@ -4091,6 +4305,195 @@ const CAMPS = [
     desc:"The Paria River corridor cuts a 38-mile slot through vermilion sandstone on a route that ends at Lee's Ferry on the Colorado. Primitive camps along the river bench put you inside a canyon world of flood-carved walls, quicksand, and moving water that rises and falls with desert storms upstream. A permit controls the canyon's daily population to a handful of parties. There is nothing like sleeping inside a slot canyon.",
     amenities:["No Facilities","Hiking","Photography","Stargazing","Wildlife Viewing"],
     seasons:["Spring","Fall"], lat:37.0612, lng:-111.9312 },
+
+  // ─── DEATH VALLEY, CALIFORNIA, UTAH & MORE ──────────────────────────────
+
+  // ── DEATH VALLEY ─────────────────────────────────────────────────────────
+  { id:256, name:"Furnace Creek Campground",          loc:"Death Valley NP · California",
+    type:"National Park", price:22, sites:136, avail:60, rating:4.6, reviews:1140,
+    desc:"The heart of Death Valley — 282 feet below sea level, surrounded by the Panamint Range and the salt flats of Badwater Basin. Night temperatures drop dramatically from the brutal daytime heat, and the stars here are among the densest in North America. The sunrise from the Zabriskie Point overlook, ten minutes from camp, is one of the most photographed scenes on the continent.",
+    amenities:["Flush Toilets","Drinking Water","Fire Rings","Parking","Accessible","Camp Store","Pet Friendly"],
+    seasons:["Fall","Winter","Spring"], lat:36.4619, lng:-116.8673 },
+
+  { id:257, name:"Mesquite Spring Campground",         loc:"Death Valley NP · California",
+    type:"National Park", price:14, sites:30, avail:24, rating:4.7, reviews:320,
+    desc:"The quietest campground in Death Valley, perched at 1,800 feet where the desert blooms in spring and temperatures stay reasonable. The Eureka Dunes — the tallest sand dunes in North America — are a day trip north. A small spring attracts migrating birds in astonishing variety. Most Death Valley visitors never find this camp.",
+    amenities:["Flush Toilets","Drinking Water","Fire Rings","Parking","Stargazing","Wildlife Viewing","Pet Friendly"],
+    seasons:["Fall","Winter","Spring"], lat:37.0080, lng:-117.4233 },
+
+  { id:258, name:"Wildrose Campground",                loc:"Death Valley NP · California",
+    type:"National Park", price:0, sites:23, avail:21, rating:4.6, reviews:188,
+    desc:"A free, high-elevation camp at 4,100 feet in the Panamint Range — significantly cooler than the valley floor and largely forgotten by visitors. The Charcoal Kilns, ten beehive-shaped stone ovens built in the 1870s, sit a few miles up the road. On clear nights the view down into Death Valley is utterly alien.",
+    amenities:["Vault Toilets","No Water","Fire Rings","Stargazing","Hiking","Wildlife Viewing"],
+    seasons:["Spring","Summer","Fall","Winter"], lat:36.2636, lng:-117.0723 },
+
+  // ── CALIFORNIA ────────────────────────────────────────────────────────────
+  { id:259, name:"D.L. Bliss State Park",              loc:"Lake Tahoe · California",
+    type:"State Park", price:35, sites:168, avail:40, rating:4.8, reviews:724,
+    desc:"The finest campground on Lake Tahoe sits on a granite headland where the water shifts from emerald to cobalt and back. The Rubicon Trail begins here and winds south along the most dramatic stretch of Tahoe's shoreline — exposed granite, secret coves, and views across to Nevada that stop you cold. The Balancing Rock Trail is a five-minute walk from camp.",
+    amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Beach Access","Hiking","Swimming","Fishing","Pet Friendly"],
+    seasons:["Summer","Fall"], lat:38.9730, lng:-120.1027 },
+
+  { id:260, name:"Convict Lake Campground",             loc:"Mammoth Lakes · California",
+    type:"Forest Service", price:28, sites:88, avail:45, rating:4.7, reviews:435,
+    desc:"A glacial lake of impossible turquoise ringed by 12,000-foot peaks in the Eastern Sierra, where the air is thin and clear and the trout fishing is exceptional. The Convict Lake Trail circles the water past towering canyon walls in under two hours. In fall, the aspens turn gold against dark granite and look almost too good to be real.",
+    amenities:["Flush Toilets","Drinking Water","Fire Rings","Fishing","Hiking","Kayaking","Pet Friendly"],
+    seasons:["Summer","Fall"], lat:37.5834, lng:-118.8503 },
+
+  { id:261, name:"Emerald Bay State Park",              loc:"Lake Tahoe · California",
+    type:"State Park", price:35, sites:100, avail:35, rating:4.8, reviews:612,
+    desc:"A glacially carved fjord of surreal blue-green water at the most photographed spot on Lake Tahoe. Boat-in and walk-in campsites on the bay's south shore put you inside the view everyone else only photographs from the overlook. Vikingsholm — a 1929 Scandinavian-style castle — is a half-mile hike away. Paddle to Fanette Island for sunrise.",
+    amenities:["Flush Toilets","Drinking Water","Fire Rings","Beach Access","Kayaking","Hiking","Swimming","Fishing"],
+    seasons:["Summer","Fall"], lat:38.9517, lng:-120.1061 },
+
+  { id:262, name:"Sentinel Campground",                 loc:"Kings Canyon NP · California",
+    type:"National Park", price:22, sites:83, avail:30, rating:4.7, reviews:380,
+    desc:"Deep in Kings Canyon — the deepest canyon in the United States — Sentinel sits on the floor where granite walls rise 8,000 feet above. The canyon is greener, quieter, and far less visited than Yosemite despite being every bit as dramatic. Giant sequoias are a short drive above in Grant Grove.",
+    amenities:["Flush Toilets","Drinking Water","Fire Rings","Parking","Fishing","Hiking","Accessible"],
+    seasons:["Spring","Summer","Fall"], lat:36.7973, lng:-118.9617 },
+
+  { id:263, name:"Scorpion Ranch — Channel Islands",    loc:"Channel Islands NP · California",
+    type:"National Park", price:15, sites:25, avail:18, rating:4.8, reviews:246,
+    desc:"A boat-in campground on Santa Cruz Island where island foxes trot through camp at dawn and the sea is a deep California blue in every direction. The Painted Cave, one of the world's largest sea caves, is accessible by kayak. No cars, no roads, no noise except the ocean and the ravens. The mainland is 25 miles east.",
+    amenities:["Vault Toilets","No Water","Fire Rings","Kayaking","Hiking","Wildlife Viewing","Fishing"],
+    seasons:["Spring","Summer","Fall"], lat:34.0469, lng:-119.5531 },
+
+  { id:264, name:"Coast Camp — Point Reyes NS",         loc:"Point Reyes · California",
+    type:"National Park", price:20, sites:14, avail:10, rating:4.8, reviews:302,
+    desc:"A hike-in camp at the edge of the Pacific on one of the wildest stretches of California coastline — bluffs, dunes, and a long curved beach with tule elk grazing the ridgeline above. Elephant seals haul out on the beaches below Chimney Rock in winter. A place that feels genuinely remote despite being an hour from San Francisco.",
+    amenities:["Vault Toilets","Drinking Water","Fire Rings","Hiking","Wildlife Viewing","Beach Access","Stargazing"],
+    seasons:["Spring","Summer","Fall","Winter"], lat:38.0338, lng:-122.9561 },
+
+  { id:265, name:"Humboldt Redwoods — Burlington",      loc:"Humboldt County · California",
+    type:"State Park", price:35, sites:132, avail:55, rating:4.7, reviews:448,
+    desc:"The Avenue of the Giants runs through the world's largest contiguous old-growth coastal redwood forest, and Burlington sits at its heart. Redwoods here reach 350 feet — the tallest living things on earth — and their canopy closes out the sky. The Eel River runs cold alongside the campground all summer.",
+    amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Fishing","Hiking","Accessible","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:40.3396, lng:-123.9784 },
+
+  { id:266, name:"Crystal Cove State Park",             loc:"Laguna Beach · California",
+    type:"State Park", price:35, sites:32, avail:12, rating:4.8, reviews:537,
+    desc:"A backcountry camp on a bluff above the Pacific in the hills behind Laguna Beach — one of the few places in Southern California you can sleep by the ocean without an RV park on one side and a highway on the other. Trails drop through coastal scrub to secluded coves. At night, the lights of Catalina Island float on the horizon.",
+    amenities:["Flush Toilets","Drinking Water","Fire Rings","Beach Access","Hiking","Swimming","Snorkeling","Wildlife Viewing"],
+    seasons:["Spring","Summer","Fall","Winter"], lat:33.5678, lng:-117.8412 },
+
+  // ── UTAH ──────────────────────────────────────────────────────────────────
+  { id:267, name:"Needles Campground",                  loc:"Canyonlands NP · Utah",
+    type:"National Park", price:20, sites:26, avail:14, rating:4.8, reviews:310,
+    desc:"Surrounded by the red and white banded Cedar Mesa sandstone spires that give the Needles district its name — one of the most dramatic campgrounds accessible by paved road in the lower 48. Slot canyons, arches, and ancient Ancestral Puebloan ruins thread the backcountry in every direction. The light at golden hour turns the needles into something from another world.",
+    amenities:["Flush Toilets","Drinking Water","Fire Rings","Parking","Hiking","Stargazing","Pet Friendly"],
+    seasons:["Spring","Fall"], lat:38.1564, lng:-109.8044 },
+
+  { id:268, name:"Dead Horse Point State Park",         loc:"Moab · Utah",
+    type:"State Park", price:35, sites:21, avail:10, rating:4.9, reviews:420,
+    desc:"A narrow mesa 2,000 feet above the Colorado River where the view from the rim — a sweeping oxbow of river, canyon wall, and canyonland stretching to the horizon — is widely considered the finest in Utah. The campground is small and the sites exposed on the desert plateau, with nothing between you and the full sweep of stars. Sunsets here are spoken of for years afterward.",
+    amenities:["Flush Toilets","Drinking Water","Fire Rings","Parking","Stargazing","Hiking","Pet Friendly","Accessible"],
+    seasons:["Spring","Fall","Winter"], lat:38.4834, lng:-109.7377 },
+
+  { id:269, name:"Calf Creek Recreation Area",          loc:"Grand Staircase-Escalante · Utah",
+    type:"BLM", price:15, sites:13, avail:10, rating:4.8, reviews:278,
+    desc:"A narrow canyon camp beside Calf Creek, where willows and cottonwoods make a green corridor through the red-rock Colorado Plateau. The 6-mile round-trip trail to Lower Calf Creek Falls — a 126-foot waterfall dropping into a turquoise pool — is one of the finest day hikes in the Southwest. Grand Staircase's vast wilderness begins at the canyon rim above.",
+    amenities:["Flush Toilets","Drinking Water","Fire Rings","Hiking","Swimming","Wildlife Viewing"],
+    seasons:["Spring","Fall"], lat:37.7953, lng:-111.4172 },
+
+  { id:270, name:"Natural Bridges — Sipapu Camp",       loc:"Natural Bridges NM · Utah",
+    type:"National Park", price:20, sites:13, avail:10, rating:4.7, reviews:175,
+    desc:"The only campground at one of the darkest-sky places in the US — Natural Bridges was the world's first International Dark Sky Park. Ancient natural sandstone bridges carved by White Canyon Creek are a short walk from camp. The night sky here is so dense with stars it appears three-dimensional.",
+    amenities:["Vault Toilets","Drinking Water","Fire Rings","Stargazing","Hiking","Wildlife Viewing"],
+    seasons:["Spring","Fall","Winter"], lat:37.6042, lng:-110.0126 },
+
+  { id:271, name:"Sand Hollow State Park",              loc:"Hurricane · Utah",
+    type:"State Park", price:35, sites:50, avail:30, rating:4.7, reviews:322,
+    desc:"A turquoise reservoir carved into brilliant red Navajo sandstone — the same formation as Zion, just 20 minutes away — where the contrast of blue water against red rock is otherworldly. Arrive on a weekday and you'll have long stretches of shoreline entirely to yourself. Winter sunsets here are spectacular.",
+    amenities:["Hot Showers","Flush Toilets","Fire Rings","Boating","Swimming","Kayaking","Pet Friendly"],
+    seasons:["Spring","Summer","Fall","Winter"], lat:37.1312, lng:-113.3851 },
+
+  { id:272, name:"Kodachrome Basin State Park",         loc:"Cannonville · Utah",
+    type:"State Park", price:18, sites:27, avail:20, rating:4.7, reviews:244,
+    desc:"Named by National Geographic in 1948 for the saturated color of its landscape — 67 monolithic sandstone chimneys rising from a valley of red, pink, and white. Bryce Canyon is 20 minutes north, Grand Staircase is 10 minutes south. This quiet, shaded camp makes an ideal base for both.",
+    amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Hiking","Stargazing","Pet Friendly"],
+    seasons:["Spring","Fall","Winter"], lat:37.5248, lng:-111.9952 },
+
+  // ── NEVADA ────────────────────────────────────────────────────────────────
+  { id:273, name:"Wheeler Peak Campground",             loc:"Great Basin NP · Nevada",
+    type:"National Park", price:15, sites:37, avail:28, rating:4.8, reviews:283,
+    desc:"Near the summit of Nevada's second-highest peak at 10,000 feet — one of the most undervisited national park campgrounds in the country. Ancient bristlecone pines, some older than the pyramids, grow in groves a short hike above camp. The Milky Way here is so bright it throws soft shadows.",
+    amenities:["Flush Toilets","Drinking Water","Fire Rings","Hiking","Stargazing","Wildlife Viewing"],
+    seasons:["Summer","Fall"], lat:38.9810, lng:-114.3023 },
+
+  { id:274, name:"Sand Harbor — Lake Tahoe Nevada",     loc:"Lake Tahoe · Nevada",
+    type:"State Park", price:25, sites:50, avail:22, rating:4.7, reviews:365,
+    desc:"A cobblestone-and-crystal beach on the Nevada side of Lake Tahoe, with water so clear you can see the bottom at 30 feet. Granite boulders create natural breakwaters and calm swimming coves that feel Mediterranean. Sunset light on the Sierras across the lake is something no photograph captures.",
+    amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Beach Access","Swimming","Kayaking","Snorkeling","Fishing"],
+    seasons:["Summer","Fall"], lat:39.1978, lng:-119.9312 },
+
+  { id:275, name:"Ruby Mountains — Ruby Valley",        loc:"Elko County · Nevada",
+    type:"BLM", price:0, sites:12, avail:12, rating:4.7, reviews:112,
+    desc:"The 'Swiss Alps of Nevada' rise to over 11,000 feet from the high desert, sheltering a hidden marshland refuge that draws 250 species of birds on the Pacific Flyway. Primitive camps in the Ruby Valley are free and almost unknown. The island-dotted lake shimmers below granite peaks. Nevada's true wilderness, without a tourist in sight.",
+    amenities:["Vault Toilets","Fire Rings","Fishing","Kayaking","Wildlife Viewing","Hiking","Stargazing"],
+    seasons:["Spring","Summer","Fall"], lat:40.2156, lng:-115.4890 },
+
+  // ── ARIZONA ───────────────────────────────────────────────────────────────
+  { id:276, name:"Cave Springs Campground",             loc:"Sedona · Arizona",
+    type:"Forest Service", price:22, sites:82, avail:40, rating:4.7, reviews:512,
+    desc:"Oak Creek Canyon is Arizona's most beloved canyon and Cave Springs sits in its heart — a corridor of sycamore, oak, and pine shading a crystal creek, red canyon walls rising above. Slide Rock State Park is upstream; the swimming holes are legendary. The drive from Flagstaff down through the canyon to Sedona is one of the most dramatic descents in the Southwest.",
+    amenities:["Hot Showers","Flush Toilets","Drinking Water","Fire Rings","Swimming","Fishing","Hiking","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:34.9867, lng:-111.7523 },
+
+  { id:277, name:"Chiricahua NM — Bonita Canyon",       loc:"Willcox · Arizona",
+    type:"National Park", price:20, sites:25, avail:18, rating:4.8, reviews:178,
+    desc:"A secret monument in the far southeastern corner of Arizona where volcanic rhyolite has eroded into thousands of spires, balanced rocks, and stone columns — Cochise Stronghold country of the Apache. The birding is extraordinary: one of the best spots in North America for rare Mexican species crossing the border.",
+    amenities:["Flush Toilets","Drinking Water","Fire Rings","Hiking","Wildlife Viewing","Stargazing","Pet Friendly"],
+    seasons:["Spring","Fall","Winter"], lat:32.0132, lng:-109.3426 },
+
+  { id:278, name:"Havasupai — Supai Village Camp",      loc:"Havasu Canyon · Arizona",
+    type:"National Park", price:395, sites:200, avail:5, rating:4.9, reviews:1840,
+    desc:"A 10-mile hike into a side canyon of the Grand Canyon leads to blue-green waterfalls — Havasu, Mooney, and Beaver Falls — cascading over travertine into pools so turquoise they appear painted. Reservations open annually and sell out in minutes. Worth every effort.",
+    amenities:["Vault Toilets","Drinking Water","Hiking","Swimming","Waterfall Access","Wildlife Viewing"],
+    seasons:["Spring","Fall"], lat:36.2553, lng:-112.6979 },
+
+  { id:279, name:"Catalina State Park",                 loc:"Tucson · Arizona",
+    type:"State Park", price:30, sites:120, avail:50, rating:4.6, reviews:412,
+    desc:"At the foot of the Santa Catalina Mountains on the edge of Tucson, ringed by towering saguaro cactus and bisected by creeks that flow after monsoon rains. Trails climb directly from camp into the Pusch Ridge Wilderness. Coyotes howl at dusk, roadrunners sprint through the sites at breakfast, and Tucson's dining scene is 20 minutes away.",
+    amenities:["Hot Showers","Flush Toilets","Drinking Water","Fire Rings","Hiking","Wildlife Viewing","Accessible","Pet Friendly"],
+    seasons:["Fall","Winter","Spring"], lat:32.4189, lng:-110.9028 },
+
+  // ── NEW MEXICO ────────────────────────────────────────────────────────────
+  { id:280, name:"White Sands — Backcountry Camp",      loc:"White Sands NM · New Mexico",
+    type:"National Park", price:20, sites:10, avail:8, rating:4.9, reviews:265,
+    desc:"The only campground in the world inside a gypsum dune field — 275 square miles of brilliant white dunes that rise and shift and squeak underfoot. You hike 1.5 miles in to reach your site, then watch the sunset turn the white sand through pink, gold, and violet. The moon on the dunes is as bright as noon.",
+    amenities:["No Facilities","Hiking","Stargazing","Wildlife Viewing","Photography"],
+    seasons:["Fall","Winter","Spring"], lat:32.7872, lng:-106.3245 },
+
+  { id:281, name:"Battleship Rock Campground",          loc:"Jemez Springs · New Mexico",
+    type:"Forest Service", price:10, sites:15, avail:12, rating:4.6, reviews:143,
+    desc:"A volcanic plug called Battleship Rock rises from the Jemez River where it carves a tight canyon through ponderosa pine and cottonwood in the Valles Caldera country. Warm springs feed natural pools a short walk upstream. The Jemez is New Mexico's best secret: a mountain river canyon with swimming holes, red-rock cliffs, and almost no one from outside the state.",
+    amenities:["Vault Toilets","Drinking Water","Fire Rings","Swimming","Hiking","Fishing","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:35.8234, lng:-106.6523 },
+
+  { id:282, name:"Rattlesnake Springs — Carlsbad Caverns", loc:"Carlsbad · New Mexico",
+    type:"National Park", price:12, sites:20, avail:15, rating:4.6, reviews:134,
+    desc:"A shaded riparian oasis in the Chihuahuan Desert just outside Carlsbad Caverns — cottonwoods and willows attract over 300 bird species, making it one of the premier birding spots in the Southwest. The evening bat flight from the cave mouth is a spectacle that draws gasps from thousands of visitors each summer.",
+    amenities:["Flush Toilets","Drinking Water","Fire Rings","Wildlife Viewing","Hiking","Pet Friendly"],
+    seasons:["Fall","Winter","Spring"], lat:32.1756, lng:-104.4090 },
+
+  // ── COLORADO (bonus) ──────────────────────────────────────────────────────
+  { id:283, name:"Maroon Bells — Maroon Lake",          loc:"Aspen · Colorado",
+    type:"Forest Service", price:35, sites:44, avail:12, rating:4.9, reviews:608,
+    desc:"The Maroon Bells are arguably the most photographed mountains in Colorado — twin 14,000-foot peaks of burgundy-red reflected in Maroon Lake at sunrise, with golden aspens lining the shore in September. Access requires a timed entry permit; sites fill within minutes of release. The payoff is incomparable.",
+    amenities:["Flush Toilets","Drinking Water","Fire Rings","Parking","Hiking","Fishing","Wildlife Viewing","Stargazing"],
+    seasons:["Summer","Fall"], lat:39.1028, lng:-106.9430 },
+
+  { id:284, name:"Pumphouse Recreation Area",           loc:"Kremmling · Colorado",
+    type:"BLM", price:0, sites:15, avail:13, rating:4.6, reviews:165,
+    desc:"Free camping on the bank of the upper Colorado River in its canyon, where the water runs cold and green through reddish canyon walls. Rafters put in here for Class IV rapids downstream. The fishing is exceptional for brown trout — and most people racing to Rocky Mountain National Park blow right past.",
+    amenities:["Vault Toilets","Fire Rings","Fishing","Kayaking","Rafting","Pet Friendly","Stargazing"],
+    seasons:["Spring","Summer","Fall"], lat:40.0789, lng:-106.3512 },
+
+  { id:285, name:"Gothic Road Dispersed Camping",       loc:"Crested Butte · Colorado",
+    type:"Forest Service", price:0, sites:20, avail:18, rating:4.7, reviews:198,
+    desc:"The 12-mile Gothic Road above Crested Butte passes through free dispersed camping areas beside Copper Creek in the Elk Mountains, with 13,000-foot peaks rising on both sides. Wildflower season in July is the finest in Colorado — and the road closes after the first major snow, making the summer and fall window intensely beautiful.",
+    amenities:["No Facilities","Hiking","Fishing","Wildlife Viewing","Stargazing","Wildflowers"],
+    seasons:["Summer","Fall"], lat:38.8934, lng:-106.9876 },
 
 ];
 
