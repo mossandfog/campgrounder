@@ -496,6 +496,7 @@ html, body {
 .home-search-row { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
 .filter-scroll { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
 .filter-scroll::-webkit-scrollbar { display: none; }
+.filter-scroll::after { content: ''; display: block; min-width: 16px; flex-shrink: 0; }
 
 .cat-section { padding: 10px 0 0; }
 .section-eyebrow { font-size: 10px; font-weight: 800; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.35); padding: 0 24px; text-align: center; }
@@ -656,8 +657,8 @@ html, body {
   color: rgba(255,255,255,0.88); margin-bottom: 3px; line-height: 1.2;
 }
 .start-body {
-  font-size: 11px; color: rgba(255,255,255,0.36);
-  line-height: 1.45; font-style: italic;
+  font-size: 11px; color: rgba(255,255,255,0.46);
+  line-height: 1.45;
 }
 .start-arrow {
   font-size: 15px; color: rgba(232,72,28,0.7); flex-shrink: 0;
@@ -714,6 +715,7 @@ html, body {
 .vbtn.on { background: var(--o); color: var(--w); }
 .results-filters { display: flex; gap: 8px; padding: 14px 24px 0; overflow-x: auto; scrollbar-width: none; }
 .results-filters::-webkit-scrollbar { display: none; }
+.results-filters::after { content: ''; display: block; min-width: 16px; flex-shrink: 0; }
 .results-scroll { flex: 1; overflow-y: auto; padding: 8px 24px 32px; display: flex; flex-direction: column; scrollbar-width: thin; scrollbar-color: rgba(232,72,28,0.2) transparent; }
 
 /* No results state */
@@ -758,11 +760,11 @@ html, body {
   background: linear-gradient(135deg, transparent 55%, rgba(0,0,0,0.35) 100%);
 }
 .card-body    { flex: 1; min-width: 0; }
-.card-type    { font-size: 8px; font-weight: 900; letter-spacing: 0.26em; text-transform: uppercase; color: var(--o); margin-bottom: 5px; }
+.card-type    { font-size: 9px; font-weight: 900; letter-spacing: 0.22em; text-transform: uppercase; color: var(--o); margin-bottom: 5px; }
 .card-name    { font-size: 19px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.card-loc     { font-size: 10px; color: rgba(255,255,255,0.38); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; }
+.card-loc     { font-size: 10px; color: rgba(255,255,255,0.48); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; }
 .card-foot    { display: flex; justify-content: space-between; align-items: baseline; }
-.card-stats   { font-size: 11px; color: rgba(255,255,255,0.45); font-weight: 600; letter-spacing: 0.02em; }
+.card-stats   { font-size: 11px; color: rgba(255,255,255,0.52); font-weight: 600; letter-spacing: 0.02em; }
 .card-pnum    { font-size: 22px; font-weight: 800; color: var(--o); line-height: 1; text-align: right; letter-spacing: -0.02em; }
 .card-punit   { font-size: 8px; font-weight: 800; letter-spacing: 0.14em; color: rgba(255,255,255,0.35); text-transform: uppercase; text-align: right; margin-top: 2px; }
 .card-chevron {
@@ -927,7 +929,7 @@ html, body {
 .empty-x::before { content:''; position:absolute; width:100%; height:3px; background:var(--o); top:50%; transform:translateY(-50%) rotate(45deg); border-radius:2px; }
 .empty-x::after  { content:''; position:absolute; width:100%; height:3px; background:var(--o); top:50%; transform:translateY(-50%) rotate(-45deg); border-radius:2px; }
 .empty-title { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 10px; color: rgba(255,255,255,0.55); }
-.empty-sub   { font-size: 13px; color: rgba(255,255,255,0.3); line-height: 1.6; margin-bottom: 28px; }
+.empty-sub   { font-size: 13px; color: rgba(255,255,255,0.42); line-height: 1.6; margin-bottom: 28px; }
 .empty-cta   { padding: 14px 28px; border: 1.5px solid var(--o); color: var(--o); font-size: 11px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; cursor: pointer; background: transparent; transition: all 0.18s; font-family: inherit; }
 .empty-cta:hover { background: var(--o); color: white; }
 
@@ -1309,9 +1311,9 @@ html, body {
 }
 .about-cell--full .about-cell-title { font-size: 22px; }
 .about-cell-body {
-  font-size: 12px; font-weight: 500;
+  font-size: 13px; font-weight: 500;
   letter-spacing: 0.02em; line-height: 1.68;
-  color: rgba(255,255,255,0.48); /* legible but recessive */
+  color: rgba(255,255,255,0.55);
   margin-top: 3px;
 }
 
@@ -3797,7 +3799,7 @@ const CAMPS = [
     seasons:["Spring","Fall","Winter"], lat:44.3627, lng:-121.1440 },
 
   { id:207, name:"Hart Mountain Hot Spring Camp",      loc:"Lake County · Oregon",
-    type:"Wildlife Refuge", price:0, sites:40, avail:38, rating:4.7, reviews:180,
+    type:"BLM", price:0, sites:40, avail:38, rating:4.7, reviews:180,
     desc:"A free, first-come geothermal hot spring in the high Oregon outback, surrounded by sage-covered plateaus and pronghorn antelope. The primitive camp sits a short walk from a natural soaking pool that steams under the open sky at night. No services, no fee, no crowds — just the stars, the silence, and the heat of the earth.",
     amenities:["Vault Toilets","Fire Rings","Hot Springs","Stargazing","Wildlife Viewing","Hiking"],
     seasons:["Spring","Summer","Fall"], lat:42.5089, lng:-119.6523 },
@@ -3809,25 +3811,25 @@ const CAMPS = [
     seasons:["Spring","Summer","Fall"], lat:42.5456, lng:-118.8234 },
 
   { id:209, name:"Hells Canyon — Copperfield Park",   loc:"Oxbow · Oregon",
-    type:"National Recreation Area", price:15, sites:62, avail:44, rating:4.5, reviews:165,
+    type:"Forest Service", price:15, sites:62, avail:44, rating:4.5, reviews:165,
     desc:"North America's deepest river gorge drops 8,000 feet from rim to river, and Copperfield puts you right at the water's edge of the Snake River. Jet boats blast upstream each morning; by afternoon the canyon goes silent and golden. Rattlesnakes, golden eagles, and the sheer scale of the walls will remind you you're somewhere genuinely wild.",
     amenities:["Flush Toilets","Drinking Water","Fire Rings","Fishing","Boating","Swimming","Hiking"],
     seasons:["Spring","Summer","Fall"], lat:45.0389, lng:-116.9534 },
 
   { id:210, name:"Sawtooth Valley — Riverside",       loc:"Stanley Basin · Idaho",
-    type:"National Forest", price:14, sites:18, avail:15, rating:4.7, reviews:290,
+    type:"Forest Service", price:14, sites:18, avail:15, rating:4.7, reviews:290,
     desc:"The Salmon River runs icy and clear through a wide glacial valley ringed by the jagged Sawtooth peaks — one of the most spectacular mountain backdrops in America. Riverside sits right on the bank, small enough to feel like a secret. The town of Stanley, five minutes away, has one of the best small-town bars in the mountain West.",
     amenities:["Vault Toilets","Drinking Water","Fire Rings","Fishing","Kayaking","Hiking","Stargazing"],
     seasons:["Summer","Fall"], lat:44.2117, lng:-114.9343 },
 
   { id:211, name:"Buckeye Flat Campground",            loc:"Sequoia National Park · California",
-    type:"National Park", price:22, sites:28, avail:20, rating:4.7, reviews:195,
+    type:"Forest Service", price:22, sites:28, avail:20, rating:4.7, reviews:195,
     desc:"Hidden in the foothills of Sequoia at just 2,800 feet, Buckeye Flat sits along the Middle Fork of the Kaweah River where the air is warm and the water runs over smooth granite. The giant sequoias are a short drive above, but down here the canyon is yours — warmer than the summit camps, far less crowded, and hauntingly beautiful in the golden foothills light.",
     amenities:["Flush Toilets","Drinking Water","Fire Rings","Fishing","Swimming","Hiking","Accessible"],
     seasons:["Spring","Summer","Fall"], lat:36.4583, lng:-118.8291 },
 
   { id:212, name:"Plaskett Creek Campground",          loc:"Los Padres NF · California",
-    type:"National Forest", price:25, sites:44, avail:30, rating:4.6, reviews:248,
+    type:"Forest Service", price:25, sites:44, avail:30, rating:4.6, reviews:248,
     desc:"On the wild Big Sur coast between Cambria and Carmel, Plaskett Creek sits just across the highway from Sand Dollar Beach — one of the longest sand beaches in Central California. Coast live oaks shade the sites while the Pacific crashes beyond the dunes. This stretch of Highway 1 is looser and quieter than Big Sur proper, and the camp fills more slowly.",
     amenities:["Flush Toilets","Drinking Water","Fire Rings","Beach Access","Hiking","Fishing","Pet Friendly"],
     seasons:["Spring","Summer","Fall","Winter"], lat:35.7921, lng:-121.3356 },
@@ -3839,25 +3841,25 @@ const CAMPS = [
     seasons:["Spring","Summer","Fall"], lat:41.0121, lng:-121.6479 },
 
   { id:214, name:"Conundrum Hot Springs Camp",         loc:"White River NF · Colorado",
-    type:"National Forest", price:10, sites:20, avail:12, rating:4.9, reviews:410,
+    type:"Forest Service", price:10, sites:20, avail:12, rating:4.9, reviews:410,
     desc:"A 9-mile backpack through an alpine valley leads to a series of natural hot springs at 11,200 feet, where you soak under 14,000-foot peaks with the Milky Way overhead. Elk bugle in the meadows at dawn. The permit system keeps numbers low, and the effort weeds out the casual — what you get at the end is one of the finest wilderness experiences in Colorado.",
     amenities:["No Facilities","Hot Springs","Stargazing","Hiking","Wildlife Viewing"],
     seasons:["Summer","Fall"], lat:38.9876, lng:-106.8726 },
 
   { id:215, name:"Tensleep Creek Campground",          loc:"Bighorn National Forest · Wyoming",
-    type:"National Forest", price:15, sites:12, avail:10, rating:4.6, reviews:134,
+    type:"Forest Service", price:15, sites:12, avail:10, rating:4.6, reviews:134,
     desc:"A small, canyon-bottom camp where Tensleep Creek carves through red and tan canyon walls in the western Bighorns. Trout dart through the clear water, canyon wrens echo off the cliffs, and the road in is dramatic enough to feel like a real journey. Half of Wyoming drives right past it on the way to the Cloud Peak Wilderness — their loss.",
     amenities:["Vault Toilets","Drinking Water","Fire Rings","Fishing","Hiking","Pet Friendly"],
     seasons:["Spring","Summer","Fall"], lat:44.0378, lng:-107.4572 },
 
   { id:216, name:"Wind River Range — Elkhart Park",    loc:"Pinedale · Wyoming",
-    type:"National Forest", price:12, sites:25, avail:16, rating:4.8, reviews:276,
+    type:"Forest Service", price:12, sites:25, avail:16, rating:4.8, reviews:276,
     desc:"The Wind River Range is America's longest unbroken stretch of high mountain wilderness, and Elkhart Park is the quiet eastern gateway. The Fremont Trail leaves from camp into a world of glaciated basins, sky-blue lakes, and granite domes that rival anything in the Sierra — with a fraction of the crowds. Moose browse in the willows at treeline every morning.",
     amenities:["Vault Toilets","Drinking Water","Fire Rings","Hiking","Stargazing","Wildlife Viewing"],
     seasons:["Summer","Fall"], lat:42.9284, lng:-109.8432 },
 
   { id:217, name:"Toadstool Geologic Park",            loc:"Chadron · Nebraska",
-    type:"National Forest", price:0, sites:8, avail:8, rating:4.5, reviews:95,
+    type:"Forest Service", price:0, sites:8, avail:8, rating:4.5, reviews:95,
     desc:"A free, barely-known primitive camp at the edge of a badlands landscape that looks more Mars than Midwest — mushroom-shaped hoodoos, eroded clay buttes, and fossil beds that have yielded prehistoric rhinos and giant tortoises. Sunsets here are outrageous. You can walk the moonscape for hours and not see another soul. Few people know Nebraska has a place like this.",
     amenities:["Vault Toilets","Fire Rings","Stargazing","Hiking","Wildlife Viewing"],
     seasons:["Spring","Summer","Fall"], lat:42.8963, lng:-103.6234 },
@@ -3881,13 +3883,13 @@ const CAMPS = [
     seasons:["Fall","Winter","Spring"], lat:29.4308, lng:-103.9630 },
 
   { id:221, name:"Padre Island NS — North Beach",      loc:"Corpus Christi · Texas",
-    type:"National Seashore", price:10, sites:50, avail:45, rating:4.6, reviews:156,
+    type:"National Park", price:10, sites:50, avail:45, rating:4.6, reviews:156,
     desc:"The longest undeveloped barrier island in the world: 70 miles of wild Gulf Coast where you drive onto the beach and camp wherever you stop. Kemp's ridley sea turtles nest here in summer. Brown pelicans cruise at eye level. There are no reservations, no amenities, and no neighbors unless you put them there. Pure, uncommercial, borderline reckless Gulf Coast freedom.",
     amenities:["No Facilities","Beach Access","Fishing","Wildlife Viewing","Stargazing"],
     seasons:["Fall","Winter","Spring"], lat:27.4091, lng:-97.3783 },
 
   { id:222, name:"Wichita Mountains Wildlife Refuge",  loc:"Lawton · Oklahoma",
-    type:"Wildlife Refuge", price:14, sites:57, avail:40, rating:4.6, reviews:198,
+    type:"BLM", price:14, sites:57, avail:40, rating:4.6, reviews:198,
     desc:"The oldest federal wildlife refuge in the country harbors free-roaming bison herds, Texas longhorns, and Rocky Mountain elk on granite hills that rise from the flat Oklahoma plains. Doris Campground sits among massive boulders surrounded by prairie and woodlands. At dusk, bison drift through the campsites with no fences between you.",
     amenities:["Flush Toilets","Drinking Water","Fire Rings","Wildlife Viewing","Hiking","Rock Climbing","Fishing"],
     seasons:["Spring","Fall","Winter"], lat:34.7356, lng:-98.6893 },
@@ -3899,7 +3901,7 @@ const CAMPS = [
     seasons:["Spring","Summer","Fall"], lat:37.5586, lng:-90.8499 },
 
   { id:224, name:"Sutton Bluff Recreation Area",       loc:"Mark Twain NF · Missouri",
-    type:"National Forest", price:12, sites:25, avail:22, rating:4.5, reviews:142,
+    type:"Forest Service", price:12, sites:25, avail:22, rating:4.5, reviews:142,
     desc:"A secluded Ozark camp where the Black River runs wide and clear over gravel bars between pine-cloaked bluffs. It's a floater's paradise — rent canoes at nearby resorts and drift lazy miles downstream. The campground is small, shaded, and perpetually underbooked, drawing the kind of Missouri river crowd that brings guitars and stays three days.",
     amenities:["Vault Toilets","Drinking Water","Fire Rings","Swimming","Canoeing","Fishing","Pet Friendly"],
     seasons:["Spring","Summer","Fall"], lat:37.3456, lng:-90.9812 },
@@ -3911,25 +3913,25 @@ const CAMPS = [
     seasons:["Spring","Summer","Fall"], lat:46.8141, lng:-89.7523 },
 
   { id:226, name:"Sylvania Wilderness — Clark Lake",   loc:"Ottawa National Forest · Michigan",
-    type:"National Forest", price:15, sites:12, avail:9, rating:4.8, reviews:175,
+    type:"Forest Service", price:15, sites:12, avail:9, rating:4.8, reviews:175,
     desc:"Permits and portaging keep the masses out of Sylvania's 4,000-acre network of pristine lakes in the Upper Peninsula. Clark Lake sits among old-growth white pines and northern hardwoods untouched since the Ice Age shaped them. The water is gin-clear to 20 feet — loons call across it at dawn. You carry everything in and leave nothing behind.",
     amenities:["No Facilities","Canoeing","Kayaking","Swimming","Fishing","Hiking","Wildlife Viewing"],
     seasons:["Summer","Fall"], lat:46.2432, lng:-89.3063 },
 
   { id:227, name:"Garden of the Gods Wilderness",      loc:"Shawnee National Forest · Illinois",
-    type:"National Forest", price:0, sites:12, avail:12, rating:4.6, reviews:208,
+    type:"Forest Service", price:0, sites:12, avail:12, rating:4.6, reviews:208,
     desc:"Sandstone formations sculpted over 320 million years tower above the forest canopy in the southernmost tip of Illinois, where the Ohio and Mississippi Rivers nearly touch. A free primitive camp sits near the main overlook trail, giving you the rocks at golden hour and the stars above the sandstone ridgeline all to yourself. It looks nothing like Illinois.",
     amenities:["Vault Toilets","Fire Rings","Hiking","Stargazing","Rock Climbing","Pet Friendly"],
     seasons:["Spring","Fall","Winter"], lat:37.5965, lng:-88.6823 },
 
   { id:228, name:"Backbone Rock Recreation Area",      loc:"Cherokee National Forest · Tennessee",
-    type:"National Forest", price:12, sites:20, avail:17, rating:4.6, reviews:133,
+    type:"Forest Service", price:12, sites:20, avail:17, rating:4.6, reviews:133,
     desc:"A camp tucked in a gorge of Laurel Creek beside what may be the world's shortest tunnel — a notch blasted through a 20-foot-wide rock fin in 1901 that locals call Backbone Rock. Rhododendron tunnels line the trail; the creek pools are cold and clear. This is deep Appalachian Tennessee, gentle and completely unsung.",
     amenities:["Flush Toilets","Drinking Water","Fire Rings","Swimming","Fishing","Hiking","Pet Friendly"],
     seasons:["Spring","Summer","Fall"], lat:36.5534, lng:-81.9113 },
 
   { id:229, name:"Red River Gorge — Koomer Ridge",     loc:"Daniel Boone NF · Kentucky",
-    type:"National Forest", price:20, sites:60, avail:35, rating:4.7, reviews:312,
+    type:"Forest Service", price:20, sites:60, avail:35, rating:4.7, reviews:312,
     desc:"Kentucky's most spectacular landscape is a maze of natural arches, soaring sandstone cliffs, and old-growth hemlock hollows carved by the Red River. Koomer Ridge sits on the plateau above the gorge and is the best base for exploring the Clifty Wilderness. The climbing community knows it well; the rest of the country doesn't, which is their loss.",
     amenities:["Flush Toilets","Drinking Water","Fire Rings","Hiking","Rock Climbing","Wildlife Viewing","Pet Friendly"],
     seasons:["Spring","Summer","Fall"], lat:37.7923, lng:-83.6521 },
@@ -3947,25 +3949,25 @@ const CAMPS = [
     seasons:["Spring","Summer","Fall"], lat:37.2868, lng:-82.2890 },
 
   { id:232, name:"Dolly Sods Wilderness — Red Creek",  loc:"Monongahela NF · West Virginia",
-    type:"National Forest", price:0, sites:20, avail:16, rating:4.7, reviews:223,
+    type:"Forest Service", price:0, sites:20, avail:16, rating:4.7, reviews:223,
     desc:"A sprawling high plateau of wind-sculpted spruce, open heath barrens, and tundra-like bogs perched at 4,000 feet in the Allegheny Mountains — it looks more like Canada than the mid-Atlantic. Red Creek campground is a rough trailhead base for accessing the backcountry, where black bear, snowshoe hare, and migratory hawks move through in astonishing numbers. One of Appalachia's true wild places.",
     amenities:["Vault Toilets","Fire Rings","Hiking","Fishing","Wildlife Viewing","Stargazing"],
     seasons:["Spring","Summer","Fall"], lat:39.0140, lng:-79.4173 },
 
   { id:233, name:"Spruce Knob — Seneca Shadows",       loc:"Monongahela NF · West Virginia",
-    type:"National Forest", price:18, sites:68, avail:42, rating:4.6, reviews:195,
+    type:"Forest Service", price:18, sites:68, avail:42, rating:4.6, reviews:195,
     desc:"West Virginia's highest point — a wind-battered plateau of red spruce and quartzite at nearly 5,000 feet — looms over this well-kept forest service camp in the Spruce Knob-Seneca Rocks National Recreation Area. The Seneca Rocks fin rises nearby like a shark tooth from the valley floor, drawing rock climbers from up and down the East Coast. The summit's 360-degree view is worth every mile of driving.",
     amenities:["Flush Toilets","Drinking Water","Fire Rings","Hiking","Stargazing","Rock Climbing","Pet Friendly"],
     seasons:["Spring","Summer","Fall"], lat:38.6993, lng:-79.5342 },
 
   { id:234, name:"Linville Gorge Wilderness",          loc:"Pisgah National Forest · North Carolina",
-    type:"National Forest", price:0, sites:15, avail:12, rating:4.8, reviews:241,
+    type:"Forest Service", price:0, sites:15, avail:12, rating:4.8, reviews:241,
     desc:"The most rugged gorge in the East — 2,000 feet deep, with no maintained trails through the inner canyon and clifftop views that dwarf anything else in the Appalachians south of the Smokies. Free primitive camping requires a weekend permit in summer, but weekdays are open. Table Rock and Hawksbill rise like sentinels on either wall. Rattlesnakes and ravens own the place.",
     amenities:["No Facilities","Hiking","Rock Climbing","Fishing","Stargazing","Wildlife Viewing"],
     seasons:["Spring","Summer","Fall"], lat:35.8789, lng:-81.9068 },
 
   { id:235, name:"Panthertown Valley — Mac's Gap",     loc:"Nantahala NF · North Carolina",
-    type:"National Forest", price:0, sites:10, avail:9, rating:4.7, reviews:160,
+    type:"Forest Service", price:0, sites:10, avail:9, rating:4.7, reviews:160,
     desc:"An isolated high-elevation valley in the Blue Ridge sometimes called the 'Yosemite of the East' — granite domes, waterfalls, and open forest glades stitched together by 30 miles of trail. Backcountry camping is free and dispersed; the trailhead is rough enough to keep out the curious. Salamanders fill every creek. It may be the finest hiking terrain in the southern Appalachians no one has heard of.",
     amenities:["No Facilities","Hiking","Fishing","Swimming","Wildlife Viewing"],
     seasons:["Spring","Summer","Fall"], lat:35.2345, lng:-83.0412 },
@@ -3995,7 +3997,7 @@ const CAMPS = [
     seasons:["Spring","Summer","Fall"], lat:38.0651, lng:-75.8723 },
 
   { id:240, name:"Delaware Water Gap NRA — Dingmans",  loc:"Pike County · Pennsylvania",
-    type:"National Recreation Area", price:20, sites:160, avail:70, rating:4.5, reviews:224,
+    type:"National Park", price:20, sites:160, avail:70, rating:4.5, reviews:224,
     desc:"The Delaware River carved a gap through the Kittatinny Ridge that has been a travel corridor since the Ice Age, and Dingmans sits at one of its finest stretches — four waterfalls within a short walk, cold river swimming, and the Appalachian Trail crossing overhead. It's three hours from midtown Manhattan yet perpetually overlooked for the more famous parks.",
     amenities:["Flush Toilets","Drinking Water","Fire Rings","Swimming","Fishing","Hiking","Pet Friendly","Accessible"],
     seasons:["Spring","Summer","Fall"], lat:41.2345, lng:-74.9012 },
@@ -4007,7 +4009,7 @@ const CAMPS = [
     seasons:["Spring","Summer","Fall"], lat:42.3756, lng:-76.8714 },
 
   { id:242, name:"Allegheny NF — Kinzua Beach",        loc:"Warren County · Pennsylvania",
-    type:"National Forest", price:24, sites:92, avail:55, rating:4.5, reviews:176,
+    type:"Forest Service", price:24, sites:92, avail:55, rating:4.5, reviews:176,
     desc:"Kinzua Beach sits on the arm of the reservoir by the same name — a 27-mile-long lake carved through the forested Pennsylvania highlands. The beach and boat ramp get busy on summer weekends, but the wooded sites above the shoreline stay quiet. Nearby, the ruined Kinzua Bridge — a Victorian railroad viaduct struck by a 2003 tornado — is one of the most haunting sights in the Northeast.",
     amenities:["Flush Toilets","Drinking Water","Fire Rings","Boating","Swimming","Fishing","Hiking","Pet Friendly"],
     seasons:["Spring","Summer","Fall"], lat:41.8562, lng:-78.9621 },
@@ -4019,61 +4021,61 @@ const CAMPS = [
     seasons:["Summer","Fall"], lat:44.7367, lng:-73.2678 },
 
   { id:244, name:"Hapgood Pond Recreation Area",       loc:"Green Mountain NF · Vermont",
-    type:"National Forest", price:22, sites:28, avail:20, rating:4.5, reviews:108,
+    type:"Forest Service", price:22, sites:28, avail:20, rating:4.5, reviews:108,
     desc:"A peaceful forest service camp on a small glacial pond in the southern Green Mountains, surrounded by hardwood and spruce forest that burns with color in October. The pond is perfect for a morning swim; the Long Trail passes a few miles east; the village of Peru, with a general store and a covered bridge, is five minutes down the road. Vermont forest camping at its most quietly perfect.",
     amenities:["Flush Toilets","Drinking Water","Fire Rings","Swimming","Fishing","Hiking","Pet Friendly"],
     seasons:["Summer","Fall"], lat:43.2673, lng:-72.7989 },
 
   { id:245, name:"Spencer Pond Camps — Primitive",     loc:"Somerset County · Maine",
-    type:"BLM / Timber", price:0, sites:5, avail:5, rating:4.7, reviews:72,
+    type:"BLM", price:0, sites:5, avail:5, rating:4.7, reviews:72,
     desc:"Maine's North Woods: a vast, roadless interior of ponds, bogs, and spruce forest where moose outnumber people and loons call across the water all night. Spencer Pond is deep in this backcountry, accessed by unpaved timber roads. There are no services and no fees — just fire rings left by whoever came before and an absolute, crushing silence that most people will never experience in their lives.",
     amenities:["No Facilities","Fishing","Canoeing","Wildlife Viewing","Hunting","Stargazing"],
     seasons:["Summer","Fall"], lat:45.6234, lng:-70.0890 },
 
   { id:246, name:"White Rock Mountain Recreation Area", loc:"Ozark National Forest · Arkansas",
-    type:"National Forest", price:12, sites:16, avail:13, rating:4.7, reviews:162,
+    type:"Forest Service", price:12, sites:16, avail:13, rating:4.7, reviews:162,
     desc:"A log-cabin-era stone shelter and fire tower crown the summit of White Rock Mountain at 2,300 feet — the highest accessible point in the Arkansas Ozarks. The ridgetop campground commands 360-degree views over the plateau, with sunsets that ignite the entire sky. Below the mountain, the Mulberry River runs cold and wild. This is the finest forest setting in a state most campers have never considered.",
     amenities:["Flush Toilets","Drinking Water","Fire Rings","Hiking","Stargazing","Wildlife Viewing"],
     seasons:["Spring","Summer","Fall"], lat:35.5018, lng:-93.8906 },
 
   { id:247, name:"Cedar Point — Croatan National Forest", loc:"Carteret County · North Carolina",
-    type:"National Forest", price:12, sites:40, avail:30, rating:4.5, reviews:118,
+    type:"Forest Service", price:12, sites:40, avail:30, rating:4.5, reviews:118,
     desc:"On the shore of the White Oak River estuary where it opens into Bogue Sound, Cedar Point is a saltwater forest camp unlike any other — longleaf pine and live oak above, saltmarsh and oyster beds below. Red wolves roam the adjacent Alligator River refuge. Paddling out into the sound at sunset, with the barrier islands of the Crystal Coast glowing across the water, is something you remember for decades.",
     amenities:["Flush Toilets","Drinking Water","Fire Rings","Kayaking","Fishing","Wildlife Viewing","Beach Access"],
     seasons:["Spring","Fall","Winter"], lat:34.6789, lng:-76.8912 },
 
   { id:248, name:"Salt Springs Recreation Area",       loc:"Ocala National Forest · Florida",
-    type:"National Forest", price:28, sites:171, avail:80, rating:4.5, reviews:203,
+    type:"Forest Service", price:28, sites:171, avail:80, rating:4.5, reviews:203,
     desc:"A first-magnitude spring bubbles up at a constant 68°F from the limestone aquifer, creating a crystal-clear run that flows a mile into Lake George — the largest lake entirely within Florida's borders. Saltwater fish from the St. Johns meet freshwater springs creatures in a biological collision zone; snorkeling the spring run on a summer morning is otherworldly. The Ocala is one of the most underrated forests in the South.",
     amenities:["Hot Showers","Flush Toilets","Fire Rings","Swimming","Snorkeling","Fishing","Kayaking","Pet Friendly"],
     seasons:["Fall","Winter","Spring"], lat:29.3465, lng:-81.7251 },
 
   { id:249, name:"East Rosebud Lake Campground",       loc:"Custer Gallatin NF · Montana",
-    type:"National Forest", price:12, sites:14, avail:11, rating:4.8, reviews:148,
+    type:"Forest Service", price:12, sites:14, avail:11, rating:4.8, reviews:148,
     desc:"The Beartooth Range rises straight from the end of this glacial lake in a wall of glacier-carved granite so dramatic it silences first-time visitors. East Rosebud is the quiet gateway to the Beartooths — no cell service, no hookups, no reservations required — just a small camp at the trailhead for one of the finest wilderness routes in Montana. Grizzlies range throughout; this is genuine backcountry country.",
     amenities:["Vault Toilets","Drinking Water","Fire Rings","Fishing","Kayaking","Hiking","Wildlife Viewing"],
     seasons:["Summer","Fall"], lat:45.1234, lng:-109.5678 },
 
   { id:250, name:"Rough Lock Falls — Black Hills",     loc:"Spearfish Canyon · South Dakota",
-    type:"National Forest", price:12, sites:11, avail:9, rating:4.7, reviews:131,
+    type:"Forest Service", price:12, sites:11, avail:9, rating:4.7, reviews:131,
     desc:"A hidden limestone canyon in the northern Black Hills where Spearfish Creek tumbles over Rough Lock Falls through walls of white limestone draped in ferns and birch. The canyon is so narrow and lush it defies South Dakota expectations entirely. The campground is tiny, the falls are a five-minute walk, and the canyon road is the most dramatic drive in the state. Brown trout finesse fishing is exceptional.",
     amenities:["Flush Toilets","Drinking Water","Fire Rings","Fishing","Hiking","Wildlife Viewing"],
     seasons:["Spring","Summer","Fall"], lat:44.5123, lng:-103.8512 },
 
   { id:251, name:"Cohutta Wilderness — Jacks River",   loc:"Chattahoochee-Oconee NF · Georgia",
-    type:"National Forest", price:0, sites:8, avail:7, rating:4.8, reviews:96,
+    type:"Forest Service", price:0, sites:8, avail:7, rating:4.8, reviews:96,
     desc:"The Cohutta Wilderness is Georgia's largest wilderness and Jacks River is its crown — a wild trout stream that must be crossed 40 times on the most committing river trail in the Southern Appalachians. The backcountry camp at river's edge is free and permit-free on weekdays, surrounded by old-growth cove hardwoods. Hellbender salamanders occupy the deepest pools. Almost no one outside the Southeast has heard of it.",
     amenities:["No Facilities","Fishing","Hiking","Swimming","Wildlife Viewing"],
     seasons:["Spring","Summer","Fall"], lat:34.9012, lng:-84.6234 },
 
   { id:252, name:"Fossil Butte — Fontenelle Creek",    loc:"Kemmerer · Wyoming",
-    type:"National Monument", price:0, sites:6, avail:6, rating:4.6, reviews:78,
+    type:"National Park", price:0, sites:6, avail:6, rating:4.6, reviews:78,
     desc:"The finest freshwater fossil beds on earth lie beneath these sagebrush hills — 52-million-year-old lake sediments that have preserved entire ecosystems in stunning detail, including fish, turtles, bats, and early horses. The primitive camp near the monument boundary is free, tiny, and extraordinarily quiet. Drive up to the monument each morning for an interpretive program and return to a camp that faces open rangeland and an infinite Wyoming sky.",
     amenities:["No Facilities","Hiking","Wildlife Viewing","Stargazing"],
     seasons:["Spring","Summer","Fall"], lat:41.8612, lng:-110.7823 },
 
   { id:253, name:"Mendenhall Lake — Tongass NF",       loc:"Juneau · Alaska",
-    type:"National Forest", price:18, sites:65, avail:40, rating:4.8, reviews:312,
+    type:"Forest Service", price:18, sites:65, avail:40, rating:4.8, reviews:312,
     desc:"A 13-mile tidewater glacier descends to a luminous glacial lake less than 15 miles from downtown Juneau — and you can camp at its shore. Icebergs calve into the lake with a crack you hear from your tent. The glacier face glows electric blue at golden hour. Bald eagles are so common here they become furniture. One of the most accessible wilderness camping experiences in Alaska.",
     amenities:["Flush Toilets","Drinking Water","Fire Rings","Hiking","Kayaking","Fishing","Wildlife Viewing","Accessible"],
     seasons:["Summer","Fall"], lat:58.4272, lng:-134.5651 },
@@ -4084,7 +4086,7 @@ const CAMPS = [
     amenities:["Flush Toilets","Drinking Water","Fire Rings","Swimming","Hiking","Wildlife Viewing","Beach Access"],
     seasons:["Spring","Summer","Fall","Winter"], lat:20.6612, lng:-156.0417 },
 
-  { id:255, name:"Cohutta Wilderness aside — Paria River Primitive",  loc:"Kanab · Utah",
+  { id:255, name:"Paria River Canyon — Primitive Camp",  loc:"Kanab · Utah",
     type:"BLM", price:5, sites:10, avail:9, rating:4.7, reviews:143,
     desc:"The Paria River corridor cuts a 38-mile slot through vermilion sandstone on a route that ends at Lee's Ferry on the Colorado. Primitive camps along the river bench put you inside a canyon world of flood-carved walls, quicksand, and moving water that rises and falls with desert storms upstream. A permit controls the canyon's daily population to a handful of parties. There is nothing like sleeping inside a slot canyon.",
     amenities:["No Facilities","Hiking","Photography","Stargazing","Wildlife Viewing"],
