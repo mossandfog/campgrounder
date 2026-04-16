@@ -255,18 +255,7 @@ html, body {
   .cat-sub  { font-size: 9px; margin-top: 3px; }
   .cat-cell svg { width: 30px; height: 30px; }
   .cat-plus { top: 14px; right: 20px; }
-  /* Pull tagline out of flex row — sits at bottom-left of title column */
-  .hero-tagline {
-    position: absolute;
-    bottom: 24px;
-    left: 40px;
-    margin: 0;
-    font-size: 9px;
-    white-space: nowrap;
-    letter-spacing: 0.22em;
-  }
-
-  /* ── FOOTER: hidden on desktop ── */
+/* ── FOOTER: hidden on desktop ── */
   .pnw-footer { display: none; }
 
   /* ── PILLS: compact, wrap layout ── */
@@ -503,11 +492,6 @@ html, body {
   margin-bottom: 16px; margin-top: 4px;
 }
 .hero-title .o { color: var(--o); }
-.hero-tagline {
-  font-size: 10px; font-weight: 700; letter-spacing: 0.16em;
-  text-transform: uppercase; color: rgba(255,255,255,0.22);
-  margin-top: 18px; line-height: 1.6;
-}
 
 .home-search-row { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
 .filter-scroll { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
@@ -1870,7 +1854,6 @@ html, body {
   </div>
   <div class="home-hero">
     <h1 class="hero-title">Find<br>your<br><span class="o">camp.</span></h1>
-    <div class="hero-tagline" id="hero-tagline">205 campgrounds · Pacific Northwest &amp; beyond</div>
     <div class="hero-right">
     <div class="home-search-row">
       <div class="sbar" onclick="openSearch()" style="cursor:pointer;">
@@ -5447,13 +5430,6 @@ function _startOrbit() {
   _flyMap.on('touchstart', () => { _flyActive = false; });
 }
 
-/// ── HERO TAGLINE: auto-sync camp count ──────────────
-(function() {
-  const el = document.getElementById('hero-tagline');
-  if (el && typeof CAMPS !== 'undefined') {
-    el.textContent = CAMPS.length + ' campgrounds · Pacific Northwest & beyond';
-  }
-})();
 
 // ── WELCOME MODAL ────────────────────────────────────
 (function() {
