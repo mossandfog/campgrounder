@@ -756,6 +756,67 @@ html, body {
   display: flex; align-items: center; gap: 5px;
 }
 
+/* ── STATS BAR ──────────────────────────────────── */
+.stats-bar {
+  display: flex;
+  border-bottom: 1.5px solid var(--w2);
+}
+.stats-cell {
+  flex: 1;
+  padding: 16px 0;
+  text-align: center;
+  border-right: 1.5px solid var(--w2);
+}
+.stats-cell:last-child { border-right: none; }
+.stats-num {
+  font-size: 19px; font-weight: 800; letter-spacing: -0.03em;
+  color: var(--w);
+}
+.stats-label {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.15em;
+  text-transform: uppercase; color: rgba(255,255,255,0.32);
+  margin-top: 3px;
+}
+
+/* ── TESTIMONIALS ────────────────────────────────── */
+.testi-section { margin: 0; }
+.testi-scroll {
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
+  border-top: 1.5px solid var(--w2);
+  border-bottom: 1.5px solid var(--w2);
+}
+.testi-scroll::-webkit-scrollbar { display: none; }
+.testi-card {
+  flex-shrink: 0;
+  width: 78vw;
+  max-width: 290px;
+  padding: 20px 22px 22px 20px;
+  border-right: 1.5px solid var(--w2);
+  border-left: 2px solid var(--o);
+  margin-left: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.testi-card:last-child { margin-right: 20px; }
+.testi-score {
+  font-size: 11px; font-weight: 900; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--o); margin-bottom: 12px;
+}
+.testi-quote {
+  font-size: 13px; line-height: 1.6; color: rgba(255,255,255,0.72);
+}
+.testi-name {
+  margin-top: 14px; font-size: 10px; font-weight: 800;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: rgba(255,255,255,0.38);
+}
+.testi-camp {
+  font-size: 10px; color: var(--o); letter-spacing: 0.06em;
+  margin-top: 3px; opacity: 0.75;
+}
+
 /* ── WHERE TO START ─────────────────────────────── */
 .start-section { margin: 28px 0 0; }
 .start-section .section-eyebrow { margin-bottom: 12px; }
@@ -2042,6 +2103,22 @@ html, body {
     </div>
     </div><!-- end .hero-right -->
   </div>
+  <!-- ── STATS BAR ──────────────────────────────── -->
+  <div class="stats-bar">
+    <div class="stats-cell">
+      <div class="stats-num">205</div>
+      <div class="stats-label">Handpicked Camps</div>
+    </div>
+    <div class="stats-cell">
+      <div class="stats-num">4.8<span style="font-size:13px;color:var(--o);">★</span></div>
+      <div class="stats-label">Avg. Rating</div>
+    </div>
+    <div class="stats-cell">
+      <div class="stats-num">12K+</div>
+      <div class="stats-label">Weekend Campers</div>
+    </div>
+  </div>
+
   <div class="cat-section">
     <div class="section-eyebrow">Browse by type</div>
     <div class="cat-grid">
@@ -2182,6 +2259,31 @@ html, body {
         <div class="region-sub">Texas · Oklahoma · Kansas</div>
       </div>
 
+    </div>
+  </div>
+
+  <!-- ── TESTIMONIALS ─────────────────────────────── -->
+  <div class="testi-section">
+    <div class="section-eyebrow" style="padding: 13px 24px; border-bottom: 1.5px solid var(--w2);">From the Field</div>
+    <div class="testi-scroll">
+      <div class="testi-card">
+        <div class="testi-score">5.0 · Verified</div>
+        <div class="testi-quote">"Found a perfect hidden lake spot in 3 minutes that I never would've discovered on my own."</div>
+        <div class="testi-name">Marcus T.</div>
+        <div class="testi-camp">Okanogan-Wenatchee NF · WA</div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-score">5.0 · Verified</div>
+        <div class="testi-quote">"The pack list and weather forecast saved our trip. Showed up prepared for 40° nights we had no idea were coming."</div>
+        <div class="testi-name">Priya &amp; Raj K.</div>
+        <div class="testi-camp">Olympic Peninsula · WA</div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-score">5.0 · Verified</div>
+        <div class="testi-quote">"Fire status info alone was worth it — half the spots we wanted were closed and we didn't know until we checked here."</div>
+        <div class="testi-name">Dana F.</div>
+        <div class="testi-camp">Lost Creek Wilderness · CO</div>
+      </div>
     </div>
   </div>
 
@@ -6167,7 +6269,7 @@ function dismissWelcome() {
         <div class="wm-geo-wide"></div>
       </div>
       <div class="wm-headline">Find<br>your<br><span class="wm-o">camp.</span></div>
-      <div class="wm-sub">Get outside easier with Campgrounder</div>
+      <div class="wm-sub">Trusted by 12,000+ weekend campers</div>
       <div class="wm-rule"></div>
       <div class="wm-props">
         <div class="wm-prop">
