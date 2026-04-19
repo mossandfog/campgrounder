@@ -2106,7 +2106,7 @@ html, body {
   <!-- ── STATS BAR ──────────────────────────────── -->
   <div class="stats-bar">
     <div class="stats-cell">
-      <div class="stats-num">205</div>
+      <div class="stats-num" style="font-size:13px;letter-spacing:0.04em;">Hundreds &amp; Counting</div>
       <div class="stats-label">Handpicked Camps</div>
     </div>
     <div class="stats-cell">
@@ -4597,6 +4597,97 @@ const CAMPS = [
     amenities:["No Facilities","Hiking","Fishing","Wildlife Viewing","Stargazing","Wildflowers"],
     seasons:["Summer","Fall"], lat:38.8934, lng:-106.9876 },
 
+  // ── NEW ADDITIONS ─────────────────────────────────────────────────────
+  { id:286, name:"Wrangell-St. Elias — Nabesna Road",  loc:"Tok · Alaska",
+    type:"National Park", price:0, sites:12, avail:10, rating:4.9, reviews:88,
+    desc:"Primitive camps along a 42-mile gravel road cutting into the largest national park in America. Dall sheep graze the ridgelines above, caribou cross the road at dusk, and on clear nights the aurora fills the entire sky.",
+    amenities:["No Facilities","Wildlife Viewing","Stargazing","Fishing","4WD Required","Hiking"],
+    seasons:["Summer","Fall"], lat:62.1234, lng:-143.0456 },
+
+  { id:287, name:"Kenai Fjords — Aialik Bay",           loc:"Seward · Alaska",
+    type:"National Park", price:0, sites:8, avail:6, rating:5.0, reviews:64,
+    desc:"Boat-access only. Sea kayak to primitive sites beneath a tidewater glacier. Humpback whales surface in the bay, puffins nest in the cliffs above, and the calving face of Aialik Glacier cracks and booms through the night.",
+    amenities:["No Facilities","Kayaking","Wildlife Viewing","Fishing","Boat Access Only","Stargazing"],
+    seasons:["Summer"], lat:59.9234, lng:-149.7654 },
+
+  { id:288, name:"Cloudcroft — Saddle Campground",      loc:"Lincoln National Forest · New Mexico",
+    type:"Forest Service", price:12, sites:18, avail:14, rating:4.6, reviews:212,
+    desc:"A cool pine-scented escape at 8,700 feet above the Chihuahuan Desert. Camp in the Sacramento Mountains while the desert bakes a mile below. Deer graze camp in the mornings and the sunsets turn the White Sands basin pink.",
+    amenities:["Vault Toilets","Fire Rings","Parking","Hiking","Wildlife Viewing","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:32.9612, lng:-105.7423 },
+
+  { id:289, name:"Isle Royale — Daisy Farm",             loc:"Lake Superior · Michigan",
+    type:"National Park", price:7, sites:20, avail:12, rating:4.9, reviews:176,
+    desc:"Accessible only by seaplane or ferry, Isle Royale is the least-visited national park in the Lower 48. Moose outnumber visitors. Wolves howl at night. The trails are empty and the lake is impossibly cold and clear.",
+    amenities:["Vault Toilets","Water Pump","Dock","Fishing","Kayaking","Wildlife Viewing"],
+    seasons:["Summer","Fall"], lat:47.9847, lng:-88.7623 },
+
+  { id:290, name:"Custer State Park — French Creek",    loc:"Custer · South Dakota",
+    type:"State Park", price:22, sites:60, avail:18, rating:4.7, reviews:430,
+    desc:"In the heart of the Black Hills, a free-ranging herd of 1,300 bison wanders past camp. Pronghorn, burros, and wild turkey are regulars too. Needles Highway and Sylvan Lake are minutes away.",
+    amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Fishing","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:43.7234, lng:-103.5876 },
+
+  { id:291, name:"Assateague — Life of the Dunes",      loc:"Assateague Island · Virginia",
+    type:"National Seashore", price:30, sites:45, avail:14, rating:4.8, reviews:310,
+    desc:"Wild ponies wander through camp on this barrier island between the Atlantic and Chincoteague Bay. Fall brings dramatic surf and empty beaches. The horses have no fear of people and camp in your site as naturally as any other creature.",
+    amenities:["Cold Showers","Flush Toilets","Fire Rings","Beach Access","Fishing","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:37.9012, lng:-75.3456 },
+
+  { id:292, name:"Big Sur — Pfeiffer Burns Camp",       loc:"Los Padres NF · California",
+    type:"State Park", price:35, sites:40, avail:9, rating:4.8, reviews:545,
+    desc:"In a valley of old-growth redwoods a half-mile from the Pacific. The Big Sur River runs cold and clear past camp. The California coast here is as dramatic as it gets — cliffs, sea stacks, condors overhead.",
+    amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Fishing","Hiking"],
+    seasons:["Spring","Summer","Fall","Winter"], lat:36.2456, lng:-121.7812 },
+
+  { id:293, name:"Pictograph Cave State Park",           loc:"Billings · Montana",
+    type:"State Park", price:20, sites:24, avail:18, rating:4.5, reviews:178,
+    desc:"Camp beside caves that sheltered humans 2,000 years ago, their rock art still vivid on the limestone walls. The rimrocks above Billings glow amber at sunset and the site is one of Montana's most underrated.",
+    amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Hiking","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:45.7234, lng:-108.4123 },
+
+  { id:294, name:"Boundary Waters — Moose Lake Entry",  loc:"Ely · Minnesota",
+    type:"Wilderness", price:16, sites:10, avail:8, rating:4.9, reviews:298,
+    desc:"Paddle-in only sites on one of the finest canoe wilderness areas in North America. Loons call across glass-still water at dawn. Walleye stack the lake. The sky holds more stars than seem possible this close to the US.",
+    amenities:["No Facilities","Kayaking","Fishing","Wildlife Viewing","Stargazing","Canoe Access"],
+    seasons:["Spring","Summer","Fall"], lat:47.9234, lng:-91.8765 },
+
+  { id:295, name:"Natchez Trace — Jeff Busby Site",     loc:"Ackerman · Mississippi",
+    type:"National Parkway", price:0, sites:18, avail:16, rating:4.4, reviews:156,
+    desc:"A free, quiet camp at the midpoint of the 444-mile Natchez Trace Parkway. The surrounding hardwood forest is cathedral-still and the Trace at night has no cars, no noise — just the sound of wind in old-growth oak.",
+    amenities:["Flush Toilets","Fire Rings","Parking","Hiking","Pet Friendly","Accessible"],
+    seasons:["Spring","Summer","Fall","Winter"], lat:33.5678, lng:-89.2345 },
+
+  { id:296, name:"Enchanted Rock — Primitive Camp",     loc:"Fredericksburg · Texas",
+    type:"State Park", price:20, sites:30, avail:14, rating:4.8, reviews:384,
+    desc:"Backcountry sites beneath a 425-foot dome of pink granite, one of the largest batholiths in the US. Sunrise turns the rock rose-gold. The Texas Hill Country spreads in every direction and the wildflower display in spring is extraordinary.",
+    amenities:["Vault Toilets","No Fires","Hiking","Stargazing","Rock Climbing","Wildlife Viewing"],
+    seasons:["Fall","Winter","Spring"], lat:30.5012, lng:-98.8234 },
+
+  { id:297, name:"Pictured Rocks — Little Beaver Lake",  loc:"Alger County · Michigan",
+    type:"National Lakeshore", price:18, sites:8, avail:6, rating:4.8, reviews:142,
+    desc:"A quiet walk-in camp tucked between a clear inland lake and the Lake Superior shoreline. The sandstone cliffs and sea caves of Pictured Rocks are minutes away by kayak. Fog rolls in off Superior at night and the mornings smell like cold water.",
+    amenities:["Vault Toilets","Water Pump","Kayaking","Fishing","Hiking","Stargazing"],
+    seasons:["Summer","Fall"], lat:46.5678, lng:-86.1234 },
+
+  { id:298, name:"Guadalupe Mountains — Pine Springs",   loc:"Salt Flat · Texas",
+    type:"National Park", price:15, sites:40, avail:28, rating:4.6, reviews:267,
+    desc:"Camp at the base of the highest peak in Texas in one of the most underrated national parks in America. The Guadalupes are a fossil reef from an ancient sea — the geology is unlike anywhere else. Dark, dark skies and almost no visitors.",
+    amenities:["Flush Toilets","Fire Rings","Parking","Hiking","Stargazing","Pet Friendly"],
+    seasons:["Fall","Winter","Spring"], lat:31.9234, lng:-104.8345 },
+
+  { id:299, name:"Hoh Rain Forest — Willaby Creek",     loc:"Olympic NP · Washington",
+    type:"National Park", price:20, sites:21, avail:11, rating:4.9, reviews:418,
+    desc:"Surrounded by moss-draped old-growth in one of the only temperate rainforests in North America. Rainfall averages 140 inches a year. Everything is dripping and green and impossibly alive. Roosevelt elk move silently through the fog.",
+    amenities:["Flush Toilets","Fire Rings","Parking","Hiking","Fishing","Wildlife Viewing"],
+    seasons:["Spring","Summer","Fall","Winter"], lat:47.8598, lng:-123.9323 },
+
+  { id:300, name:"Canyonlands — Maze Overlook",          loc:"Canyonlands NP · Utah",
+    type:"National Park", price:15, sites:4, avail:2, rating:5.0, reviews:112,
+    desc:"The most remote campground in Canyonlands — and possibly in the Lower 48. A 4WD track through the Maze puts you at the edge of a canyon system so labyrinthine that even experienced hikers get turned around. The payoff is absolute solitude and a view that makes the Grand Canyon feel crowded.",
+    amenities:["No Facilities","4WD Required","Hiking","Stargazing","No Cell Service","Permit Required"],
+    seasons:["Spring","Fall"], lat:38.2312, lng:-110.0934 },
+
 ];
 
 // ─── STATE ──────────────────────────────────────
@@ -6269,7 +6360,7 @@ function dismissWelcome() {
         <div class="wm-geo-wide"></div>
       </div>
       <div class="wm-headline">Find<br>your<br><span class="wm-o">camp.</span></div>
-      <div class="wm-sub">Trusted by 12,000+ weekend campers</div>
+      <div class="wm-sub">Hundreds of handpicked sites &amp; counting</div>
       <div class="wm-rule"></div>
       <div class="wm-props">
         <div class="wm-prop">
