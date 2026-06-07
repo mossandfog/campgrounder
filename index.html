@@ -124,7 +124,7 @@ html, body {
   .results-scroll  { padding: 0 40px 32px; max-width: 900px; align-self: stretch; }
   .saved-top       { padding: var(--top-pad) 40px 18px; }
   .saved-scroll    { padding: 0 40px 32px; }
-  .d-body          { padding: 16px 40px calc(160px + var(--safe-bot)); }
+  .d-body          { padding: 16px 40px 48px; }
   .search-ov-top   { padding: var(--top-pad) 40px 20px; }
   .sug-eyebrow     { padding: 0 40px 12px; }
   .sug-item        { padding: 14px 40px; }
@@ -1534,7 +1534,7 @@ html, body {
 /* ══════════════════════════════════════════════
    DETAIL
 ══════════════════════════════════════════════ */
-#detail { overflow-y: auto; -webkit-overflow-scrolling: touch; }
+#detail { overflow: hidden; display: flex; flex-direction: column; }
 .d-hero { height: 260px; background: var(--g2); display: flex; align-items: center; justify-content: center; position: relative; flex-shrink: 0; }
 .d-hero-glyph { position: relative; z-index: 2; }
 .d-hero-grad  { position: absolute; bottom: 0; left: 0; right: 0; height: 140px; background: linear-gradient(to top, var(--g0), transparent); }
@@ -1543,7 +1543,7 @@ html, body {
 .topbar-btn:hover { border-color: var(--o); }
 .topbar-btn.saved svg { color: var(--o) !important; }
 
-.d-body  { padding: 22px 24px calc(160px + var(--safe-bot)); }
+.d-body  { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 22px 24px 40px; }
 .d-type  { font-size: 12px; font-weight: 800; letter-spacing: 0.22em; text-transform: uppercase; color: var(--o); margin-bottom: 12px; }
 .d-name  { font-size: 34px; font-weight: 800; letter-spacing: -0.03em; line-height: 0.95; margin-bottom: 10px; }
 .d-loc   { font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--w5); margin-bottom: 24px; }
@@ -1799,7 +1799,7 @@ html, body {
 .forecast-day.today { background: rgba(232,72,28,0.07); }
 .forecast-day.today .fc-dow { color: var(--o); }
 
-.d-cta-bar { position: fixed; bottom: 0; left: 0; right: 0; z-index: 100; padding: 20px 24px calc(14px + var(--safe-bot)); background: linear-gradient(to top, var(--g0) 70%, transparent); display: flex; gap: 10px; }
+.d-cta-bar { flex-shrink: 0; padding: 16px 24px calc(14px + var(--safe-bot)); background: var(--g0); border-top: 1.5px solid var(--line); display: flex; gap: 10px; }
 .cta-main  { flex: 1; background: var(--o); color: white; border: none; padding: 13px 17px; font-family: inherit; font-size: 12px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; cursor: pointer; transition: opacity 0.18s; text-decoration: none; display: flex; align-items: center; justify-content: center; }
 .cta-main:hover { opacity: 0.85; }
 .cta-sq { width: 54px; border: 1.5px solid var(--w2); background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.16s; }
