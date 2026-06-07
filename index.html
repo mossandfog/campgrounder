@@ -879,7 +879,7 @@ html, body {
   flex-shrink: 0;
 }
 
-/* ══════════════════════════════════════════════
+/* ══════════���═══════════════════════════════════
    SEARCH OVERLAY
 ══════════════════════════════════════════════ */
 #search-overlay { z-index: 200; }
@@ -1922,7 +1922,7 @@ html, body {
 </head>
 <body>
 
-<!-- ── SVG SYMBOLS ──────────────────────────── -->
+<!-- ���─ SVG SYMBOLS ──────────────────────────── -->
 <svg width="0" height="0" style="position:absolute;pointer-events:none;">
 <defs>
 <symbol id="ic-tree"      viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3 L27 19 H20 L27 27 H5 L12 19 H5 Z"/><line x1="16" y1="27" x2="16" y2="31"/></symbol>
@@ -2907,7 +2907,24 @@ function _stateBookingUrl(c, q) {
   return `https://www.reserveamerica.com/explore/search-results?term=${q}`;
 }
 
+// Map a direct booking URL to a human-readable platform label
+function _directBookingPlatform(url) {
+  if (url.includes('recreation.gov'))        return 'Recreation.gov';
+  if (url.includes('reservecalifornia'))     return 'ReserveCalifornia';
+  if (url.includes('goingtocamp'))           return 'GoingToCamp';
+  if (url.includes('reserveamerica'))        return 'ReserveAmerica';
+  if (url.includes('hipcamp'))               return 'Hipcamp';
+  if (url.includes('glampinghub'))           return 'Glamping Hub';
+  if (url.includes('koa.com'))               return 'KOA';
+  if (url.includes('reserveohio') || url.includes('exploremoreohio')) return 'Reserve Ohio';
+  return 'booking site';
+}
+
 function buildBookingUrl(c) {
+  // Direct deep-link to the exact campground booking page, when known —
+  // this is far better than dropping users on a generic search/landing page.
+  if (c.book) return c.book;
+
   const q   = encodeURIComponent(c.name);
   const loc = c.loc.toLowerCase();
 
@@ -2942,6 +2959,9 @@ function buildCtaLabel(c) {
     return `Check ${fmtShort(checkInDate)}–${fmtShort(checkoutDate())} →`;
   if (c.price === 0)
     return 'View site info — no reservation needed →';
+  // Direct deep-link — label by its actual platform
+  if (c.book)
+    return `Book on ${_directBookingPlatform(c.book)} →`;
   const platform = {
     'National Park':  'Recreation.gov',
     'Forest Service': 'Recreation.gov',
@@ -2985,11 +3005,13 @@ const CAMPS = [
     seasons:["Spring","Summer","Fall"], lat:35.6533, lng:-83.5749 },
   { id:10, name:"Mather Campground",         loc:"Grand Canyon South Rim · Arizona",
     type:"National Park", price:18, sites:319, avail:22, rating:4.6, reviews:3410,
+    book:"https://www.recreation.gov/camping/campgrounds/232490",
     desc:"Wake up steps from the rim of one of the world's great wonders. The scale is incomprehensible until you're standing at the edge at sunrise, watching the canyon glow ember red.",
     amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Accessible","Camp Store"],
     seasons:["Spring","Summer","Fall","Winter"], lat:36.0544, lng:-112.1401 },
   { id:11, name:"Watchman Campground",       loc:"Zion National Park · Utah",
     type:"National Park", price:20, sites:176, avail:8, rating:4.8, reviews:2760,
+    book:"https://www.recreation.gov/camping/campgrounds/232445",
     desc:"Camp in the shadow of the Watchman tower at the gateway to Zion Canyon. The Virgin River runs just below, cottonwoods line the banks, and crimson sandstone walls glow at golden hour.",
     amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Accessible","Pet Friendly"],
     seasons:["Spring","Summer","Fall","Winter"], lat:37.1990, lng:-112.9879 },
@@ -3000,21 +3022,25 @@ const CAMPS = [
     seasons:["Spring","Summer","Fall"], lat:44.6482, lng:-110.8614 },
   { id:13, name:"Moraine Park",              loc:"Rocky Mountain NP · Colorado",
     type:"National Park", price:30, sites:244, avail:17, rating:4.8, reviews:980,
+    book:"https://www.recreation.gov/camping/campgrounds/274026",
     desc:"A vast glacially-carved valley ringed by 12,000-foot peaks. Elk herds graze at dusk in the open meadow. The Big Thompson River runs cold and clear through the campground.",
     amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Fishing","Accessible"],
     seasons:["Spring","Summer","Fall"], lat:40.3428, lng:-105.6209 },
   { id:14, name:"Blackwoods Campground",     loc:"Acadia National Park · Maine",
     type:"National Park", price:30, sites:306, avail:20, rating:4.7, reviews:1120,
+    book:"https://www.recreation.gov/camping/campgrounds/70967",
     desc:"On the eastern shore of Mount Desert Island, Blackwoods sits between the forest and the Atlantic. Carriage roads thread through the park and rocky coastline is a ten-minute walk.",
     amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Accessible","Pet Friendly"],
     seasons:["Spring","Summer","Fall"], lat:44.2956, lng:-68.2270 },
   { id:15, name:"Apgar Campground",          loc:"Glacier National Park · Montana",
     type:"National Park", price:23, sites:194, avail:16, rating:4.8, reviews:870,
+    book:"https://www.recreation.gov/camping/campgrounds/232492",
     desc:"On the southern shore of Lake McDonald — the longest lake in Glacier — Apgar offers stunning views across turquoise water to snow-capped peaks. Bears, eagles, and mountain goats abound.",
     amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Fishing","Kayaking"],
     seasons:["Spring","Summer","Fall"], lat:48.4954, lng:-113.9868 },
   { id:16, name:"Devil's Garden",            loc:"Arches National Park · Utah",
     type:"National Park", price:25, sites:51, avail:4, rating:4.9, reviews:640,
+    book:"https://www.recreation.gov/camping/campgrounds/234059",
     desc:"The only campground in Arches, Devil's Garden puts you in the middle of an otherworldly landscape of red-rock fins and sandstone arches lit up like fire at sunset. Book months ahead.",
     amenities:["Flush Toilets","Fire Rings","Parking","Accessible","Stargazing","Pet Friendly"],
     seasons:["Spring","Fall","Winter"], lat:38.7776, lng:-109.5925 },
@@ -3870,7 +3896,7 @@ const CAMPS = [
     amenities:["Restrooms","Showers","Drinking Water","Fire Rings","Picnic Tables","Hiking","Bike Trails","Fishing","Pet Friendly"],
     seasons:["Year-round"], lat:45.2462, lng:-122.8972 },
 
-  // ── MORE OREGON ────────────────────────────────────────────────────────────
+  // ── MORE OREGON ─────────────────────────────────────────────────────���──────
   { id:169, name:"Silver Falls State Park",              loc:"Silverton · Oregon",
     type:"State Park", price:24, sites:52, avail:28, rating:4.8, reviews:1560,
     desc:"Oregon's largest state park and one of the most beautiful campgrounds in the Pacific Northwest. The Trail of Ten Falls passes ten distinct waterfalls — including South Falls, where you can walk behind a 177-foot curtain of water — all within a single 7.2-mile loop. The campground is forest-wrapped and exceptionally well maintained, about 26 miles east of Salem.",
@@ -4935,7 +4961,7 @@ function distLabel(c) {
   return ` &nbsp;·&nbsp; ${mi < 1 ? '<1' : mi} mi`;
 }
 
-// ─── CAMPFIRE STATUS ─────────────────────────────
+// ─── CAMPFIRE STATUS ───��─────────────────────────
 const WESTERN_STATES = [
   'California','Oregon','Washington','Montana','Colorado','Utah',
   'Arizona','Nevada','Idaho','Wyoming','New Mexico','Alaska','Hawaii'
@@ -5459,7 +5485,7 @@ function glyph(href, size, color) {
   return `<svg width="${size}" height="${size}" style="color:${color||'rgba(255,255,255,0.55)'};stroke:currentColor;fill:none;display:block;"><use href="${href}"/></svg>`;
 }
 
-// ─── RENDER RESULTS ─────────────────────────────
+// ─── RENDER RESULTS ────���────────────────────────
 function renderResults() {
   let camps, headerExtra = '', eyebrow = '';
 
