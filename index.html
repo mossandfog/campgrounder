@@ -2888,22 +2888,43 @@ const AMEN_GLYPH = {
 // rather than a generic homepage — much smoother handoff.
 
 function _stateBookingPlatform(loc) {
-  if (loc.includes('california'))              return { url: 'reservecalifornia', label: 'ReserveCalifornia' };
-  if (loc.includes('minnesota'))               return { url: 'minnesota',         label: 'Reserve Minnesota' };
-  if (loc.includes('washington'))              return { url: 'washington',         label: 'Reserve Washington' };
-  if (loc.includes('florida'))                 return { url: 'florida',            label: 'ReserveAmerica' };
-  return                                              { url: 'default',            label: 'ReserveAmerica' };
+  if (loc.includes('california'))                                     return { label: 'ReserveCalifornia' };
+  if (loc.includes('minnesota'))                                      return { label: 'Reserve Minnesota' };
+  if (loc.includes('washington') && !loc.includes('d.c'))             return { label: 'WA State Parks' };
+  return                                                                     { label: 'ReserveAmerica' };
 }
 
 function _stateBookingUrl(c, q) {
   const loc = c.loc.toLowerCase();
+  // Platform-specific booking systems
   if (loc.includes('california'))
     return `https://www.reservecalifornia.com/CaliforniaWebHome/Facilities/AdvanceSearch.aspx#result/SearchKeyword=${q}`;
   if (loc.includes('minnesota'))
     return `https://mnreg.goingtocamp.com/search?q=${q}`;
   if (loc.includes('washington') && !loc.includes('d.c'))
     return `https://washington.goingtocamp.com/search?q=${q}`;
-  // All other states → ReserveAmerica search
+
+  // ReserveAmerica — ordered carefully to avoid substring collisions
+  // (west virginia before virginia, north carolina before carolina, etc.)
+  const stateMap = [
+    ['west virginia','WV'],['north carolina','NC'],['south carolina','SC'],
+    ['north dakota','ND'],['south dakota','SD'],['new mexico','NM'],
+    ['new york','NY'],['new hampshire','NH'],['new jersey','NJ'],
+    ['rhode island','RI'],['texas','TX'],['oregon','OR'],['colorado','CO'],
+    ['utah','UT'],['arizona','AZ'],['georgia','GA'],['florida','FL'],
+    ['pennsylvania','PA'],['virginia','VA'],['montana','MT'],['illinois','IL'],
+    ['wyoming','WY'],['arkansas','AR'],['tennessee','TN'],['michigan','MI'],
+    ['missouri','MO'],['maryland','MD'],['louisiana','LA'],['wisconsin','WI'],
+    ['oklahoma','OK'],['iowa','IA'],['idaho','ID'],['ohio','OH'],
+    ['massachusetts','MA'],['kansas','KS'],['connecticut','CT'],
+    ['hawaii','HI'],['alaska','AK'],['vermont','VT'],['nebraska','NE'],
+    ['nevada','NV'],['alabama','AL'],['kentucky','KY'],['mississippi','MS'],
+    ['maine','ME'],['indiana','IN'],
+  ];
+  for (const [state, code] of stateMap) {
+    if (loc.includes(state))
+      return `https://www.reserveamerica.com/explore/search-results?term=${q}&state=${code}`;
+  }
   return `https://www.reserveamerica.com/explore/search-results?term=${q}`;
 }
 
@@ -4687,6 +4708,169 @@ const CAMPS = [
     desc:"The most remote campground in Canyonlands — and possibly in the Lower 48. A 4WD track through the Maze puts you at the edge of a canyon system so labyrinthine that even experienced hikers get turned around. The payoff is absolute solitude and a view that makes the Grand Canyon feel crowded.",
     amenities:["No Facilities","4WD Required","Hiking","Stargazing","No Cell Service","Permit Required"],
     seasons:["Spring","Fall"], lat:38.2312, lng:-110.0934 },
+
+  // ── METRO-AREA ESCAPES ──────────────────────────────────────────────────
+  // NYC Metro
+  { id:301, name:"Harriman — Sebago Lake Campground",   loc:"Harriman SP · New York",
+    type:"State Park", price:28, sites:128, avail:35, rating:4.4, reviews:782,
+    desc:"NYC's most-loved escape hatch, just 45 miles from midtown. Two hundred miles of trails fan out from a genuinely swimmable lake — rowboats for rent, bluegill under every dock, and enough forest to forget the skyline exists. Book months ahead for summer weekends.",
+    amenities:["Flush Toilets","Drinking Water","Showers","Fire Rings","Swimming","Boat Rentals","Fishing","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:41.2867, lng:-74.1368 },
+
+  { id:302, name:"Dingmans — Delaware Water Gap",       loc:"Delaware Water Gap NRA · Pennsylvania",
+    type:"National Park", price:20, sites:150, avail:45, rating:4.3, reviews:534,
+    desc:"The NRA straddles the PA/NJ border, offering old-school car camping steps from the Delaware River. Dingmans Falls — a 130-foot silk-thread cascade — is a five-minute walk from camp. About 75 miles from Midtown Manhattan.",
+    amenities:["Flush Toilets","Drinking Water","Fire Rings","Swimming","Fishing","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:41.0870, lng:-74.8670 },
+
+  { id:303, name:"Canopus Lake — Fahnestock State Park", loc:"Carmel · New York",
+    type:"State Park", price:25, sites:80, avail:22, rating:4.2, reviews:341,
+    desc:"A quiet Hudson Valley alternative to Harriman, with a sandy swimming beach on Canopus Lake and trails through second-growth forest. Less crowded than its famous neighbor to the south — 90 minutes from NYC and almost always easier to book.",
+    amenities:["Flush Toilets","Drinking Water","Showers","Swimming","Fishing","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:41.4562, lng:-73.8372 },
+
+  // Chicago Metro
+  { id:304, name:"Starved Rock State Park",              loc:"Utica · Illinois",
+    type:"State Park", price:35, sites:133, avail:28, rating:4.5, reviews:1240,
+    desc:"The crown jewel of the Illinois state park system, with 18 glacial-meltwater canyons and a series of seasonal waterfalls. The historic lodge overlooks the Illinois River; canyons require no more than a mile of walking. 90 minutes southwest of Chicago.",
+    amenities:["Flush Toilets","Drinking Water","Showers","Fire Rings","Camp Store","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:41.3216, lng:-89.0012 },
+
+  { id:305, name:"Indiana Dunes — Dunewood Campground",  loc:"Indiana Dunes NP · Indiana",
+    type:"National Park", price:25, sites:125, avail:40, rating:4.3, reviews:623,
+    desc:"One of the most accessible national parks in the US — 40-foot sand dunes tumbling directly into Lake Michigan, just 55 miles from downtown Chicago. Swim in the lake, climb Mt. Baldy, and watch the steel mills glow on the Indiana shore at sunset.",
+    amenities:["Flush Toilets","Drinking Water","Showers","Fire Rings","Beach Access","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:41.6533, lng:-87.0524 },
+
+  { id:306, name:"Chain O'Lakes State Park",             loc:"Spring Grove · Illinois",
+    type:"State Park", price:30, sites:151, avail:35, rating:4.2, reviews:498,
+    desc:"Nine glacial lakes connected by channels in the Fox River watershed — a boater's paradise an hour from Chicago. Rent a pontoon, fish for walleye at dusk, and wake up to great blue herons stalking the shallows outside your tent.",
+    amenities:["Flush Toilets","Drinking Water","Showers","Fire Rings","Boat Rentals","Electric Hookup","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:42.4651, lng:-88.1931 },
+
+  // Los Angeles Metro
+  { id:307, name:"Leo Carrillo State Park",              loc:"Malibu · California",
+    type:"State Park", price:35, sites:136, avail:30, rating:4.4, reviews:892,
+    desc:"Sea caves, tide pools, and a working point break — on a stretch of PCH that still feels wild, 35 miles from Santa Monica. The campground nestles in a sycamore canyon steps from the surf. California camping at its most cinematic.",
+    amenities:["Flush Toilets","Drinking Water","Showers","Fire Rings","Beach Access","Tide Pools","Pet Friendly"],
+    seasons:["Year-round"], lat:34.0458, lng:-118.9377 },
+
+  { id:308, name:"Malibu Creek State Park",              loc:"Calabasas · California",
+    type:"State Park", price:30, sites:57, avail:18, rating:4.3, reviews:743,
+    desc:"Where M*A*S*H was filmed and where Angelenos escape without hitting the freeway for more than 30 minutes. Volcanic rock formations, a spring-fed swimming hole, and oak woodland — all 25 miles from downtown LA.",
+    amenities:["Flush Toilets","Drinking Water","Fire Rings","Swimming","Hiking","Pet Friendly"],
+    seasons:["Year-round"], lat:34.1021, lng:-118.7263 },
+
+  { id:309, name:"Crystal Cove — Moro Campground",       loc:"Newport Coast · California",
+    type:"State Park", price:35, sites:57, avail:16, rating:4.6, reviews:1120,
+    desc:"Backcountry camping on the coastal bluffs above one of Southern California's last wild stretches of shoreline. Primitive walk-in sites with Pacific Ocean views; at night, Catalina Island's lights shimmer on the water. Book the full six months out — these go in minutes.",
+    amenities:["Pit Toilets","Drinking Water","Fire Rings","Beach Access","Tide Pools","Accessible"],
+    seasons:["Year-round"], lat:33.5711, lng:-117.8404 },
+
+  // San Francisco Bay Area
+  { id:310, name:"Mount Tamalpais — Pantoll Campground", loc:"Mill Valley · California",
+    type:"State Park", price:30, sites:16, avail:4, rating:4.7, reviews:534,
+    desc:"Walk-in tent sites on the fog-draped slopes of Mt. Tam, 2,571 feet above San Francisco Bay. Ocean fog pours through the saddle at dusk; the city glitters far below. Trailheads to the coast, Muir Woods, and Stinson Beach all leave from camp.",
+    amenities:["Flush Toilets","Drinking Water","Fire Rings","Picnic Tables","Hiking"],
+    seasons:["Year-round"], lat:37.9060, lng:-122.5856 },
+
+  { id:311, name:"Samuel P. Taylor State Park",          loc:"Lagunitas · California",
+    type:"State Park", price:30, sites:60, avail:18, rating:4.4, reviews:612,
+    desc:"Old-growth redwood canyons in the rolling hills of west Marin, 28 miles from the Golden Gate. Papermill Creek runs through camp; the Sir Francis Drake Bikeway connects to Point Reyes in 15 minutes. The archetypal Bay Area car-camping weekend.",
+    amenities:["Flush Toilets","Drinking Water","Showers","Fire Rings","Fishing","Pet Friendly"],
+    seasons:["Year-round"], lat:38.0090, lng:-122.7239 },
+
+  { id:312, name:"Half Moon Bay State Beach",            loc:"Half Moon Bay · California",
+    type:"State Park", price:35, sites:52, avail:15, rating:4.2, reviews:471,
+    desc:"Four miles of wild Pacific beach with bonfires at dusk and tidepooling at low tide — 28 miles from San Francisco. Bluff-top sites look directly onto open ocean. Mavericks, one of the world's heaviest surf breaks, is three miles up the coast.",
+    amenities:["Flush Toilets","Drinking Water","Showers","Fire Rings","Beach Access","Tide Pools","Pet Friendly"],
+    seasons:["Year-round"], lat:37.4831, lng:-122.4742 },
+
+  // Seattle Metro
+  { id:313, name:"Dash Point State Park",                loc:"Federal Way · Washington",
+    type:"State Park", price:30, sites:138, avail:45, rating:4.2, reviews:387,
+    desc:"3,300 feet of Puget Sound saltwater shoreline 30 minutes south of Seattle. Low tide exposes miles of clam and crab habitat; the old-growth Douglas fir canopy overhead keeps everything cool and green even in August.",
+    amenities:["Flush Toilets","Drinking Water","Showers","Fire Rings","Beach Access","Fishing","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:47.3154, lng:-122.4107 },
+
+  { id:314, name:"Saltwater State Park",                 loc:"Des Moines · Washington",
+    type:"State Park", price:28, sites:47, avail:18, rating:4.1, reviews:284,
+    desc:"A hidden pocket of old-growth hemlock and cedar wedged between the suburbs of Des Moines, 20 minutes from Seattle-Tacoma Airport. McSorley Creek splashes through camp on its way to Puget Sound — an improbably wild feeling this close to the city.",
+    amenities:["Flush Toilets","Drinking Water","Showers","Fire Rings","Beach Access","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:47.3698, lng:-122.3618 },
+
+  // Denver Metro
+  { id:315, name:"Chatfield State Park",                 loc:"Littleton · Colorado",
+    type:"State Park", price:32, sites:197, avail:55, rating:4.1, reviews:742,
+    desc:"Denver's backyard reservoir — a 5,000-acre playground with sailing, paddleboarding, and a genuine swim beach, just 30 minutes from downtown. Rocky Mountain panoramas from every site, full hookups available, and hot showers.",
+    amenities:["Flush Toilets","Drinking Water","Showers","Fire Rings","Electric Hookup","Swimming","Boat Launch","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:39.5480, lng:-105.0715 },
+
+  { id:316, name:"Mueller State Park",                   loc:"Divide · Colorado",
+    type:"State Park", price:28, sites:132, avail:38, rating:4.5, reviews:623,
+    desc:"Pikes Peak dominates the skyline over 5,000 acres of aspen, spruce, and open meadow — the most scenically dramatic state park in the Denver region. Mule deer walk through camp at dawn. 85 miles of trails and genuine solitude, 90 minutes from downtown.",
+    amenities:["Flush Toilets","Drinking Water","Showers","Fire Rings","Hiking","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:38.8276, lng:-105.1626 },
+
+  // Phoenix Metro
+  { id:317, name:"Lost Dutchman State Park",             loc:"Apache Junction · Arizona",
+    type:"State Park", price:30, sites:138, avail:48, rating:4.4, reviews:891,
+    desc:"At the foot of the Superstition Mountains, 40 minutes from Phoenix — volcanic spires, saguaro-studded Sonoran desert, and the trailhead for the legendary Peralta Trail. Sunsets turn the cliffs blood orange. October through April is perfection; summer is brutal.",
+    amenities:["Flush Toilets","Drinking Water","Electric Hookup","Fire Rings","Hiking","Pet Friendly"],
+    seasons:["Fall","Winter","Spring"], lat:33.4615, lng:-111.4804 },
+
+  // Atlanta Metro
+  { id:318, name:"Red Top Mountain State Park",          loc:"Cartersville · Georgia",
+    type:"State Park", price:28, sites:92, avail:30, rating:4.4, reviews:612,
+    desc:"Waterfront camping on Allatoona Lake, 50 miles from downtown Atlanta. Iron-red trails wind through hardwood forest; bass fishing is world-class; and the lodge restaurant serves a breakfast worth the drive alone. An Atlanta local's well-kept secret.",
+    amenities:["Flush Toilets","Drinking Water","Showers","Fire Rings","Boat Launch","Swimming","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:34.1573, lng:-84.7144 },
+
+  { id:319, name:"Cloudland Canyon State Park",          loc:"Rising Fawn · Georgia",
+    type:"State Park", price:28, sites:72, avail:22, rating:4.7, reviews:1040,
+    desc:"A 3,500-foot gorge sliced into the Cumberland Plateau with two thundering waterfalls — Cherokee and Hemlock Falls — crashing down canyon walls below the campground. One of the most spectacular state parks in the Southeast, 90 minutes from Atlanta.",
+    amenities:["Flush Toilets","Drinking Water","Showers","Fire Rings","Hiking","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:34.8382, lng:-85.4808 },
+
+  // Austin / Houston
+  { id:320, name:"McKinney Falls State Park",            loc:"Austin · Texas",
+    type:"State Park", price:20, sites:84, avail:30, rating:4.3, reviews:876,
+    desc:"Onion Creek carves over limestone ledges to form cascading falls — all within Austin's city limits. Swimming holes, trail running, and ancient Tonkawa camping grounds. The most convenient nature escape in the Texas capital, minutes from the airport.",
+    amenities:["Flush Toilets","Drinking Water","Showers","Fire Rings","Swimming","Hiking","Pet Friendly"],
+    seasons:["Year-round"], lat:30.1844, lng:-97.7262 },
+
+  { id:321, name:"Bastrop State Park — Lost Pines",      loc:"Bastrop · Texas",
+    type:"State Park", price:22, sites:53, avail:18, rating:4.5, reviews:742,
+    desc:"An ecological island of loblolly pines 40 miles from Austin — the westernmost stand of this species, isolated from the East Texas forests by 100 miles of prairie. The park road winds through forest that feels like Louisiana, not Texas. A genuine surprise.",
+    amenities:["Flush Toilets","Drinking Water","Showers","Fire Rings","Swimming","Hiking","Pet Friendly"],
+    seasons:["Year-round"], lat:30.1190, lng:-97.2869 },
+
+  { id:322, name:"Huntsville State Park",                loc:"Huntsville · Texas",
+    type:"State Park", price:18, sites:185, avail:60, rating:4.2, reviews:534,
+    desc:"Sam Houston National Forest camping on Lake Raven, 75 miles from Houston — piney woods and bass fishing for a city that otherwise lives in flat coastal prairie. One of the most visited Texas state parks. Armadillos rustle through camp every night.",
+    amenities:["Flush Toilets","Drinking Water","Showers","Fire Rings","Boat Launch","Swimming","Pet Friendly"],
+    seasons:["Year-round"], lat:30.6229, lng:-95.5099 },
+
+  // Dallas / Fort Worth
+  { id:323, name:"Dinosaur Valley State Park",           loc:"Glen Rose · Texas",
+    type:"State Park", price:20, sites:46, avail:16, rating:4.6, reviews:831,
+    desc:"Wade the Paluxy River to see 113-million-year-old sauropod and theropod tracks pressed into the limestone riverbed — the most accessible dinosaur tracksite in North America. Camp a stone's throw from where giants walked. 90 minutes from Dallas.",
+    amenities:["Flush Toilets","Drinking Water","Showers","Fire Rings","Swimming","Hiking","Pet Friendly"],
+    seasons:["Year-round"], lat:32.2432, lng:-97.8188 },
+
+  // Boston / New England
+  { id:324, name:"Nickerson State Park — Cliff Pond",   loc:"Brewster · Massachusetts",
+    type:"State Park", price:30, sites:400, avail:100, rating:4.4, reviews:1240,
+    desc:"Cape Cod's largest campground and one of the most beloved in New England — eight crystal-clear glacial kettle ponds for swimming, paddleboarding, and pedal boats at sunset. 90 minutes from Boston; a rite of summer for Massachusetts families for generations.",
+    amenities:["Flush Toilets","Drinking Water","Showers","Fire Rings","Swimming","Boat Rentals","Fishing","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:41.7010, lng:-69.9690 },
+
+  // Miami / South Florida
+  { id:325, name:"Bahia Honda State Park",               loc:"Big Pine Key · Florida",
+    type:"State Park", price:36, sites:80, avail:20, rating:4.8, reviews:1820,
+    desc:"Consistently ranked among the best beaches in America — the Florida Keys' finest natural shoreline with turquoise shallows, snorkeling off the old Flagler railroad bridge, and campsite views that look like a screensaver. Book exactly 11 months in advance or miss out.",
+    amenities:["Flush Toilets","Drinking Water","Showers","Fire Rings","Beach Access","Snorkeling","Accessible","Pet Friendly"],
+    seasons:["Fall","Winter","Spring"], lat:24.6601, lng:-81.2753 },
 
 ];
 
