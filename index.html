@@ -122,6 +122,8 @@ html, body {
   .results-meta    { padding: 16px 40px 12px; }
   .results-filters { padding: 14px 40px 0; }
   .results-scroll  { padding: 0 40px 32px; max-width: 900px; align-self: stretch; }
+  .type-blurb      { padding: 20px 40px 18px; }
+  .type-blurb-desc { font-size: 15px; }
   .saved-top       { padding: var(--top-pad) 40px 18px; }
   .saved-scroll    { padding: 0 40px 32px; }
   .d-body          { padding: 16px 40px 48px; }
@@ -911,7 +913,13 @@ html, body {
 .results-filters { display: flex; gap: 8px; padding: 14px 24px 0; overflow-x: auto; scrollbar-width: none; }
 .results-filters::-webkit-scrollbar { display: none; }
 .results-filters::after { content: ''; display: block; min-width: 16px; flex-shrink: 0; }
-.results-scroll { flex: 1; overflow-y: auto; padding: 8px 24px 32px; display: flex; flex-direction: column; scrollbar-width: thin; scrollbar-color: rgba(232,72,28,0.2) transparent; }
+.results-scroll { flex: 1; overflow-y: auto; padding: 0 24px 32px; display: flex; flex-direction: column; scrollbar-width: thin; scrollbar-color: rgba(232,72,28,0.2) transparent; }
+
+/* Type description blurb */
+.type-blurb { padding: 18px 24px 16px; border-bottom: 1px solid var(--line); display: none; }
+.type-blurb.visible { display: block; }
+.type-blurb-title { font-size: 12px; font-weight: 800; letter-spacing: 0.22em; text-transform: uppercase; color: var(--o); margin-bottom: 8px; }
+.type-blurb-desc  { font-size: 14px; line-height: 1.7; color: rgba(255,255,255,0.62); max-width: 640px; }
 
 /* No results state */
 .no-results {
@@ -928,10 +936,10 @@ html, body {
 .camp-card {
   display: flex; align-items: center;
   border-bottom: 1px solid rgba(255,255,255,0.07);
-  cursor: pointer; padding: 22px 0; transition: background 0.16s; gap: 18px;
+  cursor: pointer; padding: 28px 0; transition: background 0.16s; gap: 18px;
 }
-.camp-card:first-child { border-top: 1px solid rgba(255,255,255,0.07); }
-.camp-card:hover { background: var(--w1); margin: 0 -12px; padding: 20px 12px; }
+.camp-card:first-child { border-top: 1px solid rgba(255,255,255,0.07); margin-top: 10px; }
+.camp-card:hover { background: var(--w1); margin: 0 -12px; padding: 26px 12px; }
 .card-box {
   width: 64px; height: 64px; flex-shrink: 0;
   background: var(--g1);
@@ -2390,6 +2398,10 @@ html, body {
     <div class="pill"    onclick="setFilter(this,'water')">Has Water</div>
     <div class="pill"    onclick="setFilter(this,'fires-ok')">🔥 Fires OK</div>
     <div class="pill"    id="nearby-pill" onclick="sortNearMe(this)">Near Me</div>
+  </div>
+  <div class="type-blurb" id="type-blurb">
+    <div class="type-blurb-title" id="type-blurb-title"></div>
+    <div class="type-blurb-desc"  id="type-blurb-desc"></div>
   </div>
   <div class="results-scroll" id="results-list"></div>
   <nav class="bnav">
@@ -5491,11 +5503,36 @@ function setView(v) {
 }
 
 // ─── FILTERS ────────────────────────────────────
+const TYPE_BLURBS = {
+  'National Park':  { title: 'National Parks', desc: "America's crown jewels — protected for extraordinary natural beauty. Iconic scenery, high demand, and fierce competition for sites. Book months in advance for peak season, especially Yosemite, Yellowstone, and the Grand Canyon." },
+  'Forest Service': { title: 'National Forests', desc: "Dispersed wilderness managed by the USDA Forest Service. From developed campgrounds with full amenities to primitive sites deep in the backcountry — often with a fraction of the crowds of national parks." },
+  'BLM':            { title: 'BLM Land', desc: "Bureau of Land Management land offers the greatest freedom: dispersed camping, low fees, and wide open country. Most sites are first-come, first-served with no reservations needed — just show up and stake your claim." },
+  'Army Corps':     { title: 'Army Corps of Engineers', desc: "Operated by the U.S. Army Corps of Engineers, these lakeside campgrounds are a hidden gem. Full hookups, boat launches, and waterfront sites that rival anything in the national park system — at state park prices." },
+  'State Park':     { title: 'State Parks', desc: "Protected lands managed by state agencies, offering developed facilities and reliably maintained sites. Year-round access to some of the most scenic landscapes in each state, with easier reservations than the federal system." },
+  'Private':        { title: 'Private Campgrounds', desc: "Privately owned campgrounds with resort-style amenities — hot showers, camp stores, and activities for the whole family. More convenience and services, great for car campers who prefer comfort over solitude." },
+  'Glamping':       { title: 'Glamping', desc: "All the magic of the outdoors, none of the gear. Furnished bell tents, yurts, treehouses, and cabins in stunning natural settings. A perfect gateway experience — or a serious upgrade for any trip." },
+  'RV Park':        { title: 'RV Parks', desc: "Full-service RV parks with electric, water, and sewer hookups. Designed for road trippers with rigs of all sizes, often with Wi-Fi, laundry, and pull-through sites. Your home on the road." },
+  'pet':            { title: 'Pet Friendly', desc: "Campgrounds that genuinely welcome four-legged adventurers. Always check individual site rules on leash requirements and trail access — policies vary even within the same park." },
+  'water':          { title: 'Has Water Access', desc: "Campgrounds with lakes, rivers, or ocean frontage. Whether you're swimming, kayaking, or just watching the light change on the water at dusk, these sites have access to the good stuff." },
+  'fires-ok':       { title: 'Campfire Allowed', desc: "Sites where campfires are currently permitted. Always verify restrictions locally before you go — fire rules change quickly based on conditions, and regulations vary by season and elevation." },
+  'nearby':         { title: 'Near You', desc: "Campgrounds sorted by distance from your current location. Great for a spontaneous weekend escape — filter by type or amenity to narrow it down." },
+};
+
 function setFilter(el, key) {
   lastMinuteMode = false; // exit last-minute mode when filter is changed
   currentFilter = key;
   el.closest('.results-filters').querySelectorAll('.pill').forEach(p => p.classList.remove('on'));
   el.classList.add('on');
+  // Update type blurb
+  const blurb = document.getElementById('type-blurb');
+  const blurbData = TYPE_BLURBS[key];
+  if (blurbData) {
+    document.getElementById('type-blurb-title').textContent = blurbData.title;
+    document.getElementById('type-blurb-desc').textContent  = blurbData.desc;
+    blurb.classList.add('visible');
+  } else {
+    blurb.classList.remove('visible');
+  }
   renderResults();
   updateMapMarkers();
 }
