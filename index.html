@@ -1547,9 +1547,12 @@ html, body {
    DETAIL
 ══════════════════════════════════════════════ */
 #detail { overflow: hidden; display: flex; flex-direction: column; }
-.d-hero { height: 260px; background: var(--g2); display: flex; align-items: center; justify-content: center; position: relative; flex-shrink: 0; }
-.d-hero-glyph { position: relative; z-index: 2; }
-.d-hero-grad  { position: absolute; bottom: 0; left: 0; right: 0; height: 140px; background: linear-gradient(to top, var(--g0), transparent); }
+.d-hero { height: 260px; background: var(--g1); background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; position: relative; flex-shrink: 0; transition: background-image 0.3s; }
+/* Dark tint overlay so photos stay moody and the dark theme holds */
+.d-hero::before { content: ''; position: absolute; inset: 0; background: rgba(10,24,16,0.48); z-index: 1; }
+.d-hero-glyph { position: relative; z-index: 3; }
+/* Gradient: taller on photo hero so the fade into content feels seamless */
+.d-hero-grad  { position: absolute; bottom: 0; left: 0; right: 0; height: 180px; background: linear-gradient(to top, var(--g0) 30%, transparent); z-index: 2; }
 .d-topbar     { position: absolute; top: var(--top-pad); left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 0 22px; z-index: 20; }
 .topbar-btn   { width: 40px; height: 40px; background: rgba(0,0,0,0.45); backdrop-filter: blur(10px); border: 1.5px solid var(--w2); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.16s; }
 .topbar-btn:hover { border-color: var(--o); }
@@ -1887,7 +1890,7 @@ html, body {
   border: 1.5px solid rgba(255,255,255,0.22); border-radius: 30px;
   padding: 9px 18px 9px 13px; color: #fff;
   font-size: 12px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase;
-  cursor: pointer; white-space: nowrap; z-index: 5;
+  cursor: pointer; white-space: nowrap; z-index: 10;
   transition: border-color 0.15s, background 0.15s;
   -webkit-tap-highlight-color: transparent;
 }
@@ -5939,11 +5942,25 @@ function openDetail(id) {
   prevScreen = document.querySelector('.screen.active')?.id || 'results';
   currentDetailId = id;
 
-  const heroTints = {'National Park':'#172E1F','State Park':'#152B1C','Private':'#221E12','Glamping':'#21142A'};
-  const fallbackBg = heroTints[c.type] || '#1A3528';
+  // Curated Unsplash photos per camp type — dark tint applied via CSS ::before
+  const TYPE_PHOTOS = {
+    'National Park':  'https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=900&q=72',
+    'State Park':     'https://images.unsplash.com/photo-1542273917363-0123b9c30836?auto=format&fit=crop&w=900&q=72',
+    'Forest Service': 'https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=900&q=72',
+    'BLM':            'https://images.unsplash.com/photo-1509316785289-025f5b846b35?auto=format&fit=crop&w=900&q=72',
+    'Army Corps':     'https://images.unsplash.com/photo-1502781252888-9143ba7f074e?auto=format&fit=crop&w=900&q=72',
+    'Glamping':       'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?auto=format&fit=crop&w=900&q=72',
+    'Private':        'https://images.unsplash.com/photo-1537905569824-f89f14cceb68?auto=format&fit=crop&w=900&q=72',
+    'RV Park':        'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=900&q=72',
+  };
   const dHero = document.getElementById('d-hero');
-  dHero.style.background = `${fallbackBg} url(${mapboxStatic(c.lat, c.lng, 800, 520)}) center/cover no-repeat`;
-  document.getElementById('d-glyph').innerHTML = ''; // real image replaces the glyph
+  const photoUrl = TYPE_PHOTOS[c.type];
+  if (photoUrl) {
+    dHero.style.backgroundImage = `url(${photoUrl})`;
+  } else {
+    dHero.style.backgroundImage = 'none';
+  }
+  document.getElementById('d-glyph').innerHTML = '';
 
   document.getElementById('d-type').textContent    = c.type;
   document.getElementById('d-name').textContent    = c.name;
