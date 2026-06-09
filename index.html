@@ -6627,81 +6627,83 @@ function openDetail(id) {
   prevScreen = document.querySelector('.screen.active')?.id || 'results';
   currentDetailId = id;
 
-  // State-based hero photos — far more accurate than type-based.
-  // Extract state from loc field ("Park Name · State") then look up landscape photo.
-  // Falls back to type-based if state not mapped.
-  const U = 'https://images.unsplash.com/photo-';
-  const Q = '?auto=format&fit=crop&w=900&q=72';
+  // State-based hero photos via Lorem Picsum (picsum.photos) — free, no API key, no hotlink blocking.
+  // Unsplash CDN now blocks requests from unregistered domains.
+  // Each numeric ID maps to a curated landscape photo on Picsum's CDN.
+  const U = 'https://picsum.photos/id/';
+  const Q = '/900/500';
   const STATE_PHOTOS = {
-    // ── Pacific Northwest ──────────────────────────────────────
-    'Washington':     '1448375240586-882707db888b',  // PNW old-growth rainforest
-    'Oregon':         '1448375240586-882707db888b',  // PNW coast forest
-    // ── California ─────────────────────────────────────────────
-    'California':     'Tr-faG4v38w',                 // Sierra Nevada alpine lake
-    // ── Southwest Desert ───────────────────────────────────────
-    'Utah':           '1509316785289-025f5b846b35',  // red rock canyon country
-    'Arizona':        '1509316785289-025f5b846b35',  // Sonoran desert canyon
-    'Nevada':         '1509316785289-025f5b846b35',  // Great Basin desert
-    'New Mexico':     '1509316785289-025f5b846b35',  // high desert red rock
-    'Texas':          '1509316785289-025f5b846b35',  // Big Bend desert (dominant camping region)
-    'South Dakota':   '1509316785289-025f5b846b35',  // Badlands canyon terrain
-    // ── Rocky Mountains ────────────────────────────────────────
-    'Colorado':       '1472396961693-142e6e269027',  // Rocky Mountain peaks
-    'Wyoming':        '1472396961693-142e6e269027',  // Tetons / Yellowstone
-    'Montana':        '1472396961693-142e6e269027',  // Glacier country big sky
-    'Idaho':          '1472396961693-142e6e269027',  // Sawtooth wilderness
-    'Alaska':         '1472396961693-142e6e269027',  // vast mountain wilderness
-    // ── Great Plains ───────────────────────────────────────────
-    'Nebraska':       'HhYuxURqvos',                 // Sandhills tallgrass prairie
-    'North Dakota':   'HhYuxURqvos',                 // prairie / Theodore Roosevelt
-    'Kansas':         'HhYuxURqvos',                 // grassland plains
-    'Oklahoma':       'HhYuxURqvos',                 // plains / red dirt
-    'Iowa':           'HhYuxURqvos',                 // rolling prairie
-    // ── Great Lakes ────────────────────────────────────────────
-    'Michigan':       'pTdloyQMg_I',                 // Great Lakes forested shore
-    'Wisconsin':      'pTdloyQMg_I',                 // northwoods lake country
-    'Minnesota':      'pTdloyQMg_I',                 // Boundary Waters / lake country
-    // ── Appalachian / Southeast Forest ─────────────────────────
-    'Tennessee':      '1542273917363-0123b9c30836',  // misty Smoky Mountains
-    'North Carolina': '1542273917363-0123b9c30836',  // Blue Ridge misty forest
-    'Virginia':       '1542273917363-0123b9c30836',  // Shenandoah green ridges
-    'West Virginia':  '1542273917363-0123b9c30836',  // Appalachian hollows
-    'Georgia':        '1542273917363-0123b9c30836',  // north Georgia forest
-    'Kentucky':       '1542273917363-0123b9c30836',  // Daniel Boone forest
-    'Alabama':        '1537905569824-f89f14cceb68',  // Bankhead / Talladega forest
-    'Arkansas':       '1537905569824-f89f14cceb68',  // Ozarks forest
-    'Missouri':       '1537905569824-f89f14cceb68',  // Ozarks / Current River
-    'Mississippi':    '1537905569824-f89f14cceb68',  // Piney Woods / Delta
-    'Louisiana':      '1537905569824-f89f14cceb68',  // Kisatchie / bayou forest
-    'South Carolina': '1537905569824-f89f14cceb68',  // Lowcountry / Upstate forest
-    'Illinois':       '1537905569824-f89f14cceb68',  // Shawnee forest
-    // ── Northeast ──────────────────────────────────────────────
-    'Maine':          'IQ1kOQTJrOQ',                 // rocky granite Atlantic coast
-    'New York':       '1542273917363-0123b9c30836',  // Adirondack forest
-    'Vermont':        '1542273917363-0123b9c30836',  // Green Mountain forest
-    'New Hampshire':  '1542273917363-0123b9c30836',  // White Mountains
-    'Pennsylvania':   '1542273917363-0123b9c30836',  // Poconos / Appalachian
-    'Massachusetts':  '1542273917363-0123b9c30836',  // forest / Cape Cod
-    'Maryland':       '1542273917363-0123b9c30836',  // Catoctin / Chesapeake
-    'Connecticut':    '1542273917363-0123b9c30836',  // New England forest
-    // ── Florida ────────────────────────────────────────────────
-    'Florida':        'o_CjIHnOXro',                 // subtropical / Everglades
-    // ── Hawaii ─────────────────────────────────────────────────
-    'Hawaii':         'prSogOoFmkw',                 // volcanic / tropical cliffs
+    // ── Pacific Northwest — old-growth forest / waterfall ──────
+    'Washington':     '29',   // forest waterfall, lush green
+    'Oregon':         '29',
+    // ── California — Sierra Nevada / alpine lake ────────────────
+    'California':     '280',  // mountain lake reflection
+    // ── Southwest Desert — red rock / canyon ───────────────────
+    'Utah':           '64',   // rocky canyon landscape
+    'Arizona':        '64',
+    'Nevada':         '64',
+    'New Mexico':     '64',
+    'Texas':          '652',  // dry desert terrain
+    'South Dakota':   '64',
+    // ── Rocky Mountains — peaks / big sky ──────────────────────
+    'Colorado':       '15',   // mountain valley highway
+    'Wyoming':        '15',
+    'Montana':        '219',  // mountain peaks
+    'Idaho':          '219',
+    'Alaska':         '437',  // snow-capped peaks
+    // ── Great Plains — open prairie ─────────────────────────────
+    'Nebraska':       '390',  // aerial open landscape / plains
+    'North Dakota':   '390',
+    'Kansas':         '390',
+    'Oklahoma':       '390',
+    'Iowa':           '390',
+    // ── Great Lakes — forested lake shoreline ──────────────────
+    'Michigan':       '428',  // lake with mountain backdrop
+    'Wisconsin':      '428',
+    'Minnesota':      '336',  // alpine lake reflection
+    // ── Appalachian / Smoky — misty mountain forest ─────────────
+    'Tennessee':      '292',  // mountain forest valley
+    'North Carolina': '292',
+    'Virginia':       '292',
+    'West Virginia':  '292',
+    'Georgia':        '167',  // sunlit forest interior
+    'Kentucky':       '167',
+    // ── Southern Forest — humid green woodland ──────────────────
+    'Alabama':        '127',  // deep forest path
+    'Arkansas':       '127',
+    'Missouri':       '127',
+    'Mississippi':    '127',
+    'Louisiana':      '127',
+    'South Carolina': '127',
+    'Illinois':       '127',
+    // ── Northeast — forest / coastal ────────────────────────────
+    'Maine':          '253',  // rocky coastal cliffs
+    'Massachusetts':  '253',
+    'New York':       '292',  // forest mountain
+    'Vermont':        '167',  // forest
+    'New Hampshire':  '292',
+    'Pennsylvania':   '314',  // dense forest
+    'Maryland':       '314',
+    'Connecticut':    '314',
+    'Rhode Island':   '253',
+    // ── Florida — subtropical lush green ────────────────────────
+    'Florida':        '167',  // lush green forest (closest to subtropical)
+    // ── Hawaii — tropical / volcanic ────────────────────────────
+    'Hawaii':         '577',  // coastal cliffs / tropical
   };
   // Type-based fallback for any unmapped state
   const TYPE_PHOTOS = {
-    'National Park':  '1472396961693-142e6e269027',
-    'State Park':     '1542273917363-0123b9c30836',
-    'Forest Service': '1448375240586-882707db888b',
-    'BLM':            '1509316785289-025f5b846b35',
-    'Army Corps':     '1502781252888-9143ba7f074e',
-    'Glamping':       '1504280390367-361c6d9f38f4',
-    'Private':        '1537905569824-f89f14cceb68',
-    'RV Park':        '1469854523086-cc02fe5d8800',
+    'National Park':  '15',   // mountain valley
+    'State Park':     '292',  // mountain forest
+    'Forest Service': '29',   // waterfall forest
+    'BLM':            '64',   // rocky desert
+    'Army Corps':     '428',  // lake
+    'Glamping':       '167',  // sunlit forest
+    'Private':        '127',  // forest path
+    'RV Park':        '390',  // open meadow
   };
   const campState = (c.loc.split('·')[1] || '').trim();
-  const photoId = STATE_PHOTOS[campState] || TYPE_PHOTOS[c.type] || '1472396961693-142e6e269027';
+  const photoId = STATE_PHOTOS[campState] || TYPE_PHOTOS[c.type] || '15';
   const dHero = document.getElementById('d-hero');
   dHero.style.backgroundImage = `url(${U}${photoId}${Q})`;
   document.getElementById('d-glyph').innerHTML = '';
