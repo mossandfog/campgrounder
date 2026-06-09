@@ -6809,9 +6809,228 @@ function openDetail(id) {
   document.getElementById('detail').scrollTop = 0;
 }
 
-function shareCamp() {
+// ─── SHARE CARD ──────────────────────────────────
+
+function _wrapText(ctx, text, maxWidth, maxLines) {
+  const words = text.split(' ');
+  const lines = [];
+  let current = '';
+  for (const word of words) {
+    const test = current ? current + ' ' + word : word;
+    if (ctx.measureText(test).width > maxWidth && current) {
+      lines.push(current);
+      current = word;
+      if (lines.length >= maxLines) { current = ''; break; }
+    } else {
+      current = test;
+    }
+  }
+  if (current) lines.push(current);
+  // If we have the max lines and text was clipped, add ellipsis to last line
+  if (lines.length >= maxLines && text !== lines.join(' ')) {
+    let last = lines[maxLines - 1];
+    while (ctx.measureText(last + '…').width > maxWidth && last.includes(' ')) {
+      last = last.substring(0, last.lastIndexOf(' '));
+    }
+    lines[maxLines - 1] = last + '…';
+  }
+  return lines.slice(0, maxLines);
+}
+
+function generateShareCard(c) {
+  const W = 1080, H = 1080;
+  const canvas = document.createElement('canvas');
+  canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext('2d');
+  const O = '#E8481C', G0 = '#0C1F15', G1 = '#132B1C';
+  const PAD = 80;
+  const ls = (v) => { if ('letterSpacing' in ctx) ctx.letterSpacing = v; };
+
+  // ── Background
+  ctx.fillStyle = G0;
+  ctx.fillRect(0, 0, W, H);
+
+  // ── Subtle grid
+  ctx.strokeStyle = 'rgba(232,72,28,0.07)';
+  ctx.lineWidth = 1;
+  for (let x = 0; x <= W; x += 90) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+  for (let y = 0; y <= H; y += 90) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+
+  // ── Top bar
+  ctx.fillStyle = O;
+  ctx.fillRect(0, 0, W, 10);
+
+  // ── Type badge
+  ls('0.14em');
+  ctx.font = 'bold 18px "Helvetica Neue",Helvetica,Arial,sans-serif';
+  const typeText = (c.type || '').toUpperCase();
+  const bW = ctx.measureText(typeText).width + 40;
+  ctx.fillStyle = 'rgba(232,72,28,0.12)';
+  ctx.fillRect(PAD, 76, bW, 42);
+  ctx.strokeStyle = 'rgba(232,72,28,0.55)';
+  ctx.lineWidth = 1.5;
+  ctx.strokeRect(PAD, 76, bW, 42);
+  ctx.fillStyle = O;
+  ctx.fillText(typeText, PAD + 20, 76 + 27);
+
+  // ── campgrounder.io (top right)
+  ls('0.08em');
+  ctx.font = '600 18px "Helvetica Neue",Helvetica,Arial,sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.25)';
+  ctx.textAlign = 'right';
+  ctx.fillText('CAMPGROUNDER.IO', W - PAD, 76 + 27);
+  ctx.textAlign = 'left';
+
+  // ── Camp name — adaptive font size
+  const nameLen = (c.name || '').length;
+  const namePx = nameLen > 28 ? 64 : nameLen > 20 ? 74 : 84;
+  const nameLH = namePx + 12;
+  ls('-0.02em');
+  ctx.font = `800 ${namePx}px "Helvetica Neue",Helvetica,Arial,sans-serif`;
+  ctx.fillStyle = '#FFFFFF';
+  const nameLines = _wrapText(ctx, c.name || '', W - PAD * 2, 2);
+  const nameY0 = 168;
+  nameLines.forEach((line, i) => ctx.fillText(line, PAD, nameY0 + i * nameLH));
+  const afterName = nameY0 + nameLines.length * nameLH;
+
+  // ── Location
+  ls('0.1em');
+  ctx.font = 'bold 20px "Helvetica Neue",Helvetica,Arial,sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.4)';
+  ctx.fillText((c.loc || '').toUpperCase(), PAD, afterName + 34);
+
+  // ── Rating
+  const rY = afterName + 82;
+  ls('0');
+  ctx.font = 'bold 24px "Helvetica Neue",Helvetica,Arial,sans-serif';
+  ctx.fillStyle = '#E8C21C';
+  ctx.fillText('★', PAD, rY);
+  ctx.fillStyle = '#FFFFFF';
+  ctx.fillText(' ' + c.rating, PAD + 24, rY);
+  ls('0.1em');
+  ctx.font = '500 18px "Helvetica Neue",Helvetica,Arial,sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.28)';
+  ctx.fillText('  ·  ' + (c.reviews || 0).toLocaleString() + ' REVIEWS', PAD + 80, rY);
+
+  // ── Divider
+  const divY = rY + 42;
+  ctx.fillStyle = 'rgba(232,72,28,0.55)';
+  ctx.fillRect(PAD, divY, W - PAD * 2, 1.5);
+
+  // ── Stats grid
+  const stY = divY + 44;
+  const stH = 108;
+  const colW = (W - PAD * 2) / 3;
+  const stats = [
+    { val: '$' + c.price, label: 'PER NIGHT',   color: O },
+    { val: c.sites,       label: 'TOTAL SITES',  color: '#FFFFFF' },
+    { val: '★ ' + c.rating, label: 'RATING',    color: '#E8C21C' },
+  ];
+  ctx.strokeStyle = 'rgba(232,72,28,0.3)';
+  ctx.lineWidth = 1.5;
+  // Outer rect + internal dividers
+  ctx.strokeRect(PAD, stY, W - PAD * 2, stH);
+  [1, 2].forEach(n => {
+    ctx.beginPath();
+    ctx.moveTo(PAD + colW * n, stY);
+    ctx.lineTo(PAD + colW * n, stY + stH);
+    ctx.stroke();
+  });
+  stats.forEach((s, i) => {
+    const sx = PAD + i * colW + 22;
+    ls('-0.01em');
+    ctx.font = `800 44px "Helvetica Neue",Helvetica,Arial,sans-serif`;
+    ctx.fillStyle = s.color;
+    ctx.fillText(String(s.val), sx, stY + 58);
+    ls('0.14em');
+    ctx.font = 'bold 14px "Helvetica Neue",Helvetica,Arial,sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.32)';
+    ctx.fillText(s.label, sx, stY + 84);
+  });
+
+  // ── Description
+  const descY = stY + stH + 44;
+  ls('0');
+  ctx.font = '400 26px "Helvetica Neue",Helvetica,Arial,sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.5)';
+  const descLines = _wrapText(ctx, c.desc || '', W - PAD * 2, 2);
+  descLines.forEach((line, i) => ctx.fillText(line, PAD, descY + i * 40));
+
+  // ── Amenity chips
+  const amenY = descY + 104;
+  const amenities = (c.amenities || []).slice(0, 4);
+  ls('0.08em');
+  ctx.font = 'bold 15px "Helvetica Neue",Helvetica,Arial,sans-serif';
+  let ax = PAD;
+  amenities.forEach(a => {
+    const lbl = a.toUpperCase();
+    const cW  = ctx.measureText(lbl).width + 28;
+    ctx.fillStyle = 'rgba(255,255,255,0.05)';
+    ctx.fillRect(ax, amenY - 16, cW, 30);
+    ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(ax, amenY - 16, cW, 30);
+    ctx.fillStyle = 'rgba(255,255,255,0.38)';
+    ctx.fillText(lbl, ax + 14, amenY + 7);
+    ax += cW + 10;
+  });
+
+  // ── Bottom bar
+  const botH = 130;
+  const botY = H - botH;
+  ctx.fillStyle = O;
+  ctx.fillRect(0, botY, W, botH);
+  ls('0.22em');
+  ctx.font = '800 36px "Helvetica Neue",Helvetica,Arial,sans-serif';
+  ctx.fillStyle = '#FFFFFF';
+  ctx.textAlign = 'center';
+  ctx.fillText('CAMPGROUNDER', W / 2, botY + 50);
+  ls('0.06em');
+  ctx.font = '600 19px "Helvetica Neue",Helvetica,Arial,sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.72)';
+  ctx.fillText('Find your perfect campsite  ·  campgrounder.io', W / 2, botY + 86);
+  ctx.textAlign = 'left';
+
+  return canvas;
+}
+
+function downloadCard(canvas, filename) {
+  const a = document.createElement('a');
+  a.download = filename;
+  a.href = canvas.toDataURL('image/png');
+  a.click();
+}
+
+async function shareCamp() {
   if (!currentDetailId) return;
-  showToast('Link copied ＋');
+  const c = CAMPS.find(x => x.id === currentDetailId);
+  if (!c) return;
+
+  showToast('Building card…');
+  await new Promise(r => setTimeout(r, 60)); // let toast render
+
+  const canvas = generateShareCard(c);
+  const filename = (c.name || 'camp').toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-campgrounder.png';
+
+  if (navigator.share) {
+    canvas.toBlob(async blob => {
+      const file = new File([blob], filename, { type: 'image/png' });
+      try {
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({ title: c.name + ' — Campgrounder', files: [file] });
+        } else {
+          await navigator.share({ title: c.name + ' — Campgrounder', url: 'https://campgrounder.io', text: `Check out ${c.name} on Campgrounder!` });
+        }
+      } catch (e) {
+        if (e.name !== 'AbortError') { downloadCard(canvas, filename); showToast('Card saved ↓'); }
+      }
+    }, 'image/png');
+    return;
+  }
+
+  // Desktop: download
+  downloadCard(canvas, filename);
+  showToast('Card saved ↓');
 }
 
 // ─── MAP ────────────────────────────────────────
