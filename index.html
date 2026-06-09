@@ -2110,6 +2110,18 @@ html, body {
 .forecast-day.today .fc-dow { color: var(--o); }
 
 .d-cta-bar { flex-shrink: 0; padding: 16px 24px calc(14px + var(--safe-bot)); background: var(--g0); border-top: 1.5px solid var(--line); display: flex; gap: 10px; }
+
+/* ── SHARE SHEET ───────────────────────────────── */
+.share-sheet { position: fixed; inset: 0; z-index: 400; display: flex; align-items: flex-end; justify-content: center; animation: fadeIn 0.18s ease; }
+.share-sheet-bg { position: absolute; inset: 0; background: rgba(0,0,0,0.65); }
+.share-sheet-panel { position: relative; background: var(--g1); border-top: 1.5px solid var(--line); border-left: 1.5px solid rgba(232,72,28,0.2); border-right: 1.5px solid rgba(232,72,28,0.2); width: 100%; max-width: 520px; padding: 26px 22px calc(26px + var(--safe-bot)); }
+.share-sheet-title { font-size: 11px; font-weight: 900; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.28); margin-bottom: 18px; }
+.share-sheet-opt { display: flex; align-items: center; gap: 16px; padding: 14px 16px; border: 1.5px solid rgba(255,255,255,0.1); margin-bottom: 10px; cursor: pointer; background: transparent; width: 100%; color: white; font-family: inherit; text-align: left; transition: border-color 0.15s, background 0.15s; -webkit-tap-highlight-color: transparent; }
+.share-sheet-opt:hover { border-color: var(--o); background: rgba(232,72,28,0.06); }
+.share-sheet-opt-icon { width: 36px; height: 36px; flex-shrink: 0; border: 1.5px solid rgba(255,255,255,0.16); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.55); }
+.share-sheet-opt-title { font-size: 14px; font-weight: 800; letter-spacing: 0.03em; margin-bottom: 3px; }
+.share-sheet-opt-sub { font-size: 12px; color: rgba(255,255,255,0.32); letter-spacing: 0.01em; }
+.share-sheet-cancel { width: 100%; padding: 13px; margin-top: 12px; background: transparent; border: 1.5px solid rgba(255,255,255,0.07); color: rgba(255,255,255,0.35); font-family: inherit; font-size: 12px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; cursor: pointer; transition: border-color 0.15s; }
 .cta-main  { flex: 1; background: var(--o); color: white; border: none; padding: 13px 17px; font-family: inherit; font-size: 12px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; cursor: pointer; transition: opacity 0.18s; text-decoration: none; display: flex; align-items: center; justify-content: center; }
 .cta-main:hover { opacity: 0.85; }
 .cta-sq { width: 54px; border: 1.5px solid var(--w2); background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.16s; }
@@ -5934,7 +5946,7 @@ function go(toId, fromId) {
   const cg = document.getElementById('compass-global');
   if (cg) cg.classList.toggle('vis', toId === 'results' || toId === 'saved');
 }
-function goBack() { go(prevScreen || 'home', null); }
+function goBack() { go(prevScreen || 'home', null); history.replaceState(null, '', window.location.pathname + window.location.search); }
 
 let searchQuery = '';
 
@@ -6660,6 +6672,7 @@ function openDetail(id) {
   if (!c) return;
   prevScreen = document.querySelector('.screen.active')?.id || 'results';
   currentDetailId = id;
+  history.replaceState(null, '', '#camp-' + id);
 
   // State-based hero photos via Lorem Picsum (picsum.photos) — free, no API key, no hotlink blocking.
   // Unsplash CDN now blocks requests from unregistered domains.
@@ -6882,7 +6895,7 @@ function generateShareCard(c) {
   ctx.font = `800 ${namePx}px "Helvetica Neue",Helvetica,Arial,sans-serif`;
   ctx.fillStyle = '#FFFFFF';
   const nameLines = _wrapText(ctx, c.name || '', W - PAD * 2, 2);
-  const nameY0 = 168;
+  const nameY0 = 195; // extra clearance from type badge above
   nameLines.forEach((line, i) => ctx.fillText(line, PAD, nameY0 + i * nameLH));
   const afterName = nameY0 + nameLines.length * nameLH;
 
@@ -6968,9 +6981,26 @@ function generateShareCard(c) {
     ax += cW + 10;
   });
 
-  // ── Bottom bar
+  // ── Deep-link badge
   const botH = 130;
   const botY = H - botH;
+  const campUrl = `campgrounder.io/#camp-${c.id}`;
+  ls('0.08em');
+  ctx.font = '600 17px "Helvetica Neue",Helvetica,Arial,sans-serif';
+  const linkTxtW = ctx.measureText(campUrl).width;
+  const linkBadgeW = linkTxtW + 40;
+  const linkBadgeH = 34;
+  const linkBadgeX = W / 2 - linkBadgeW / 2;
+  const linkBadgeY = botY - 62;
+  ctx.fillStyle = 'rgba(232,72,28,0.1)';
+  ctx.fillRect(linkBadgeX, linkBadgeY, linkBadgeW, linkBadgeH);
+  ctx.strokeStyle = 'rgba(232,72,28,0.38)';
+  ctx.lineWidth = 1.5;
+  ctx.strokeRect(linkBadgeX, linkBadgeY, linkBadgeW, linkBadgeH);
+  ctx.fillStyle = 'rgba(232,72,28,0.75)';
+  ctx.textAlign = 'center';
+  ctx.fillText(campUrl, W / 2, linkBadgeY + 22);
+  ctx.textAlign = 'left';
   ctx.fillStyle = O;
   ctx.fillRect(0, botY, W, botH);
   ls('0.22em');
@@ -6994,36 +7024,102 @@ function downloadCard(canvas, filename) {
   a.click();
 }
 
+let _shareCanvas = null;
+
 async function shareCamp() {
   if (!currentDetailId) return;
   const c = CAMPS.find(x => x.id === currentDetailId);
   if (!c) return;
-
   showToast('Building card…');
-  await new Promise(r => setTimeout(r, 60)); // let toast render
-
-  const canvas = generateShareCard(c);
+  await new Promise(r => setTimeout(r, 60));
+  _shareCanvas = generateShareCard(c);
+  // Show share sheet
+  const campUrl = `https://campgrounder.io/#camp-${c.id}`;
   const filename = (c.name || 'camp').toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-campgrounder.png';
+  const sheet = document.createElement('div');
+  sheet.className = 'share-sheet';
+  sheet.id = 'share-sheet';
+  sheet.innerHTML = `
+    <div class="share-sheet-bg" onclick="closeShareSheet()"></div>
+    <div class="share-sheet-panel">
+      <div class="share-sheet-title">Share ${c.name}</div>
+      <button class="share-sheet-opt" onclick="shareDownloadCard()">
+        <div class="share-sheet-opt-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </div>
+        <div>
+          <div class="share-sheet-opt-title">Download Card</div>
+          <div class="share-sheet-opt-sub">Save the share image to your device</div>
+        </div>
+      </button>
+      ${navigator.share ? `
+      <button class="share-sheet-opt" id="share-native-btn">
+        <div class="share-sheet-opt-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        </div>
+        <div>
+          <div class="share-sheet-opt-title">Share to Social / Messages</div>
+          <div class="share-sheet-opt-sub">Instagram, WhatsApp, iMessage, and more</div>
+        </div>
+      </button>` : ''}
+      <button class="share-sheet-opt" id="share-copy-btn">
+        <div class="share-sheet-opt-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        </div>
+        <div>
+          <div class="share-sheet-opt-title">Copy Link</div>
+          <div class="share-sheet-opt-sub" style="font-family:monospace;font-size:11px;letter-spacing:0;">${campUrl}</div>
+        </div>
+      </button>
+      <button class="share-sheet-cancel" onclick="closeShareSheet()">Cancel</button>
+    </div>`;
+  document.body.appendChild(sheet);
+  // Wire up buttons (avoids inline onclick with URL strings)
+  const nativeBtn = sheet.querySelector('#share-native-btn');
+  if (nativeBtn) nativeBtn.onclick = () => shareNative(c, filename, campUrl);
+  sheet.querySelector('#share-copy-btn').onclick = () => shareCopyLink(campUrl);
+}
 
-  if (navigator.share) {
-    canvas.toBlob(async blob => {
-      const file = new File([blob], filename, { type: 'image/png' });
-      try {
-        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-          await navigator.share({ title: c.name + ' — Campgrounder', files: [file] });
-        } else {
-          await navigator.share({ title: c.name + ' — Campgrounder', url: 'https://campgrounder.io', text: `Check out ${c.name} on Campgrounder!` });
-        }
-      } catch (e) {
-        if (e.name !== 'AbortError') { downloadCard(canvas, filename); showToast('Card saved ↓'); }
-      }
-    }, 'image/png');
-    return;
-  }
+function closeShareSheet() {
+  document.getElementById('share-sheet')?.remove();
+}
 
-  // Desktop: download
-  downloadCard(canvas, filename);
+function shareDownloadCard() {
+  closeShareSheet();
+  if (!_shareCanvas || !currentDetailId) return;
+  const c = CAMPS.find(x => x.id === currentDetailId);
+  const filename = (c?.name || 'camp').toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-campgrounder.png';
+  downloadCard(_shareCanvas, filename);
   showToast('Card saved ↓');
+}
+
+async function shareNative(c, filename, campUrl) {
+  closeShareSheet();
+  if (!_shareCanvas) return;
+  _shareCanvas.toBlob(async blob => {
+    const file = new File([blob], filename, { type: 'image/png' });
+    try {
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ title: c.name + ' — Campgrounder', files: [file] });
+      } else {
+        await navigator.share({ title: c.name + ' — Campgrounder', url: campUrl, text: `Check out ${c.name} on Campgrounder!` });
+      }
+    } catch (e) {
+      if (e.name !== 'AbortError') showToast('Share cancelled');
+    }
+  }, 'image/png');
+}
+
+function shareCopyLink(url) {
+  closeShareSheet();
+  if (navigator.clipboard?.writeText) {
+    navigator.clipboard.writeText(url).then(() => showToast('Link copied ＋'));
+  } else {
+    const ta = document.createElement('textarea');
+    ta.value = url; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+    showToast('Link copied ＋');
+  }
 }
 
 // ─── MAP ────────────────────────────────────────
@@ -7222,12 +7318,17 @@ if ('serviceWorker' in navigator) {
 // Initialize wildfire section on first page load (home is the default screen)
 setTimeout(initWildfireSection, 400);
 
-// Handle deep-link shortcuts from manifest.json
+// Handle deep-link shortcuts from manifest.json + hash-based camp links
 (function handleLaunchParams() {
+  // Hash deep-links: campgrounder.io/#camp-42 opens that campground directly
+  const hash = window.location.hash;
+  if (hash.startsWith('#camp-')) {
+    const id = parseInt(hash.slice(6));
+    if (!isNaN(id)) { requestAnimationFrame(() => openDetail(id)); return; }
+  }
   const params = new URLSearchParams(window.location.search);
   const action = params.get('action');
   if (action === 'saved') {
-    // Navigate to saved screen on launch
     requestAnimationFrame(() => go('saved', 'home'));
   } else if (action === 'browse') {
     requestAnimationFrame(() => go('results', 'home'));
