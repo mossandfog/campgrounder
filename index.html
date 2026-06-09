@@ -1813,14 +1813,14 @@ html, body {
   text-transform: uppercase; color: rgba(255,255,255,0.12);
 }
 .about-sig-maf {
-  font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
-  color: rgba(255,255,255,0.28); margin-top: 2px;
+  font-size: 12px; font-weight: 700; letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.42); margin-top: 4px;
 }
 .about-maf-link {
-  color: rgba(232,72,28,0.55); text-decoration: none;
-  transition: color 0.15s;
+  color: var(--o); text-decoration: none;
+  transition: color 0.15s, opacity 0.15s; opacity: 0.8;
 }
-.about-maf-link:hover { color: var(--o); }
+.about-maf-link:hover { color: var(--o); opacity: 1; }
 
 /* ── Privacy Policy ── */
 .privacy-body {
@@ -2743,8 +2743,9 @@ html, body {
   <div class="pnw-footer">
     <a href="https://www.producthunt.com/products/campgrounder-find-your-perfect-campsite?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-campgrounder-find-your-perfect-campsite" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-bottom:16px;"><img alt="Campgrounder- Find Your Perfect Campsite - Clean, design-forward campground finder app! | Product Hunt" width="250" height="54" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1167043&theme=light&t=1780967451203"></a>
     🌲 Born in the Pacific Northwest
-    <a href="presskit_mockup.html" target="_blank" style="display:block;margin-top:8px;font-size:12px;font-weight:900;letter-spacing:0.22em;color:rgba(232,72,28,0.55);text-decoration:none;text-transform:uppercase;transition:color 0.15s;" onmouseover="this.style.color='rgba(232,72,28,0.9)'" onmouseout="this.style.color='rgba(232,72,28,0.55)'">Press Kit →</a>
-    <a href="#" onclick="go('about','home');return false;" style="display:block;margin-top:6px;font-size:12px;font-weight:900;letter-spacing:0.22em;color:rgba(255,255,255,0.25);text-decoration:none;text-transform:uppercase;transition:color 0.15s;" onmouseover="this.style.color='rgba(255,255,255,0.55)'" onmouseout="this.style.color='rgba(255,255,255,0.25)'">About →</a>
+    <a href="presskit_mockup.html" target="_blank" style="display:inline-block;margin-top:12px;font-size:15px;font-weight:900;letter-spacing:0.2em;color:var(--o);text-decoration:none;text-transform:uppercase;padding:8px 18px;border:1.5px solid rgba(232,72,28,0.4);transition:background 0.15s,border-color 0.15s;" onmouseover="this.style.background='rgba(232,72,28,0.1)';this.style.borderColor='var(--o)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(232,72,28,0.4)'">Press Kit →</a>
+    <a href="https://mossandfog.com/media/" target="_blank" rel="noopener noreferrer" style="display:block;margin-top:14px;font-size:12px;font-weight:800;letter-spacing:0.16em;color:rgba(255,255,255,0.5);text-decoration:none;text-transform:uppercase;transition:color 0.15s;" onmouseover="this.style.color='rgba(255,255,255,0.9)'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Part of the Moss and Fog Media Family →</a>
+    <a href="#" onclick="go('about','home');return false;" style="display:block;margin-top:8px;font-size:12px;font-weight:900;letter-spacing:0.22em;color:rgba(255,255,255,0.25);text-decoration:none;text-transform:uppercase;transition:color 0.15s;" onmouseover="this.style.color='rgba(255,255,255,0.55)'" onmouseout="this.style.color='rgba(255,255,255,0.25)'">About →</a>
     <a href="#" onclick="go('privacy','home');return false;" style="display:block;margin-top:6px;font-size:11px;font-weight:700;letter-spacing:0.18em;color:rgba(255,255,255,0.14);text-decoration:none;text-transform:uppercase;transition:color 0.15s;" onmouseover="this.style.color='rgba(255,255,255,0.38)'" onmouseout="this.style.color='rgba(255,255,255,0.14)'">Privacy Policy</a>
   </div>
 </div><!-- end .home-scroll -->
@@ -3226,7 +3227,7 @@ html, body {
       <div class="about-sig-text">
         <div class="about-sig-name">Campgrounder</div>
         <div class="about-sig-sub">Pacific Northwest · Est. 2025</div>
-        <div class="about-sig-maf">A <a href="https://mossandfog.com" target="_blank" rel="noopener noreferrer" class="about-maf-link">Moss and Fog Media</a> project</div>
+        <div class="about-sig-maf">Part of the <a href="https://mossandfog.com/media/" target="_blank" rel="noopener noreferrer" class="about-maf-link">Moss and Fog Media</a> family</div>
         <div class="about-sig-maf" style="margin-top:4px;"><a href="mailto:hello@campgrounder.io" class="about-maf-link">hello@campgrounder.io</a></div>
       </div>
     </div>
