@@ -2131,23 +2131,23 @@ html, body {
 .rev-big-num { font-size: 56px; font-weight: 800; color: var(--o); line-height: 1; letter-spacing: -0.03em; }
 .rev-stars-col { padding-bottom: 6px; }
 .rev-stars-lg { color: #E8C21C; font-size: 15px; letter-spacing: 4px; line-height: 1; }
-.rev-ct { font-size: 10px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-top: 6px; }
-.rev-disclaimer { font-size: 10px; color: rgba(255,255,255,0.18); letter-spacing: 0.05em; line-height: 1.6; margin-top: 8px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.rev-ct { font-size: 12px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-top: 6px; }
+.rev-disclaimer { font-size: 12px; color: rgba(255,255,255,0.28); letter-spacing: 0.03em; line-height: 1.6; margin-top: 8px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.05); }
 .rev-dist { margin-bottom: 22px; padding-bottom: 22px; border-bottom: 1px solid rgba(255,255,255,0.05); }
 .rev-dist-row { display: flex; align-items: center; gap: 9px; margin-bottom: 8px; }
 .rev-dist-row:last-child { margin-bottom: 0; }
-.rev-dist-lbl { font-size: 10px; font-weight: 800; letter-spacing: 0.06em; color: rgba(255,255,255,0.35); width: 14px; text-align: right; flex-shrink: 0; }
+.rev-dist-lbl { font-size: 12px; font-weight: 800; letter-spacing: 0.06em; color: rgba(255,255,255,0.45); width: 14px; text-align: right; flex-shrink: 0; }
 .rev-dist-star { color: #E8C21C; font-size: 9px; flex-shrink: 0; line-height: 1; }
 .rev-dist-track { flex: 1; height: 3px; background: rgba(255,255,255,0.06); border-radius: 2px; overflow: hidden; }
 .rev-dist-fill { height: 100%; border-radius: 2px; background: var(--o); width: 0%; transition: width 0.7s cubic-bezier(0.16,1,0.3,1); }
-.rev-dist-pct { font-size: 10px; font-weight: 800; letter-spacing: 0.04em; color: rgba(255,255,255,0.25); width: 30px; text-align: right; flex-shrink: 0; }
-.rev-eyebrow { font-size: 10px; font-weight: 900; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.25); margin-bottom: 11px; }
+.rev-dist-pct { font-size: 12px; font-weight: 800; letter-spacing: 0.04em; color: rgba(255,255,255,0.38); width: 34px; text-align: right; flex-shrink: 0; }
+.rev-eyebrow { font-size: 11px; font-weight: 900; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 12px; }
 .rev-source { display: flex; align-items: center; gap: 14px; padding: 12px 14px; border: 1.5px solid rgba(255,255,255,0.07); margin-bottom: 7px; text-decoration: none; background: transparent; transition: border-color 0.15s, background 0.15s; -webkit-tap-highlight-color: transparent; cursor: pointer; }
 .rev-source:hover { border-color: rgba(232,72,28,0.5); background: rgba(232,72,28,0.05); }
 .rev-source:last-of-type { margin-bottom: 0; }
 .rev-source-icon { width: 32px; height: 32px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border: 1.5px solid; }
-.rev-source-name { font-size: 11px; font-weight: 900; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.82); margin-bottom: 3px; }
-.rev-source-sub { font-size: 11px; color: rgba(255,255,255,0.28); letter-spacing: 0.01em; }
+.rev-source-name { font-size: 13px; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.88); margin-bottom: 4px; }
+.rev-source-sub { font-size: 12px; color: rgba(255,255,255,0.38); letter-spacing: 0.01em; }
 .rev-source-arrow { margin-left: auto; color: rgba(232,72,28,0.55); font-size: 14px; flex-shrink: 0; padding-left: 10px; }
 .rev-close { width: 100%; padding: 13px; margin-top: 14px; background: transparent; border: 1.5px solid rgba(255,255,255,0.06); color: rgba(255,255,255,0.3); font-family: inherit; font-size: 11px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; cursor: pointer; transition: border-color 0.15s, color 0.15s; }
 .rev-close:hover { border-color: rgba(255,255,255,0.18); color: rgba(255,255,255,0.5); }
@@ -3401,6 +3401,9 @@ html, body {
   </div>
   <div class="d-cta-bar">
     <a class="cta-main" id="d-cta-link" href="#" target="_blank" rel="noopener">Check Availability →</a>
+    <div class="cta-sq" onclick="addToCalendar()" title="Add to Calendar">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    </div>
     <div class="cta-sq" onclick="shareCamp()">
       <svg width="17" height="17" style="color:rgba(255,255,255,0.6);stroke:currentColor;fill:none;"><use href="#ic-share"/></svg>
     </div>
@@ -5447,7 +5450,10 @@ const CAMPS = [
 ];
 
 // ─── STATE ──────────────────────────────────────
-let savedIds        = new Set();
+let savedIds = (() => {
+  try { return new Set(JSON.parse(localStorage.getItem('cg_saved') || '[]')); }
+  catch { return new Set(); }
+})();
 let prevScreen      = 'home';
 let currentFilter   = 'all';
 let currentDetailId = null;
@@ -6671,6 +6677,10 @@ function updateBadges() {
   const n = savedIds.size;
   document.querySelectorAll('.badge').forEach(b => { b.textContent = n; b.classList.toggle('show', n > 0); });
 }
+function persistSaved() {
+  try { localStorage.setItem('cg_saved', JSON.stringify([...savedIds])); } catch {}
+}
+
 function toggleSave() {
   if (currentDetailId === null) return;
   const btn = document.getElementById('save-btn');
@@ -6688,10 +6698,61 @@ function toggleSave() {
     btn.classList.add('saved');
     showToast('Saved  ＋');
   }
+  persistSaved();
   updateBadges();
 }
 function unsave(id, e) {
-  e.stopPropagation(); savedIds.delete(id); updateBadges(); renderSaved(); showToast('Removed');
+  e.stopPropagation(); savedIds.delete(id); persistSaved(); updateBadges(); renderSaved(); showToast('Removed');
+}
+
+function addToCalendar() {
+  if (!currentDetailId) return;
+  const c = CAMPS.find(x => x.id === currentDetailId);
+  if (!c) return;
+
+  let startStr = checkInDate;
+  let nights   = Math.max(1, stayNights || 2);
+
+  if (!startStr) {
+    // Default to next Friday if no dates picked
+    const d = new Date();
+    const daysToFri = ((5 - d.getDay()) + 7) % 7 || 7;
+    d.setDate(d.getDate() + daysToFri);
+    startStr = d.toISOString().slice(0, 10);
+    showToast('Tip: pick dates first for accuracy');
+  }
+
+  const startFmt = startStr.replace(/-/g, '');
+  const endDt    = new Date(startStr + 'T12:00:00');
+  endDt.setDate(endDt.getDate() + nights);
+  const endFmt   = endDt.toISOString().slice(0, 10).replace(/-/g, '');
+
+  const loc = (c.loc || '').replace('·', ',').trim();
+  const url = `https://campgrounder.io/#camp-${c.id}`;
+
+  const ics = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Campgrounder//campgrounder.io//EN',
+    'BEGIN:VEVENT',
+    `UID:campgrounder-${c.id}-${Date.now()}@campgrounder.io`,
+    `DTSTART;VALUE=DATE:${startFmt}`,
+    `DTEND;VALUE=DATE:${endFmt}`,
+    `SUMMARY:⛺ ${c.name}`,
+    `DESCRIPTION:${nights} night${nights !== 1 ? 's' : ''} at ${c.name}\\, ${loc}\\n\\nView on Campgrounder: ${url}`,
+    `URL:${url}`,
+    `LOCATION:${loc}`,
+    'END:VEVENT',
+    'END:VCALENDAR',
+  ].join('\r\n');
+
+  const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+  const a    = document.createElement('a');
+  a.href     = URL.createObjectURL(blob);
+  a.download = (c.name || 'camp').toLowerCase().replace(/[^a-z0-9]+/g, '-') + '.ics';
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+  if (checkInDate) showToast('Added to calendar ↓');
 }
 
 // ─── TOAST ──────────────────────────────────────
@@ -7154,14 +7215,14 @@ function showReviewSheet() {
   const sources = [
     {
       name: 'The Dyrt',
-      sub: 'Largest campground review community',
+      sub: 'Campground reviews & trip reports',
       url: `https://thedyrt.com/search?query=${q}`,
       color: 'rgba(42,160,100,0.9)',
       icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l4-8 5 4 3-6 5 10"/><path d="M3 21h18"/></svg>`
     },
     {
       name: 'Campendium',
-      sub: 'In-depth camper trip reports & photos',
+      sub: 'Camper reviews, photos & ratings',
       url: `https://www.campendium.com/search?q=${q}`,
       color: 'rgba(28,155,160,0.9)',
       icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>`
