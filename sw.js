@@ -1,14 +1,14 @@
-// Campgrounder Service Worker v4
+// Campgrounder Service Worker v5
 // Strategy:
-//   App shell (index.html, manifest)  → Cache-first, background update
+//   App shell (index.html, manifest)  → Network-first, cache fallback (ensures fresh deploys show immediately)
 //   Leaflet CDN assets                → Cache-first (stable, versioned URLs)
 //   Map tiles (ESRI)                  → Network-first, cache fallback
 //   Weather API (Open-Meteo)          → Network-only (always fresh)
 //   Everything else                   → Network-first, cache fallback
 
-const CACHE_SHELL   = 'campgrounder-shell-v4';
-const CACHE_ASSETS  = 'campgrounder-assets-v4';
-const CACHE_TILES   = 'campgrounder-tiles-v4';
+const CACHE_SHELL   = 'campgrounder-shell-v5';
+const CACHE_ASSETS  = 'campgrounder-assets-v5';
+const CACHE_TILES   = 'campgrounder-tiles-v5';
 
 const SHELL_URLS = [
   '/',
@@ -87,17 +87,16 @@ self.addEventListener('fetch', e => {
     return;
   }
 
-  // App shell → cache-first, revalidate in background
+  // App shell → network-first, cache fallback (so fresh deploys show on next visit, not second visit)
   if (url.includes('/index.html') || url.endsWith('/') || url.includes('/manifest.json')) {
     e.respondWith(
-      caches.open(CACHE_SHELL).then(async c => {
-        const cached = await c.match(e.request);
-        const fetchPromise = fetch(e.request).then(res => {
-          c.put(e.request, res.clone());
+      fetch(e.request)
+        .then(res => {
+          const clone = res.clone();
+          caches.open(CACHE_SHELL).then(c => c.put(e.request, clone));
           return res;
-        });
-        return cached || fetchPromise;
-      })
+        })
+        .catch(() => caches.match(e.request))
     );
     return;
   }

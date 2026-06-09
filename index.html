@@ -6746,7 +6746,8 @@ function openDetail(id) {
   const campState = (c.loc.split('·')[1] || '').trim();
   const photoId = STATE_PHOTOS[campState] || TYPE_PHOTOS[c.type] || '15';
   const dHero = document.getElementById('d-hero');
-  dHero.style.backgroundImage = `url(${U}${photoId}${Q})`;
+  // Picsum as primary; linear-gradient is the CSS fallback if the image fails to load
+  dHero.style.backgroundImage = `url(${U}${photoId}${Q}), linear-gradient(160deg, var(--g2) 0%, var(--g0) 100%)`;
   document.getElementById('d-glyph').innerHTML = '';
 
   document.getElementById('d-type').textContent    = c.type;
