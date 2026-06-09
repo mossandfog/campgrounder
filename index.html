@@ -7116,48 +7116,19 @@ function getConnectivityData(c) {
     '#5EC26A',
   ];
 
-  // ── Starlink: score based on estimated sky obstruction ──
-  // Starlink works everywhere in the US — the question is whether
-  // trees block the sky view. Open terrain = excellent; dense canopy = poor.
-  let slBase = 3; // default: Good — it's widely available
-
+  // ── Starlink: satellite covers the entire US — only sky obstruction matters ──
+  // State doesn't matter (it's in orbit). The only real variable is whether the
+  // dish can find a clear cone of sky at the actual campsite.
   const denseCanopy = /old.growth|old growth|dense forest|forest canopy|towering fir|towering cedar|redwood|sequoia|hemlock|dense canopy|temperate rain|rain forest/.test(desc);
   const openSky     = /\bmeadow\b|open plain|open desert|above treeline|alpine meadow|high desert|scrubland|prairie|open valley|desert floor|mesa|plateau/.test(desc);
   const hasForest   = /\bforest\b|\btimber\b|wooded|forested|\bpine\b|conifer/.test(desc);
 
-  if (denseCanopy) slBase -= 2;
-  else if (hasForest) slBase -= 1;
-  if (openSky) slBase += 1;
-
-  // Camp type as sky-obstruction proxy
-  const SL_TYPE = {
-    'Forest Service': -1,  // deep in forest by definition
-    'National Park':  -0.5,
-    'BLM':            +1,  // open range / desert
-    'Glamping':       +0.5, // sited with sky view in mind
-    'RV Park':        +0.5, // cleared pads
-    'Private':        +0.3,
-    'Army Corps':      0,
-    'State Park':     -0.2,
-  };
-  slBase += (SL_TYPE[c.type] ?? 0);
-
-  // State tree-coverage modifier
-  const SL_STATE = {
-    // Dense forest states
-    'Washington': -1, 'Oregon': -1, 'Alaska': -1.5,
-    'Georgia': -0.5, 'Alabama': -0.5, 'Mississippi': -0.5,
-    'South Carolina': -0.5, 'North Carolina': -0.5,
-    'Tennessee': -0.5, 'Arkansas': -0.5, 'Idaho': -0.3,
-    // Open / desert states — clear skies
-    'Arizona': +1, 'New Mexico': +0.8, 'Nevada': +1,
-    'Utah': +0.8, 'Kansas': +0.8, 'Nebraska': +0.8,
-    'North Dakota': +0.8, 'South Dakota': +0.5,
-    'Texas': +0.6, 'Oklahoma': +0.5,
-    // Mixed
-    'Wyoming': +0.3, 'Montana': 0, 'Colorado': 0,
-  };
-  slBase += (SL_STATE[state] ?? 0);
+  // 4 = Excellent always baseline — Starlink reaches every US zip code.
+  // Only severe tree canopy can obstruct the dish, never eliminate service entirely.
+  let slBase = 4;
+  if (denseCanopy) slBase = 2;      // old-growth / dense forest: Fair — you can still find a gap
+  else if (hasForest) slBase = 3;   // forested camp: Good — most sites have enough clearing
+  if (openSky) slBase = 4;          // explicitly open terrain: always Excellent
 
   const sl = clamp(slBase);
 
