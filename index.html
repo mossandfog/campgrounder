@@ -6160,20 +6160,13 @@ function handleSearchInput(val) {
       : 'Results';
 
     if (scored.length) {
-      // Detect if this looks like a direct name/location search vs a semantic concept search
-      const isNameSearch = scored[0].s >= 11; // high score = direct name/location match
       html = `<div class="sug-eyebrow">${eyebrow}</div>` +
-        scored.map(({ c }) => {
-          // If top result is a name/location match, clicking it goes straight to the detail page
-          const action = isNameSearch && (c.name.toLowerCase().includes(val.toLowerCase()) || c.loc.toLowerCase().includes(val.toLowerCase()))
-            ? `openDetail(${c.id})`
-            : `submitSearch(${JSON.stringify(val)})`;
-          return `
-          <div class="sug-item" onclick="${action}">
+        scored.map(({ c }) =>
+          `<div class="sug-item" onclick="openDetail(${c.id})">
             <div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="${TYPE_GLYPH[c.type]||'#ic-tent'}"/></svg></div>
             <div><div class="sug-name">${c.name}</div><div class="sug-sub">${c.loc} · ${c.type}</div></div>
-          </div>`;
-        }).join('') +
+          </div>`
+        ).join('') +
         `<div class="sug-item" onclick="submitSearch(${JSON.stringify(val)})" style="opacity:0.55; border-top: 1px solid rgba(255,255,255,0.06); margin-top: 4px; padding-top: 14px;">
           <div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="#ic-search"/></svg></div>
           <div><div class="sug-name">See all results for "${val}"</div><div class="sug-sub">${scored.length < 5 ? scored.length : '5+'} matches found</div></div>
