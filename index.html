@@ -14,9 +14,16 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
 <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png">
 <meta property="og:title" content="Campgrounder — Find Your Perfect Campsite">
-<meta property="og:description" content="Find your perfect campsite. State parks, private, glamping and more.">
+<meta property="og:description" content="One clean place to find your perfect campsite. National parks, state parks, BLM, glamping, and more — no ads, no dark patterns.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://campgrounder.io">
+<meta property="og:image" content="https://campgrounder.io/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Campgrounder — Find Your Perfect Campsite">
+<meta name="twitter:description" content="One clean place to find your perfect campsite. National parks, state parks, BLM, glamping, and more — no ads, no dark patterns.">
+<meta name="twitter:image" content="https://campgrounder.io/og-image.png">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <!--
@@ -366,6 +373,19 @@ html, body {
     border-bottom: none;
   }
   .about-cell--full .about-cell-title { font-size: 20px; } /* matches sibling cells */
+
+  /* Stats: bigger numbers on desktop */
+  .about-stat-num { font-size: 40px; }
+  .about-stat { padding: 28px 24px 24px; }
+
+  /* Roadmap: 4-col on desktop */
+  .about-roadmap-eyebrow { padding: 22px 40px 0; }
+  .about-roadmap-grid { grid-template-columns: repeat(4, 1fr); }
+  .about-roadmap-item { border-right: 1.5px solid var(--line); }
+  .about-roadmap-item:last-child { border-right: none; }
+  .about-roadmap-item:nth-child(even) { border-right: 1.5px solid var(--line); }
+  .about-roadmap-item:last-child { border-right: none; }
+  .about-roadmap-item { padding: 20px 28px 24px; }
 
   /* Signature: wider padding */
   .about-sig { padding: 32px 40px 28px; }
@@ -1549,6 +1569,54 @@ html, body {
   margin-top: 3px;
 }
 
+/* ── Stats row ── */
+.about-stats {
+  display: flex; border-bottom: 1.5px solid var(--line);
+}
+.about-stat {
+  flex: 1; padding: 22px 20px 20px; text-align: center;
+  border-right: 1.5px solid var(--line);
+}
+.about-stat:last-child { border-right: none; }
+.about-stat-num {
+  font-size: 32px; font-weight: 900; letter-spacing: -0.04em;
+  color: var(--o); line-height: 1;
+}
+.about-stat-label {
+  font-size: 10px; font-weight: 800; letter-spacing: 0.18em;
+  text-transform: uppercase; color: rgba(255,255,255,0.38);
+  margin-top: 6px;
+}
+
+/* ── Roadmap ── */
+.about-roadmap {
+  border-top: 1.5px solid var(--line);
+  border-bottom: 1.5px solid var(--line);
+}
+.about-roadmap-eyebrow {
+  padding: 18px 24px 0;
+  font-size: 12px; font-weight: 900; letter-spacing: 0.32em;
+  text-transform: uppercase; color: rgba(232,72,28,0.85);
+}
+.about-roadmap-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+.about-roadmap-item {
+  padding: 18px 22px 20px;
+  border-right: 1.5px solid var(--line);
+  border-top: 1.5px solid var(--line);
+}
+.about-roadmap-item:nth-child(even) { border-right: none; }
+.about-roadmap-icon { font-size: 20px; margin-bottom: 8px; }
+.about-roadmap-title {
+  font-size: 13px; font-weight: 800; letter-spacing: 0.04em;
+  color: var(--w); margin-bottom: 6px;
+}
+.about-roadmap-body {
+  font-size: 12px; line-height: 1.6; color: rgba(255,255,255,0.48);
+}
+
 /* ── Signature ── */
 .about-sig {
   padding: 28px 24px 24px;
@@ -1565,6 +1633,31 @@ html, body {
 .about-sig-sub {
   font-size: 12px; font-weight: 600; letter-spacing: 0.18em;
   text-transform: uppercase; color: rgba(255,255,255,0.12);
+}
+.about-sig-maf {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.28); margin-top: 2px;
+}
+.about-maf-link {
+  color: rgba(232,72,28,0.55); text-decoration: none;
+  transition: color 0.15s;
+}
+.about-maf-link:hover { color: var(--o); }
+
+/* ── Privacy Policy ── */
+.privacy-body {
+  padding: 8px 0 40px;
+}
+.privacy-section {
+  padding: 20px 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.privacy-heading {
+  font-size: 12px; font-weight: 900; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--o); margin-bottom: 10px;
+}
+.privacy-section p {
+  font-size: 14px; line-height: 1.72; color: rgba(255,255,255,0.52);
 }
 
 /* ══════════════════════════════════════════════
@@ -2353,6 +2446,7 @@ html, body {
     🌲 Born in the Pacific Northwest
     <a href="presskit_mockup.html" target="_blank" style="display:block;margin-top:8px;font-size:12px;font-weight:900;letter-spacing:0.22em;color:rgba(232,72,28,0.55);text-decoration:none;text-transform:uppercase;transition:color 0.15s;" onmouseover="this.style.color='rgba(232,72,28,0.9)'" onmouseout="this.style.color='rgba(232,72,28,0.55)'">Press Kit →</a>
     <a href="#" onclick="go('about','home');return false;" style="display:block;margin-top:6px;font-size:12px;font-weight:900;letter-spacing:0.22em;color:rgba(255,255,255,0.25);text-decoration:none;text-transform:uppercase;transition:color 0.15s;" onmouseover="this.style.color='rgba(255,255,255,0.55)'" onmouseout="this.style.color='rgba(255,255,255,0.25)'">About →</a>
+    <a href="#" onclick="go('privacy','home');return false;" style="display:block;margin-top:6px;font-size:11px;font-weight:700;letter-spacing:0.18em;color:rgba(255,255,255,0.14);text-decoration:none;text-transform:uppercase;transition:color 0.15s;" onmouseover="this.style.color='rgba(255,255,255,0.38)'" onmouseout="this.style.color='rgba(255,255,255,0.14)'">Privacy Policy</a>
   </div>
 </div><!-- end .home-scroll -->
   <nav class="bnav">
@@ -2748,6 +2842,26 @@ html, body {
       </div>
     </div>
 
+    <!-- Stats row -->
+    <div class="about-stats">
+      <div class="about-stat">
+        <div class="about-stat-num">325</div>
+        <div class="about-stat-label">Campgrounds</div>
+      </div>
+      <div class="about-stat">
+        <div class="about-stat-num">42</div>
+        <div class="about-stat-label">States</div>
+      </div>
+      <div class="about-stat">
+        <div class="about-stat-num">8</div>
+        <div class="about-stat-label">Categories</div>
+      </div>
+      <div class="about-stat">
+        <div class="about-stat-num">0</div>
+        <div class="about-stat-label">Ads. Ever.</div>
+      </div>
+    </div>
+
     <!-- Manifesto -->
     <div class="about-manifesto">
       <div class="about-manifesto-eyebrow">The Idea</div>
@@ -2778,7 +2892,34 @@ html, body {
 
     </div>
 
-    <!-- Signature -->
+    <!-- Roadmap -->
+    <div class="about-roadmap">
+      <div class="about-roadmap-eyebrow">What's Next</div>
+      <div class="about-roadmap-grid">
+        <div class="about-roadmap-item">
+          <div class="about-roadmap-icon">⚡</div>
+          <div class="about-roadmap-title">Live Availability</div>
+          <div class="about-roadmap-body">Real-time site availability pulled directly from Recreation.gov and state park APIs.</div>
+        </div>
+        <div class="about-roadmap-item">
+          <div class="about-roadmap-icon">🗺</div>
+          <div class="about-roadmap-title">Trip Planner</div>
+          <div class="about-roadmap-body">Multi-stop itineraries with drive time, elevation, and weather built in.</div>
+        </div>
+        <div class="about-roadmap-item">
+          <div class="about-roadmap-icon">🔔</div>
+          <div class="about-roadmap-title">Cancellation Alerts</div>
+          <div class="about-roadmap-body">Get notified the moment a site opens up at a sold-out campground.</div>
+        </div>
+        <div class="about-roadmap-item">
+          <div class="about-roadmap-icon">📱</div>
+          <div class="about-roadmap-title">Native App</div>
+          <div class="about-roadmap-body">Offline maps, saved trips, and one-tap booking — iOS and Android.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Signature + Moss and Fog attribution -->
     <div class="about-sig" aria-label="Campgrounder signature">
       <svg class="about-sig-mark" viewBox="0 0 100 100" aria-hidden="true">
         <use href="#ic-logo"/>
@@ -2786,11 +2927,92 @@ html, body {
       <div class="about-sig-text">
         <div class="about-sig-name">Campgrounder</div>
         <div class="about-sig-sub">Pacific Northwest · Est. 2025</div>
+        <div class="about-sig-maf">A <a href="https://mossandfog.com" target="_blank" rel="noopener noreferrer" class="about-maf-link">Moss and Fog Media</a> project</div>
       </div>
     </div>
 
   </div><!-- end .about-scroll -->
 
+</div>
+
+<!-- ══════════════════════════════════════
+  PRIVACY POLICY
+══════════════════════════════════════ -->
+<div class="screen" id="privacy">
+  <div class="topbar">
+    <div class="topbar-btn xbtn is-close" onclick="goBack()"></div>
+    <div class="topbar-title">Privacy Policy</div>
+    <div style="width:36px"></div>
+  </div>
+  <div class="about-scroll" style="padding-top:0;">
+
+    <div class="about-hero" style="padding:28px 24px 32px;">
+      <div class="about-hero-eyebrow">Your privacy matters</div>
+      <div class="about-hero-title" style="font-size:clamp(36px,10vw,56px);letter-spacing:-0.03em;line-height:1.1;">PRIVACY<br>POLICY</div>
+      <div class="about-hero-rule"></div>
+      <div class="about-hero-tagline">Effective date: June 1, 2025</div>
+    </div>
+
+    <div class="about-manifesto">
+      <div class="about-manifesto-eyebrow">The Short Version</div>
+      <p>We don't sell your data. We don't share it with advertisers. We collect only what we need to understand how the app is used so we can make it better. <strong>That's it.</strong></p>
+    </div>
+
+    <div class="privacy-body">
+
+      <div class="privacy-section">
+        <div class="privacy-heading">1. Information We Collect</div>
+        <p>Campgrounder collects anonymous usage data through Google Analytics and Vercel Web Analytics. This includes pages visited, time spent, device type, browser, and approximate location (country/region level). We do not collect your name, email address, or any personally identifiable information unless you voluntarily provide it to us.</p>
+      </div>
+
+      <div class="privacy-section">
+        <div class="privacy-heading">2. How We Use Information</div>
+        <p>Usage data is used solely to understand how people interact with Campgrounder and to improve the product. We do not use this data for advertising, profiling, or any purpose beyond product analytics.</p>
+      </div>
+
+      <div class="privacy-section">
+        <div class="privacy-heading">3. Cookies</div>
+        <p>We use cookies only for essential functionality and anonymous analytics. We do not use advertising cookies or third-party tracking cookies. You can disable cookies in your browser settings, though this may affect some features.</p>
+      </div>
+
+      <div class="privacy-section">
+        <div class="privacy-heading">4. Third-Party Services</div>
+        <p>Campgrounder uses the following third-party services, each with their own privacy policies: Google Analytics (analytics.google.com/policies/privacy), Vercel (vercel.com/legal/privacy-policy), Unsplash (unsplash.com/privacy), and Leaflet/OpenStreetMap (openstreetmap.org/privacy). Booking links direct you to third-party platforms (Recreation.gov, Reserve America, Hipcamp, etc.) — we are not responsible for their privacy practices.</p>
+      </div>
+
+      <div class="privacy-section">
+        <div class="privacy-heading">5. Data Sharing</div>
+        <p>We do not sell, rent, or share your personal information with third parties for their marketing purposes. We may share anonymized, aggregated usage statistics that cannot be used to identify any individual.</p>
+      </div>
+
+      <div class="privacy-section">
+        <div class="privacy-heading">6. Data Retention</div>
+        <p>Anonymous analytics data is retained for up to 26 months as per Google Analytics default settings. You may request deletion of any data associated with your usage by contacting us.</p>
+      </div>
+
+      <div class="privacy-section">
+        <div class="privacy-heading">7. Children's Privacy</div>
+        <p>Campgrounder is not directed at children under the age of 13. We do not knowingly collect personal information from children under 13.</p>
+      </div>
+
+      <div class="privacy-section">
+        <div class="privacy-heading">8. Your Rights</div>
+        <p>Depending on your location, you may have the right to access, correct, or delete data we hold about you. To exercise these rights, contact us at the address below.</p>
+      </div>
+
+      <div class="privacy-section">
+        <div class="privacy-heading">9. Changes to This Policy</div>
+        <p>We may update this Privacy Policy from time to time. We will note the effective date at the top of this page. Continued use of Campgrounder after any changes constitutes your acceptance of the revised policy.</p>
+      </div>
+
+      <div class="privacy-section">
+        <div class="privacy-heading">10. Contact</div>
+        <p>Campgrounder is a product of <a href="https://mossandfog.com" target="_blank" rel="noopener noreferrer" class="about-maf-link">Moss and Fog Media</a>. For privacy questions or data requests, contact us via mossandfog.com.</p>
+      </div>
+
+    </div>
+
+  </div>
 </div>
 
 <!-- ══════════════════════════════════════
