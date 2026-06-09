@@ -14,7 +14,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
 <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png">
 <meta property="og:title" content="Campgrounder — Find Your Perfect Campsite">
-<meta property="og:description" content="One clean place to find your perfect campsite. National parks, state parks, BLM, glamping, and more — no ads, no dark patterns.">
+<meta property="og:description" content="One clean place to find your perfect campsite. National parks, state parks, BLM, glamping, and more. Clean, fast, beautiful.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://campgrounder.io">
 <meta property="og:image" content="https://campgrounder.io/og-image.png">
@@ -22,7 +22,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Campgrounder — Find Your Perfect Campsite">
-<meta name="twitter:description" content="One clean place to find your perfect campsite. National parks, state parks, BLM, glamping, and more — no ads, no dark patterns.">
+<meta name="twitter:description" content="One clean place to find your perfect campsite. National parks, state parks, BLM, glamping, and more. Clean, fast, beautiful.">
 <meta name="twitter:image" content="https://campgrounder.io/og-image.png">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -1440,6 +1440,184 @@ html, body {
   font-size: 12px; color: rgba(255,255,255,0.65); margin-top: 3px;
 }
 
+/* ── WILDFIRE WATCH (tile-grid redesign) ─────────── */
+#wildfire-section {
+  border-left: 1.5px solid rgba(232,72,28,0.2);
+  border-right: 1.5px solid rgba(232,72,28,0.2);
+}
+.wf-top {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 24px 16px;
+  background: rgba(232,72,28,0.055);
+  border-bottom: 1px solid rgba(232,72,28,0.16);
+}
+.wf-count-row { display: flex; align-items: baseline; gap: 12px; }
+.wf-count {
+  font-size: 46px; font-weight: 900; letter-spacing: -0.05em;
+  color: var(--o); line-height: 1;
+}
+.wf-count-label {
+  font-size: 10px; font-weight: 800; letter-spacing: 0.2em;
+  text-transform: uppercase; color: rgba(255,255,255,0.5);
+}
+.wf-count-sub {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.13em;
+  text-transform: uppercase; color: rgba(255,255,255,0.22);
+  margin-top: 2px;
+}
+.wf-live-badge {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 9px; font-weight: 800; letter-spacing: 0.18em;
+  text-transform: uppercase; color: rgba(255,255,255,0.3);
+}
+.wf-live-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #5EC26A;
+  box-shadow: 0 0 0 0 rgba(94,194,106,0.5);
+  animation: wf-live-pulse 2.4s ease-out infinite;
+}
+@keyframes wf-live-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(94,194,106,0.5); }
+  70%  { box-shadow: 0 0 0 6px rgba(94,194,106,0); }
+  100% { box-shadow: 0 0 0 0 rgba(94,194,106,0); }
+}
+/* State tile grid */
+.wf-grid-wrap {
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid rgba(232,72,28,0.1);
+  background: rgba(0,0,0,0.12);
+}
+.wf-grid-label {
+  font-size: 8px; font-weight: 800; letter-spacing: 0.24em;
+  text-transform: uppercase; color: rgba(255,255,255,0.2);
+  margin-bottom: 9px;
+}
+.wf-grid {
+  display: grid;
+  grid-template-columns: repeat(11, 1fr);
+  gap: 2px;
+  width: 100%;
+}
+.wf-cell {
+  aspect-ratio: 1;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  font-size: 6.5px; font-weight: 900;
+  letter-spacing: 0.03em; text-transform: uppercase;
+  color: transparent;
+  border: 1px solid transparent;
+  position: relative; overflow: hidden;
+  line-height: 1;
+}
+.wf-cell.wf-state {
+  background: var(--g2);
+  border-color: rgba(255,255,255,0.05);
+  color: rgba(255,255,255,0.22);
+}
+.wf-cell.wf-fire-1 {
+  background: rgba(232,72,28,0.14);
+  border-color: rgba(232,72,28,0.38);
+  color: rgba(255,160,100,0.9);
+}
+.wf-cell.wf-fire-2 {
+  background: rgba(232,72,28,0.28);
+  border-color: rgba(232,72,28,0.6);
+  color: #fff;
+  animation: wf-cell-breathe 3s ease-in-out infinite;
+}
+.wf-cell.wf-fire-3 {
+  background: rgba(232,72,28,0.5);
+  border-color: var(--o);
+  color: #fff;
+  animation: wf-cell-breathe 1.8s ease-in-out infinite;
+  box-shadow: 0 0 8px rgba(232,72,28,0.35);
+}
+@keyframes wf-cell-breathe {
+  0%,100% { opacity: 1; }
+  50%      { opacity: 0.72; }
+}
+.wf-cell-count {
+  position: absolute; top: 1px; right: 1px;
+  font-size: 5.5px; font-weight: 900;
+  color: rgba(232,72,28,0.75);
+  line-height: 1;
+}
+.wf-cell.wf-fire-2 .wf-cell-count,
+.wf-cell.wf-fire-3 .wf-cell-count { color: rgba(255,200,160,0.9); }
+/* Fire incident scroll */
+.wf-fires-scroll {
+  display: flex; gap: 0;
+  overflow-x: auto; overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  border-bottom: 1px solid rgba(232,72,28,0.1);
+  min-height: 62px;
+}
+.wf-fires-scroll::-webkit-scrollbar { display: none; }
+.wf-fire-card {
+  flex-shrink: 0;
+  padding: 12px 16px;
+  width: 190px;
+  border-right: 1px solid rgba(232,72,28,0.09);
+  border-left: 2px solid rgba(232,72,28,0.35);
+  margin-left: 12px;
+}
+.wf-fire-card:first-child { margin-left: 0; border-left-width: 0; }
+.wf-fire-name {
+  font-size: 11.5px; font-weight: 800;
+  color: rgba(255,255,255,0.82); line-height: 1.3; margin-bottom: 5px;
+}
+.wf-fire-meta { display: flex; gap: 5px; align-items: center; flex-wrap: wrap; }
+.wf-fire-state {
+  font-size: 8px; font-weight: 900; letter-spacing: 0.1em;
+  text-transform: uppercase; color: rgba(255,255,255,0.7);
+  background: rgba(232,72,28,0.22);
+  padding: 2px 5px;
+  border: 1px solid rgba(232,72,28,0.38);
+}
+.wf-fire-age {
+  font-size: 9px; font-weight: 700;
+  color: rgba(255,255,255,0.28);
+}
+.wf-fire-hot {
+  font-size: 8px; font-weight: 900; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--o);
+}
+/* Proximity warning */
+.wf-proximity {
+  display: none; align-items: center; gap: 10px;
+  padding: 12px 24px;
+  background: rgba(232,72,28,0.09);
+  border-bottom: 1px solid rgba(232,72,28,0.2);
+  font-size: 11px; font-weight: 800;
+  color: rgba(255,255,255,0.58); letter-spacing: 0.05em;
+  cursor: pointer; transition: background 0.15s;
+}
+.wf-proximity:hover { background: rgba(232,72,28,0.16); }
+.wf-proximity em { color: var(--o); font-style: normal; font-weight: 900; }
+/* Footer */
+.wf-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 24px;
+  font-size: 10px; font-weight: 800; letter-spacing: 0.14em;
+  text-transform: uppercase; color: rgba(255,255,255,0.2);
+}
+.wf-footer a {
+  color: rgba(232,72,28,0.5); text-decoration: none;
+  transition: color 0.15s;
+}
+.wf-footer a:hover { color: var(--o); }
+/* Desktop */
+@media (min-width: 768px) {
+  .wf-top { padding: 20px 40px 18px; }
+  .wf-count { font-size: 54px; }
+  .wf-grid-wrap { padding: 18px 40px 14px; }
+  .wf-grid { max-width: 528px; }
+  .wf-cell { font-size: 8px; }
+  .wf-footer { padding: 10px 40px; }
+  .wf-proximity { padding: 12px 40px; }
+}
+
 /* ── Footer ── */
 .profile-footer {
   margin: 32px 28px 0;
@@ -2441,6 +2619,43 @@ html, body {
     </div>
   </div>
 
+  <!-- ── WILDFIRE WATCH ── -->
+  <div class="section-eyebrow">Wildfire Watch</div>
+  <div id="wildfire-section">
+    <!-- Stats bar -->
+    <div class="wf-top">
+      <div class="wf-count-row">
+        <div class="wf-count" id="wf-count">—</div>
+        <div>
+          <div class="wf-count-label">Active Wildfires</div>
+          <div class="wf-count-sub">Continental United States</div>
+        </div>
+      </div>
+      <div class="wf-live-badge">
+        <div class="wf-live-dot"></div>
+        <span id="wf-updated">Loading</span>
+      </div>
+    </div>
+    <!-- State tile grid -->
+    <div class="wf-grid-wrap">
+      <div class="wf-grid-label">Fire Activity by State</div>
+      <div class="wf-grid" id="wf-state-grid"></div>
+    </div>
+    <!-- Fire incident horizontal scroll -->
+    <div class="wf-fires-scroll" id="wf-fires-scroll"></div>
+    <!-- Proximity warning (shown by JS if campgrounds near fires) -->
+    <div class="wf-proximity" id="wf-proximity" onclick="wfViewNearby()">
+      <span style="font-size:13px;">⚠</span>
+      <span id="wf-proximity-text"></span>
+      <span style="margin-left:auto;font-size:9px;letter-spacing:0.12em;color:rgba(232,72,28,0.55);">VIEW CAMPS →</span>
+    </div>
+    <!-- Footer -->
+    <div class="wf-footer">
+      <span>NASA EONET · NIFC</span>
+      <a href="https://inciweb.nwcg.gov/" target="_blank" rel="noopener noreferrer">InciWeb →</a>
+    </div>
+  </div>
+
   <div class="pnw-footer">
     <a href="https://www.producthunt.com/products/campgrounder-find-your-perfect-campsite?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-campgrounder-find-your-perfect-campsite" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-bottom:16px;"><img alt="Campgrounder- Find Your Perfect Campsite - Clean, design-forward campground finder app! | Product Hunt" width="250" height="54" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1167043&theme=light&t=1780967451203"></a>
     🌲 Born in the Pacific Northwest
@@ -2857,8 +3072,8 @@ html, body {
         <div class="about-stat-label">Categories</div>
       </div>
       <div class="about-stat">
-        <div class="about-stat-num">0</div>
-        <div class="about-stat-label">Ads. Ever.</div>
+        <div class="about-stat-num">Free</div>
+        <div class="about-stat-label">Always</div>
       </div>
     </div>
 
@@ -2866,7 +3081,7 @@ html, body {
     <div class="about-manifesto">
       <div class="about-manifesto-eyebrow">The Idea</div>
       <p>The outdoors shouldn't require a spreadsheet. Recreation.gov, state parks, private sites, BLM land — each with its own system, its own calendar, its own friction. <strong>We built Campgrounder to fix that.</strong></p>
-      <p>One honest place to browse, decide, and go. No ads. No dark patterns. No algorithm nudging you somewhere you don't want to be. Just trees, trails, and the cleanest path between you and them.</p>
+      <p>One honest place to browse, decide, and go. No algorithm nudging you somewhere you don't want to be. Just trees, trails, and the cleanest path between you and them.</p>
     </div>
 
     <!-- Principle cells -->
@@ -5443,6 +5658,226 @@ function fireStatusBlockHTML(status) {
     </div>`;
 }
 
+// ─── WILDFIRE WATCH (tile-grid redesign) ─────────
+const WF_STATE_ABBR = {
+  'Alabama':'AL','Alaska':'AK','Arizona':'AZ','Arkansas':'AR','California':'CA',
+  'Colorado':'CO','Connecticut':'CT','Delaware':'DE','Florida':'FL','Georgia':'GA',
+  'Hawaii':'HI','Idaho':'ID','Illinois':'IL','Indiana':'IN','Iowa':'IA',
+  'Kansas':'KS','Kentucky':'KY','Louisiana':'LA','Maine':'ME','Maryland':'MD',
+  'Massachusetts':'MA','Michigan':'MI','Minnesota':'MN','Mississippi':'MS','Missouri':'MO',
+  'Montana':'MT','Nebraska':'NE','Nevada':'NV','New Hampshire':'NH','New Jersey':'NJ',
+  'New Mexico':'NM','New York':'NY','North Carolina':'NC','North Dakota':'ND','Ohio':'OH',
+  'Oklahoma':'OK','Oregon':'OR','Pennsylvania':'PA','Rhode Island':'RI','South Carolina':'SC',
+  'South Dakota':'SD','Tennessee':'TN','Texas':'TX','Utah':'UT','Vermont':'VT',
+  'Virginia':'VA','Washington':'WA','West Virginia':'WV','Wisconsin':'WI','Wyoming':'WY',
+};
+
+// Tile-grid positions: [col, row] in 11-column × 9-row grid
+const WF_TILE = {
+  'ME':[10,0],
+  'VT':[9,1],'NH':[10,1],
+  'WA':[0,2],'MT':[1,2],'ND':[2,2],'MN':[3,2],'MI':[5,2],'NY':[7,2],'MA':[8,2],'RI':[9,2],
+  'OR':[0,3],'ID':[1,3],'WY':[2,3],'SD':[3,3],'WI':[4,3],'IN':[5,3],'OH':[6,3],'PA':[7,3],'NJ':[8,3],'CT':[9,3],
+  'CA':[0,4],'NV':[1,4],'UT':[2,4],'CO':[3,4],'NE':[4,4],'IA':[5,4],'IL':[6,4],'KY':[7,4],'WV':[8,4],'VA':[9,4],'MD':[10,4],
+  'AZ':[1,5],'NM':[2,5],'KS':[3,5],'MO':[4,5],'TN':[5,5],'NC':[6,5],'SC':[7,5],'DE':[10,5],
+  'OK':[3,6],'AR':[4,6],'MS':[5,6],'AL':[6,6],'GA':[7,6],
+  'TX':[3,7],'LA':[4,7],'FL':[7,7],
+  'AK':[0,8],'HI':[1,8],
+};
+
+// Simplified lat/lng → state for EONET fallback (west-heavy fire states)
+function wfLatLngToState(lat, lng) {
+  if (lat > 45.5  && lng < -116.5) return 'WA';
+  if (lat > 41.9  && lat <= 45.5  && lng < -116.5) return 'OR';
+  if (lat > 32.5  && lat <= 42.0  && lng < -119.5) return 'CA';
+  if (lat > 37.9  && lat <= 42.0  && lng >= -119.5 && lng < -114.0) return 'NV';
+  if (lat > 36.9  && lat <= 38.0  && lng >= -114.0 && lng < -109.0) return 'UT';
+  if (lat > 31.3  && lat <= 37.0  && lng >= -114.8 && lng < -109.0) return 'AZ';
+  if (lat > 36.9  && lat <= 41.0  && lng >= -109.0 && lng < -102.0) return 'CO';
+  if (lat > 31.3  && lat <= 37.0  && lng >= -109.0 && lng < -103.0) return 'NM';
+  if (lat > 44.3  && lat <= 49.0  && lng >= -116.0 && lng < -104.0) return 'MT';
+  if (lat > 41.9  && lat <= 44.3  && lng >= -117.0 && lng < -111.0) return 'ID';
+  if (lat > 40.9  && lat <= 45.0  && lng >= -111.0 && lng < -104.0) return 'WY';
+  if (lat > 25.8  && lat <= 36.5  && lng >= -106.6 && lng < -93.5)  return 'TX';
+  if (lat > 33.6  && lat <= 37.0  && lng >= -103.0 && lng < -94.4)  return 'OK';
+  if (lat > 33.0  && lat <= 36.5  && lng >= -94.6  && lng < -89.6)  return 'AR';
+  return null;
+}
+
+// Haversine distance in miles
+function wfMiles(lat1, lng1, lat2, lng2) {
+  const R = 3958.8, toRad = Math.PI / 180;
+  const dLat = (lat2 - lat1) * toRad, dLng = (lng2 - lng1) * toRad;
+  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*toRad) * Math.cos(lat2*toRad) * Math.sin(dLng/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+let wfLoaded = false;
+window.FIRE_CAMP_IDS = new Set();
+
+async function initWildfireSection() {
+  if (wfLoaded) return;
+  wfLoaded = true;
+  renderWfGrid({});   // show empty grid right away
+  loadWildfireData();
+}
+
+function renderWfGrid(stateMap) {
+  const el = document.getElementById('wf-state-grid');
+  if (!el) return;
+  const COLS = 11, ROWS = 9;
+  const cells = Array(COLS * ROWS).fill(null);
+  Object.entries(WF_TILE).forEach(([ab,[c,r]]) => { cells[r * COLS + c] = ab; });
+  el.innerHTML = '';
+  cells.forEach(ab => {
+    const div = document.createElement('div');
+    if (!ab) { div.className = 'wf-cell'; el.appendChild(div); return; }
+    const n = stateMap[ab] || 0;
+    let cls = 'wf-cell wf-state';
+    if (n >= 5) cls += ' wf-fire-3';
+    else if (n >= 2) cls += ' wf-fire-2';
+    else if (n >= 1) cls += ' wf-fire-1';
+    div.className = cls;
+    div.textContent = ab;
+    if (n > 0) {
+      const badge = document.createElement('div');
+      badge.className = 'wf-cell-count';
+      badge.textContent = n > 9 ? '9+' : n;
+      div.appendChild(badge);
+      div.title = `${n} active fire${n > 1 ? 's' : ''} in ${ab}`;
+    }
+    el.appendChild(div);
+  });
+}
+
+function renderWfCards(fires) {
+  const el = document.getElementById('wf-fires-scroll');
+  if (!el) return;
+  if (!fires.length) {
+    el.innerHTML = '<div style="padding:14px 24px;font-size:10px;color:rgba(255,255,255,0.25);font-weight:800;letter-spacing:0.14em;text-transform:uppercase;align-self:center;">No active wildfires reported</div>';
+    return;
+  }
+  const sorted = [...fires].sort((a,b) => b.ms - a.ms).slice(0, 24);
+  el.innerHTML = sorted.map(f => {
+    const daysAgo = Math.floor((Date.now() - f.ms) / 86400000);
+    const isHot = daysAgo < 3;
+    const ageStr = daysAgo === 0 ? 'Today' : daysAgo === 1 ? '1d ago' : `${daysAgo}d ago`;
+    return `<div class="wf-fire-card">
+      <div class="wf-fire-name">${escHtml(f.title)}</div>
+      <div class="wf-fire-meta">
+        ${f.state ? `<div class="wf-fire-state">${f.state}</div>` : ''}
+        ${isHot ? '<div class="wf-fire-hot">🔴 NEW</div>' : ''}
+        <div class="wf-fire-age">${ageStr}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function wfCheckProximity(fires) {
+  const RADIUS = 75;
+  const coords = fires.filter(f => f.coords);
+  const near = new Set();
+  CAMPS.forEach(c => {
+    if (!c.lat || !c.lng) return;
+    if (coords.some(f => wfMiles(f.coords[0], f.coords[1], c.lat, c.lng) <= RADIUS)) near.add(c.id);
+  });
+  window.FIRE_CAMP_IDS = near;
+  const warnEl = document.getElementById('wf-proximity');
+  const txtEl  = document.getElementById('wf-proximity-text');
+  if (!warnEl || !txtEl) return;
+  if (near.size > 0) {
+    txtEl.innerHTML = `<em>${near.size} campground${near.size > 1 ? 's' : ''}</em> within 75 mi of an active fire`;
+    warnEl.style.display = 'flex';
+  }
+}
+
+function wfViewNearby() {
+  if (!window.FIRE_CAMP_IDS?.size) return;
+  go('results', 'home');
+}
+
+async function loadWildfireData() {
+  const cEl = document.getElementById('wf-count');
+  const uEl = document.getElementById('wf-updated');
+
+  // Primary: NIFC ESRI (has POOState + acreage)
+  try {
+    const r = await fetch(
+      'https://services3.arcgis.com/T4QMspbfLg3qTGWY/arcgis/rest/services/Active_Fires/FeatureServer/0/query' +
+      '?where=1%3D1&outFields=IncidentName,GISAcres,POOState,FireDiscoveryDateTime' +
+      '&geometry=-126,24,-65,50&geometryType=esriGeometryEnvelope&spatialRel=esriSpatialRelIntersects' +
+      '&inSR=4326&f=json&resultRecordCount=300',
+      { signal: AbortSignal.timeout(8000) }
+    );
+    const d = await r.json();
+    if (d.features?.length) {
+      const fires = [], stateMap = {};
+      d.features.forEach(f => {
+        const a = f.attributes || {};
+        const raw = a.POOState;
+        const state = raw ? (WF_STATE_ABBR[raw] || (raw.length === 2 ? raw.toUpperCase() : null)) : null;
+        let coords = null;
+        if (f.geometry?.x != null) coords = [f.geometry.y, f.geometry.x];
+        else if (f.geometry?.rings) {
+          const pts = f.geometry.rings[0];
+          const lng = pts.reduce((s,p)=>s+p[0],0)/pts.length;
+          const lat = pts.reduce((s,p)=>s+p[1],0)/pts.length;
+          coords = [lat, lng];
+        }
+        const ms = a.FireDiscoveryDateTime || 0;
+        if (state) stateMap[state] = (stateMap[state]||0) + 1;
+        fires.push({ title: a.IncidentName || 'Active Fire', state, coords, ms });
+      });
+      if (cEl) cEl.textContent = d.features.length;
+      if (uEl) { const t = new Date(); uEl.textContent = `Live · ${t.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}`; }
+      renderWfGrid(stateMap);
+      renderWfCards(fires);
+      wfCheckProximity(fires);
+      return;
+    }
+  } catch {}
+
+  // Fallback: NASA EONET
+  try {
+    const r = await fetch(
+      'https://eonet.gsfc.nasa.gov/api/v3/events?category=wildfires&status=open&limit=500&days=60',
+      { signal: AbortSignal.timeout(9000) }
+    );
+    const d = await r.json();
+    if (d.events?.length) {
+      const usEvts = d.events.filter(e => {
+        const g = e.geometry?.[e.geometry.length-1];
+        if (!g || g.type !== 'Point') return false;
+        const [lng,lat] = g.coordinates;
+        return lat > 24.5 && lat < 49.5 && lng > -124.8 && lng < -66.9;
+      });
+      const fires = [], stateMap = {};
+      usEvts.forEach(e => {
+        const g = e.geometry[e.geometry.length-1];
+        const [lng,lat] = g.coordinates;
+        const state = wfLatLngToState(lat,lng);
+        const ms = new Date(g.date).getTime();
+        if (state) stateMap[state] = (stateMap[state]||0) + 1;
+        fires.push({ title: e.title, state, coords: [lat,lng], ms });
+      });
+      if (cEl) cEl.textContent = usEvts.length || '0';
+      if (uEl) { const t = new Date(); uEl.textContent = `Live · ${t.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}`; }
+      renderWfGrid(stateMap);
+      renderWfCards(fires);
+      wfCheckProximity(fires);
+      return;
+    }
+  } catch {}
+
+  if (cEl) cEl.textContent = '—';
+  if (uEl) uEl.textContent = 'Unavailable';
+  renderWfCards([]);
+}
+
 // ─── NAVIGATION ─────────────────────────────────
 function go(toId, fromId) {
   prevScreen = fromId || document.querySelector('.screen.active')?.id || 'home';
@@ -5452,6 +5887,7 @@ function go(toId, fromId) {
   if (toId === 'results')    renderResults();
   if (toId === 'saved')      renderSaved();
   if (toId === 'profile')    renderProfile();
+  if (toId === 'home')       initWildfireSection();
   // Show global compass on results + saved screens only (home and map have their own; detail has CTA bar)
   const cg = document.getElementById('compass-global');
   if (cg) cg.classList.toggle('vis', toId === 'results' || toId === 'saved');
@@ -6522,6 +6958,9 @@ if ('serviceWorker' in navigator) {
       .catch(() => {});
   });
 }
+
+// Initialize wildfire section on first page load (home is the default screen)
+setTimeout(initWildfireSection, 400);
 
 // Handle deep-link shortcuts from manifest.json
 (function handleLaunchParams() {
