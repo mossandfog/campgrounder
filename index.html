@@ -2116,7 +2116,7 @@ html, body {
 .cta-sq:hover { border-color: var(--o); }
 
 /* ── DETAIL BOTTOM GRID (pack + drive) ─────────── */
-.detail-bottom-grid { display: block; }
+.detail-bottom-grid { display: block; padding-top: 4px; }
 @media (min-width: 768px) {
   .detail-bottom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 40px; align-items: start; }
 }
@@ -2124,9 +2124,9 @@ html, body {
 /* ── PACK LIST ─────────────────────────────────── */
 .pack-toggle { cursor: pointer; -webkit-tap-highlight-color: transparent; user-select: none; display: flex; align-items: center; gap: 6px; }
 .pack-toggle:hover #pack-chevron { color: rgba(255,255,255,0.7) !important; }
-.pack-hint { font-size: 12px; color: rgba(255,255,255,0.25); margin-bottom: 14px; letter-spacing: 0.02em; }
+.pack-hint { font-size: 12px; color: rgba(255,255,255,0.25); margin-bottom: 16px; letter-spacing: 0.02em; }
 /* ── PACK PREVIEW CHIPS ─────────────────────────── */
-.pack-preview { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 4px; }
+.pack-preview { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0 6px; }
 .pack-chip { font-size: 12px; color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.05);
              border: 1px solid rgba(255,255,255,0.09); border-radius: 20px; padding: 4px 10px;
              white-space: nowrap; letter-spacing: 0.01em; }
@@ -2134,9 +2134,47 @@ html, body {
              border: 1px solid rgba(232,72,28,0.25); border-radius: 20px; padding: 4px 10px;
              white-space: nowrap; font-weight: 600; letter-spacing: 0.02em; }
 .pack-list  { display: flex; flex-direction: column; margin-bottom: 40px; }
-.pack-item  { display: flex; align-items: center; gap: 13px; padding: 11px 0;
+.pack-item  { display: flex; align-items: center; gap: 13px; padding: 15px 0;
               border-bottom: 1px solid rgba(255,255,255,0.06); cursor: pointer;
               transition: opacity 0.2s; -webkit-tap-highlight-color: transparent; }
+
+/* ── CONNECTIVITY ─────────────────────────────── */
+.conn-block { margin-bottom: 8px; }
+.conn-row {
+  display: flex; align-items: center; gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.conn-row:last-child { border-bottom: none; }
+.conn-carrier {
+  font-size: 11px; font-weight: 900; letter-spacing: 0.1em;
+  text-transform: uppercase; width: 68px; flex-shrink: 0;
+  color: rgba(255,255,255,0.75);
+}
+.conn-bars { display: flex; align-items: flex-end; gap: 3px; flex-shrink: 0; }
+.conn-bar {
+  width: 5px; border-radius: 1.5px 1.5px 0 0;
+  background: rgba(255,255,255,0.1);
+  transition: background 0.3s;
+}
+.conn-bar:nth-child(1) { height: 6px; }
+.conn-bar:nth-child(2) { height: 9px; }
+.conn-bar:nth-child(3) { height: 13px; }
+.conn-bar:nth-child(4) { height: 17px; }
+.conn-quality {
+  font-size: 11px; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase;
+  min-width: 58px;
+}
+.conn-tech {
+  margin-left: auto; flex-shrink: 0;
+  font-size: 9px; font-weight: 900; letter-spacing: 0.2em;
+  padding: 3px 7px; border: 1.5px solid;
+}
+.conn-note {
+  font-size: 11px; color: rgba(255,255,255,0.2); letter-spacing: 0.03em;
+  margin-top: 10px; padding-top: 10px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
 .pack-item:last-child { border-bottom: none; }
 .pack-check { width: 20px; height: 20px; border: 1.5px solid rgba(232,72,28,0.4);
               border-radius: 4px; flex-shrink: 0; transition: background 0.15s, border-color 0.15s;
@@ -3280,6 +3318,9 @@ html, body {
     <div class="d-divider" id="d-wx-divider" style="display:none;"></div>
     <div class="d-eyebrow" id="d-wx-eyebrow" style="display:none;">Forecast</div>
     <div class="forecast-strip" id="d-forecast" style="display:none;"></div>
+    <div class="d-divider"></div>
+    <div class="d-eyebrow">Connectivity</div>
+    <div id="d-connectivity"></div>
     <div class="d-divider"></div>
     <div class="detail-bottom-grid">
       <!-- Pack List col -->
@@ -6751,6 +6792,9 @@ function openDetail(id) {
   // Trigger forecast load
   loadDetailForecast(c);
 
+  // Connectivity
+  renderConnectivity(c);
+
   // Pack list
   renderPackList(c);
 
@@ -7021,6 +7065,81 @@ function dismissCompassHint() {
     hero.style.backgroundPositionY = `calc(50% + ${y * 0.38}px)`;
   }, { passive: true });
 })();
+
+// ─── CONNECTIVITY ────────────────────────────────
+function getConnectivityData(c) {
+  const desc  = (c.desc || '').toLowerCase();
+  const state = (c.loc  || '').split('·')[1]?.trim() || '';
+
+  // Explicit desc mentions override everything
+  const noSignal  = /no cell|no service|no reception|no coverage|zero cell|no phone|no signal/.test(desc);
+  const hasWifi   = /\bwifi\b|\bwi-fi\b/.test(desc);
+
+  // Base score by camp type (0–4 scale)
+  const TYPE_SCORE = {
+    'Glamping': 3.5, 'RV Park': 3.5, 'Private': 3,
+    'Army Corps': 2.5, 'State Park': 2,
+    'National Park': 1.5, 'Forest Service': 1, 'BLM': 1,
+  };
+  let base = TYPE_SCORE[c.type] ?? 2;
+
+  // State remoteness modifier
+  const STATE_MOD = {
+    'Alaska': -2, 'Montana': -1.5, 'Wyoming': -1.2, 'Idaho': -1,
+    'North Dakota': -0.5, 'South Dakota': -0.5,
+    'Nevada': -0.5, 'New Mexico': -0.5, 'West Virginia': -0.5,
+    'Texas': 0.4, 'Florida': 0.5, 'California': 0.2,
+    'Ohio': 0.3, 'Pennsylvania': 0.3, 'New York': 0.3,
+    'Illinois': 0.3, 'Michigan': 0.3, 'Washington': 0.2,
+  };
+  base += (STATE_MOD[state] ?? 0);
+
+  if (noSignal) base = 0;
+  else if (hasWifi) base = Math.min(4, base + 0.8);
+
+  base = Math.max(0, Math.min(4, base));
+
+  // Per-carrier variation (T-Mobile expanding fast, Verizon steady, AT&T similar)
+  const clamp = v => Math.max(0, Math.min(4, Math.round(v)));
+  const tm  = clamp(base + 0.35);
+  const vz  = clamp(base);
+  const att = clamp(base - 0.15);
+
+  const LABELS = ['No Signal', 'Poor', 'Fair', 'Good', 'Excellent'];
+  // Quality colors: grey → orange-red → orange → yellow-gold → green
+  const COLORS = [
+    'rgba(255,255,255,0.22)',
+    'rgba(232,72,28,0.75)',
+    '#E8481C',
+    '#E8C21C',
+    '#5EC26A',
+  ];
+
+  return [
+    { name: 'T-Mobile', bars: tm,  tech: tm  >= 3 ? '5G'  : tm  > 0 ? 'LTE' : '', label: LABELS[tm],  color: COLORS[tm]  },
+    { name: 'Verizon',  bars: vz,  tech: vz  > 0  ? 'LTE' : '',                    label: LABELS[vz],  color: COLORS[vz]  },
+    { name: 'AT&T',     bars: att, tech: att > 0  ? 'LTE' : '',                    label: LABELS[att], color: COLORS[att] },
+  ];
+}
+
+function renderConnectivity(c) {
+  const rows = getConnectivityData(c);
+  document.getElementById('d-connectivity').innerHTML =
+    `<div class="conn-block">
+      ${rows.map(r => `
+        <div class="conn-row">
+          <div class="conn-carrier">${r.name}</div>
+          <div class="conn-bars">
+            ${[1,2,3,4].map(i =>
+              `<div class="conn-bar${i <= r.bars ? ' lit' : ''}" style="${i <= r.bars ? `background:${r.color}` : ''}"></div>`
+            ).join('')}
+          </div>
+          <div class="conn-quality" style="color:${r.color}">${r.label}</div>
+          ${r.tech ? `<div class="conn-tech" style="color:${r.color};border-color:${r.color}">${r.tech}</div>` : `<div style="margin-left:auto"></div>`}
+        </div>`).join('')}
+      <div class="conn-note">Estimated area coverage · signal varies within camp</div>
+    </div>`;
+}
 
 // ─── SMART PACK LIST ─────────────────────────────
 function generatePackList(c) {
