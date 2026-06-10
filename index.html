@@ -2319,6 +2319,48 @@ html, body {
 }
 .flyover-hint { color: rgba(255,255,255,0.55); font-size: 12px; }
 
+/* ── Nearby Campgrounds ─────────────────────────────────────────── */
+.nearby-section { margin-top: 4px; }
+.nearby-header {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 14px;
+}
+.nearby-glyph {
+  width: 28px; height: 28px; display: flex; align-items: center;
+  justify-content: center; font-size: 15px;
+  background: rgba(232,72,28,0.12); border: 1px solid rgba(232,72,28,0.22);
+  flex-shrink: 0;
+}
+.nearby-card {
+  display: flex; align-items: center; gap: 12px;
+  padding: 13px 0; border-bottom: 1px solid rgba(255,255,255,0.06);
+  cursor: pointer; transition: opacity 0.15s;
+}
+.nearby-card:last-child { border-bottom: none; }
+.nearby-card:active { opacity: 0.65; }
+.nearby-card-thumb {
+  width: 52px; height: 52px; flex-shrink: 0;
+  background: var(--g2); overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.08);
+  display: flex; align-items: center; justify-content: center;
+}
+.nearby-card-thumb svg { color: rgba(255,255,255,0.18); }
+.nearby-body { flex: 1; min-width: 0; }
+.nearby-name {
+  font-size: 14px; font-weight: 800; color: rgba(255,255,255,0.9);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  letter-spacing: 0.01em;
+}
+.nearby-meta {
+  font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.38);
+  margin-top: 3px; letter-spacing: 0.04em;
+}
+.nearby-dist {
+  font-size: 11px; font-weight: 900; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--o); opacity: 0.75;
+  flex-shrink: 0;
+}
+
 /* ── Accessibility & Legibility Pass ───────────────────────────────── */
 /* Focus-visible: orange brand outline on all interactive elements */
 :focus-visible {
@@ -3438,6 +3480,7 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
         </div>
       </div>
     </div>
+    <div id="d-nearby"></div>
   </div>
   <div class="d-cta-bar">
     <a class="cta-main" id="d-cta-link" href="#" target="_blank" rel="noopener">Check Availability →</a>
@@ -6942,6 +6985,9 @@ function openDetail(id) {
   // Best For tags + experience level
   renderBestFor(c);
 
+  // Nearby campgrounds
+  renderNearby(c);
+
   // Pack list
   renderPackList(c);
 
@@ -7789,6 +7835,44 @@ function renderConnectivity(c) {
           ${r.tech ? `<div class="conn-tech" style="color:${r.color};border-color:${r.color}">${r.tech}</div>` : `<div style="margin-left:auto"></div>`}
         </div>`).join('')}
       <div class="conn-note">Estimated area coverage · signal varies within camp</div>
+    </div>`;
+}
+
+// ─── NEARBY CAMPGROUNDS ──────────────────────────
+function renderNearby(c) {
+  const el = document.getElementById('d-nearby');
+  if (!el) return;
+
+  // Find closest camps (excluding self), sorted by straight-line distance
+  const nearby = CAMPS
+    .filter(x => x.id !== c.id)
+    .map(x => ({ ...x, _mi: haversine(c.lat, c.lng, x.lat, x.lng) }))
+    .sort((a, b) => a._mi - b._mi)
+    .slice(0, 3);
+
+  if (!nearby.length) { el.style.display = 'none'; return; }
+
+  const typeGlyph = id => `<svg width="22" height="22" style="color:rgba(255,255,255,0.22);stroke:currentColor;fill:none;"><use href="${id}"/></svg>`;
+
+  el.innerHTML = `
+    <div class="d-divider"></div>
+    <div class="nearby-section">
+      <div class="nearby-header">
+        <div class="nearby-glyph" aria-hidden="true">🗺</div>
+        <div class="d-eyebrow" style="margin-bottom:0;">Nearby</div>
+      </div>
+      ${nearby.map(n => `
+        <div class="nearby-card" onclick="openDetail(${n.id})" role="button" tabindex="0"
+             aria-label="${n.name}, ${Math.round(n._mi)} miles away">
+          <div class="nearby-card-thumb" aria-hidden="true">
+            ${typeGlyph(TYPE_GLYPH[n.type] || '#ic-tent')}
+          </div>
+          <div class="nearby-body">
+            <div class="nearby-name">${n.name}</div>
+            <div class="nearby-meta">${n.type} &nbsp;·&nbsp; ★ ${n.rating} &nbsp;·&nbsp; $${n.price}/night</div>
+          </div>
+          <div class="nearby-dist">${Math.round(n._mi)} mi</div>
+        </div>`).join('')}
     </div>`;
 }
 
