@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Campgrounder — Find Your Perfect Campsite</title>
 <meta name="description" content="Find campgrounds at state parks, private sites, glamping and more.">
 <meta name="theme-color" content="#0C1F15">
@@ -2318,6 +2318,36 @@ html, body {
   font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
 }
 .flyover-hint { color: rgba(255,255,255,0.55); font-size: 12px; }
+
+/* ── Accessibility & Legibility Pass ───────────────────────────────── */
+/* Focus-visible: orange brand outline on all interactive elements */
+:focus-visible {
+  outline: 2px solid var(--o);
+  outline-offset: 2px;
+}
+button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--o);
+  outline-offset: 2px;
+}
+
+/* Minimum touch target: .xbtn bumped to 44×44 */
+.xbtn { width: 44px !important; height: 44px !important; min-width: 44px; min-height: 44px; }
+
+/* .vbtn — increase tap target padding */
+.vbtn { padding: 8px 14px !important; min-height: 36px; }
+
+/* Font bumps for very small labels */
+.d-exp-badge  { font-size: 11px !important; }
+.d-best-tag   { font-size: 11px !important; }
+.conn-tech    { font-size: 11px !important; }
+.conn-carrier, .conn-quality { font-size: 12px !important; }
+.d-rview-cta  { font-size: 11px !important; }
+
+/* Contrast improvements on low-opacity text */
+.pack-hint         { color: rgba(255,255,255,0.45) !important; }
+.conn-note         { color: rgba(255,255,255,0.38) !important; }
+.share-sheet-title { color: rgba(255,255,255,0.55) !important; }
 </style>
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
@@ -2449,7 +2479,7 @@ html, body {
         <div id="compass-ping" class="compass-ping" style="display:none;"></div>
         <div id="compass-tip"  class="compass-tip">Camps near you →</div>
       </div>
-      <div class="xbtn" onclick="openSearch()"></div>
+      <div class="xbtn" onclick="openSearch()" aria-label="Open search" role="button" tabindex="0"></div>
     </div>
   </div>
   <div class="home-hero">
@@ -2460,7 +2490,7 @@ html, body {
         <input placeholder="Where are you headed?" readonly style="cursor:pointer;">
         <div class="sbar-icon"><svg width="17" height="17" style="color:rgba(255,255,255,0.52);stroke:currentColor;fill:none;"><use href="#ic-search"/></svg></div>
       </div>
-      <div class="xbtn" onclick="openSearch()"></div>
+      <div class="xbtn" onclick="openSearch()" aria-label="Open search" role="button" tabindex="0"></div>
     </div>
     <!-- Date strip -->
     <div class="date-strip">
@@ -2770,7 +2800,7 @@ html, body {
 ══════════════════════════════════════ -->
 <div class="screen" id="search-overlay" style="z-index:200;">
   <div class="search-ov-top">
-    <div class="xbtn is-close" onclick="closeSearch()"></div>
+    <div class="xbtn is-close" onclick="closeSearch()" aria-label="Close search" role="button" tabindex="0"></div>
     <div class="sbar">
       <input id="search-input" placeholder="Free camping, dog-friendly, waterfalls…"
         type="search" inputmode="search" enterkeyhint="search" autocomplete="off"
@@ -2797,9 +2827,9 @@ html, body {
 ══════════════════════════════════════ -->
 <div class="screen" id="results">
   <div class="results-top">
-    <div class="xbtn is-close" onclick="clearSearch();go('home','results')"></div>
+    <div class="xbtn is-close" onclick="clearSearch();go('home','results')" aria-label="Clear and go home" role="button" tabindex="0"></div>
     <div class="sbar"><input value="California" id="results-input"></div>
-    <div class="xbtn" onclick="openSearch()"></div>
+    <div class="xbtn" onclick="openSearch()" aria-label="Open search" role="button" tabindex="0"></div>
   </div>
   <!-- Fire season advisory banner — shown June–September -->
   <div class="fire-season-banner" id="fire-season-banner">
@@ -2856,7 +2886,7 @@ html, body {
 
   <!-- Floating topbar overlay -->
   <div class="map-topbar">
-    <div class="xbtn is-close dark-bg" onclick="go('home','map-screen')"></div>
+    <div class="xbtn is-close dark-bg" onclick="go('home','map-screen')" aria-label="Close map" role="button" tabindex="0"></div>
     <div class="sbar" style="background:rgba(12,31,21,0.88);backdrop-filter:blur(12px);" onclick="openSearch()">
       <input placeholder="Search the map…" readonly style="cursor:pointer;">
       <div class="sbar-icon"><svg width="17" height="17" style="color:rgba(255,255,255,0.52);stroke:currentColor;fill:none;"><use href="#ic-search"/></svg></div>
@@ -2897,7 +2927,7 @@ html, body {
       <div class="saved-heading">Saved</div>
       <div class="saved-count" id="saved-count">0 campgrounds</div>
     </div>
-    <div class="xbtn is-close" onclick="go('home','saved')"></div>
+    <div class="xbtn is-close" onclick="go('home','saved')" aria-label="Close saved list" role="button" tabindex="0"></div>
   </div>
   <div class="saved-scroll" id="saved-list"></div>
   <nav class="bnav">
@@ -3129,7 +3159,7 @@ html, body {
 <div class="screen" id="about">
 
   <div class="about-top">
-    <div class="xbtn is-close" onclick="goBack()"></div>
+    <div class="xbtn is-close" onclick="goBack()" aria-label="Go back" role="button" tabindex="0"></div>
     <div class="about-top-label">About</div>
     <div style="width:40px;"></div>
   </div>
@@ -3247,7 +3277,7 @@ html, body {
 ══════════════════════════════════════ -->
 <div class="screen" id="privacy">
   <div class="topbar">
-    <div class="topbar-btn xbtn is-close" onclick="goBack()"></div>
+    <div class="topbar-btn xbtn is-close" onclick="goBack()" aria-label="Go back" role="button" tabindex="0"></div>
     <div class="topbar-title">Privacy Policy</div>
     <div style="width:36px"></div>
   </div>
@@ -3330,10 +3360,10 @@ html, body {
     <div class="d-hero-glyph" id="d-glyph"></div>
     <div class="d-hero-grad"></div>
     <div class="d-topbar">
-      <div class="topbar-btn xbtn is-close" onclick="goBack()"></div>
+      <div class="topbar-btn xbtn is-close" onclick="goBack()" aria-label="Go back" role="button"></div>
       <div style="display:flex;gap:8px;">
-<div class="topbar-btn" id="save-btn" onclick="toggleSave()">
-          <svg id="save-svg" width="17" height="17" style="color:rgba(255,255,255,0.7);stroke:currentColor;fill:none;"><use href="#ic-heart"/></svg>
+<div class="topbar-btn" id="save-btn" onclick="toggleSave()" aria-label="Save campground" role="button">
+          <svg id="save-svg" width="17" height="17" style="color:rgba(255,255,255,0.7);stroke:currentColor;fill:none;" aria-hidden="true"><use href="#ic-heart"/></svg>
         </div>
       </div>
     </div>
@@ -3346,11 +3376,11 @@ html, body {
     <div class="d-type"   id="d-type">National Park</div>
     <div class="d-name"   id="d-name">Yosemite Valley</div>
     <div class="d-loc"    id="d-loc">Yosemite NP · California</div>
-    <div class="d-rating" onclick="showReviewSheet()">
+    <div class="d-rating" onclick="showReviewSheet()" role="button" aria-label="View review sources" tabindex="0">
       <div class="d-rnum"  id="d-rating">4.8</div>
-      <div class="d-rstars">★★★★★</div>
+      <div class="d-rstars" aria-hidden="true">★★★★★</div>
       <div class="d-rct"   id="d-reviews">1,240 Reviews</div>
-      <div class="d-rview-cta">SOURCES →</div>
+      <div class="d-rview-cta" aria-hidden="true">SOURCES →</div>
     </div>
     <div class="stat-row">
       <div class="stat-box"><div class="stat-val" id="d-price" style="color:var(--o);">$35</div><div class="stat-lbl">Per night</div></div>
@@ -3411,11 +3441,11 @@ html, body {
   </div>
   <div class="d-cta-bar">
     <a class="cta-main" id="d-cta-link" href="#" target="_blank" rel="noopener">Check Availability →</a>
-    <div class="cta-sq" onclick="addToCalendar()" title="Add to Calendar">
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    <div class="cta-sq" onclick="addToCalendar()" title="Add to Calendar" aria-label="Add to Calendar" role="button">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
     </div>
-    <div class="cta-sq" onclick="shareCamp()">
-      <svg width="17" height="17" style="color:rgba(255,255,255,0.6);stroke:currentColor;fill:none;"><use href="#ic-share"/></svg>
+    <div class="cta-sq" onclick="shareCamp()" aria-label="Share campground" role="button">
+      <svg width="17" height="17" style="color:rgba(255,255,255,0.6);stroke:currentColor;fill:none;" aria-hidden="true"><use href="#ic-share"/></svg>
     </div>
   </div>
 </div>
@@ -3424,7 +3454,7 @@ html, body {
 <div id="flyover-overlay">
   <div id="flyover-map"></div>
   <div class="flyover-topbar">
-    <div class="topbar-btn xbtn is-close dark-bg" onclick="closeFlyover()"></div>
+    <div class="topbar-btn xbtn is-close dark-bg" onclick="closeFlyover()" aria-label="Close map view" role="button" tabindex="0"></div>
     <div class="flyover-title">
       <div class="flyover-title-name" id="flyover-name"></div>
       <div class="flyover-title-loc"  id="flyover-loc"></div>
@@ -6510,8 +6540,8 @@ function renderResults() {
   }
 
   document.getElementById('results-list').innerHTML = headerExtra + camps.map(c => `
-    <div class="camp-card" onclick="openDetail(${c.id})">
-      <div class="card-box">${glyph(TYPE_GLYPH[c.type]||'#ic-tent',30)}</div>
+    <div class="camp-card" onclick="openDetail(${c.id})" role="button" tabindex="0" aria-label="${c.name}, ${c.loc}, ${c.rating} stars, $${c.price} per night">
+      <div class="card-box" aria-hidden="true">${glyph(TYPE_GLYPH[c.type]||'#ic-tent',30)}</div>
       <div class="card-body">
         <div class="card-type">${c.type}</div>
         <div class="card-name">${c.name}</div>
@@ -6521,7 +6551,7 @@ function renderResults() {
           <div><div class="card-pnum">$${c.price}</div><div class="card-punit">/ Night</div></div>
         </div>
       </div>
-      <div class="card-chevron"></div>
+      <div class="card-chevron" aria-hidden="true"></div>
     </div>`).join('');
 
   // Async: load weather glyphs after cards are in DOM
@@ -6543,15 +6573,15 @@ function renderSaved() {
     return;
   }
   document.getElementById('saved-list').innerHTML = camps.map(c => `
-    <div class="saved-card" onclick="openDetail(${c.id})">
-      <div class="saved-sat-thumb" style="background-image:url(${mapboxStatic(c.lat, c.lng, 144, 144, 11, 20, 45)})"></div>
+    <div class="saved-card" onclick="openDetail(${c.id})" role="button" tabindex="0" aria-label="${c.name}, ${c.loc}">
+      <div class="saved-sat-thumb" style="background-image:url(${mapboxStatic(c.lat, c.lng, 144, 144, 11, 20, 45)})" aria-hidden="true"></div>
       <div class="card-body" style="flex:1;">
         <div class="card-type">${c.type}</div>
         <div class="card-name">${c.name}</div>
         <div class="card-loc">${c.loc}</div>
         <div class="card-stats" style="font-size:12px;color:rgba(255,255,255,0.5);">★ ${c.rating} &nbsp;·&nbsp; $${c.price} / night</div>
       </div>
-      <div class="unsave-btn" onclick="unsave(${c.id},event)"></div>
+      <div class="unsave-btn" onclick="unsave(${c.id},event)" aria-label="Remove ${c.name} from saved" role="button"></div>
     </div>`).join('');
 }
 
@@ -7750,9 +7780,9 @@ function renderConnectivity(c) {
       ${rows.map(r => `
         <div class="conn-row">
           <div class="conn-carrier">${r.name}</div>
-          <div class="conn-bars">
+          <div class="conn-bars" aria-label="${r.label} signal (${r.bars} of 4 bars)" role="img">
             ${[1,2,3,4].map(i =>
-              `<div class="conn-bar${i <= r.bars ? ' lit' : ''}" style="${i <= r.bars ? `background:${r.color}` : ''}"></div>`
+              `<div class="conn-bar${i <= r.bars ? ' lit' : ''}" style="${i <= r.bars ? `background:${r.color}` : ''}" aria-hidden="true"></div>`
             ).join('')}
           </div>
           <div class="conn-quality" style="color:${r.color}">${r.label}</div>
@@ -8078,6 +8108,32 @@ function dismissWelcome() {
   localStorage.setItem('cg_welcomed', '1');
   setTimeout(() => { overlay.style.display = 'none'; overlay.classList.remove('out'); }, 240);
 }
+
+// ── Accessibility Init ────────────────────────────────────────────
+(function a11yInit() {
+  // Mark nav tab SVGs as decorative (text labels do the job)
+  document.querySelectorAll('.ntab svg').forEach(s => s.setAttribute('aria-hidden','true'));
+  // Nav tabs: add role + keyboard support
+  document.querySelectorAll('.ntab').forEach(el => {
+    if (!el.getAttribute('role')) el.setAttribute('role','button');
+    if (!el.getAttribute('tabindex')) el.setAttribute('tabindex','0');
+    el.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' ') { e.preventDefault(); el.click(); } });
+  });
+  // Rating div: keyboard support (Enter/Space opens review sheet)
+  const ratingDiv = document.querySelector('.d-rating[role="button"]');
+  if (ratingDiv) {
+    ratingDiv.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' ') { e.preventDefault(); showReviewSheet(); } });
+  }
+  // Global event delegation — keyboard activation for dynamically rendered role=button divs
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    const el = e.target;
+    if (el.getAttribute('role') === 'button' && el.tagName !== 'BUTTON' && el.tagName !== 'A') {
+      e.preventDefault();
+      el.click();
+    }
+  });
+})();
 </script>
 
 <!-- ── WELCOME MODAL ── -->
