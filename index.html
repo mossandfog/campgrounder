@@ -2670,8 +2670,8 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
       <div class="start-cell" onclick="openLastMinute()">
         <div class="start-num">03</div>
         <div class="start-text">
-          <div class="start-head">See this weekend's openings</div>
-          <div class="start-body">Rare availability at top-rated sites — moves fast</div>
+          <div class="start-head">Browse top-rated sites</div>
+          <div class="start-body">Curated picks across every camping style and region</div>
         </div>
         <div class="start-arrow">→</div>
       </div>
@@ -3427,7 +3427,7 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
     <div class="stat-row">
       <div class="stat-box"><div class="stat-val" id="d-price" style="color:var(--o);">$35</div><div class="stat-lbl">Per night</div></div>
       <div class="stat-box"><div class="stat-val" id="d-sites">240</div><div class="stat-lbl">Sites</div></div>
-      <div class="stat-box"><div class="stat-val" id="d-avail">12</div><div class="stat-lbl">Available</div></div>
+      <div class="stat-box" title="Typical open sites — verify on booking site"><div class="stat-val" id="d-avail">12</div><div class="stat-lbl">Typical Open</div></div>
       <div class="stat-box" id="d-dist-box" style="display:none;"><div class="stat-val" id="d-dist">—</div><div class="stat-lbl">Miles away</div></div>
     </div>
     <div class="d-eyebrow-row">
@@ -3960,11 +3960,11 @@ const CAMPS = [
     desc:"Perched on coastal bluffs above the Pacific south of San Francisco. Fog rolls in at dusk, whale spouts appear offshore, and the San Mateo Coast stretches endlessly north and south.",
     amenities:["Hot Showers","Electric Hookups","WiFi","Parking","Accessible","Pet Friendly"],
     seasons:["Spring","Summer","Fall","Winter"], lat:37.5, lng:-122.5 },
-  { id:64, name:"Stagecoach Trails RV",      loc:"Joshua Tree · Arizona",
+  { id:64, name:"Stagecoach Trails RV",      loc:"Yucca Valley · California",
     type:"RV Park", price:38, sites:150, avail:45, rating:4.5, reviews:440,
-    desc:"Desert RV park with big skies, full hookups, and a saloon. Horseback rides through the Sonoran Desert, ATV trails, and one of the most spectacular stargazing sites in the Southwest.",
+    desc:"Desert RV park with big skies, full hookups, and a saloon. Horseback rides through the Mojave Desert, ATV trails, and one of the most spectacular stargazing sites in the Southwest — Joshua Tree's dark skies begin just down the road.",
     amenities:["Hot Showers","Electric Hookups","WiFi","Stargazing","Pet Friendly","Camp Store"],
-    seasons:["Fall","Winter","Spring"], lat:33.4, lng:-114.0 },
+    seasons:["Fall","Winter","Spring"], lat:34.1186, lng:-116.4326 },
   { id:65, name:"Traverse City RV Resort",   loc:"Lake Michigan Shore · Michigan",
     type:"RV Park", price:58, sites:180, avail:35, rating:4.6, reviews:520,
     desc:"Full-hookup resort on the shores of Grand Traverse Bay. Cherry orchards surround the property in spring bloom. The Leelanau wine trail and Sleeping Bear Dunes are a short drive.",
@@ -4060,7 +4060,7 @@ const CAMPS = [
     amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Accessible","Pet Friendly"],
     seasons:["Spring","Summer","Fall"], lat:44.2705, lng:-71.3031 },
   { id:83, name:"Lost Creek Wilderness",       loc:"Pike National Forest · Colorado",
-    type:"Forest Service", price:20, sites:0, avail:99, rating:4.7, reviews:290,
+    type:"Forest Service", price:0, sites:0, avail:99, rating:4.7, reviews:290,
     desc:"Dispersed camping in a hauntingly beautiful wilderness of granite towers and Lost Creek — a stream that disappears underground for miles before reappearing. No crowds, no fees, no reservations.",
     amenities:["Fire Rings","Stargazing","Hiking","Pet Friendly","Fishing","Accessible"],
     seasons:["Summer","Fall"], lat:39.1420, lng:-105.3167 },
@@ -7858,7 +7858,7 @@ function renderNearby(c) {
     <div class="d-divider"></div>
     <div class="nearby-section">
       <div class="nearby-header">
-        <div class="nearby-glyph" aria-hidden="true">🗺</div>
+        <div class="nearby-glyph" aria-hidden="true"><svg width="15" height="15" style="color:var(--o);stroke:currentColor;fill:none;"><use href="#ic-map"/></svg></div>
         <div class="d-eyebrow" style="margin-bottom:0;">Nearby</div>
       </div>
       ${nearby.map(n => `
