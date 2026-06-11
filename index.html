@@ -2945,6 +2945,11 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
     <div class="pill"    onclick="setFilter(this,'water')">Has Water</div>
     <div class="pill"    onclick="setFilter(this,'fires-ok')">🔥 Fires OK</div>
     <div class="pill"    id="nearby-pill" onclick="sortNearMe(this)">Near Me</div>
+    <div class="pill"    onclick="setFilter(this,'dark-sky')">🌌 Dark Sky</div>
+    <div class="pill"    onclick="setFilter(this,'tent-friendly')">🏕️ Tent-Friendly</div>
+    <div class="pill"    onclick="setFilter(this,'rv-ready')">🚐 RV-Ready</div>
+    <div class="pill"    onclick="setFilter(this,'wifi')">📶 Has WiFi</div>
+    <div class="pill"    onclick="setFilter(this,'winter-open')">❄️ Open in Winter</div>
   </div>
   <div class="type-blurb" id="type-blurb">
     <div class="type-blurb-title" id="type-blurb-title"></div>
@@ -6765,6 +6770,11 @@ const TYPE_BLURBS = {
   'water':          { title: 'Has Water Access', desc: "Campgrounds with lakes, rivers, or ocean frontage. Whether you're swimming, kayaking, or just watching the light change on the water at dusk, these sites have access to the good stuff." },
   'fires-ok':       { title: 'Campfire Allowed', desc: "Sites where campfires are currently permitted. Always verify restrictions locally before you go — fire rules change quickly based on conditions, and regulations vary by season and elevation." },
   'nearby':         { title: 'Near You', desc: "Campgrounds sorted by distance from your current location. Great for a spontaneous weekend escape — filter by type or amenity to narrow it down." },
+  'dark-sky':       { title: '🌌 Dark Sky Stargazing', desc: "Campgrounds with exceptional night skies — remote locations away from city light pollution, where the Milky Way is visible to the naked eye. Bring a blanket, kill the lantern, and look up." },
+  'tent-friendly':  { title: '🏕️ Tent-Friendly — No Hookups', desc: "Sites with no electrical hookups — meaning no RV pads, no generator-powered neighbors, and no campground buzz at midnight. Mostly tents, hammocks, and the sound of wind in the trees." },
+  'rv-ready':       { title: '🚐 RV-Ready with Hookups', desc: "Campgrounds with electrical hookups, water connections, or full-service RV pads. Pull through with your rig, plug in, and make yourself comfortable. Power and conveniences included." },
+  'wifi':           { title: '📶 Wi-Fi Available', desc: "Campgrounds with on-site Wi-Fi — useful for remote workers, streaming campers, or staying in touch on longer trips. Coverage strength varies; don't expect a fiber connection in the backcountry." },
+  'winter-open':    { title: '❄️ Open in Winter', desc: "Campgrounds accessible during the winter season — from Southern desert camps warm year-round, to ski-area sites and hardy Northern parks. Pack layers, check road conditions, and enjoy the crowds staying home." },
 };
 
 function setFilter(el, key) {
@@ -6911,6 +6921,14 @@ function getFilteredCamps() {
     if (currentFilter === 'fires-ok') return getCampfireStatus(c) === 'allowed';
     if (currentFilter === 'nearby')   return true;
     if (currentFilter === 'canada')   return isCanada(c);
+    if (currentFilter === 'dark-sky') return c.amenities.includes('Stargazing') ||
+        /dark sky|starlit|milky way|billion.*star|wall of stars|stars overhead/i.test(c.desc);
+    if (currentFilter === 'tent-friendly') return c.type !== 'RV Park' &&
+        !c.amenities.some(a => /hookup/i.test(a));
+    if (currentFilter === 'rv-ready') return c.type === 'RV Park' ||
+        c.amenities.some(a => /hookup/i.test(a));
+    if (currentFilter === 'wifi') return c.amenities.includes('WiFi');
+    if (currentFilter === 'winter-open') return Array.isArray(c.seasons) && c.seasons.includes('Winter');
     return c.type === currentFilter;
   });
 
