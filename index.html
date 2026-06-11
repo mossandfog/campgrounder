@@ -2390,6 +2390,38 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
 .pack-hint         { color: rgba(255,255,255,0.45) !important; }
 .conn-note         { color: rgba(255,255,255,0.38) !important; }
 .share-sheet-title { color: rgba(255,255,255,0.55) !important; }
+
+/* ── Starlink Referral Promo ──────────────────────────────────────────────── */
+.starlink-ref {
+  display: flex; align-items: center; gap: 10px;
+  margin: 0 0 10px; padding: 10px 14px;
+  border: 1.5px solid rgba(232,72,28,0.28);
+  background: rgba(232,72,28,0.05);
+  cursor: pointer; text-decoration: none;
+  transition: border-color 0.15s, background 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.starlink-ref:hover, .starlink-ref:focus { border-color: var(--o); background: rgba(232,72,28,0.1); outline: none; }
+.starlink-ref-icon { width: 26px; height: 26px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(232,72,28,0.35); color: var(--o); font-size: 13px; }
+.starlink-ref-body { flex: 1; min-width: 0; }
+.starlink-ref-title { font-size: 11px; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.88); }
+.starlink-ref-sub { font-size: 11px; color: rgba(255,255,255,0.38); margin-top: 2px; letter-spacing: 0.02em; }
+.starlink-ref-arrow { font-size: 11px; color: var(--o); flex-shrink: 0; font-weight: 900; }
+
+/* ── Suggest a Camp Sheet ─────────────────────────────────────────────────── */
+.suggest-field {
+  width: 100%; box-sizing: border-box;
+  background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.9); font-family: inherit; font-size: 14px;
+  padding: 11px 14px; margin-bottom: 10px;
+  transition: border-color 0.15s; resize: none; outline: none;
+}
+.suggest-field::placeholder { color: rgba(255,255,255,0.25); }
+.suggest-field:focus { border-color: var(--o); }
+.suggest-label { display: block; font-size: 10px; font-weight: 900; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.32); margin-bottom: 6px; }
+.suggest-submit { width: 100%; padding: 14px; background: var(--o); border: none; color: white; font-family: inherit; font-size: 12px; font-weight: 900; letter-spacing: 0.22em; text-transform: uppercase; cursor: pointer; transition: background 0.15s; margin-top: 4px; }
+.suggest-submit:hover { background: #D03C12; }
+.suggest-note { font-size: 11px; color: rgba(255,255,255,0.28); text-align: center; margin-top: 10px; line-height: 1.6; }
 </style>
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
@@ -2597,7 +2629,7 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
     <div class="cat-grid">
       <div class="cat-cell" onclick="goFiltered('National Park')">
         <svg width="44" height="44" style="color:#E8481C;stroke:currentColor;fill:none;"><use href="#ic-mountain"/></svg>
-        <div><div class="cat-name">National Parks</div><div class="cat-sub">America's best idea</div></div>
+        <div><div class="cat-name">National Parks</div><div class="cat-sub">US &amp; Canada's best idea</div></div>
         <div class="cat-plus"></div>
       </div>
       <div class="cat-cell" onclick="goFiltered('State Park')">
@@ -2633,6 +2665,12 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
       <div class="cat-cell" onclick="goSearch('lake fishing waterfront')">
         <svg width="44" height="44" style="color:#E8481C;stroke:currentColor;fill:none;"><use href="#ic-wave"/></svg>
         <div><div class="cat-name">Lake Camping</div><div class="cat-sub">Waterfront sites</div></div>
+        <div class="cat-plus"></div>
+      </div>
+      <div class="cat-cell" onclick="goFiltered('canada')" style="position:relative;">
+        <span style="position:absolute;top:12px;right:12px;font-size:10px;font-weight:900;letter-spacing:0.12em;text-transform:uppercase;color:#fff;background:var(--o);padding:2px 7px;border-radius:20px;">NEW</span>
+        <svg width="44" height="44" style="color:#E8481C;stroke:currentColor;fill:none;"><use href="#ic-mountain"/></svg>
+        <div><div class="cat-name">🍁 Canada</div><div class="cat-sub">Banff to Gros Morne</div></div>
         <div class="cat-plus"></div>
       </div>
       <div class="cat-cell lm-cell" onclick="openLastMinute()">
@@ -2825,6 +2863,8 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
     <a href="https://mossandfog.com/media/" target="_blank" rel="noopener noreferrer" style="display:block;margin-top:14px;font-size:12px;font-weight:800;letter-spacing:0.16em;color:rgba(255,255,255,0.5);text-decoration:none;text-transform:uppercase;transition:color 0.15s;" onmouseover="this.style.color='rgba(255,255,255,0.9)'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Part of the Moss and Fog Media Family →</a>
     <a href="#" onclick="go('about','home');return false;" style="display:block;margin-top:8px;font-size:12px;font-weight:900;letter-spacing:0.22em;color:rgba(255,255,255,0.25);text-decoration:none;text-transform:uppercase;transition:color 0.15s;" onmouseover="this.style.color='rgba(255,255,255,0.55)'" onmouseout="this.style.color='rgba(255,255,255,0.25)'">About →</a>
     <a href="#" onclick="go('privacy','home');return false;" style="display:block;margin-top:6px;font-size:11px;font-weight:700;letter-spacing:0.18em;color:rgba(255,255,255,0.14);text-decoration:none;text-transform:uppercase;transition:color 0.15s;" onmouseover="this.style.color='rgba(255,255,255,0.38)'" onmouseout="this.style.color='rgba(255,255,255,0.14)'">Privacy Policy</a>
+    <a href="#" onclick="go('terms','home');return false;" style="display:block;margin-top:4px;font-size:11px;font-weight:700;letter-spacing:0.18em;color:rgba(255,255,255,0.14);text-decoration:none;text-transform:uppercase;transition:color 0.15s;" onmouseover="this.style.color='rgba(255,255,255,0.38)'" onmouseout="this.style.color='rgba(255,255,255,0.14)'">Terms of Service</a>
+    <a href="#" onclick="showSuggestSheet();return false;" style="display:inline-block;margin-top:14px;font-size:11px;font-weight:900;letter-spacing:0.2em;color:var(--o);text-decoration:none;text-transform:uppercase;padding:8px 16px;border:1.5px solid rgba(232,72,28,0.35);transition:background 0.15s,border-color 0.15s;" onmouseover="this.style.background='rgba(232,72,28,0.1)';this.style.borderColor='var(--o)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(232,72,28,0.35)'">Suggest a Camp →</a>
   </div>
 </div><!-- end .home-scroll -->
   <nav class="bnav">
@@ -2899,6 +2939,8 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
     <div class="pill"    onclick="setFilter(this,'Private')">Private</div>
     <div class="pill"    onclick="setFilter(this,'Glamping')">Glamping</div>
     <div class="pill"    onclick="setFilter(this,'RV Park')">RV Parks</div>
+    <div class="pill"    onclick="setFilter(this,'Provincial Park')">Provincial Parks</div>
+    <div class="pill"    onclick="setFilter(this,'canada')" style="border-color:rgba(232,72,28,0.6);">🍁 Canada <span style="font-size:10px;font-weight:900;letter-spacing:0.1em;background:var(--o);color:#fff;padding:1px 5px;border-radius:10px;margin-left:4px;">NEW</span></div>
     <div class="pill"    onclick="setFilter(this,'pet')">Pet Friendly</div>
     <div class="pill"    onclick="setFilter(this,'water')">Has Water</div>
     <div class="pill"    onclick="setFilter(this,'fires-ok')">🔥 Fires OK</div>
@@ -3395,6 +3437,116 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
 </div>
 
 <!-- ══════════════════════════════════════
+  TERMS OF SERVICE
+══════════════════════════════════════ -->
+<div class="screen" id="terms">
+  <div class="topbar">
+    <div class="topbar-btn xbtn is-close" onclick="goBack()" aria-label="Go back" role="button" tabindex="0"></div>
+    <div class="topbar-title">Terms of Service</div>
+    <div style="width:36px"></div>
+  </div>
+  <div class="about-scroll" style="padding-top:0;">
+
+    <div class="about-hero" style="padding:28px 24px 32px;">
+      <div class="about-hero-eyebrow">Please read before using Campgrounder</div>
+      <div class="about-hero-title" style="font-size:clamp(36px,10vw,56px);letter-spacing:-0.03em;line-height:1.1;">TERMS OF<br>SERVICE</div>
+      <div class="about-hero-rule"></div>
+      <div class="about-hero-tagline">Effective date: June 1, 2025</div>
+    </div>
+
+    <div class="about-manifesto">
+      <div class="about-manifesto-eyebrow">The Short Version</div>
+      <p>Campgrounder is a free discovery tool. Campground information — prices, availability, ratings — is curated and approximate. <strong>Always verify details directly with the campground or booking platform before you go.</strong> We're not liable for errors or decisions made based on this information.</p>
+    </div>
+
+    <div class="privacy-body">
+
+      <div class="privacy-section">
+        <div class="privacy-heading">1. Acceptance of Terms</div>
+        <p>By using Campgrounder (campgrounder.io), you agree to these Terms of Service. If you do not agree, please do not use the site. These terms apply to all visitors and users of the service.</p>
+      </div>
+
+      <div class="privacy-section">
+        <div class="privacy-heading">2. Informational Use Only</div>
+        <p>Campgrounder provides campground discovery information for reference purposes only. Pricing, site availability, amenity listings, ratings, and all other campground data are curated estimates and may be out of date, inaccurate, or incomplete. Campgrounder makes no guarantee of accuracy. Users are solely responsible for verifying all information directly with campgrounds, land management agencies, or booking platforms before making reservations or travel plans.</p>
+      </div>
+
+      <div class="privacy-section">
+        <div class="privacy-heading">3. No Warranties</div>
+        <p>Campgrounder is provided "as is" and "as available" without warranties of any kind, express or implied. We do not warrant that the service will be uninterrupted, error-free, or free of harmful components. We make no warranties regarding the accuracy, reliability, completeness, or timeliness of any content on the site.</p>
+      </div>
+
+      <div class="privacy-section">
+        <div class="privacy-heading">4. Limitation of Liability</div>
+        <p>To the fullest extent permitted by law, Campgrounder and Moss and Fog Media shall not be liable for any direct, indirect, incidental, special, consequential, or punitive damages arising from your use of or inability to use the service, including but not limited to: inaccurate campground information, failed bookings, travel disruptions, or reliance on pricing or availability data displayed on this site.</p>
+      </div>
+
+      <div class="privacy-section">
+        <div class="privacy-heading">5. Third-Party Booking Links</div>
+        <p>Campgrounder links to third-party booking platforms including Recreation.gov, Reserve America, Hipcamp, Glamping Hub, and others. These platforms have their own terms of service, privacy policies, and cancellation policies. Campgrounder is not responsible for third-party platform policies, booking errors, or the quality of campgrounds booked through external links.</p>
+      </div>
+
+      <div class="privacy-section">
+        <div class="privacy-heading">6. Affiliate &amp; Referral Disclosure</div>
+        <p>Campgrounder may earn referral credits when users sign up for third-party services through links on this site. Currently this includes Starlink (satellite internet). These relationships do not affect our editorial decisions — we include Starlink because it genuinely improves the camping experience in remote areas, not because of any financial arrangement. Referral links are clearly labeled on the site.</p>
+      </div>
+
+      <div class="privacy-section">
+        <div class="privacy-heading">7. User-Submitted Content</div>
+        <p>If you submit campground suggestions to Campgrounder, you grant us a non-exclusive, royalty-free license to use, edit, and publish that information. You represent that your submission is accurate to the best of your knowledge and does not infringe on any third-party rights. We reserve the right to reject, modify, or remove any submitted content.</p>
+      </div>
+
+      <div class="privacy-section">
+        <div class="privacy-heading">8. Intellectual Property</div>
+        <p>The Campgrounder name, logo, design system, and written content are the property of Moss and Fog Media. Campground descriptions and curated data are original editorial content. You may not reproduce, distribute, or create derivative works from this content without written permission. Campground images are served from licensed third-party sources (Picsum / Unsplash License).</p>
+      </div>
+
+      <div class="privacy-section">
+        <div class="privacy-heading">9. Prohibited Use</div>
+        <p>You agree not to scrape, copy, or systematically extract Campgrounder's campground database; use the site for commercial purposes without permission; attempt to interfere with or compromise the site's security or functionality; or use the site in any way that violates applicable law.</p>
+      </div>
+
+      <div class="privacy-section">
+        <div class="privacy-heading">10. Changes to These Terms</div>
+        <p>We may update these Terms of Service at any time. We will update the effective date at the top of this page. Continued use of Campgrounder after changes constitutes your acceptance of the revised terms.</p>
+      </div>
+
+      <div class="privacy-section">
+        <div class="privacy-heading">11. Governing Law</div>
+        <p>These terms are governed by the laws of the State of Oregon, United States, without regard to conflict of law principles.</p>
+      </div>
+
+      <div class="privacy-section">
+        <div class="privacy-heading">12. Contact</div>
+        <p>Campgrounder is a product of <a href="https://mossandfog.com" target="_blank" rel="noopener noreferrer" class="about-maf-link">Moss and Fog Media</a>. For questions about these terms, contact us at <a href="mailto:hello@campgrounder.io" class="about-maf-link">hello@campgrounder.io</a>.</p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SUGGEST A CAMPGROUND SHEET
+══════════════════════════════════════ -->
+<div id="suggest-sheet" style="display:none;position:fixed;inset:0;z-index:400;display:none;align-items:flex-end;justify-content:center;">
+  <div style="position:absolute;inset:0;background:rgba(0,0,0,0.65);" onclick="closeSuggestSheet()"></div>
+  <div style="position:relative;background:var(--g1);border-top:1.5px solid var(--line);border-left:1.5px solid rgba(232,72,28,0.2);border-right:1.5px solid rgba(232,72,28,0.2);width:100%;max-width:520px;padding:26px 22px calc(26px + var(--safe-bot));">
+    <div class="share-sheet-title">Suggest a Campground</div>
+    <label class="suggest-label" for="sg-name">Camp name *</label>
+    <input id="sg-name" class="suggest-field" type="text" placeholder="e.g. Enchanted Rock State Natural Area" maxlength="120">
+    <label class="suggest-label" for="sg-loc">Location</label>
+    <input id="sg-loc" class="suggest-field" type="text" placeholder="e.g. Fredericksburg · Texas" maxlength="100">
+    <label class="suggest-label" for="sg-why">Why should it be on Campgrounder?</label>
+    <textarea id="sg-why" class="suggest-field" rows="3" placeholder="What makes it special? Any booking link or website?" maxlength="500"></textarea>
+    <label class="suggest-label" for="sg-email">Your email (optional — for follow-up)</label>
+    <input id="sg-email" class="suggest-field" type="email" placeholder="you@example.com" maxlength="120">
+    <button class="suggest-submit" onclick="submitSuggest()">Send Suggestion →</button>
+    <p class="suggest-note">We review every submission. Good ones get added within a week.</p>
+    <button onclick="closeSuggestSheet()" style="width:100%;padding:12px;margin-top:8px;background:transparent;border:1.5px solid rgba(255,255,255,0.07);color:rgba(255,255,255,0.3);font-family:inherit;font-size:11px;font-weight:800;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;">Cancel</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
   DETAIL
 ══════════════════════════════════════ -->
 <div class="screen" id="detail">
@@ -3518,7 +3670,9 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
 ══════════════════════════════════════ -->
 <script>
 // ─── GLYPH / BOOKING MAPS ──────────────────────
-const TYPE_GLYPH = { 'National Park':'#ic-mountain','State Park':'#ic-tree','Forest Service':'#ic-compass','Private':'#ic-tent','Glamping':'#ic-gem','RV Park':'#ic-rv','BLM':'#ic-fire','Army Corps':'#ic-wave' };
+const TYPE_GLYPH = { 'National Park':'#ic-mountain','State Park':'#ic-tree','Provincial Park':'#ic-mountain','Forest Service':'#ic-compass','Private':'#ic-tent','Glamping':'#ic-gem','RV Park':'#ic-rv','BLM':'#ic-fire','Army Corps':'#ic-wave' };
+const CA_PROVINCES = ['british columbia','alberta','ontario','quebec','nova scotia','new brunswick','newfoundland','prince edward island','manitoba','saskatchewan','yukon','northwest territories','nunavut'];
+function isCanada(c) { const loc = (c.loc||'').toLowerCase(); return CA_PROVINCES.some(p => loc.includes(p)); }
 const AMEN_GLYPH = {
   // Facilities
   'Hot Showers':'#ic-shower','Showers':'#ic-shower','Restrooms':'#ic-toilet',
@@ -3594,11 +3748,33 @@ function buildBookingUrl(c) {
   if (c.price === 0)
     return `https://www.recreation.gov/search?q=${q}&entity_type=campground`;
 
+  // Canadian parks — route to Parks Canada or provincial systems
+  if (isCanada(c)) {
+    if (c.type === 'National Park') return `https://reservation.pc.gc.ca/search?query=${q}`;
+    const loc = c.loc.toLowerCase();
+    if (loc.includes('british columbia')) return `https://camping.bcparks.ca/`;
+    if (loc.includes('ontario'))          return `https://reservations.ontarioparks.com/`;
+    if (loc.includes('alberta'))          return `https://reserve.albertaparks.ca/`;
+    if (loc.includes('quebec'))           return `https://www.sepaq.com/reservation/`;
+    if (loc.includes('nova scotia'))      return `https://parks.novascotia.ca/campground-reservations`;
+    if (loc.includes('new brunswick'))    return `https://parcsnbparks.info/`;
+    if (loc.includes('newfoundland'))     return `https://nlcamping.ca/`;
+    if (loc.includes('manitoba'))         return `https://www.gov.mb.ca/sd/parks/camping/`;
+    if (loc.includes('saskatchewan'))     return `https://saskparks.com/camping`;
+    if (loc.includes('yukon'))            return `https://yukon.ca/en/camping`;
+    return `https://reservation.pc.gc.ca/search?query=${q}`;
+  }
+
   // State Parks — state-aware routing
   if (c.type === 'State Park') return _stateBookingUrl(c, q);
 
-  // Recreation.gov types — pre-fill campground name + dates if selected
-  if (['National Park','Forest Service','BLM','Army Corps'].includes(c.type)) {
+  // Recreation.gov types — use real RIDB facility ID for direct deep-link when available
+  if (['National Park','Forest Service','BLM','Army Corps','National Forest','National Lakeshore','National Seashore','National Parkway','Wilderness'].includes(c.type)) {
+    if (c.ridb_id) {
+      let url = `https://www.recreation.gov/camping/campgrounds/${c.ridb_id}`;
+      if (checkInDate) url += `?start_date=${checkInDate}&end_date=${checkoutDate()}`;
+      return url;
+    }
     let url = `https://www.recreation.gov/search?q=${q}&entity_type=campground`;
     if (checkInDate) url += `&start_date=${checkInDate}&end_date=${checkoutDate()}`;
     return url;
@@ -3621,6 +3797,15 @@ function buildCtaLabel(c) {
     return `Check ${fmtShort(checkInDate)}–${fmtShort(checkoutDate())} →`;
   if (c.price === 0)
     return 'View site info — no reservation needed →';
+  if (isCanada(c)) {
+    const loc = c.loc.toLowerCase();
+    if (c.type === 'National Park') return 'Book on Parks Canada →';
+    if (loc.includes('british columbia')) return 'Book on BC Parks →';
+    if (loc.includes('ontario'))          return 'Book on Ontario Parks →';
+    if (loc.includes('alberta'))          return 'Book on Alberta Parks →';
+    if (loc.includes('quebec'))           return 'Book on SEPAQ →';
+    return 'Book on Parks Canada →';
+  }
   const platform = {
     'National Park':  'Recreation.gov',
     'Forest Service': 'Recreation.gov',
@@ -3641,7 +3826,7 @@ const CAMPS = [
     type:"National Park", price:35, sites:240, avail:12, rating:4.8, reviews:1240,
     desc:"Experience camping in one of America's most iconic landscapes. Towering granite cliffs, ancient sequoias, and the rush of the Merced River — wilderness at its most breathtaking.",
     amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Accessible","Pet Friendly"],
-    seasons:["Spring","Summer","Fall"], lat:37.7456, lng:-119.5936 },
+    seasons:["Spring","Summer","Fall"], lat:37.7456, lng:-119.5936, ridb_id:"234756", photo:"https://cdn.recreation.gov/public/2019/06/04/19/13/234756_e6ba02a6-2a48-4716-b1cd-64bf18d0edd3_1440.webp" },
   { id:5,  name:"Joshua Tree Desert",        loc:"Joshua Tree NP · California",
     type:"National Park", price:25, sites:168, avail:24, rating:4.6, reviews:2100,
     desc:"The high desert at its most otherworldly. Billions of stars overhead, twisted Joshua Trees silhouetted at dusk, and boulder formations sculpted by giants. Pure, absolute silence.",
@@ -3656,62 +3841,57 @@ const CAMPS = [
     type:"National Park", price:28, sites:179, avail:31, rating:4.5, reviews:558,
     desc:"Camp beside a pristine volcanic lake with Lassen Peak reflected in still morning water. Geothermal features, abundant wildlife, and quiet trails wait just outside your tent door.",
     amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Fishing","Kayaking"],
-    seasons:["Summer","Fall"], lat:40.5337, lng:-121.5722 },
+    seasons:["Summer","Fall"], lat:40.5337, lng:-121.5722, ridb_id:"234039", photo:"https://cdn.recreation.gov/public/images/71706_700.webp" },
   { id:9,  name:"Elkmont",                   loc:"Great Smoky Mountains NP · Tennessee",
     type:"National Park", price:30, sites:220, avail:19, rating:4.7, reviews:1890,
     desc:"Nestled in a quiet valley along the Little River, Elkmont is one of the most beloved campgrounds in the Smokies. Old-growth forest, firefly displays in June, and trails in every direction.",
     amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Fishing","Accessible"],
-    seasons:["Spring","Summer","Fall"], lat:35.6533, lng:-83.5749 },
+    seasons:["Spring","Summer","Fall"], lat:35.6533, lng:-83.5749, ridb_id:"232487", photo:"https://cdn.recreation.gov/public/2019/02/06/15/46/232487_47bae8c6-f377-4044-9230-3742ccbcd693_1440.webp" },
   { id:10, name:"Mather Campground",         loc:"Grand Canyon South Rim · Arizona",
     type:"National Park", price:18, sites:319, avail:22, rating:4.6, reviews:3410,
     desc:"Wake up steps from the rim of one of the world's great wonders. The scale is incomprehensible until you're standing at the edge at sunrise, watching the canyon glow ember red.",
     amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Accessible","Camp Store"],
-    seasons:["Spring","Summer","Fall","Winter"], lat:36.0544, lng:-112.1401 },
+    seasons:["Spring","Summer","Fall","Winter"], lat:36.0544, lng:-112.1401, ridb_id:"232490", photo:"https://cdn.recreation.gov/public/2023/06/23/14/31/232490_eb417bcd-69ca-4135-a5e4-0a46bc7fbc43_1440.webp" },
   { id:11, name:"Watchman Campground",       loc:"Zion National Park · Utah",
     type:"National Park", price:20, sites:176, avail:8, rating:4.8, reviews:2760,
     desc:"Camp in the shadow of the Watchman tower at the gateway to Zion Canyon. The Virgin River runs just below, cottonwoods line the banks, and crimson sandstone walls glow at golden hour.",
     amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Accessible","Pet Friendly"],
-    seasons:["Spring","Summer","Fall","Winter"], lat:37.1990, lng:-112.9879 },
+    seasons:["Spring","Summer","Fall","Winter"], lat:37.1990, lng:-112.9879, ridb_id:"232445", photo:"https://cdn.recreation.gov/public/2018/08/23/15/20/232445_d2305230-89ab-4df8-bf53-e6c0e214f1c2_700.webp" },
   { id:12, name:"Madison Campground",        loc:"Yellowstone NP · Wyoming",
     type:"National Park", price:28, sites:278, avail:14, rating:4.7, reviews:1560,
     desc:"At the confluence of the Firehole and Gibbon Rivers, Madison sits at the heart of Yellowstone's geyser country. Bison roam freely past your tent. Geysers erupt on the horizon.",
     amenities:["Flush Toilets","Fire Rings","Parking","Fishing","Accessible","Pet Friendly"],
-    seasons:["Spring","Summer","Fall"], lat:44.6482, lng:-110.8614 },
+    seasons:["Spring","Summer","Fall"], lat:44.6482, lng:-110.8614, ridb_id:"10169448", photo:"https://cdn.recreation.gov/public/2024/02/28/20/02/10169448_e9418dab-c103-419a-96c4-bc356c84afbd_700.webp" },
   { id:13, name:"Moraine Park",              loc:"Rocky Mountain NP · Colorado",
     type:"National Park", price:30, sites:244, avail:17, rating:4.8, reviews:980,
     desc:"A vast glacially-carved valley ringed by 12,000-foot peaks. Elk herds graze at dusk in the open meadow. The Big Thompson River runs cold and clear through the campground.",
     amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Fishing","Accessible"],
-    seasons:["Spring","Summer","Fall"], lat:40.3428, lng:-105.6209 },
-  { id:14, name:"Blackwoods Campground",     loc:"Acadia National Park · Maine",
-    type:"National Park", price:30, sites:306, avail:20, rating:4.7, reviews:1120,
-    desc:"On the eastern shore of Mount Desert Island, Blackwoods sits between the forest and the Atlantic. Carriage roads thread through the park and rocky coastline is a ten-minute walk.",
-    amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Accessible","Pet Friendly"],
-    seasons:["Spring","Summer","Fall"], lat:44.2956, lng:-68.2270 },
+    seasons:["Spring","Summer","Fall"], lat:40.3428, lng:-105.6209, ridb_id:"232463", photo:"https://cdn.recreation.gov/public/2025/07/07/23/24/232463_a88bea3f-5f57-462d-a469-3ad86761c9a5_1440.webp" },
   { id:15, name:"Apgar Campground",          loc:"Glacier National Park · Montana",
     type:"National Park", price:23, sites:194, avail:16, rating:4.8, reviews:870,
     desc:"On the southern shore of Lake McDonald — the longest lake in Glacier — Apgar offers stunning views across turquoise water to snow-capped peaks. Bears, eagles, and mountain goats abound.",
     amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Fishing","Kayaking"],
-    seasons:["Spring","Summer","Fall"], lat:48.4954, lng:-113.9868 },
+    seasons:["Spring","Summer","Fall"], lat:48.4954, lng:-113.9868, ridb_id:"10171274", photo:"https://cdn.recreation.gov/public/2022/04/19/19/53/10171274_e7a620f2-6c56-47bd-9da8-054899714d24_1440.webp" },
   { id:16, name:"Devil's Garden",            loc:"Arches National Park · Utah",
     type:"National Park", price:25, sites:51, avail:4, rating:4.9, reviews:640,
     desc:"The only campground in Arches, Devil's Garden puts you in the middle of an otherworldly landscape of red-rock fins and sandstone arches lit up like fire at sunset. Book months ahead.",
     amenities:["Flush Toilets","Fire Rings","Parking","Accessible","Stargazing","Pet Friendly"],
-    seasons:["Spring","Fall","Winter"], lat:38.7776, lng:-109.5925 },
+    seasons:["Spring","Fall","Winter"], lat:38.7776, lng:-109.5925, ridb_id:"234059", photo:"https://cdn.recreation.gov/public/2019/10/03/14/33/234059_71942c9a-c262-4a4d-b664-46c1e2a47e48_1440.webp" },
   { id:17, name:"Big Meadows",               loc:"Shenandoah NP · Virginia",
     type:"National Park", price:30, sites:217, avail:25, rating:4.6, reviews:760,
     desc:"Perched atop the Blue Ridge at 3,500 feet, Big Meadows offers sweeping Shenandoah Valley views. The Skyline Drive runs right through camp, and the meadow fills with deer at dusk.",
     amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Accessible","Camp Store"],
-    seasons:["Spring","Summer","Fall"], lat:38.5318, lng:-78.4386 },
+    seasons:["Spring","Summer","Fall"], lat:38.5318, lng:-78.4386, ridb_id:"10165150", photo:"https://cdn.recreation.gov/public/2024/09/04/22/45/10165150_25f00313-555c-4263-ba6f-d3c03c61cf5f_700.webp" },
   { id:18, name:"Mazama Village",            loc:"Crater Lake NP · Oregon",
     type:"National Park", price:32, sites:214, avail:21, rating:4.7, reviews:550,
     desc:"The deepest lake in America sits just above. Crater Lake's impossible blue is unlike anything else on earth — a collapsed volcano now filled with the purest water imaginable.",
     amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Camp Store","Accessible"],
-    seasons:["Summer","Fall"], lat:42.8684, lng:-122.1685 },
+    seasons:["Summer","Fall"], lat:42.8684, lng:-122.1685, ridb_id:"10337002", photo:"https://cdn.recreation.gov/public/2025/01/01/03/30/10337002_a4d568cc-8024-4eca-b06d-9c45604af4d8_1440.webp" },
   { id:19, name:"Jenny Lake",                loc:"Grand Teton NP · Wyoming",
     type:"National Park", price:28, sites:49, avail:3, rating:5.0, reviews:890,
     desc:"Tents-only and perpetually full, Jenny Lake is the most coveted spot in the Tetons. The Teton Range erupts straight from the ground, and the lake reflects them in perfect silence.",
     amenities:["Flush Toilets","Fire Rings","Accessible","Stargazing","Fishing","Kayaking"],
-    seasons:["Spring","Summer","Fall"], lat:43.7453, lng:-110.7249 },
+    seasons:["Spring","Summer","Fall"], lat:43.7453, lng:-110.7249, ridb_id:"247664", photo:"https://cdn.recreation.gov/public/2021/01/19/22/13/247664_db024167-f828-456b-9d36-fe75e96867f9_1440.webp" },
   { id:20, name:"North Campground",          loc:"Bryce Canyon NP · Utah",
     type:"National Park", price:20, sites:99, avail:11, rating:4.8, reviews:720,
     desc:"Sleep among the hoodoos at 8,000 feet. Bryce Canyon's pale orange spires and amphitheaters are dreamlike at sunrise, and the night sky here ranks among the darkest in the lower 48.",
@@ -3721,7 +3901,7 @@ const CAMPS = [
     type:"National Park", price:22, sites:214, avail:18, rating:4.7, reviews:980,
     desc:"Camp beneath the world's most massive living things. General Sherman — the largest tree on Earth by volume — is a short walk from camp. Ancient giants surround you in every direction.",
     amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Accessible","Camp Store"],
-    seasons:["Spring","Summer","Fall"], lat:36.6060, lng:-118.7301 },
+    seasons:["Spring","Summer","Fall"], lat:36.6060, lng:-118.7301, ridb_id:"234027", photo:"https://cdn.recreation.gov/public/2018/08/28/20/40/234027_f2f39319-0a39-473a-bb9d-d9d3a6cb39c2_700.webp" },
   { id:22, name:"Cedar Pass Lodge Area",     loc:"Badlands NP · South Dakota",
     type:"National Park", price:22, sites:96, avail:30, rating:4.5, reviews:490,
     desc:"Mars-like spires and eroded buttes stretch to the horizon. Fossil beds, vast prairie, and complete solitude. The sky here is so big and wide it feels like the whole world is sky.",
@@ -3744,11 +3924,6 @@ const CAMPS = [
     desc:"California's largest state park — a vast, silent desert broken by palm oases, slot canyons, and spring wildflower blooms so intense they can be seen from space on a good year.",
     amenities:["Flush Toilets","Fire Rings","Parking","Stargazing","Accessible","Pet Friendly"],
     seasons:["Fall","Winter","Spring"], lat:33.2598, lng:-116.4088 },
-  { id:25, name:"Custer State Park",         loc:"Black Hills · South Dakota",
-    type:"State Park", price:27, sites:300, avail:35, rating:4.8, reviews:920,
-    desc:"Home to one of the largest free-roaming bison herds in North America. The Wildlife Loop Road winds through rolling grasslands where pronghorn, burros, and prairie dogs keep you company.",
-    amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Fishing","Pet Friendly"],
-    seasons:["Spring","Summer","Fall"], lat:43.7243, lng:-103.5343 },
   { id:26, name:"Porcupine Mountains",       loc:"Upper Peninsula · Michigan",
     type:"State Park", price:22, sites:100, avail:18, rating:4.7, reviews:540,
     desc:"Michigan's largest state park, a wilderness of old-growth forest, tumbling waterfalls, and Lake Superior shoreline. The Porkies feel genuinely remote — because they are.",
@@ -3764,11 +3939,6 @@ const CAMPS = [
     desc:"Wild ponies roam the beach at sunrise. Assateague's barrier island is one of the last stretches of undeveloped Atlantic coastline — a place of salt grass, ghost crabs, and crashing surf.",
     amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Beach Access","Fishing"],
     seasons:["Spring","Summer","Fall"], lat:38.0589, lng:-75.2077 },
-  { id:29, name:"Cloudland Canyon",          loc:"Lookout Mountain · Georgia",
-    type:"State Park", price:28, sites:72, avail:10, rating:4.7, reviews:480,
-    desc:"A stunning gorge cut 1,000 feet deep into Lookout Mountain by Sitton Gulch Creek. Waterfalls, canyon overlooks, and the kind of quiet that feels earned.",
-    amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Accessible","Pet Friendly"],
-    seasons:["Spring","Summer","Fall","Winter"], lat:34.8365, lng:-85.4836 },
   { id:30, name:"Lost Maples State Area",    loc:"Texas Hill Country · Texas",
     type:"State Park", price:20, sites:30, avail:6, rating:4.8, reviews:390,
     desc:"Named for a rare stand of Uvalde bigtooth maples that turn brilliant red and gold each fall. In Texas. Limestone canyons, clear swimming holes, and one of the state's great surprises.",
@@ -3976,17 +4146,17 @@ const CAMPS = [
     type:"National Park", price:30, sites:173, avail:16, rating:4.9, reviews:820,
     desc:"Camp beneath the eternal ice and fire of Mt. Rainier — the most glaciated peak in the contiguous US. Old-growth fir and hemlock surround the sites. The mountain fills your entire sky.",
     amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Accessible","Pet Friendly"],
-    seasons:["Summer","Fall"], lat:46.7633, lng:-121.7814 },
+    seasons:["Summer","Fall"], lat:46.7633, lng:-121.7814, ridb_id:"232466", photo:"https://cdn.recreation.gov/public/2018/12/07/21/42/232466_9043ce63-15b2-497b-9fc9-8a302db82a10_1440.webp" },
   { id:67, name:"Newhalem Creek",            loc:"North Cascades NP · Washington",
     type:"National Park", price:20, sites:111, avail:22, rating:4.8, reviews:490,
     desc:"Deep in the Cascade wilderness where the Skagit River carves through the heart of the range. Peaks rise on every side. Old-growth cedar and hemlock. The air smells like cold water and pine.",
     amenities:["Flush Toilets","Fire Rings","Parking","Fishing","Accessible","Pet Friendly"],
-    seasons:["Summer","Fall"], lat:48.6826, lng:-121.2434 },
+    seasons:["Summer","Fall"], lat:48.6826, lng:-121.2434, ridb_id:"234060", photo:"https://cdn.recreation.gov/public/2018/09/19/21/36/234060_ee0354fe-9970-46dd-8292-6650ab12b7fe_700.webp" },
   { id:68, name:"Sol Duc Hot Springs",       loc:"Olympic NP · Washington",
     type:"National Park", price:32, sites:82, avail:10, rating:4.8, reviews:620,
     desc:"Soak in geothermal hot spring pools surrounded by one of the last temperate rainforests in the world. Ancient Sitka spruce drip with moss. The Sol Duc Falls are a short walk from camp.",
     amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Hot Springs","Fishing"],
-    seasons:["Spring","Summer","Fall"], lat:47.9720, lng:-123.8555 },
+    seasons:["Spring","Summer","Fall"], lat:47.9720, lng:-123.8555, ridb_id:"251906", photo:"https://cdn.recreation.gov/public/2021/06/23/00/07/251906_25495013-565f-456c-a7bb-ac4cd642f8e3_700.webp" },
   { id:69, name:"Deception Pass State Park", loc:"Oak Harbor · Washington",
     type:"State Park", price:35, sites:167, avail:14, rating:4.9, reviews:1340,
     desc:"Washington's most-visited state park, where a dramatic bridge spans a roiling tidal channel between Whidbey and Fidalgo Islands. Rocky beaches, Douglas fir forest, and kayak-ready coves.",
@@ -4058,17 +4228,17 @@ const CAMPS = [
     type:"Forest Service", price:22, sites:55, avail:18, rating:4.8, reviews:520,
     desc:"Base camp for New Hampshire's Presidential Range — the most rugged hiking in the Northeast. The weather can turn on a dime above treeline, and the views from Mt. Washington on a clear day are incomparable.",
     amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Accessible","Pet Friendly"],
-    seasons:["Spring","Summer","Fall"], lat:44.2705, lng:-71.3031 },
+    seasons:["Spring","Summer","Fall"], lat:44.2705, lng:-71.3031, ridb_id:"232387", photo:"https://cdn.recreation.gov/public/2020/04/16/19/56/232387_976a6787-9e5c-45c2-bedd-36541d56eb36_700.webp" },
   { id:83, name:"Lost Creek Wilderness",       loc:"Pike National Forest · Colorado",
     type:"Forest Service", price:0, sites:0, avail:99, rating:4.7, reviews:290,
     desc:"Dispersed camping in a hauntingly beautiful wilderness of granite towers and Lost Creek — a stream that disappears underground for miles before reappearing. No crowds, no fees, no reservations.",
     amenities:["Fire Rings","Stargazing","Hiking","Pet Friendly","Fishing","Accessible"],
-    seasons:["Summer","Fall"], lat:39.1420, lng:-105.3167 },
+    seasons:["Summer","Fall"], lat:39.1420, lng:-105.3167, ridb_id:"10243253", photo:"https://cdn.recreation.gov/public/2023/04/03/21/33/10243253_616efd72-89e9-4d3a-92fa-66472973dfb2_1440.webp" },
   { id:84, name:"Kaibab Plateau Camp",         loc:"Kaibab National Forest · Arizona",
     type:"Forest Service", price:18, sites:70, avail:31, rating:4.7, reviews:360,
     desc:"On the North Rim plateau above the Grand Canyon, amid ponderosa pines and aspen groves. Elk roam freely at dawn and dusk. The canyon rim is a short drive, with far fewer crowds than the South.",
     amenities:["Vault Toilets","Fire Rings","Parking","Stargazing","Hiking","Pet Friendly"],
-    seasons:["Spring","Summer","Fall"], lat:36.6996, lng:-112.1949 },
+    seasons:["Spring","Summer","Fall"], lat:36.6996, lng:-112.1949, ridb_id:"234722", photo:"https://cdn.recreation.gov/public/2021/10/05/16/52/234722_c5551bf9-b968-423b-9f1b-6120f4a7fe91_1440.webp" },
   { id:85, name:"Pisgah Forest Camp",          loc:"Pisgah National Forest · North Carolina",
     type:"Forest Service", price:20, sites:95, avail:22, rating:4.8, reviews:470,
     desc:"Blue Ridge headwaters country, where a dozen trout streams flow cold through hardwood coves. Davidson River runs right through camp. The Appalachian Trail and Shining Rock Wilderness are minutes away.",
@@ -4105,7 +4275,7 @@ const CAMPS = [
     type:"National Park", price:20, sites:25, avail:14, rating:4.8, reviews:310,
     desc:"Camp at 6,800 feet on the rim of Haleakalā — a dormant shield volcano on Maui. Watch the sunrise from above the clouds in one of the most transcendent experiences available anywhere on earth.",
     amenities:["Vault Toilets","Fire Rings","Parking","Stargazing","Hiking","Accessible"],
-    seasons:["Spring","Summer","Fall","Winter"], lat:20.7316, lng:-156.2449 },
+    seasons:["Spring","Summer","Fall","Winter"], lat:20.7316, lng:-156.2449, ridb_id:"10068557", photo:"https://cdn.recreation.gov/public/2020/08/20/05/04/10068557_a96346f3-7c8d-4b90-8776-049a24b1f325_700.webp" },
   { id:92, name:"Nāmakanipaio Camp",           loc:"Hawaii Volcanoes NP · Hawaii",
     type:"National Park", price:21, sites:16, avail:10, rating:4.7, reviews:270,
     desc:"Camp on the rim of Kīlauea — one of the world's most active volcanoes — in an ohia lehua forest filled with native honeycreepers. Lava glow lights the horizon at night. It's that real.",
@@ -4127,12 +4297,12 @@ const CAMPS = [
     type:"National Park", price:28, sites:147, avail:35, rating:4.9, reviews:620,
     desc:"The gateway to Denali — North America's highest peak at 20,310 feet. On clear days the mountain dominates the entire northern horizon. Moose, caribou, and grizzly bears are year-round residents.",
     amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Accessible","Camp Store"],
-    seasons:["Summer","Fall"], lat:63.7323, lng:-148.9186 },
+    seasons:["Summer","Fall"], lat:63.7323, lng:-148.9186, ridb_id:"258711", photo:"https://cdn.recreation.gov/public/2019/08/26/15/46/258711_dcf063ed-8ebf-4121-92f1-2ded24fee4c2_700.jpeg" },
   { id:96, name:"Exit Glacier Camp",           loc:"Kenai Fjords NP · Alaska",
     type:"National Park", price:20, sites:12, avail:8, rating:4.9, reviews:290,
     desc:"Walk to a receding tidewater glacier, watch orcas breach in Resurrection Bay, and camp on the Kenai Peninsula's wild edge. Exit Glacier is the only part of the park reachable by road.",
     amenities:["Vault Toilets","Fire Rings","Parking","Hiking","Accessible","Pet Friendly"],
-    seasons:["Summer","Fall"], lat:60.1863, lng:-149.6346 },
+    seasons:["Summer","Fall"], lat:60.1863, lng:-149.6346, ridb_id:"248555", photo:"https://cdn.recreation.gov/public/images/81580_700.webp" },
   { id:97, name:"Denali Basecamp",             loc:"Talkeetna · Alaska",
     type:"Private", price:70, sites:18, avail:8, rating:4.9, reviews:160,
     desc:"A climbers' and adventurers' camp in tiny Talkeetna — the jumping-off point for Denali expeditions and flightseeing tours. Glaciers visible from the airstrip. The clearest mountain air on earth.",
@@ -4235,12 +4405,12 @@ const CAMPS = [
     type:"National Park", price:25, sites:71, avail:18, rating:4.8, reviews:540,
     desc:"An 1880s Mormon pioneer orchard still produces in the heart of Capitol Reef — pick your own cherries, peaches, or apples in season. The Waterpocket Fold is a 100-mile wrinkle in the earth's crust.",
     amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Accessible","Pet Friendly"],
-    seasons:["Spring","Fall","Winter"], lat:38.2868, lng:-111.2491 },
+    seasons:["Spring","Fall","Winter"], lat:38.2868, lng:-111.2491, ridb_id:"251709", photo:"https://cdn.recreation.gov/public/images/75285_1440.webp" },
   { id:116, name:"Dog Canyon",                 loc:"Guadalupe Mountains NP · Texas",
     type:"National Park", price:14, sites:9, avail:6, rating:4.8, reviews:190,
     desc:"The most remote campground in Texas' only national park — a nine-site canyon camp accessible by 70 miles of winding two-lane road. Near total darkness at night. Elk, mule deer, and mountain lion country.",
     amenities:["Vault Toilets","Fire Rings","Parking","Stargazing","Hiking","Pet Friendly"],
-    seasons:["Spring","Fall","Winter"], lat:31.9532, lng:-104.7726 },
+    seasons:["Spring","Fall","Winter"], lat:31.9532, lng:-104.7726, ridb_id:"258852", photo:"https://cdn.recreation.gov/public/2021/02/18/22/55/258852_369c0a48-2557-4ebd-acdc-8fab01645af3_700.webp" },
   { id:117, name:"New River Gorge Grandview",  loc:"New River Gorge NP · West Virginia",
     type:"National Park", price:0, sites:30, avail:20, rating:4.7, reviews:310,
     desc:"The newest national park in the US (2020) protects a stunning 53-mile gorge where the New River drops through some of the most dramatic rapids east of the Rockies. Free camping. Zero fees. True wild.",
@@ -4306,7 +4476,7 @@ const CAMPS = [
     type:"National Park", price:14, sites:60, avail:12, rating:4.9, reviews:710,
     desc:"Camp at 5,400 feet inside a volcanic caldera in the most remote national park in the lower 48. The Chisos Mountains rise from Chihuahuan Desert. Peregrine falcons nest overhead. The stars are staggering.",
     amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Stargazing","Camp Store"],
-    seasons:["Fall","Winter","Spring"], lat:29.2698, lng:-103.3028 },
+    seasons:["Fall","Winter","Spring"], lat:29.2698, lng:-103.3028, ridb_id:"234038", photo:"https://cdn.recreation.gov/public/2021/06/11/16/16/234038_b39939d5-af26-42ab-8785-7278ed91d3b0_1440.webp" },
   { id:129, name:"Palo Duro Canyon State Park", loc:"Canyon · Texas",
     type:"State Park", price:20, sites:100, avail:30, rating:4.8, reviews:580,
     desc:"The Grand Canyon of Texas — 120 miles long, 800 feet deep, a canyon that most Texans don't know exists. Trails wind through hoodoos, juniper breaks, and layers of geologic time. Sunsets here are violent.",
@@ -4323,7 +4493,7 @@ const CAMPS = [
     type:"BLM", price:20, sites:18, avail:18, rating:4.9, reviews:890,
     desc:"Arguably the most scenic campground in America, Goose Island sits right on the Colorado River with unobstructed views of 800-foot red sandstone walls. Sites are first-come, first-served and fill by Thursday afternoon in spring.",
     amenities:["Vault Toilets","River Access","Pet Friendly","Parking"],
-    seasons:["Spring","Fall"], lat:38.6127, lng:-109.5499 },
+    seasons:["Spring","Fall"], lat:38.6127, lng:-109.5499, ridb_id:"202151" },
 
   { id:132, name:"Alabama Hills Recreation Area", loc:"Lone Pine · California",
     type:"BLM", price:0, sites:99, avail:99, rating:4.8, reviews:1240,
@@ -4335,7 +4505,7 @@ const CAMPS = [
     type:"BLM", price:8, sites:14, avail:14, rating:4.7, reviews:320,
     desc:"The most remote drive-in beach camp in California, at the end of a 23-mile dead-end road where the King Range mountains plunge straight into the Pacific. Bald eagles, Roosevelt elk, and zero cell signal.",
     amenities:["Vault Toilets","Beach Access","Pet Friendly"],
-    seasons:["Spring","Summer","Fall"], lat:40.2796, lng:-124.3494 },
+    seasons:["Spring","Summer","Fall"], lat:40.2796, lng:-124.3494, ridb_id:"262790", photo:"https://cdn.recreation.gov/public/2026/06/09/20/29/262790_4a021188-2c08-45f8-a5c7-074e270be77f.jpeg" },
 
   { id:134, name:"Macks Canyon Recreation Site", loc:"Maupin · Oregon",
     type:"BLM", price:15, sites:17, avail:17, rating:4.8, reviews:480,
@@ -4347,7 +4517,7 @@ const CAMPS = [
     type:"BLM", price:14, sites:34, avail:20, rating:4.6, reviews:370,
     desc:"A serene reservoir camp in the Gates of the Mountains Wilderness area north of Helena. The Missouri River canyon here was described by Lewis & Clark as the most beautiful scenery of the entire expedition.",
     amenities:["Hot Showers","Boat Launch","Fishing","Pet Friendly","Parking"],
-    seasons:["Spring","Summer","Fall"], lat:47.0173, lng:-111.9765 },
+    seasons:["Spring","Summer","Fall"], lat:47.0173, lng:-111.9765, ridb_id:"261696", photo:"https://cdn.recreation.gov/public/2025/06/16/07/38/261696_1cdc27b7-00f1-404f-8e81-a45c955b8901_700.webp" },
 
   { id:136, name:"Hartman Rocks Recreation Area", loc:"Gunnison · Colorado",
     type:"BLM", price:0, sites:50, avail:50, rating:4.7, reviews:560,
@@ -4359,7 +4529,7 @@ const CAMPS = [
     type:"BLM", price:8, sites:30, avail:30, rating:4.5, reviews:290,
     desc:"A hidden oasis along a perennial Sonoran Desert creek, where saguaro cacti tower 40 feet above your tent and bighorn sheep come to drink at dawn. One of the few BLM camps in Arizona with reliable year-round water.",
     amenities:["Flush Toilets","Water","Pet Friendly","Fishing","Parking"],
-    seasons:["Fall","Winter","Spring"], lat:34.4852, lng:-113.5789 },
+    seasons:["Fall","Winter","Spring"], lat:34.4852, lng:-113.5789, ridb_id:"10000305", photo:"https://cdn.recreation.gov/public/2020/01/06/19/08/10000305_86707c49-b7f6-4820-acf4-00ca649b11d8_1440.webp" },
 
   { id:138, name:"Virgin River Canyon Camp", loc:"St. George · Utah",
     type:"BLM", price:15, sites:75, avail:40, rating:4.6, reviews:410,
@@ -4401,26 +4571,26 @@ const CAMPS = [
     type:"BLM", price:8, sites:83, avail:50, rating:4.6, reviews:400,
     desc:"An inexpensive base camp at the foot of Mount Whitney — the highest peak in the Lower 48 — with direct access to the Whitney Portal trail. At 5,100 feet, it stays cooler than Owens Valley and fills every weekend in summer.",
     amenities:["Vault Toilets","Water","Pet Friendly","Hiking","Parking"],
-    seasons:["Spring","Summer","Fall"], lat:36.5697, lng:-118.1438 },
+    seasons:["Spring","Summer","Fall"], lat:36.5697, lng:-118.1438, ridb_id:"10004620", photo:"https://cdn.recreation.gov/public/2023/07/21/18/54/10004620_23cffab8-0721-4260-88c7-0fae4fec6d0a_700.webp" },
 
   { id:145, name:"James Kipp Recreation Area", loc:"Winifred · Montana",
     type:"BLM", price:7, sites:28, avail:28, rating:4.6, reviews:180,
     desc:"A frontier-feeling Missouri River camp in the White Cliffs section — the same white sandstone formation Lewis & Clark called 'visionary enchantment' in their journals. Canoe-in primitive sites extend for 50 miles downstream.",
     amenities:["Boat Launch","Fishing","Pet Friendly","Vault Toilets"],
-    seasons:["Spring","Summer","Fall"], lat:47.5502, lng:-108.9073 },
+    seasons:["Spring","Summer","Fall"], lat:47.5502, lng:-108.9073, ridb_id:"262717" },
 
   // ── ARMY CORPS ─────────────────────────────────
   { id:146, name:"J. Percy Priest Lake — Poole Knobs", loc:"Nashville · Tennessee",
     type:"Army Corps", price:28, sites:86, avail:30, rating:4.7, reviews:540,
     desc:"The closest Army Corps campground to downtown Nashville — just 12 miles out — with lakefront sites, a swimming beach, and one of the best bass fishing lakes in Tennessee. Fills every summer weekend; book 6 months ahead.",
     amenities:["Hot Showers","Electric Hookups","Boat Launch","Swimming","Pet Friendly","Accessible"],
-    seasons:["Spring","Summer","Fall"], lat:36.0946, lng:-86.5285 },
+    seasons:["Spring","Summer","Fall"], lat:36.0946, lng:-86.5285, ridb_id:"232677", photo:"https://cdn.recreation.gov/public/2019/10/07/14/39/232677_c632e1e2-1511-459f-97a5-282bfc96d55f_1440.webp" },
 
   { id:147, name:"Lake Sidney Lanier — Bolding Mill", loc:"Gainesville · Georgia",
     type:"Army Corps", price:34, sites:97, avail:35, rating:4.8, reviews:760,
     desc:"The most beloved campground on Lake Lanier — Atlanta's 38,000-acre backyard lake — with wooded lakeside sites, a white sand swimming beach, and water that sparkles an unusual blue-green from the granite bottom.",
     amenities:["Hot Showers","Electric Hookups","Swimming","Boat Launch","Fishing","Pet Friendly","Accessible"],
-    seasons:["Spring","Summer","Fall"], lat:34.2476, lng:-83.8918 },
+    seasons:["Spring","Summer","Fall"], lat:34.2476, lng:-83.8918, ridb_id:"232531", photo:"https://cdn.recreation.gov/public/images/66176_700.webp" },
 
   { id:148, name:"Sam Rayburn Reservoir — Twin Dikes", loc:"Jasper · Texas",
     type:"Army Corps", price:22, sites:48, avail:25, rating:4.5, reviews:380,
@@ -4450,55 +4620,55 @@ const CAMPS = [
     type:"Army Corps", price:20, sites:110, avail:50, rating:4.5, reviews:370,
     desc:"A wooded Kentucky reservoir camp one hour south of Louisville and just 12 miles from Mammoth Cave National Park — the longest known cave system on Earth. Rent a paddleboard and explore the coves at dusk.",
     amenities:["Hot Showers","Electric Hookups","Boat Launch","Swimming","Pet Friendly"],
-    seasons:["Spring","Summer","Fall"], lat:37.2116, lng:-86.2682 },
+    seasons:["Spring","Summer","Fall"], lat:37.2116, lng:-86.2682, ridb_id:"233670", photo:"https://cdn.recreation.gov/public/2021/08/10/14/15/233670_ebb6a72d-656a-412e-be94-ea4e79cca953_1440.webp" },
 
   { id:153, name:"Carlyle Lake — Boulder Recreation", loc:"Carlyle · Illinois",
     type:"Army Corps", price:22, sites:74, avail:35, rating:4.4, reviews:280,
     desc:"The largest man-made lake in Illinois, with 26,000 surface acres and the most reliable sailing winds in the Midwest. The campground sits on a wooded peninsula with lake views from nearly every site.",
     amenities:["Hot Showers","Electric Hookups","Boat Launch","Marina","Pet Friendly","Accessible"],
-    seasons:["Spring","Summer","Fall"], lat:38.6151, lng:-89.4001 },
+    seasons:["Spring","Summer","Fall"], lat:38.6151, lng:-89.4001, ridb_id:"233433", photo:"https://cdn.recreation.gov/public/2021/03/19/15/51/233433_f5ae4e10-e1b0-491f-aa5e-b567f16027df_1440.webp" },
 
   { id:154, name:"Beaver Lake — Dam Site",         loc:"Rogers · Arkansas",
     type:"Army Corps", price:24, sites:60, avail:28, rating:4.6, reviews:420,
     desc:"Northwest Arkansas's crown jewel reservoir in the Ozarks, where the crystal-clear water and limestone bluffs feel more like the Ozark highlands than a federal impoundment. The Bentonville mountain bike trail network is 20 minutes away.",
     amenities:["Hot Showers","Electric Hookups","Boat Launch","Fishing","Pet Friendly","Accessible"],
-    seasons:["Spring","Summer","Fall"], lat:36.4293, lng:-94.0229 },
+    seasons:["Spring","Summer","Fall"], lat:36.4293, lng:-94.0229, ridb_id:"10249153", photo:"https://cdn.recreation.gov/public/2023/08/27/18/11/10249153_17fe71ba-92ad-4bf4-b877-e585398154e5_700.webp" },
 
   { id:155, name:"Lake Hartwell — Twin Lakes",     loc:"Anderson · South Carolina",
     type:"Army Corps", price:28, sites:102, avail:45, rating:4.7, reviews:530,
     desc:"A massive 56,000-acre reservoir on the Georgia-South Carolina border with 962 miles of shoreline — more than Lake Michigan. Camp here, fish for catfish and crappie, and watch Clemson fans congregate on football weekends.",
     amenities:["Hot Showers","Electric Hookups","Swimming","Boat Launch","Fishing","Pet Friendly"],
-    seasons:["Spring","Summer","Fall"], lat:34.4787, lng:-82.8293 },
+    seasons:["Spring","Summer","Fall"], lat:34.4787, lng:-82.8293, ridb_id:"251648" },
 
   { id:156, name:"Fort Gibson Lake — Flat Rock",   loc:"Fort Gibson · Oklahoma",
     type:"Army Corps", price:20, sites:55, avail:30, rating:4.5, reviews:290,
     desc:"Eastern Oklahoma's most popular Corps lake, where the Grand, Arkansas, and Neosho Rivers converge. Ancient cypress trees line the coves; blue herons stalk the shallows; and the largemouth bass fishing is among the best in the state.",
     amenities:["Hot Showers","Electric Hookups","Boat Launch","Fishing","Pet Friendly"],
-    seasons:["Spring","Summer","Fall"], lat:35.7987, lng:-95.2565 },
+    seasons:["Spring","Summer","Fall"], lat:35.7987, lng:-95.2565, ridb_id:"233500", photo:"https://cdn.recreation.gov/public/2019/09/19/12/52/233500_73ae17f0-bbdb-40fd-a0e5-c35b6c898031_1440.webp" },
 
   { id:157, name:"Okatibbee Lake — Twiltley Branch", loc:"Meridian · Mississippi",
     type:"Army Corps", price:18, sites:64, avail:35, rating:4.4, reviews:220,
     desc:"A quiet pine forest reservoir camp in central Mississippi, where the bass fishing is serious and the pace of life slows considerably. Fireflies light the campground in June in a display that draws visitors from across the South.",
     amenities:["Hot Showers","Electric Hookups","Boat Launch","Fishing","Pet Friendly","Accessible"],
-    seasons:["Spring","Summer","Fall","Winter"], lat:32.3940, lng:-88.6990 },
+    seasons:["Spring","Summer","Fall","Winter"], lat:32.3940, lng:-88.6990, ridb_id:"232725", photo:"https://cdn.recreation.gov/public/2026/05/22/15/39/232725_508e121c-f766-43ef-aac9-ae55bffc3f6e_1440.png" },
 
   { id:158, name:"Barren River Lake — Baileys Point", loc:"Glasgow · Kentucky",
     type:"Army Corps", price:22, sites:45, avail:22, rating:4.5, reviews:250,
     desc:"A secluded Appalachian foothills lake camp tucked into the knobs and hollows of Barren County. The dock fishing is excellent and the wooded campsites feel genuinely remote despite being two hours from Nashville.",
     amenities:["Hot Showers","Electric Hookups","Boat Launch","Fishing","Pet Friendly"],
-    seasons:["Spring","Summer","Fall"], lat:37.0476, lng:-85.9408 },
+    seasons:["Spring","Summer","Fall"], lat:37.0476, lng:-85.9408, ridb_id:"233420", photo:"https://cdn.recreation.gov/public/2018/09/05/19/39/233420_cdad0721-31ac-4f9e-a609-35dc47937fb1_700.webp" },
 
   { id:159, name:"Lost Lake Campground",              loc:"Mt. Hood · Hood River County · Oregon",
     type:"National Forest", price:28, sites:125, avail:40, rating:4.9, reviews:2100,
     desc:"The most iconic campground on Mt. Hood — Lost Lake offers the classic postcard reflection of the peak mirrored in still water at dawn. Old-growth forest surrounds the lake, hiking trails circle the shore, and boat rentals make lazy afternoons easy. One of the Pacific Northwest's most beloved camps.",
     amenities:["Boat Rentals","Swimming","Fishing","Hiking","Pet Friendly","Hot Showers","Camp Store"],
-    seasons:["Summer","Fall"], lat:45.4938, lng:-121.8226 },
+    seasons:["Summer","Fall"], lat:45.4938, lng:-121.8226, ridb_id:"10364954" },
 
   { id:160, name:"Timothy Lake — Hoodview Campground", loc:"Mt. Hood National Forest · Oregon",
     type:"National Forest", price:24, sites:74, avail:30, rating:4.7, reviews:980,
     desc:"A sprawling reservoir at 3,200 feet in Mt. Hood National Forest with views of the peak framed by Douglas fir. Hoodview is the most scenic of the four campgrounds ringing the lake — paddle-boarders, kayakers, and anglers share the calm water while hikers access the PCT just minutes away.",
     amenities:["Boat Launch","Fishing","Swimming","Hiking","Pet Friendly","Flush Toilets"],
-    seasons:["Summer","Fall"], lat:45.1176, lng:-121.7810 },
+    seasons:["Summer","Fall"], lat:45.1176, lng:-121.7810, ridb_id:"232867", photo:"https://cdn.recreation.gov/public/2020/12/03/22/54/232867_fa1ee156-82b8-493b-9f84-deeb27e5275d_700.webp" },
 
   { id:161, name:"Ramona Falls Trailhead Camp",        loc:"Sandy River · Mt. Hood · Oregon",
     type:"National Forest", price:0, sites:8, avail:6, rating:4.6, reviews:410,
@@ -4549,12 +4719,7 @@ const CAMPS = [
     amenities:["Restrooms","Showers","Drinking Water","Fire Rings","Picnic Tables","Hiking","Bike Trails","Fishing","Pet Friendly"],
     seasons:["Year-round"], lat:45.2462, lng:-122.8972 },
 
-  // ── MORE OREGON ────────────────────────────────────────────────────────────
-  { id:169, name:"Silver Falls State Park",              loc:"Silverton · Oregon",
-    type:"State Park", price:24, sites:52, avail:28, rating:4.8, reviews:1560,
-    desc:"Oregon's largest state park and one of the most beautiful campgrounds in the Pacific Northwest. The Trail of Ten Falls passes ten distinct waterfalls — including South Falls, where you can walk behind a 177-foot curtain of water — all within a single 7.2-mile loop. The campground is forest-wrapped and exceptionally well maintained, about 26 miles east of Salem.",
-    amenities:["Restrooms","Showers","Drinking Water","Fire Rings","Picnic Tables","Hiking","Pet Friendly","Bike Trails"],
-    seasons:["Year-round"], lat:44.8779, lng:-122.6540 },
+  // ── MORE OREGON ────────────────────────────────────────────────────────────,
 
   { id:170, name:"Detroit Lake State Recreation Area",   loc:"Detroit · Oregon",
     type:"State Park", price:24, sites:178, avail:60, rating:4.4, reviews:1120,
@@ -4562,24 +4727,13 @@ const CAMPS = [
     amenities:["Restrooms","Showers","Drinking Water","Electrical Hookups","Fire Rings","Picnic Tables","Swimming","Fishing","Hiking","Pet Friendly"],
     seasons:["Spring","Summer","Fall"], lat:44.7260, lng:-122.1870 },
 
-  { id:171, name:"Cape Lookout State Park",              loc:"Tillamook Coast · Oregon",
-    type:"State Park", price:24, sites:170, avail:50, rating:4.6, reviews:1380,
-    desc:"A spit of land jutting into the Pacific on the northern Oregon coast, with campsites ranging from beach-front to forest. The trail out to the cape's tip — a narrow finger of Sitka spruce above crashing surf — is one of the great coastal hikes in the state. Gray whale migration peaks here in March and December; you may spot spouts from the trail.",
-    amenities:["Restrooms","Showers","Drinking Water","Fire Rings","Picnic Tables","Hiking","Beach Access","Pet Friendly","Wildlife Viewing"],
-    seasons:["Year-round"], lat:45.3449, lng:-123.9642 },
-
-  // ── WASHINGTON STATE ───────────────────────────────────────────────────────
-  { id:172, name:"Deception Pass State Park",            loc:"Whidbey Island · Washington",
-    type:"State Park", price:30, sites:167, avail:60, rating:4.8, reviews:2240,
-    desc:"Washington's most-visited state park straddles the turbulent straits between Whidbey and Fidalgo Islands. Camp in the old-growth fir above tidal pools, hike the bluffs for views of the bridge and swirling currents, or kayak into sheltered coves at high tide. The bridge itself — watched from below through the binoculars of a thousand Instagram posts — is genuinely spine-tingling.",
-    amenities:["Restrooms","Showers","Drinking Water","Fire Rings","Picnic Tables","Hiking","Beach Access","Kayaking","Fishing","Pet Friendly"],
-    seasons:["Year-round"], lat:48.4074, lng:-122.6446 },
+  // ── WASHINGTON STATE ───────────────────────────────────────────────────────,
 
   { id:173, name:"Kalaloch Campground",                  loc:"Olympic National Park · Washington",
     type:"National Park", price:21, sites:170, avail:60, rating:4.7, reviews:1870,
     desc:"One of the rare campgrounds where the sites actually front onto the beach — you can fall asleep to the Pacific surf and wake up to mist drifting in from the ocean. The wild, driftwood-strewn beach stretches for miles in each direction; the famous \"Tree of Life\" (a Sitka spruce clinging to an undercut bank by its roots alone) is a five-minute walk north.",
     amenities:["Restrooms","Drinking Water","Fire Rings","Picnic Tables","Beach Access","Wildlife Viewing","Hiking","Pet Friendly"],
-    seasons:["Year-round"], lat:47.6099, lng:-124.3757 },
+    seasons:["Year-round"], lat:47.6099, lng:-124.3757, ridb_id:"232464", photo:"https://cdn.recreation.gov/public/2018/12/02/19/47/232464_0362d870-dd32-4bb6-b55b-148e5ef1b785_700.webp" },
 
   { id:174, name:"Fort Worden State Park",               loc:"Port Townsend · Washington",
     type:"State Park", price:35, sites:80, avail:40, rating:4.6, reviews:980,
@@ -4591,20 +4745,9 @@ const CAMPS = [
     type:"National Forest", price:23, sites:45, avail:28, rating:4.6, reviews:750,
     desc:"Tucked into the narrow Icicle Canyon just above the Bavarian-themed town of Leavenworth, this Forest Service camp sits along a rushing glacial creek surrounded by granite walls. Rock climbers base here for the world-class walls at Castle Rock; hikers access the Alpine Lakes Wilderness from trailheads minutes away. At night the Milky Way blazes between the canyon ridges.",
     amenities:["Restrooms","Drinking Water","Fire Rings","Picnic Tables","Hiking","Fishing","Rock Climbing","Pet Friendly","Stargazing"],
-    seasons:["Spring","Summer","Fall"], lat:47.5474, lng:-120.7449 },
+    seasons:["Spring","Summer","Fall"], lat:47.5474, lng:-120.7449, ridb_id:"121440", photo:"https://cdn.recreation.gov/public/2024/09/05/21/26/121440_f42065ea-8326-4675-bc43-f3aa074782d9_700.webp" },
 
-  // ── CALIFORNIA COAST ───────────────────────────────────────────────────────
-  { id:176, name:"Salt Point State Park",                loc:"Sonoma Coast · California",
-    type:"State Park", price:35, sites:109, avail:40, rating:4.5, reviews:1120,
-    desc:"A rugged, windswept stretch of Sonoma Coast where tide pools, abalone diving, and twisted pygmy cypress forests coexist. The park has two campgrounds — Woodside in the forest and Gerstle Cove on the bluffs above the water. Scuba divers arrive before dawn to dive for red urchin and the recovering abalone population. The coastal trail connects both camps with jaw-dropping views.",
-    amenities:["Restrooms","Drinking Water","Fire Rings","Picnic Tables","Hiking","Beach Access","Fishing","Pet Friendly","Wildlife Viewing"],
-    seasons:["Year-round"], lat:38.5688, lng:-123.3293 },
-
-  { id:177, name:"Pfeiffer Big Sur State Park",          loc:"Big Sur · California",
-    type:"State Park", price:35, sites:189, avail:60, rating:4.7, reviews:3200,
-    desc:"The quintessential Big Sur campground, set in a cathedral redwood grove along the Big Sur River. The river pools are ideal for a refreshing dip after a day hiking the Valley View Trail or driving the coast. The Pfeiffer Beach turnoff is 3 miles north for the famous purple-sand beach at sunset. Book months in advance — this is one of the most in-demand campgrounds in California.",
-    amenities:["Restrooms","Showers","Drinking Water","Fire Rings","Picnic Tables","Hiking","Fishing","Swimming","Pet Friendly"],
-    seasons:["Year-round"], lat:36.2504, lng:-121.7844 },
+  // ── CALIFORNIA COAST ───────────────────────────────────────────────────────,
 
   // ── NEVADA ─────────────────────────────────────────────────────────────────
   { id:178, name:"Cathedral Gorge State Park",           loc:"Panaca · Nevada",
@@ -4613,12 +4756,7 @@ const CAMPS = [
     amenities:["Restrooms","Drinking Water","Fire Rings","Picnic Tables","Hiking","Stargazing","Pet Friendly"],
     seasons:["Year-round"], lat:37.8040, lng:-114.4059 },
 
-  // ── UTAH ───────────────────────────────────────────────────────────────────
-  { id:179, name:"Goblin Valley State Park",             loc:"Green River · Utah",
-    type:"State Park", price:30, sites:25, avail:18, rating:4.8, reviews:1040,
-    desc:"Camp beside thousands of otherworldly sandstone hoodoos — called \"goblins\" — shaped by millions of years of wind and water erosion. The valley floor is open for wandering in any direction among the formations; there are no trails, just open desert exploration among the mushroom-capped spires. At sunset and sunrise the formations glow deep rust and amber. One of Utah's strangest and most magical camps.",
-    amenities:["Restrooms","Showers","Drinking Water","Fire Rings","Picnic Tables","Hiking","Stargazing","Pet Friendly"],
-    seasons:["Year-round"], lat:38.5701, lng:-110.7080 },
+  // ── UTAH ───────────────────────────────────────────────────────────────────,
 
   // ── TEXAS ──────────────────────────────────────────────────────────────────
   { id:180, name:"Garner State Park",                    loc:"Concan · Texas",
@@ -4627,17 +4765,11 @@ const CAMPS = [
     amenities:["Restrooms","Showers","Drinking Water","Electrical Hookups","Fire Rings","Picnic Tables","Swimming","Fishing","Hiking","Pet Friendly"],
     seasons:["Year-round"], lat:29.5947, lng:-99.7481 },
 
-  { id:181, name:"Palo Duro Canyon State Park",          loc:"Canyon · Texas",
-    type:"State Park", price:20, sites:100, avail:50, rating:4.6, reviews:1580,
-    desc:"The \"Grand Canyon of Texas\" — 800-foot walls of red, orange, and purple rock dropping into a juniper canyon that feels completely unlike the surrounding flat Panhandle. The Lighthouse Trail (6 miles RT) leads to the park's iconic stone pillar; the evening musical drama staged in the canyon amphitheater has run every summer since 1965. A genuinely unexpected landscape.",
-    amenities:["Restrooms","Showers","Drinking Water","Electrical Hookups","Fire Rings","Picnic Tables","Hiking","Bike Trails","Horse Trails","Pet Friendly"],
-    seasons:["Year-round"], lat:34.9022, lng:-101.6708 },
-
   { id:182, name:"Guadalupe Mountains NP — Pine Springs", loc:"Salt Flat · Texas",
     type:"National Park", price:15, sites:40, avail:30, rating:4.5, reviews:680,
     desc:"Camp at the base of the highest peak in Texas — Guadalupe Peak at 8,751 feet — in a park most Americans have never heard of. The landscape shifts from Chihuahuan Desert scrub to fir and aspen forest within a single strenuous hike. The fossil reef exposed in the canyon walls is among the most complete Permian-era examples anywhere on earth. Almost no one comes here. That's the point.",
     amenities:["Restrooms","Drinking Water","Picnic Tables","Hiking","Stargazing","Pet Friendly"],
-    seasons:["Year-round"], lat:31.8928, lng:-104.8338 },
+    seasons:["Year-round"], lat:31.8928, lng:-104.8338, ridb_id:"232805", photo:"https://cdn.recreation.gov/public/2022/10/25/21/58/232805_ff130b39-f4f8-4c90-af62-79caa5ca0e18_1440.webp" },
 
   // ── NEW MEXICO ─────────────────────────────────────────────────────────────
   { id:183, name:"Oliver Lee Memorial State Park",       loc:"Alamogordo · New Mexico",
@@ -4646,12 +4778,7 @@ const CAMPS = [
     amenities:["Restrooms","Drinking Water","Electrical Hookups","Fire Rings","Picnic Tables","Hiking","Stargazing","Pet Friendly"],
     seasons:["Year-round"], lat:32.7473, lng:-105.9541 },
 
-  // ── SOUTHEAST ──────────────────────────────────────────────────────────────
-  { id:184, name:"Cheaha State Park",                    loc:"Delta · Alabama",
-    type:"State Park", price:22, sites:73, avail:40, rating:4.5, reviews:760,
-    desc:"Alabama's highest point — Cheaha Mountain at 2,413 feet — is the centerpiece of this wooded park in the Talladega National Forest. The campground sits on the ridgeline with views stretching across the forested hills of the Appalachian foothills; on clear days you can see three states. The stone Civilian Conservation Corps buildings and overlook lodge have been here since the 1930s.",
-    amenities:["Restrooms","Showers","Drinking Water","Electrical Hookups","Fire Rings","Picnic Tables","Hiking","Pet Friendly"],
-    seasons:["Year-round"], lat:33.4877, lng:-85.8113 },
+  // ── SOUTHEAST ──────────────────────────────────────────────────────────────,
 
   { id:185, name:"Tishomingo State Park",                loc:"Tishomingo · Mississippi",
     type:"State Park", price:18, sites:62, avail:38, rating:4.4, reviews:480,
@@ -4659,24 +4786,13 @@ const CAMPS = [
     amenities:["Restrooms","Showers","Drinking Water","Electrical Hookups","Fire Rings","Picnic Tables","Hiking","Fishing","Kayaking","Pet Friendly"],
     seasons:["Year-round"], lat:34.6477, lng:-88.2061 },
 
-  { id:186, name:"Chicot State Park",                    loc:"Ville Platte · Louisiana",
-    type:"State Park", price:20, sites:200, avail:80, rating:4.3, reviews:640,
-    desc:"Louisiana's largest state park sits around the state's largest natural freshwater lake — Lake Chicot — a relic oxbow of the Mississippi. Cypress trees draped in Spanish moss line the shore; alligators sun on logs and wood ducks work the shallows. The fishing is exceptional for largemouth bass, crappie, and bream. The aquatic center and beach make it popular with families all summer.",
-    amenities:["Restrooms","Showers","Drinking Water","Electrical Hookups","Fire Rings","Picnic Tables","Swimming","Fishing","Hiking","Pet Friendly","Wildlife Viewing"],
-    seasons:["Year-round"], lat:30.7940, lng:-92.2844 },
-
   { id:187, name:"Cossatot River State Park Natural Area", loc:"Mena · Arkansas",
     type:"State Park", price:14, sites:24, avail:18, rating:4.6, reviews:380,
     desc:"The Cossatot runs through a remote stretch of Ouachita Mountain wilderness and is considered one of the most technically demanding whitewater rivers in the mid-south — class III–IV rapids in a stunning boulder-strewn canyon. The park keeps it primitive and quiet; this is for paddlers and hikers who want genuine wilderness without driving to Colorado. Wildflower diversity in the canyon bottom is extraordinary.",
     amenities:["Restrooms","Drinking Water","Fire Rings","Picnic Tables","Hiking","Fishing","Kayaking","Pet Friendly"],
     seasons:["Spring","Summer","Fall"], lat:34.1178, lng:-94.2831 },
 
-  // ── MIDWEST ────────────────────────────────────────────────────────────────
-  { id:188, name:"Starved Rock State Park",              loc:"Utica · Illinois",
-    type:"State Park", price:20, sites:133, avail:55, rating:4.6, reviews:1640,
-    desc:"Illinois's most visited state park punches way above its size — sandstone canyons carved by glacial meltwater hide 18 distinct waterfalls along a 13-mile trail network above the Illinois River. The canyon walls create dramatic slot-like passages through the forest. Winter visits reveal frozen waterfalls; spring brings cascading snowmelt and wildflowers. Only 90 miles southwest of Chicago.",
-    amenities:["Restrooms","Showers","Drinking Water","Electrical Hookups","Fire Rings","Picnic Tables","Hiking","Fishing","Pet Friendly"],
-    seasons:["Year-round"], lat:41.3181, lng:-88.9881 },
+  // ── MIDWEST ────────────────────────────────────────────────────────────────,
 
   { id:189, name:"Ledges State Park",                    loc:"Boone · Iowa",
     type:"State Park", price:16, sites:55, avail:35, rating:4.4, reviews:560,
@@ -4707,7 +4823,7 @@ const CAMPS = [
     type:"National Park", price:14, sites:76, avail:50, rating:4.7, reviews:920,
     desc:"Camp inside the multicolored badlands of North Dakota's only national park — striped buttes, prairie dog towns, and free-roaming bison and wild horses visible right from camp. The Little Missouri River loops through the cottonwood grove; the evening glow on the painted canyon walls turns magenta and gold. Theodore Roosevelt ranched nearby and credited the Badlands with making him the man who would become president.",
     amenities:["Restrooms","Drinking Water","Fire Rings","Picnic Tables","Hiking","Wildlife Viewing","Stargazing","Pet Friendly"],
-    seasons:["Year-round"], lat:46.9688, lng:-103.5392 },
+    seasons:["Year-round"], lat:46.9688, lng:-103.5392, ridb_id:"251160", photo:"https://cdn.recreation.gov/public/2023/10/23/17/35/251160_f354848d-bdec-4e4f-ac5a-20b21223fef9_1440.webp" },
 
   { id:194, name:"Bighorn Canyon NRA — Horseshoe Bend", loc:"Lovell · Wyoming",
     type:"National Park", price:15, sites:58, avail:40, rating:4.5, reviews:540,
@@ -4720,7 +4836,7 @@ const CAMPS = [
     type:"National Forest", price:26, sites:18, avail:14, rating:4.7, reviews:680,
     desc:"A high-alpine camp at 11,200 feet at the foot of Mt. Bierstadt (14,060 feet) — one of Colorado's most accessible fourteeners — and within the Mt. Evans Wilderness. The pass is one of Colorado's most photogenic drives at peak fall color (late September), when the willow basins turn brilliant gold and the granite peaks reflect in the tundra ponds. Stars at this elevation are overwhelming.",
     amenities:["Drinking Water","Restrooms","Picnic Tables","Hiking","Stargazing","Pet Friendly"],
-    seasons:["Summer","Fall"], lat:39.5857, lng:-105.7107 },
+    seasons:["Summer","Fall"], lat:39.5857, lng:-105.7107, ridb_id:"232306", photo:"https://cdn.recreation.gov/public/2023/09/05/18/37/232306_ef27f0bd-d625-403c-9a26-6e49bc8592a8_1440.webp" },
 
   // ── NORTHEAST ──────────────────────────────────────────────────────────────
   { id:196, name:"Baxter State Park — Katahdin Stream",  loc:"Millinocket · Maine",
@@ -4733,13 +4849,7 @@ const CAMPS = [
     type:"National Park", price:30, sites:281, avail:80, rating:4.6, reviews:2840,
     desc:"The main campground inside Acadia National Park, set in a spruce and fir forest just minutes from the Atlantic shoreline. The carriage roads, designed by John D. Rockefeller Jr., radiate from nearby Jordan Pond — 45 miles of smooth gravel paths through the finest park in the Northeast. Watch sunrise from Cadillac Mountain (the first place the sun touches the US mainland in winter) then bike back to camp for breakfast.",
     amenities:["Restrooms","Drinking Water","Fire Rings","Picnic Tables","Hiking","Bike Trails","Fishing","Pet Friendly"],
-    seasons:["Spring","Summer","Fall"], lat:44.3283, lng:-68.2085 },
-
-  { id:198, name:"Ricketts Glen State Park",             loc:"Benton · Pennsylvania",
-    type:"State Park", price:22, sites:120, avail:55, rating:4.8, reviews:1620,
-    desc:"Pennsylvania's crown jewel — a lake and a waterfall-choked gorge with 22 named falls along Ganoga Glen. The Falls Trail descends through a hemlock and old-growth forest to Ganoga Falls (94 feet, the tallest) and loops back through a gallery of cascades that seems to reveal a new waterfall at every bend. The campground is large and well-run with good access to all trails.",
-    amenities:["Restrooms","Showers","Drinking Water","Electrical Hookups","Fire Rings","Picnic Tables","Hiking","Swimming","Fishing","Boating","Pet Friendly"],
-    seasons:["Year-round"], lat:41.3228, lng:-76.2887 },
+    seasons:["Spring","Summer","Fall"], lat:44.3283, lng:-68.2085, ridb_id:"232508", photo:"https://cdn.recreation.gov/public/2020/01/14/21/34/232508_9c88f01b-15f7-4306-8d62-126874a40d34_1440.webp" },
 
   { id:199, name:"Allegany State Park",                  loc:"Salamanca · New York",
     type:"State Park", price:25, sites:350, avail:120, rating:4.4, reviews:1280,
@@ -4803,7 +4913,7 @@ const CAMPS = [
     type:"BLM", price:8, sites:36, avail:28, rating:4.6, reviews:210,
     desc:"At the base of one of the most dramatic fault-block mountains in the West, Page Springs sits where the Donner und Blitzen River emerges cool and clear from the high desert. Bighorn sheep pick their way down the basalt cliffs above camp. It's the gateway to Steens Mountain's wild gorges and one of the most remote, sky-wide landscapes in the lower 48.",
     amenities:["Vault Toilets","Drinking Water","Fire Rings","Fishing","Hiking","Wildlife Viewing","Pet Friendly"],
-    seasons:["Spring","Summer","Fall"], lat:42.5456, lng:-118.8234 },
+    seasons:["Spring","Summer","Fall"], lat:42.5456, lng:-118.8234, ridb_id:"255180", photo:"https://cdn.recreation.gov/public/2022/06/22/23/06/255180_fcb9c61c-b278-41a8-adcb-ec29998048f8_1440.webp" },
 
   { id:209, name:"Hells Canyon — Copperfield Park",   loc:"Oxbow · Oregon",
     type:"Forest Service", price:15, sites:62, avail:44, rating:4.5, reviews:165,
@@ -4821,13 +4931,13 @@ const CAMPS = [
     type:"Forest Service", price:22, sites:28, avail:20, rating:4.7, reviews:195,
     desc:"Hidden in the foothills of Sequoia at just 2,800 feet, Buckeye Flat sits along the Middle Fork of the Kaweah River where the air is warm and the water runs over smooth granite. The giant sequoias are a short drive above, but down here the canyon is yours — warmer than the summit camps, far less crowded, and hauntingly beautiful in the golden foothills light.",
     amenities:["Flush Toilets","Drinking Water","Fire Rings","Fishing","Swimming","Hiking","Accessible"],
-    seasons:["Spring","Summer","Fall"], lat:36.4583, lng:-118.8291 },
+    seasons:["Spring","Summer","Fall"], lat:36.4583, lng:-118.8291, ridb_id:"249982", photo:"https://cdn.recreation.gov/public/images/69468_700.webp" },
 
   { id:212, name:"Plaskett Creek Campground",          loc:"Los Padres NF · California",
     type:"Forest Service", price:25, sites:44, avail:30, rating:4.6, reviews:248,
     desc:"On the wild Big Sur coast between Cambria and Carmel, Plaskett Creek sits just across the highway from Sand Dollar Beach — one of the longest sand beaches in Central California. Coast live oaks shade the sites while the Pacific crashes beyond the dunes. This stretch of Highway 1 is looser and quieter than Big Sur proper, and the camp fills more slowly.",
     amenities:["Flush Toilets","Drinking Water","Fire Rings","Beach Access","Hiking","Fishing","Pet Friendly"],
-    seasons:["Spring","Summer","Fall","Winter"], lat:35.7921, lng:-121.3356 },
+    seasons:["Spring","Summer","Fall","Winter"], lat:35.7921, lng:-121.3356, ridb_id:"231959", photo:"https://cdn.recreation.gov/public/images/76721_1440.webp" },
 
   { id:213, name:"McArthur-Burney Falls SP",           loc:"Shasta County · California",
     type:"State Park", price:35, sites:128, avail:40, rating:4.7, reviews:312,
@@ -4889,29 +4999,17 @@ const CAMPS = [
     amenities:["Flush Toilets","Drinking Water","Fire Rings","Wildlife Viewing","Hiking","Rock Climbing","Fishing"],
     seasons:["Spring","Fall","Winter"], lat:34.7356, lng:-98.6893 },
 
-  { id:223, name:"Johnson's Shut-Ins State Park",      loc:"Lesterville · Missouri",
-    type:"State Park", price:24, sites:98, avail:55, rating:4.7, reviews:237,
-    desc:"The Black River squeezes through ancient rhyolite rock formations that have carved a natural waterpark of pools, slides, and chutes in the Missouri Ozarks. The shut-ins are unlike anything else in the Midwest — billion-year-old volcanic rock worn smooth by water, framed by shortleaf pine and mixed hardwood forest. Peak summer weekends fill fast; go on a Tuesday and have the river to yourself.",
-    amenities:["Hot Showers","Flush Toilets","Fire Rings","Swimming","Hiking","Fishing","Pet Friendly","Camp Store"],
-    seasons:["Spring","Summer","Fall"], lat:37.5586, lng:-90.8499 },
-
   { id:224, name:"Sutton Bluff Recreation Area",       loc:"Mark Twain NF · Missouri",
     type:"Forest Service", price:12, sites:25, avail:22, rating:4.5, reviews:142,
     desc:"A secluded Ozark camp where the Black River runs wide and clear over gravel bars between pine-cloaked bluffs. It's a floater's paradise — rent canoes at nearby resorts and drift lazy miles downstream. The campground is small, shaded, and perpetually underbooked, drawing the kind of Missouri river crowd that brings guitars and stays three days.",
     amenities:["Vault Toilets","Drinking Water","Fire Rings","Swimming","Canoeing","Fishing","Pet Friendly"],
-    seasons:["Spring","Summer","Fall"], lat:37.3456, lng:-90.9812 },
-
-  { id:225, name:"Porcupine Mountains Wilderness SP",  loc:"Ontonagon · Michigan",
-    type:"State Park", price:18, sites:100, avail:60, rating:4.8, reviews:265,
-    desc:"The largest old-growth forest east of the Rockies crowns the 'Porkies,' a remote wilderness park on Lake Superior's southern shore where ancient hemlocks and maples have never been logged. The Lake of the Clouds overlook — one of the Midwest's finest views — is ten minutes from the main campground. Bears roam freely; black bears, not the polite kind.",
-    amenities:["Flush Toilets","Drinking Water","Fire Rings","Hiking","Fishing","Wildlife Viewing","Kayaking","Pet Friendly"],
-    seasons:["Spring","Summer","Fall"], lat:46.8141, lng:-89.7523 },
+    seasons:["Spring","Summer","Fall"], lat:37.3456, lng:-90.9812, ridb_id:"232419", photo:"https://cdn.recreation.gov/public/2020/07/12/23/10/232419_ac150cea-f2d7-43b4-9d98-d385e4dabfc5_1440.webp" },
 
   { id:226, name:"Sylvania Wilderness — Clark Lake",   loc:"Ottawa National Forest · Michigan",
     type:"Forest Service", price:15, sites:12, avail:9, rating:4.8, reviews:175,
     desc:"Permits and portaging keep the masses out of Sylvania's 4,000-acre network of pristine lakes in the Upper Peninsula. Clark Lake sits among old-growth white pines and northern hardwoods untouched since the Ice Age shaped them. The water is gin-clear to 20 feet — loons call across it at dawn. You carry everything in and leave nothing behind.",
     amenities:["No Facilities","Canoeing","Kayaking","Swimming","Fishing","Hiking","Wildlife Viewing"],
-    seasons:["Summer","Fall"], lat:46.2432, lng:-89.3063 },
+    seasons:["Summer","Fall"], lat:46.2432, lng:-89.3063, ridb_id:"272249", photo:"https://cdn.recreation.gov/public/2021/08/25/16/29/272249_d2105add-5853-4df6-b615-d6382acd6494_700.webp" },
 
   { id:227, name:"Garden of the Gods Wilderness",      loc:"Shawnee National Forest · Illinois",
     type:"Forest Service", price:0, sites:12, avail:12, rating:4.6, reviews:208,
@@ -4929,7 +5027,7 @@ const CAMPS = [
     type:"Forest Service", price:20, sites:60, avail:35, rating:4.7, reviews:312,
     desc:"Kentucky's most spectacular landscape is a maze of natural arches, soaring sandstone cliffs, and old-growth hemlock hollows carved by the Red River. Koomer Ridge sits on the plateau above the gorge and is the best base for exploring the Clifty Wilderness. The climbing community knows it well; the rest of the country doesn't, which is their loss.",
     amenities:["Flush Toilets","Drinking Water","Fire Rings","Hiking","Rock Climbing","Wildlife Viewing","Pet Friendly"],
-    seasons:["Spring","Summer","Fall"], lat:37.7923, lng:-83.6521 },
+    seasons:["Spring","Summer","Fall"], lat:37.7923, lng:-83.6521, ridb_id:"10311270", photo:"https://cdn.recreation.gov/public/2024/04/19/16/34/10311270_da731384-b9c4-4129-a419-e8844b40d5da_700.webp" },
 
   { id:230, name:"Natural Tunnel State Park",          loc:"Scott County · Virginia",
     type:"State Park", price:20, sites:47, avail:32, rating:4.7, reviews:149,
@@ -4947,7 +5045,7 @@ const CAMPS = [
     type:"Forest Service", price:0, sites:20, avail:16, rating:4.7, reviews:223,
     desc:"A sprawling high plateau of wind-sculpted spruce, open heath barrens, and tundra-like bogs perched at 4,000 feet in the Allegheny Mountains — it looks more like Canada than the mid-Atlantic. Red Creek campground is a rough trailhead base for accessing the backcountry, where black bear, snowshoe hare, and migratory hawks move through in astonishing numbers. One of Appalachia's true wild places.",
     amenities:["Vault Toilets","Fire Rings","Hiking","Fishing","Wildlife Viewing","Stargazing"],
-    seasons:["Spring","Summer","Fall"], lat:39.0140, lng:-79.4173 },
+    seasons:["Spring","Summer","Fall"], lat:39.0140, lng:-79.4173, ridb_id:"239774" },
 
   { id:233, name:"Spruce Knob — Seneca Shadows",       loc:"Monongahela NF · West Virginia",
     type:"Forest Service", price:18, sites:68, avail:42, rating:4.6, reviews:195,
@@ -4997,12 +5095,6 @@ const CAMPS = [
     amenities:["Flush Toilets","Drinking Water","Fire Rings","Swimming","Fishing","Hiking","Pet Friendly","Accessible"],
     seasons:["Spring","Summer","Fall"], lat:41.2345, lng:-74.9012 },
 
-  { id:241, name:"Watkins Glen State Park",            loc:"Schuyler County · New York",
-    type:"State Park", price:28, sites:296, avail:100, rating:4.8, reviews:415,
-    desc:"A mile-long gorge trail threads through 19 waterfalls in a limestone canyon so narrow and fern-draped it feels tropical. Carved by glacial meltwater, the gorge walls rise 200 feet above the creek. The state park campground above is spacious and quiet — the gorge crowds clear by 6pm, leaving you the trails in soft evening light. The Finger Lakes wine country begins just outside the gate.",
-    amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Swimming","Hiking","Pet Friendly"],
-    seasons:["Spring","Summer","Fall"], lat:42.3756, lng:-76.8714 },
-
   { id:242, name:"Allegheny NF — Kinzua Beach",        loc:"Warren County · Pennsylvania",
     type:"Forest Service", price:24, sites:92, avail:55, rating:4.5, reviews:176,
     desc:"Kinzua Beach sits on the arm of the reservoir by the same name — a 27-mile-long lake carved through the forested Pennsylvania highlands. The beach and boat ramp get busy on summer weekends, but the wooded sites above the shoreline stay quiet. Nearby, the ruined Kinzua Bridge — a Victorian railroad viaduct struck by a 2003 tornado — is one of the most haunting sights in the Northeast.",
@@ -5019,7 +5111,7 @@ const CAMPS = [
     type:"Forest Service", price:22, sites:28, avail:20, rating:4.5, reviews:108,
     desc:"A peaceful forest service camp on a small glacial pond in the southern Green Mountains, surrounded by hardwood and spruce forest that burns with color in October. The pond is perfect for a morning swim; the Long Trail passes a few miles east; the village of Peru, with a general store and a covered bridge, is five minutes down the road. Vermont forest camping at its most quietly perfect.",
     amenities:["Flush Toilets","Drinking Water","Fire Rings","Swimming","Fishing","Hiking","Pet Friendly"],
-    seasons:["Summer","Fall"], lat:43.2673, lng:-72.7989 },
+    seasons:["Summer","Fall"], lat:43.2673, lng:-72.7989, ridb_id:"232393", photo:"https://cdn.recreation.gov/public/2018/07/12/20/21/c7621d89-e5c6-45cf-a7bd-57ba8ddbcb39_700.webp" },
 
   { id:245, name:"Spencer Pond Camps — Primitive",     loc:"Somerset County · Maine",
     type:"BLM", price:0, sites:5, avail:5, rating:4.7, reviews:72,
@@ -5037,19 +5129,19 @@ const CAMPS = [
     type:"Forest Service", price:12, sites:40, avail:30, rating:4.5, reviews:118,
     desc:"On the shore of the White Oak River estuary where it opens into Bogue Sound, Cedar Point is a saltwater forest camp unlike any other — longleaf pine and live oak above, saltmarsh and oyster beds below. Red wolves roam the adjacent Alligator River refuge. Paddling out into the sound at sunset, with the barrier islands of the Crystal Coast glowing across the water, is something you remember for decades.",
     amenities:["Flush Toilets","Drinking Water","Fire Rings","Kayaking","Fishing","Wildlife Viewing","Beach Access"],
-    seasons:["Spring","Fall","Winter"], lat:34.6789, lng:-76.8912 },
+    seasons:["Spring","Fall","Winter"], lat:34.6789, lng:-76.8912, ridb_id:"233312", photo:"https://cdn.recreation.gov/public/2021/11/10/20/34/233312_97310c97-b404-4b61-9745-3d249cf40d7e_1440.webp" },
 
   { id:248, name:"Salt Springs Recreation Area",       loc:"Ocala National Forest · Florida",
     type:"Forest Service", price:28, sites:171, avail:80, rating:4.5, reviews:203,
     desc:"A first-magnitude spring bubbles up at a constant 68°F from the limestone aquifer, creating a crystal-clear run that flows a mile into Lake George — the largest lake entirely within Florida's borders. Saltwater fish from the St. Johns meet freshwater springs creatures in a biological collision zone; snorkeling the spring run on a summer morning is otherworldly. The Ocala is one of the most underrated forests in the South.",
     amenities:["Hot Showers","Flush Toilets","Fire Rings","Swimming","Snorkeling","Fishing","Kayaking","Pet Friendly"],
-    seasons:["Fall","Winter","Spring"], lat:29.3465, lng:-81.7251 },
+    seasons:["Fall","Winter","Spring"], lat:29.3465, lng:-81.7251, ridb_id:"233920", photo:"https://cdn.recreation.gov/public/2026/04/29/17/01/233920_08b89f02-43f0-4ecc-ae0a-6d5f53853d66_700.jpg" },
 
   { id:249, name:"East Rosebud Lake Campground",       loc:"Custer Gallatin NF · Montana",
     type:"Forest Service", price:12, sites:14, avail:11, rating:4.8, reviews:148,
     desc:"The Beartooth Range rises straight from the end of this glacial lake in a wall of glacier-carved granite so dramatic it silences first-time visitors. East Rosebud is the quiet gateway to the Beartooths — no cell service, no hookups, no reservations required — just a small camp at the trailhead for one of the finest wilderness routes in Montana. Grizzlies range throughout; this is genuine backcountry country.",
     amenities:["Vault Toilets","Drinking Water","Fire Rings","Fishing","Kayaking","Hiking","Wildlife Viewing"],
-    seasons:["Summer","Fall"], lat:45.1234, lng:-109.5678 },
+    seasons:["Summer","Fall"], lat:45.1234, lng:-109.5678, ridb_id:"239849" },
 
   { id:250, name:"Rough Lock Falls — Black Hills",     loc:"Spearfish Canyon · South Dakota",
     type:"Forest Service", price:12, sites:11, avail:9, rating:4.7, reviews:131,
@@ -5073,7 +5165,7 @@ const CAMPS = [
     type:"Forest Service", price:18, sites:65, avail:40, rating:4.8, reviews:312,
     desc:"A 13-mile tidewater glacier descends to a luminous glacial lake less than 15 miles from downtown Juneau — and you can camp at its shore. Icebergs calve into the lake with a crack you hear from your tent. The glacier face glows electric blue at golden hour. Bald eagles are so common here they become furniture. One of the most accessible wilderness camping experiences in Alaska.",
     amenities:["Flush Toilets","Drinking Water","Fire Rings","Hiking","Kayaking","Fishing","Wildlife Viewing","Accessible"],
-    seasons:["Summer","Fall"], lat:58.4272, lng:-134.5651 },
+    seasons:["Summer","Fall"], lat:58.4272, lng:-134.5651, ridb_id:"234504", photo:"https://cdn.recreation.gov/public/2021/08/16/23/38/234504_583925ac-30da-48d1-931f-a8e5a4ca5185_1440.webp" },
 
   { id:254, name:"Kīpahulu Campground — Haleakalā",    loc:"Maui · Hawaii",
     type:"National Park", price:20, sites:50, avail:30, rating:4.8, reviews:186,
@@ -5094,19 +5186,19 @@ const CAMPS = [
     type:"National Park", price:22, sites:136, avail:60, rating:4.6, reviews:1140,
     desc:"The heart of Death Valley — 282 feet below sea level, surrounded by the Panamint Range and the salt flats of Badwater Basin. Night temperatures drop dramatically from the brutal daytime heat, and the stars here are among the densest in North America. The sunrise from the Zabriskie Point overlook, ten minutes from camp, is one of the most photographed scenes on the continent.",
     amenities:["Flush Toilets","Drinking Water","Fire Rings","Parking","Accessible","Camp Store","Pet Friendly"],
-    seasons:["Fall","Winter","Spring"], lat:36.4619, lng:-116.8673 },
+    seasons:["Fall","Winter","Spring"], lat:36.4619, lng:-116.8673, ridb_id:"232496", photo:"https://cdn.recreation.gov/public/2020/06/13/19/55/232496_743d740d-3da8-42dd-b273-f4f5021037f7_700.webp" },
 
   { id:257, name:"Mesquite Spring Campground",         loc:"Death Valley NP · California",
     type:"National Park", price:14, sites:30, avail:24, rating:4.7, reviews:320,
     desc:"The quietest campground in Death Valley, perched at 1,800 feet where the desert blooms in spring and temperatures stay reasonable. The Eureka Dunes — the tallest sand dunes in North America — are a day trip north. A small spring attracts migrating birds in astonishing variety. Most Death Valley visitors never find this camp.",
     amenities:["Flush Toilets","Drinking Water","Fire Rings","Parking","Stargazing","Wildlife Viewing","Pet Friendly"],
-    seasons:["Fall","Winter","Spring"], lat:37.0080, lng:-117.4233 },
+    seasons:["Fall","Winter","Spring"], lat:37.0080, lng:-117.4233, ridb_id:"10087322", photo:"https://cdn.recreation.gov/public/2021/03/07/20/08/10087322_aef1ed3e-04b2-4033-9036-536fa9f943df.jpeg" },
 
   { id:258, name:"Wildrose Campground",                loc:"Death Valley NP · California",
     type:"National Park", price:0, sites:23, avail:21, rating:4.6, reviews:188,
     desc:"A free, high-elevation camp at 4,100 feet in the Panamint Range — significantly cooler than the valley floor and largely forgotten by visitors. The Charcoal Kilns, ten beehive-shaped stone ovens built in the 1870s, sit a few miles up the road. On clear nights the view down into Death Valley is utterly alien.",
     amenities:["Vault Toilets","No Water","Fire Rings","Stargazing","Hiking","Wildlife Viewing"],
-    seasons:["Spring","Summer","Fall","Winter"], lat:36.2636, lng:-117.0723 },
+    seasons:["Spring","Summer","Fall","Winter"], lat:36.2636, lng:-117.0723, ridb_id:"246822", photo:"https://cdn.recreation.gov/public/2021/03/07/18/41/246822_a6e522e0-4cc3-4216-b7e0-343ffdb68ba7.jpeg" },
 
   // ── CALIFORNIA ────────────────────────────────────────────────────────────
   { id:259, name:"D.L. Bliss State Park",              loc:"Lake Tahoe · California",
@@ -5119,7 +5211,7 @@ const CAMPS = [
     type:"Forest Service", price:28, sites:88, avail:45, rating:4.7, reviews:435,
     desc:"A glacial lake of impossible turquoise ringed by 12,000-foot peaks in the Eastern Sierra, where the air is thin and clear and the trout fishing is exceptional. The Convict Lake Trail circles the water past towering canyon walls in under two hours. In fall, the aspens turn gold against dark granite and look almost too good to be real.",
     amenities:["Flush Toilets","Drinking Water","Fire Rings","Fishing","Hiking","Kayaking","Pet Friendly"],
-    seasons:["Summer","Fall"], lat:37.5834, lng:-118.8503 },
+    seasons:["Summer","Fall"], lat:37.5834, lng:-118.8503, ridb_id:"234311", photo:"https://cdn.recreation.gov/public/2019/06/19/20/17/234311_4bc2ec17-85fa-4ce0-9d2f-40c809d4e470_700.webp" },
 
   { id:261, name:"Emerald Bay State Park",              loc:"Lake Tahoe · California",
     type:"State Park", price:35, sites:100, avail:35, rating:4.8, reviews:612,
@@ -5131,7 +5223,7 @@ const CAMPS = [
     type:"National Park", price:22, sites:83, avail:30, rating:4.7, reviews:380,
     desc:"Deep in Kings Canyon — the deepest canyon in the United States — Sentinel sits on the floor where granite walls rise 8,000 feet above. The canyon is greener, quieter, and far less visited than Yosemite despite being every bit as dramatic. Giant sequoias are a short drive above in Grant Grove.",
     amenities:["Flush Toilets","Drinking Water","Fire Rings","Parking","Fishing","Hiking","Accessible"],
-    seasons:["Spring","Summer","Fall"], lat:36.7973, lng:-118.9617 },
+    seasons:["Spring","Summer","Fall"], lat:36.7973, lng:-118.9617, ridb_id:"253917", photo:"https://cdn.recreation.gov/public/2018/08/20/17/59/253917_ec8002af-e320-445e-b8b0-09a4e96e0549_700.webp" },
 
   { id:263, name:"Scorpion Ranch — Channel Islands",    loc:"Channel Islands NP · California",
     type:"National Park", price:15, sites:25, avail:18, rating:4.8, reviews:246,
@@ -5174,7 +5266,7 @@ const CAMPS = [
     type:"BLM", price:15, sites:13, avail:10, rating:4.8, reviews:278,
     desc:"A narrow canyon camp beside Calf Creek, where willows and cottonwoods make a green corridor through the red-rock Colorado Plateau. The 6-mile round-trip trail to Lower Calf Creek Falls — a 126-foot waterfall dropping into a turquoise pool — is one of the finest day hikes in the Southwest. Grand Staircase's vast wilderness begins at the canyon rim above.",
     amenities:["Flush Toilets","Drinking Water","Fire Rings","Hiking","Swimming","Wildlife Viewing"],
-    seasons:["Spring","Fall"], lat:37.7953, lng:-111.4172 },
+    seasons:["Spring","Fall"], lat:37.7953, lng:-111.4172, ridb_id:"256917" },
 
   { id:270, name:"Natural Bridges — Sipapu Camp",       loc:"Natural Bridges NM · Utah",
     type:"National Park", price:20, sites:13, avail:10, rating:4.7, reviews:175,
@@ -5199,7 +5291,7 @@ const CAMPS = [
     type:"National Park", price:15, sites:37, avail:28, rating:4.8, reviews:283,
     desc:"Near the summit of Nevada's second-highest peak at 10,000 feet — one of the most undervisited national park campgrounds in the country. Ancient bristlecone pines, some older than the pyramids, grow in groves a short hike above camp. The Milky Way here is so bright it throws soft shadows.",
     amenities:["Flush Toilets","Drinking Water","Fire Rings","Hiking","Stargazing","Wildlife Viewing"],
-    seasons:["Summer","Fall"], lat:38.9810, lng:-114.3023 },
+    seasons:["Summer","Fall"], lat:38.9810, lng:-114.3023, ridb_id:"10088563", photo:"https://cdn.recreation.gov/public/2022/01/10/20/24/10088563_a1e0fb5a-5ab6-44ea-8efc-ed8d99f38900_700.webp" },
 
   { id:274, name:"Sand Harbor — Lake Tahoe Nevada",     loc:"Lake Tahoe · Nevada",
     type:"State Park", price:25, sites:50, avail:22, rating:4.7, reviews:365,
@@ -5218,13 +5310,13 @@ const CAMPS = [
     type:"Forest Service", price:22, sites:82, avail:40, rating:4.7, reviews:512,
     desc:"Oak Creek Canyon is Arizona's most beloved canyon and Cave Springs sits in its heart — a corridor of sycamore, oak, and pine shading a crystal creek, red canyon walls rising above. Slide Rock State Park is upstream; the swimming holes are legendary. The drive from Flagstaff down through the canyon to Sedona is one of the most dramatic descents in the Southwest.",
     amenities:["Hot Showers","Flush Toilets","Drinking Water","Fire Rings","Swimming","Fishing","Hiking","Pet Friendly"],
-    seasons:["Spring","Summer","Fall"], lat:34.9867, lng:-111.7523 },
+    seasons:["Spring","Summer","Fall"], lat:34.9867, lng:-111.7523, ridb_id:"232468", photo:"https://cdn.recreation.gov/public/2021/10/30/17/36/232468_55294891-1ef8-4a56-bb3e-c5d7ba7bc1c9_1440.webp" },
 
   { id:277, name:"Chiricahua NM — Bonita Canyon",       loc:"Willcox · Arizona",
     type:"National Park", price:20, sites:25, avail:18, rating:4.8, reviews:178,
     desc:"A secret monument in the far southeastern corner of Arizona where volcanic rhyolite has eroded into thousands of spires, balanced rocks, and stone columns — Cochise Stronghold country of the Apache. The birding is extraordinary: one of the best spots in North America for rare Mexican species crossing the border.",
     amenities:["Flush Toilets","Drinking Water","Fire Rings","Hiking","Wildlife Viewing","Stargazing","Pet Friendly"],
-    seasons:["Spring","Fall","Winter"], lat:32.0132, lng:-109.3426 },
+    seasons:["Spring","Fall","Winter"], lat:32.0132, lng:-109.3426, ridb_id:"250901", photo:"https://cdn.recreation.gov/public/2020/03/26/20/07/250901_289f9046-04e7-4e2e-bcfc-b1d4e322d7a5_1440.webp" },
 
   { id:278, name:"Havasupai — Supai Village Camp",      loc:"Havasu Canyon · Arizona",
     type:"National Park", price:395, sites:200, avail:5, rating:4.9, reviews:1840,
@@ -5249,7 +5341,7 @@ const CAMPS = [
     type:"Forest Service", price:10, sites:15, avail:12, rating:4.6, reviews:143,
     desc:"A volcanic plug called Battleship Rock rises from the Jemez River where it carves a tight canyon through ponderosa pine and cottonwood in the Valles Caldera country. Warm springs feed natural pools a short walk upstream. The Jemez is New Mexico's best secret: a mountain river canyon with swimming holes, red-rock cliffs, and almost no one from outside the state.",
     amenities:["Vault Toilets","Drinking Water","Fire Rings","Swimming","Hiking","Fishing","Pet Friendly"],
-    seasons:["Spring","Summer","Fall"], lat:35.8234, lng:-106.6523 },
+    seasons:["Spring","Summer","Fall"], lat:35.8234, lng:-106.6523, ridb_id:"249115" },
 
   { id:282, name:"Rattlesnake Springs — Carlsbad Caverns", loc:"Carlsbad · New Mexico",
     type:"National Park", price:12, sites:20, avail:15, rating:4.6, reviews:134,
@@ -5268,7 +5360,7 @@ const CAMPS = [
     type:"BLM", price:0, sites:15, avail:13, rating:4.6, reviews:165,
     desc:"Free camping on the bank of the upper Colorado River in its canyon, where the water runs cold and green through reddish canyon walls. Rafters put in here for Class IV rapids downstream. The fishing is exceptional for brown trout — and most people racing to Rocky Mountain National Park blow right past.",
     amenities:["Vault Toilets","Fire Rings","Fishing","Kayaking","Rafting","Pet Friendly","Stargazing"],
-    seasons:["Spring","Summer","Fall"], lat:40.0789, lng:-106.3512 },
+    seasons:["Spring","Summer","Fall"], lat:40.0789, lng:-106.3512, ridb_id:"261786", photo:"https://cdn.recreation.gov/public/2023/03/27/06/02/261786_8625cccb-734f-4c24-8e0b-8bddfa84be9b_1440.webp" },
 
   { id:285, name:"Gothic Road Dispersed Camping",       loc:"Crested Butte · Colorado",
     type:"Forest Service", price:0, sites:20, avail:18, rating:4.7, reviews:198,
@@ -5293,13 +5385,13 @@ const CAMPS = [
     type:"Forest Service", price:12, sites:18, avail:14, rating:4.6, reviews:212,
     desc:"A cool pine-scented escape at 8,700 feet above the Chihuahuan Desert. Camp in the Sacramento Mountains while the desert bakes a mile below. Deer graze camp in the mornings and the sunsets turn the White Sands basin pink.",
     amenities:["Vault Toilets","Fire Rings","Parking","Hiking","Wildlife Viewing","Pet Friendly"],
-    seasons:["Spring","Summer","Fall"], lat:32.9612, lng:-105.7423 },
+    seasons:["Spring","Summer","Fall"], lat:32.9612, lng:-105.7423, ridb_id:"10296963", photo:"https://cdn.recreation.gov/public/2023/12/12/20/37/10296963_3c3b9bae-0d22-4387-a09d-e248122ea5c4_700.webp" },
 
   { id:289, name:"Isle Royale — Daisy Farm",             loc:"Lake Superior · Michigan",
     type:"National Park", price:7, sites:20, avail:12, rating:4.9, reviews:176,
     desc:"Accessible only by seaplane or ferry, Isle Royale is the least-visited national park in the Lower 48. Moose outnumber visitors. Wolves howl at night. The trails are empty and the lake is impossibly cold and clear.",
     amenities:["Vault Toilets","Water Pump","Dock","Fishing","Kayaking","Wildlife Viewing"],
-    seasons:["Summer","Fall"], lat:47.9847, lng:-88.7623 },
+    seasons:["Summer","Fall"], lat:47.9847, lng:-88.7623, ridb_id:"258897", photo:"https://cdn.recreation.gov/public/2021/05/18/20/28/258897_02af3af4-7886-41fc-a122-01587fe9a418.jpeg" },
 
   { id:290, name:"Custer State Park — French Creek",    loc:"Custer · South Dakota",
     type:"State Park", price:22, sites:60, avail:18, rating:4.7, reviews:430,
@@ -5335,7 +5427,7 @@ const CAMPS = [
     type:"National Parkway", price:0, sites:18, avail:16, rating:4.4, reviews:156,
     desc:"A free, quiet camp at the midpoint of the 444-mile Natchez Trace Parkway. The surrounding hardwood forest is cathedral-still and the Trace at night has no cars, no noise — just the sound of wind in old-growth oak.",
     amenities:["Flush Toilets","Fire Rings","Parking","Hiking","Pet Friendly","Accessible"],
-    seasons:["Spring","Summer","Fall","Winter"], lat:33.5678, lng:-89.2345 },
+    seasons:["Spring","Summer","Fall","Winter"], lat:33.5678, lng:-89.2345, ridb_id:"259043", photo:"https://cdn.recreation.gov/public/2020/09/04/18/29/259043_0b5b7d00-a2a0-4ae2-b680-e34b8502d649.jpeg" },
 
   { id:296, name:"Enchanted Rock — Primitive Camp",     loc:"Fredericksburg · Texas",
     type:"State Park", price:20, sites:30, avail:14, rating:4.8, reviews:384,
@@ -5347,13 +5439,7 @@ const CAMPS = [
     type:"National Lakeshore", price:18, sites:8, avail:6, rating:4.8, reviews:142,
     desc:"A quiet walk-in camp tucked between a clear inland lake and the Lake Superior shoreline. The sandstone cliffs and sea caves of Pictured Rocks are minutes away by kayak. Fog rolls in off Superior at night and the mornings smell like cold water.",
     amenities:["Vault Toilets","Water Pump","Kayaking","Fishing","Hiking","Stargazing"],
-    seasons:["Summer","Fall"], lat:46.5678, lng:-86.1234 },
-
-  { id:298, name:"Guadalupe Mountains — Pine Springs",   loc:"Salt Flat · Texas",
-    type:"National Park", price:15, sites:40, avail:28, rating:4.6, reviews:267,
-    desc:"Camp at the base of the highest peak in Texas in one of the most underrated national parks in America. The Guadalupes are a fossil reef from an ancient sea — the geology is unlike anywhere else. Dark, dark skies and almost no visitors.",
-    amenities:["Flush Toilets","Fire Rings","Parking","Hiking","Stargazing","Pet Friendly"],
-    seasons:["Fall","Winter","Spring"], lat:31.9234, lng:-104.8345 },
+    seasons:["Summer","Fall"], lat:46.5678, lng:-86.1234, ridb_id:"246856", photo:"https://cdn.recreation.gov/public/2019/08/02/19/08/246856_e8a03228-058c-4fef-9db0-a339a6277b2f_1440.webp" },
 
   { id:299, name:"Hoh Rain Forest — Willaby Creek",     loc:"Olympic NP · Washington",
     type:"National Park", price:20, sites:21, avail:11, rating:4.9, reviews:418,
@@ -5387,18 +5473,13 @@ const CAMPS = [
     amenities:["Flush Toilets","Drinking Water","Showers","Swimming","Fishing","Pet Friendly"],
     seasons:["Spring","Summer","Fall"], lat:41.4562, lng:-73.8372 },
 
-  // Chicago Metro
-  { id:304, name:"Starved Rock State Park",              loc:"Utica · Illinois",
-    type:"State Park", price:35, sites:133, avail:28, rating:4.5, reviews:1240,
-    desc:"The crown jewel of the Illinois state park system, with 18 glacial-meltwater canyons and a series of seasonal waterfalls. The historic lodge overlooks the Illinois River; canyons require no more than a mile of walking. 90 minutes southwest of Chicago.",
-    amenities:["Flush Toilets","Drinking Water","Showers","Fire Rings","Camp Store","Pet Friendly"],
-    seasons:["Spring","Summer","Fall"], lat:41.3216, lng:-89.0012 },
+  // Chicago Metro,
 
   { id:305, name:"Indiana Dunes — Dunewood Campground",  loc:"Indiana Dunes NP · Indiana",
     type:"National Park", price:25, sites:125, avail:40, rating:4.3, reviews:623,
     desc:"One of the most accessible national parks in the US — 40-foot sand dunes tumbling directly into Lake Michigan, just 55 miles from downtown Chicago. Swim in the lake, climb Mt. Baldy, and watch the steel mills glow on the Indiana shore at sunset.",
     amenities:["Flush Toilets","Drinking Water","Showers","Fire Rings","Beach Access","Pet Friendly"],
-    seasons:["Spring","Summer","Fall"], lat:41.6533, lng:-87.0524 },
+    seasons:["Spring","Summer","Fall"], lat:41.6533, lng:-87.0524, ridb_id:"258887", photo:"https://cdn.recreation.gov/public/2019/04/30/19/19/258887_45b35d06-1e2d-4835-b731-022fb7454fae_1440.webp" },
 
   { id:306, name:"Chain O'Lakes State Park",             loc:"Spring Grove · Illinois",
     type:"State Park", price:30, sites:151, avail:35, rating:4.2, reviews:498,
@@ -5418,12 +5499,6 @@ const CAMPS = [
     desc:"Where M*A*S*H was filmed and where Angelenos escape without hitting the freeway for more than 30 minutes. Volcanic rock formations, a spring-fed swimming hole, and oak woodland — all 25 miles from downtown LA.",
     amenities:["Flush Toilets","Drinking Water","Fire Rings","Swimming","Hiking","Pet Friendly"],
     seasons:["Year-round"], lat:34.1021, lng:-118.7263 },
-
-  { id:309, name:"Crystal Cove — Moro Campground",       loc:"Newport Coast · California",
-    type:"State Park", price:35, sites:57, avail:16, rating:4.6, reviews:1120,
-    desc:"Backcountry camping on the coastal bluffs above one of Southern California's last wild stretches of shoreline. Primitive walk-in sites with Pacific Ocean views; at night, Catalina Island's lights shimmer on the water. Book the full six months out — these go in minutes.",
-    amenities:["Pit Toilets","Drinking Water","Fire Rings","Beach Access","Tide Pools","Accessible"],
-    seasons:["Year-round"], lat:33.5711, lng:-117.8404 },
 
   // San Francisco Bay Area
   { id:310, name:"Mount Tamalpais — Pantoll Campground", loc:"Mill Valley · California",
@@ -5484,12 +5559,6 @@ const CAMPS = [
     amenities:["Flush Toilets","Drinking Water","Showers","Fire Rings","Boat Launch","Swimming","Pet Friendly"],
     seasons:["Spring","Summer","Fall"], lat:34.1573, lng:-84.7144 },
 
-  { id:319, name:"Cloudland Canyon State Park",          loc:"Rising Fawn · Georgia",
-    type:"State Park", price:28, sites:72, avail:22, rating:4.7, reviews:1040,
-    desc:"A 3,500-foot gorge sliced into the Cumberland Plateau with two thundering waterfalls — Cherokee and Hemlock Falls — crashing down canyon walls below the campground. One of the most spectacular state parks in the Southeast, 90 minutes from Atlanta.",
-    amenities:["Flush Toilets","Drinking Water","Showers","Fire Rings","Hiking","Pet Friendly"],
-    seasons:["Spring","Summer","Fall"], lat:34.8382, lng:-85.4808 },
-
   // Austin / Houston
   { id:320, name:"McKinney Falls State Park",            loc:"Austin · Texas",
     type:"State Park", price:20, sites:84, avail:30, rating:4.3, reviews:876,
@@ -5523,12 +5592,7 @@ const CAMPS = [
     amenities:["Flush Toilets","Drinking Water","Showers","Fire Rings","Swimming","Boat Rentals","Fishing","Pet Friendly"],
     seasons:["Spring","Summer","Fall"], lat:41.7010, lng:-69.9690 },
 
-  // Miami / South Florida
-  { id:325, name:"Bahia Honda State Park",               loc:"Big Pine Key · Florida",
-    type:"State Park", price:36, sites:80, avail:20, rating:4.8, reviews:1820,
-    desc:"Consistently ranked among the best beaches in America — the Florida Keys' finest natural shoreline with turquoise shallows, snorkeling off the old Flagler railroad bridge, and campsite views that look like a screensaver. Book exactly 11 months in advance or miss out.",
-    amenities:["Flush Toilets","Drinking Water","Showers","Fire Rings","Beach Access","Snorkeling","Accessible","Pet Friendly"],
-    seasons:["Fall","Winter","Spring"], lat:24.6601, lng:-81.2753 },
+  // Miami / South Florida,
 
   // ─── NEW JERSEY ──────────────────────────────────────────────────────────
   { id:326, name:"Island Beach State Park",              loc:"Seaside Park · New Jersey",
@@ -5574,28 +5638,28 @@ const CAMPS = [
     type:"National Park", price:25, sites:109, avail:55, rating:4.5, reviews:1890,
     desc:"The world's longest known cave system — more than 420 mapped miles of passages beneath the Kentucky karns — and you can camp at the door. The forest above is as compelling as the cave below: sandstone ridges, cedar glades, and a river bottom thick with herons and river otters run through the park's 53,000 acres. Star-gazing in the meadow above the visitor center after a candlelight cave tour is one of those National Park experiences you don't forget.",
     amenities:["Flush Toilets","Drinking Water","Showers","Fire Rings","Hiking","Fishing","Pet Friendly","Accessible"],
-    seasons:["Spring","Summer","Fall","Winter"], lat:37.1862, lng:-86.1013 },
+    seasons:["Spring","Summer","Fall","Winter"], lat:37.1862, lng:-86.1013, ridb_id:"232467", photo:"https://cdn.recreation.gov/public/2020/12/03/19/07/232467_278a17d7-0ff9-4fbf-9e1f-6d92d1bc1a32_1440.webp" },
 
   // ─── MESA VERDE NP — COLORADO ────────────────────────────────────────────
   { id:333, name:"Morefield Campground — Mesa Verde NP", loc:"Mesa Verde NP · Colorado",
     type:"National Park", price:30, sites:267, avail:80, rating:4.7, reviews:2140,
     desc:"The only campground in Mesa Verde sits at 7,800 feet in Morefield Canyon, where Gambel oaks and meadows full of mule deer surround you — and the ancestral Puebloan cliff dwellings are eight miles up the road. Waking early, before the tour buses arrive, and walking the Knife Edge Trail above the canyon at sunrise is the best way to experience these monuments. The Milky Way over the Mesa Verde plateau in summer is extraordinary.",
     amenities:["Flush Toilets","Drinking Water","Showers","Fire Rings","Camp Store","Hiking","Pet Friendly","Accessible"],
-    seasons:["Spring","Summer","Fall"], lat:37.1878, lng:-108.4756 },
+    seasons:["Spring","Summer","Fall"], lat:37.1878, lng:-108.4756, ridb_id:"10070059", photo:"https://cdn.recreation.gov/public/2020/08/15/22/28/10070059_f75f8289-8074-474a-a046-cd2ecf179e32.jpeg" },
 
   // ─── VOYAGEURS NP — MINNESOTA ────────────────────────────────────────────
   { id:334, name:"Voyageurs NP — Kettle Falls",          loc:"International Falls · Minnesota",
     type:"National Park", price:14, sites:12, avail:10, rating:4.9, reviews:312,
     desc:"The only way to reach Kettle Falls is by water — a 30-minute boat ride from the nearest launch puts you at a campground on a glacially sculpted peninsula where four lakes meet at the US-Canada border. Loons call all night. Wolves cross the ice in winter. Northern lights paint the sky green in September. This is one of the most remote and genuinely wild camping experiences in the lower 48 — accessible but utterly disconnected from the world.",
     amenities:["Vault Toilets","Drinking Water","Fire Rings","Kayaking","Canoeing","Fishing","Hiking","Wildlife Viewing","Stargazing"],
-    seasons:["Summer","Fall"], lat:48.4976, lng:-92.8513 },
+    seasons:["Summer","Fall"], lat:48.4976, lng:-92.8513, ridb_id:"234061", photo:"https://cdn.recreation.gov/public/2021/04/22/20/56/234061_05b3fc7a-f120-463e-83d7-9e8a1f9a208f_1440.webp" },
 
   // ─── SLEEPING BEAR DUNES — MICHIGAN ──────────────────────────────────────
   { id:335, name:"Platte River Campground — Sleeping Bear", loc:"Sleeping Bear Dunes NL · Michigan",
     type:"National Park", price:25, sites:179, avail:40, rating:4.8, reviews:1560,
     desc:"Voted 'Most Beautiful Place in America' by Good Morning America viewers — and from the summit of the Dune Climb, looking out over 400-foot sand bluffs plunging into a cobalt Lake Michigan, the hyperbole feels earned. The Platte River campground sits in cedar and hardwood forest two miles from the lakeshore, with a crystal-clear river running to the beach. Tubing the Platte River to Lake Michigan is an iconic summer Michigan experience.",
     amenities:["Flush Toilets","Drinking Water","Showers","Fire Rings","Swimming","Kayaking","Fishing","Hiking","Pet Friendly","Accessible"],
-    seasons:["Spring","Summer","Fall"], lat:44.6512, lng:-86.0298 },
+    seasons:["Spring","Summer","Fall"], lat:44.6512, lng:-86.0298, ridb_id:"232458", photo:"https://cdn.recreation.gov/public/2023/10/22/00/47/232458_f29bc01f-c7a9-43d0-8b7c-493959cd88c9_1440.webp" },
 
   // ─── HOCKING HILLS — OHIO ────────────────────────────────────────────────
   { id:336, name:"Hocking Hills State Park",             loc:"Logan · Ohio",
@@ -5624,6 +5688,212 @@ const CAMPS = [
     desc:"A hemlock gorge in the Connecticut River Valley where Chapman Falls drops 60 feet over a staircase of basalt — and glacial potholes the size of bathtubs line the streambed below. The campground is tiny and tucked into forest above the falls, making it feel far wilder than southern New England has any right to be. Fall color here is exceptional; the gorge funnels wind through crimson maples and you have the whole place nearly to yourself.",
     amenities:["Flush Toilets","Drinking Water","Fire Rings","Fishing","Hiking","Pet Friendly"],
     seasons:["Spring","Summer","Fall"], lat:41.4745, lng:-72.3423 },
+
+  // ── PACIFIC NORTHWEST ADDITIONS ──────────────────────────────────────────
+  { id:340, name:"Trillium Lake Campground",      loc:"Mt. Hood NF · Oregon",
+    type:"Forest Service", price:28, sites:57, avail:8, rating:4.9, reviews:1820,
+    desc:"The most photographed campground in Oregon. Trillium Lake sits at the foot of Mt. Hood, and on calm mornings the volcano's snow-capped cone reflects perfectly in the still water — a view that draws photographers before dawn and keeps families enchanted all day. The sites ring the lake closely, so nearly every one has water access. Rowboats and canoes are the right pace here; the hiking is gentle and the nights are cool even in August.",
+    amenities:["Flush Toilets","Running Water","Fire Rings","Parking","Boat Launch","Fishing"],
+    seasons:["Spring","Summer","Fall"], lat:45.2707, lng:-121.7345, ridb_id:"232831", photo:"https://cdn.recreation.gov/public/images/66770_700.webp" },
+
+  { id:341, name:"Wallowa Lake State Park",       loc:"Joseph · Oregon",
+    type:"State Park", price:28, sites:89, avail:11, rating:4.8, reviews:1140,
+    desc:"Called the 'Switzerland of Oregon,' Wallowa Lake is a glacially carved jewel backed by the Eagle Cap Wilderness and ringed by peaks that rise almost 4,000 feet above the water. The state park at the south end has full hookups, a swimming beach, and a tramway that lifts you to 8,150 feet in minutes. Elk wander the campground at dusk. The Nez Perce homeland surrounds it — Chief Joseph is buried nearby — and the fishing for kokanee salmon is extraordinary.",
+    amenities:["Hot Showers","Flush Toilets","Electric Hookups","Fire Rings","Swimming","Boat Launch","Pet Friendly"],
+    seasons:["Summer","Fall"], lat:45.2723, lng:-117.2032 },
+
+  { id:342, name:"Tumalo State Park",             loc:"Bend · Oregon",
+    type:"State Park", price:24, sites:54, avail:10, rating:4.5, reviews:890,
+    desc:"The best basecamp for exploring the high desert around Bend. Tumalo State Park sits along the Deschutes River — swim, fish for brown trout, or paddle downstream while camp smells like sage and ponderosa pine. Smith Rock, Crater Lake, and the Cascade volcanoes are all within a two-hour drive. The park has both tent and full-hookup sites, warm showers, and enough shade that the desert sun doesn't wear you out. A solid choice year-round.",
+    amenities:["Hot Showers","Flush Toilets","Electric Hookups","Fire Rings","Fishing","Pet Friendly"],
+    seasons:["Spring","Summer","Fall","Winter"], lat:44.0903, lng:-121.3558 },
+
+  { id:343, name:"Cape Disappointment State Park", loc:"Ilwaco · Washington",
+    type:"State Park", price:35, sites:108, avail:14, rating:4.6, reviews:1050,
+    desc:"Where the Columbia River meets the Pacific Ocean — two of Lewis and Clark's journals note this as one of the most dramatic landscapes on the expedition. The park sits on a rocky headland with two lighthouses, wild surf beaches, towering Douglas fir, and some of the best kite flying on the coast. The campground is large but well-treed. North Head Lighthouse rises from the mist on clear mornings like something from a postcard. Razor clam digging in season.",
+    amenities:["Hot Showers","Flush Toilets","Electric Hookups","Fire Rings","Pet Friendly","Accessible"],
+    seasons:["Spring","Summer","Fall","Winter"], lat:46.2829, lng:-124.0418 },
+
+  { id:344, name:"Ohanapecosh Campground",        loc:"Mt. Rainier NP · Washington",
+    type:"National Park", price:30, sites:188, avail:16, rating:4.8, reviews:2140,
+    desc:"Sheltered beneath some of the oldest and tallest old-growth trees in the Pacific Northwest, Ohanapecosh sits along a clear glacial river in the southeast corner of Mt. Rainier National Park. The Grove of the Patriarchs — a stand of ancient cedar, fir, and hemlock accessible by a short loop trail — is minutes from camp. Marmots whistle from the talus above, and the sound of the river is constant. Hot springs are nearby, and wildflower meadows bloom above the treeline all summer.",
+    amenities:["Flush Toilets","Running Water","Fire Rings","Amphitheater","Parking","Accessible"],
+    seasons:["Summer","Fall"], lat:46.7311, lng:-121.5703, ridb_id:"232465", photo:"https://cdn.recreation.gov/public/2018/12/07/21/37/232465_2bb5debd-e98d-4e9b-b05f-b7118ceaaae6_1440.webp" },
+
+  // ── NATIONAL PARK ADDITIONS ───────────────────────────────────────────────
+  { id:345, name:"Cataloochee Campground",        loc:"Great Smoky Mountains NP · North Carolina",
+    type:"National Park", price:25, sites:27, avail:6, rating:4.9, reviews:1230,
+    desc:"The most secluded drive-in campground in the Smokies, tucked in a cove valley accessible by a winding mountain road that keeps the crowds away. Elk were reintroduced here in 2001 and the herd has thrived — at dawn and dusk, bulls bugle and cows graze in the meadow right through camp. Old homestead buildings stand nearby, and the silence at night is absolute. This is the Smokies the way they were before the traffic, and it books out months in advance for good reason.",
+    amenities:["Flush Toilets","Running Water","Fire Rings","Parking"],
+    seasons:["Spring","Summer","Fall"], lat:35.6312, lng:-83.0855, ridb_id:"233284", photo:"https://cdn.recreation.gov/public/2019/02/08/18/52/233284_d0f1f633-f0f1-442f-8d07-c5213ae5a5bb_1440.webp" },
+
+  { id:346, name:"Gold Bluffs Beach",             loc:"Redwood NP · California",
+    type:"National Park", price:35, sites:26, avail:5, rating:4.9, reviews:1450,
+    desc:"Camping directly on a wild Pacific beach at the base of 200-foot bluffs draped in fern and redwood — this is one of the most otherworldly camping experiences in America. Roosevelt elk herds move through camp at will, browsing right between the tents. The surf is powerful and cold, the beach wide and often foggy. Fern Canyon — a narrow gorge where five-finger ferns cover both walls top to bottom — is a ten-minute walk. It was a filming location for The Lost World. The road is rough enough to deter most.",
+    amenities:["Running Water","Fire Rings","Parking","Pet Friendly"],
+    seasons:["Spring","Summer","Fall","Winter"], lat:41.3822, lng:-124.0699, ridb_id:"259181", photo:"https://cdn.recreation.gov/public/images/82228_1440.webp" },
+
+  { id:347, name:"Aspenglen Campground",          loc:"Rocky Mountain NP · Colorado",
+    type:"National Park", price:30, sites:52, avail:7, rating:4.7, reviews:1680,
+    desc:"The quieter alternative to Moraine Park, Aspenglen sits at the Fall River entrance to Rocky Mountain National Park, screened by old-growth ponderosa and bisected by a clear mountain stream. It's at 8,230 feet — cool even in July, cold at night — and the elk move through regularly. The Ute Trail is steps from camp. Sunrise turns Longs Peak rose-gold from here, and the drive up Trail Ridge Road (the highest paved road in the US) starts minutes away. Book in the Timed Entry window.",
+    amenities:["Flush Toilets","Running Water","Fire Rings","Amphitheater","Parking","Accessible"],
+    seasons:["Summer","Fall"], lat:40.4002, lng:-105.5926, ridb_id:"233187", photo:"https://cdn.recreation.gov/public/2025/07/11/20/02/233187_9cd3e3ab-3f40-4945-bbc2-6ced338fab82_1440.webp" },
+
+  // ── MIDWEST / NORTHEAST ADDITIONS ────────────────────────────────────────
+  { id:348, name:"D.H. Day Campground",           loc:"Sleeping Bear Dunes NL · Michigan",
+    type:"National Lakeshore", price:22, sites:88, avail:10, rating:4.7, reviews:1020,
+    desc:"Named for the farmer who once owned this land and donated it to conservation, D.H. Day is the premier campground in one of the most beautiful landscapes in the Midwest. Sleeping Bear Dunes rise 460 feet above Lake Michigan and stretch for miles — climbing them and tumbling down to the water is a rite of passage. The campground is shaded by maple and beech, close to the Dune Climb and the scenic drive that overlooks North and South Manitou Islands. Fall color here is spectacular.",
+    amenities:["Flush Toilets","Running Water","Fire Rings","Parking","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:44.8973, lng:-86.0206, ridb_id:"259242", photo:"https://cdn.recreation.gov/public/2023/11/06/15/10/259242_3eee011a-8ae9-4c2f-9caa-317778f2f382_1440.webp" },
+
+  { id:349, name:"Dolly Copp Campground",         loc:"White Mountain NF · New Hampshire",
+    type:"National Forest", price:28, sites:176, avail:18, rating:4.6, reviews:1380,
+    desc:"The largest campground in the White Mountain National Forest, Dolly Copp commands a sweeping view of Mt. Madison and the Northern Presidentials. The Peabody River runs through camp, cold and clean enough to wade in on hot August afternoons. The Appalachian Trail is nearby and the auto road to Mt. Washington's summit begins minutes away. Fall arrives early here — the maples and birches turn by mid-September, and the campground stays open late into the season. A classic New England forest camp.",
+    amenities:["Flush Toilets","Running Water","Fire Rings","Amphitheater","Parking","Pet Friendly"],
+    seasons:["Summer","Fall"], lat:44.3328, lng:-71.2194, ridb_id:"232173", photo:"https://cdn.recreation.gov/public/2024/04/09/15/53/232173_0933271e-82fb-40a4-9aae-ce21f48f8661_1440.webp" },
+
+  { id:350, name:"Devils Lake State Park",        loc:"Baraboo · Wisconsin",
+    type:"State Park", price:28, sites:423, avail:22, rating:4.7, reviews:2560,
+    desc:"The most visited state park in Wisconsin — and it earns it. Devils Lake fills a gorge carved by glaciers and rimmed on both sides by 500-foot quartzite bluffs that climbers have worked for generations. The lake is warm enough to swim, the rock climbing is legitimate, and the trails wind through talus fields and old-growth timber. The park is enormous and the camping spans three separate areas, so there's nearly always something available mid-week. Ice Age Trail passes through. The bluffs at sunset: unforgettable.",
+    amenities:["Hot Showers","Flush Toilets","Electric Hookups","Fire Rings","Swimming","Accessible","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:43.4196, lng:-89.7271 },
+
+  // ── SOUTH / TEXAS ADDITIONS ────────────────────────────────────────────────
+  { id:351, name:"Pedernales Falls State Park",   loc:"Johnson City · Texas",
+    type:"State Park", price:20, sites:69, avail:12, rating:4.7, reviews:1760,
+    desc:"The Pedernales River flows over layered limestone shelves into pools perfect for swimming, with Hill Country cedar and live oak lining both banks. The waterfalls are dramatic after rain and meditative in dry spells, and the swimming holes downstream stay cool through Texas summer. There are golden-cheeked warblers in spring and white-tailed deer at dusk. The Pedernales Falls loop trail runs along the canyon rim with views that feel outsized for central Texas. About an hour from Austin.",
+    amenities:["Hot Showers","Flush Toilets","Water Hookups","Fire Rings","Swimming","Pet Friendly"],
+    seasons:["Spring","Summer","Fall","Winter"], lat:30.3024, lng:-98.2574 },
+
+  { id:352, name:"Caddo Lake State Park",         loc:"Karnack · Texas",
+    type:"State Park", price:18, sites:46, avail:9, rating:4.6, reviews:940,
+    desc:"The only natural lake in Texas, Caddo Lake is a bayou world of ancient bald cypress draped in Spanish moss, lily-covered water, and narrow channels that disappear into the swamp. Canoes and kayaks are the right tools here. Alligators, great blue herons, and hundreds of songbird species share the water with you. The light in the morning, when mist sits on the cypress and the wood ducks call, is genuinely magical. It feels like Louisiana somehow ended up in East Texas. Rent a paddleboat and get lost.",
+    amenities:["Hot Showers","Flush Toilets","Electric Hookups","Fire Rings","Boat Launch","Fishing","Pet Friendly"],
+    seasons:["Spring","Summer","Fall","Winter"], lat:32.6910, lng:-94.1818 },
+
+  // ── SOUTHEAST ADDITION ────────────────────────────────────────────────────
+  { id:353, name:"Jedediah Smith Redwoods",       loc:"Crescent City · California",
+    type:"State Park", price:35, sites:86, avail:12, rating:4.8, reviews:1670,
+    desc:"Jedediah Smith contains the world's largest contiguous old-growth coast redwood forest — trees that were saplings during the Roman Empire, now rising 300 feet and more. The Smith River runs clear and jade-green beside camp, one of the last undammed wild rivers in California and the state's premier steelhead fishery. The Boy Scout Tree Trail winds through groves so ancient and tall they block out the sky at noon. Campfire smoke drifts up through cathedral spires. This is the most awe-inspiring campground in California.",
+    amenities:["Hot Showers","Flush Toilets","Fire Rings","Parking","Fishing","Pet Friendly","Accessible"],
+    seasons:["Spring","Summer","Fall","Winter"], lat:41.7990, lng:-124.0671 },
+
+  // ── CANADA ────────────────────────────────────────────────────────────────
+  // 🍁 New feature — more Canadian destinations coming soon
+
+  // British Columbia
+  { id:354, name:"Green Point Campground",        loc:"Pacific Rim NP · British Columbia",
+    type:"National Park", price:22, sites:94, avail:10, rating:4.8, reviews:1320,
+    desc:"Perched on a bluff above Long Beach on Vancouver Island, Green Point is the most dramatic ocean campground in Canada. Pacific rollers pound the beach a short walk below, sea otters float in the kelp, and gray whales breach offshore in spring. The old-growth rainforest closes in behind the sites — everything drips. The Wickaninnish Interpretive Centre and the iconic Long Beach stretch for miles in either direction. Summer evenings bring bonfires and a sky full of stars once the marine layer lifts.",
+    amenities:["Flush Toilets","Running Water","Fire Rings","Amphitheater","Parking","Accessible"],
+    seasons:["Spring","Summer","Fall"], lat:49.0019, lng:-125.7649 },
+
+  { id:355, name:"Rathtrevor Beach Provincial Park", loc:"Parksville · British Columbia",
+    type:"Provincial Park", price:38, sites:174, avail:16, rating:4.7, reviews:1870,
+    desc:"The warmest ocean water on the BC coast. Rathtrevor's shallow tidal flats heat up in summer, creating a sheltered swimming beach that families return to year after year. At low tide, the water recedes to reveal a half-mile of sand, perfect for clam digging and tide-pooling. The campground is tucked in second-growth Douglas fir close enough to hear the surf. Herons stalk the estuary at the park's edge. The Oceanside Trail connects to nearby beaches. One of BC's most beloved provincial parks.",
+    amenities:["Hot Showers","Flush Toilets","Electric Hookups","Fire Rings","Swimming","Pet Friendly","Accessible"],
+    seasons:["Spring","Summer","Fall"], lat:49.3263, lng:-124.3951 },
+
+  { id:356, name:"Mount Robson Provincial Park",   loc:"Valemount · British Columbia",
+    type:"Provincial Park", price:22, sites:125, avail:11, rating:4.8, reviews:980,
+    desc:"The Monarch of the Canadian Rockies rises 12,972 feet from a base near camp — Mt. Robson is the highest peak in the range and one of the most cloud-shrouded mountains on earth. On a clear morning when the summit reveals itself above the valley, it's a sight that stops conversation. The Berg Lake Trail begins here and climbs through wildflower meadows to glacial icefields. The Robson River runs turquoise through camp. Even if you don't hike, the view from the campground alone justifies the drive.",
+    amenities:["Flush Toilets","Running Water","Fire Rings","Fishing","Parking","Pet Friendly"],
+    seasons:["Summer","Fall"], lat:53.1078, lng:-119.1607 },
+
+  // Alberta
+  { id:357, name:"Two Jack Lakeside",             loc:"Banff NP · Alberta",
+    type:"National Park", price:30, sites:74, avail:8, rating:4.9, reviews:2040,
+    desc:"The most scenic campground in Banff National Park — and the competition is fierce. Two Jack Lake sits in the Palliser Range with a direct sightline to Mt. Rundle, and at dawn the mountain's limestone face reflects in still water the color of glacial milk. Sites are set right on the lakeshore. Canoe and kayak rentals are nearby. Wildlife is constant — coyotes, elk, and occasionally bear. The town of Banff is a 15-minute drive, but out here it feels like the mountains own the night.",
+    amenities:["Flush Toilets","Running Water","Fire Rings","Boat Launch","Parking","Accessible"],
+    seasons:["Summer","Fall"], lat:51.2222, lng:-115.4760 },
+
+  { id:358, name:"Tunnel Mountain Village",       loc:"Banff · Alberta",
+    type:"National Park", price:32, sites:321, avail:22, rating:4.7, reviews:3180,
+    desc:"The largest campground in Banff, set on the rounded hump of Tunnel Mountain overlooking the Bow Valley. Elk wander the sites at dusk — regularly and fearlessly — and the sunsets over the Fairholme Range are reliably extraordinary. Town is walkable. The Hoodoos Trail winds through glacial formations along the river below. Three campground loops offer everything from tents to full hookups. The classic Banff basecamp: close to everything, yet still in the middle of the Rockies.",
+    amenities:["Hot Showers","Flush Toilets","Electric Hookups","Fire Rings","Parking","Accessible","Pet Friendly"],
+    seasons:["Summer","Fall"], lat:51.1805, lng:-115.5440 },
+
+  { id:359, name:"Whistlers Campground",          loc:"Jasper NP · Alberta",
+    type:"National Park", price:30, sites:781, avail:28, rating:4.6, reviews:2760,
+    desc:"The largest campground in the Canadian national park system, Whistlers sits below the gondola that climbs to Whistlers Mountain above the treeline. Jasper is wilder than Banff — the elk here outnumber the tourists in spring, and bear and wolf sightings are genuine. The Icefields Parkway begins in town, running 144 miles to Banff through scenery that has no peer in North America. The campground is enormous but the surrounding wilderness is endless. Bring bear spray and a star chart.",
+    amenities:["Hot Showers","Flush Toilets","Electric Hookups","Fire Rings","Amphitheater","Parking","Pet Friendly"],
+    seasons:["Summer","Fall"], lat:52.8426, lng:-118.0989 },
+
+  // Ontario
+  { id:360, name:"Cyprus Lake Campground",        loc:"Bruce Peninsula NP · Ontario",
+    type:"National Park", price:26, sites:242, avail:18, rating:4.8, reviews:2150,
+    desc:"Georgian Bay's water is the color of the Caribbean — turquoise over white limestone — and the Bruce Peninsula's shoreline, ten minutes from camp, is the most jaw-dropping freshwater scenery in Canada. The Grotto, a sea cave carved by ancient waves, is a short hike away and draws swimmers from across Ontario. The Cyprus Lake trail system winds through cedar forest and opens onto cliff-top views of the bay. Crows and herons circle the limestone bluffs. The swimming is extraordinary and the sunsets are relentless.",
+    amenities:["Flush Toilets","Running Water","Fire Rings","Amphitheater","Parking","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:45.2386, lng:-81.5121 },
+
+  { id:361, name:"Algonquin PP — Canisbay Lake", loc:"Algonquin Park · Ontario",
+    type:"Provincial Park", price:42, sites:132, avail:14, rating:4.8, reviews:1940,
+    desc:"Algonquin Provincial Park is the spiritual home of canoe camping in North America — Tom Thomson painted here, the Group of Seven camped here, and the tradition of paddling into the backcountry through a thousand interconnected lakes has continued unbroken since. Canisbay Lake offers one of the finest drive-in experiences in the park: loons call at night, moose wade the shallows at dawn, and the fall colours turn the surrounding maple and birch into something incandescent. The park's interior portage system begins here.",
+    amenities:["Hot Showers","Flush Toilets","Electric Hookups","Fire Rings","Boat Launch","Fishing","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:45.5516, lng:-78.5003 },
+
+  { id:362, name:"Sandbanks Provincial Park",     loc:"Prince Edward County · Ontario",
+    type:"Provincial Park", price:48, sites:523, avail:30, rating:4.7, reviews:3240,
+    desc:"The world's largest freshwater baymouth barrier dune system. Sandbanks sits in Prince Edward County on the north shore of Lake Ontario, where massive sand dunes rise from the lake and create sheltered lagoons perfect for swimming. The water is warm, the beaches are wide, and the sunsets across the lake are remarkable. Prince Edward County has become one of Ontario's premier wine and culinary destinations — the campground puts you in reach of both wilderness and world-class Pinot Noir. Books out within minutes of opening.",
+    amenities:["Hot Showers","Flush Toilets","Electric Hookups","Fire Rings","Swimming","Accessible","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:43.9019, lng:-77.2524 },
+
+  // Quebec
+  { id:363, name:"Parc de la Jacques-Cartier",   loc:"Wendake · Quebec",
+    type:"Provincial Park", price:30, sites:85, avail:10, rating:4.7, reviews:1120,
+    desc:"Thirty minutes north of Quebec City, the Jacques-Cartier River has carved a deep boreal valley that feels impossibly wild given its proximity to a major city. The valley walls rise 550 meters on either side and the river runs fast and cold through an unbroken spruce-fir forest. Moose are common. Kayaking and canoe routes thread through the valley. In autumn the birch and maple ignite in colour and the mist fills the valley floor at dawn. A flagship park of the SEPAQ network, and one of Quebec's finest outdoor destinations.",
+    amenities:["Hot Showers","Flush Toilets","Electric Hookups","Fire Rings","Fishing","Boat Launch","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:47.0011, lng:-71.4500 },
+
+  // Nova Scotia
+  { id:364, name:"Chéticamp Campground",          loc:"Cape Breton Highlands NP · Nova Scotia",
+    type:"National Park", price:26, sites:162, avail:14, rating:4.8, reviews:1450,
+    desc:"The Cabot Trail is considered one of the world's great scenic drives, and Chéticamp sits at its western gateway in Cape Breton Highlands National Park. The highland plateau drops dramatically to the Gulf of St. Lawrence — pilot whales blow offshore in summer, bald eagles circle the headlands, and the boreal forest is threaded with moose. The campground is set above the sea with views down the coast. Acadian culture fills the nearby village. The fall colour here, when the highland maples and birches turn, rivals anything in New England.",
+    amenities:["Hot Showers","Flush Toilets","Electric Hookups","Fire Rings","Amphitheater","Accessible","Pet Friendly"],
+    seasons:["Summer","Fall"], lat:46.6500, lng:-60.9739 },
+
+  { id:365, name:"Kejimkujik NP — Mersey River", loc:"Annapolis County · Nova Scotia",
+    type:"National Park", price:22, sites:329, avail:20, rating:4.7, reviews:1080,
+    desc:"Kejimkujik is one of only a handful of Dark Sky Preserves in Canada — certified by the Royal Astronomical Society for its exceptional light-free skies. The Milky Way is visible with the naked eye most clear nights, and the park runs regular stargazing programs at the main beach. By day it's a paddler's paradise: 46 backcountry campsites reachable only by canoe, through a labyrinth of lakes and rivers that Mi'kmaw people have navigated for millennia. Ancient petroglyphs carved in lakeside slate record their presence. Sacred and spectacular.",
+    amenities:["Flush Toilets","Running Water","Fire Rings","Boat Launch","Amphitheater","Pet Friendly","Accessible"],
+    seasons:["Spring","Summer","Fall"], lat:44.4050, lng:-65.2072 },
+
+  // New Brunswick
+  { id:366, name:"Chignecto Campground",          loc:"Fundy NP · New Brunswick",
+    type:"National Park", price:24, sites:202, avail:16, rating:4.7, reviews:1280,
+    desc:"The Bay of Fundy has the highest tides on earth — 16 meters, twice a day — and from the cliffs at Fundy National Park the force of it is visceral. Low tide exposes the sea floor for hundreds of meters; six hours later the ocean reclaims it all. The Dickson Falls trail passes through old-growth hemlock. The Fundy Circuit backcountry route begins here. Covered bridges dot the inland valleys and the villages of the Petitcodiac watershed have barely changed in a century. A genuinely rare coastal experience.",
+    amenities:["Hot Showers","Flush Toilets","Electric Hookups","Fire Rings","Swimming","Amphitheater","Accessible"],
+    seasons:["Summer","Fall"], lat:45.6026, lng:-64.9508 },
+
+  // Newfoundland
+  { id:367, name:"Berry Hill Campground",         loc:"Gros Morne NP · Newfoundland",
+    type:"National Park", price:22, sites:154, avail:12, rating:4.9, reviews:1650,
+    desc:"Gros Morne is a UNESCO World Heritage Site for its geology — the Tablelands expose the earth's mantle, bare and rust-red, visible from the road. The Long Range Mountains rise from fjords that rival Norway's. Berry Hill sits at the edge of the lowland boreal forest with the Tablelands visible on clear days and moose grazing the edges of camp at dusk. The Western Brook Pond boat tour ventures into a landlocked fjord with 2,000-foot walls. The lobster is cheap. The isolation is profound. One of the most special places in North America.",
+    amenities:["Flush Toilets","Running Water","Fire Rings","Amphitheater","Parking","Accessible"],
+    seasons:["Summer","Fall"], lat:49.6523, lng:-57.8062 },
+
+  // Manitoba
+  { id:368, name:"Wasagaming Campground",         loc:"Riding Mountain NP · Manitoba",
+    type:"National Park", price:24, sites:541, avail:28, rating:4.6, reviews:1380,
+    desc:"Rising out of the Manitoba plains, Riding Mountain is an isolated highland — a remnant of the boreal forest that once covered the prairies. Clear Lake is the centerpiece: warm enough to swim, large enough to sail, with a sandy beach that draws families from across the province. Bison graze in a paddock near the park entrance. Wolf, black bear, moose, and lynx move through the backcountry. The townsite of Wasagaming is a throwback to 1930s park architecture, with a dance hall and ice cream stand that haven't changed in decades.",
+    amenities:["Hot Showers","Flush Toilets","Electric Hookups","Fire Rings","Swimming","Boat Launch","Pet Friendly","Accessible"],
+    seasons:["Spring","Summer","Fall"], lat:50.6572, lng:-99.9432 },
+
+  // Saskatchewan
+  { id:369, name:"Waskesiu Campground",           loc:"Prince Albert NP · Saskatchewan",
+    type:"National Park", price:24, sites:407, avail:22, rating:4.6, reviews:1140,
+    desc:"Grey Owl, the conservationist who became the most famous Indigenous advocate of the early 20th century (later revealed to be an Englishman named Archie Belaney), lived and died in this park. His cabin at Ajawaan Lake is reachable by trail. Waskesiu Lake anchors the park — a swimming beach, sailboats, and a 1930s-era townsite built by the relief program during the Depression. Pelicans roost on the narrows. The northern boreal stretches unbroken to the Arctic. A deeply Canadian place.",
+    amenities:["Hot Showers","Flush Toilets","Electric Hookups","Fire Rings","Swimming","Boat Launch","Fishing","Accessible"],
+    seasons:["Summer","Fall"], lat:53.9183, lng:-106.0639 },
+
+  // Yukon
+  { id:370, name:"Kathleen Lake Campground",      loc:"Kluane NP · Yukon",
+    type:"National Park", price:18, sites:41, avail:8, rating:4.9, reviews:740,
+    desc:"Kluane National Park contains the largest non-polar icefields in the world — more glacial ice than anywhere outside the polar regions. Kathleen Lake sits at their edge, ringed by the St. Elias Mountains, the tallest range in Canada. The lake is cold, clear, and empty of other boats. Dall sheep move along the ridgelines above. Grizzly bear and wolf frequent the valley. The Auriol Trail begins at camp. In August the northern lights begin to appear. This is true wilderness — vast, unhurried, and humbling in a way that the more-visited parks rarely achieve.",
+    amenities:["Flush Toilets","Running Water","Fire Rings","Boat Launch","Fishing","Parking"],
+    seasons:["Summer","Fall"], lat:60.5306, lng:-137.1814 }
+
+,
 
 ];
 
@@ -6462,7 +6732,9 @@ function setView(v) {
 
 // ─── FILTERS ────────────────────────────────────
 const TYPE_BLURBS = {
-  'National Park':  { title: 'National Parks', desc: "America's crown jewels — protected for extraordinary natural beauty. Iconic scenery, high demand, and fierce competition for sites. Book months in advance for peak season, especially Yosemite, Yellowstone, and the Grand Canyon." },
+  'National Park':  { title: 'National Parks', desc: "The crown jewels of North America — protected for extraordinary natural beauty. Iconic scenery, high demand, and fierce competition for sites. Book months in advance for peak season, especially Yosemite, Yellowstone, and Banff." },
+  'Provincial Park':{ title: 'Canadian Provincial Parks', desc: "Canada's provincially protected wilderness — from BC's old-growth coast to Ontario's canoe country to the Maritimes' rocky shores. Often less crowded than national parks, with equally stunning scenery. Book through each province's own reservation system." },
+  'canada':         { title: '🍁 Canada — New!', desc: "Campgrounder now features 20 iconic Canadian campgrounds across every region. From Banff and Jasper in the Rockies to Gros Morne in Newfoundland, Algonquin in Ontario, and the wild Pacific Rim coast of BC. More Canadian destinations coming soon." },
   'Forest Service': { title: 'National Forests', desc: "Dispersed wilderness managed by the USDA Forest Service. From developed campgrounds with full amenities to primitive sites deep in the backcountry — often with a fraction of the crowds of national parks." },
   'BLM':            { title: 'BLM Land', desc: "Bureau of Land Management land offers the greatest freedom: dispersed camping, low fees, and wide open country. Most sites are first-come, first-served with no reservations needed — just show up and stake your claim." },
   'Army Corps':     { title: 'Army Corps of Engineers', desc: "Operated by the U.S. Army Corps of Engineers, these lakeside campgrounds are a hidden gem. Full hookups, boat launches, and waterfront sites that rival anything in the national park system — at state park prices." },
@@ -6619,6 +6891,7 @@ function getFilteredCamps() {
     if (currentFilter === 'water')    return hasWater(c);
     if (currentFilter === 'fires-ok') return getCampfireStatus(c) === 'allowed';
     if (currentFilter === 'nearby')   return true;
+    if (currentFilter === 'canada')   return isCanada(c);
     return c.type === currentFilter;
   });
 
@@ -7035,8 +7308,9 @@ function openDetail(id) {
   const campState = (c.loc.split('·')[1] || '').trim();
   const photoId = STATE_PHOTOS[campState] || TYPE_PHOTOS[c.type] || '15';
   const dHero = document.getElementById('d-hero');
-  // Picsum IDs verified programmatically (flesh < 5%, nature+sky > 35%)
-  dHero.style.backgroundImage = `url(${U}${photoId}${Q}), linear-gradient(160deg, var(--g2) 0%, var(--g0) 100%)`;
+  // Use real RIDB photo when available, fall back to Picsum placeholder
+  const heroImg = c.photo || `${U}${photoId}${Q}`;
+  dHero.style.backgroundImage = `url(${heroImg}), linear-gradient(160deg, var(--g2) 0%, var(--g0) 100%)`;
   document.getElementById('d-glyph').innerHTML = '';
 
   document.getElementById('d-type').textContent    = c.type;
@@ -7371,6 +7645,46 @@ async function shareCamp() {
 
 function closeShareSheet() {
   document.getElementById('share-sheet')?.remove();
+}
+
+/* ── Suggest a Campground Sheet ─────────────────────────── */
+function showSuggestSheet() {
+  const el = document.getElementById('suggest-sheet');
+  if (!el) return;
+  el.style.display = 'flex';
+  requestAnimationFrame(() => {
+    el.style.opacity = '1';
+    const panel = el.querySelector('div[style*="background:var(--g1)"]');
+    if (panel) { panel.style.transform = 'translateY(0)'; }
+  });
+  document.getElementById('sg-name')?.focus();
+}
+
+function closeSuggestSheet() {
+  const el = document.getElementById('suggest-sheet');
+  if (!el) return;
+  el.style.display = 'none';
+  ['sg-name','sg-loc','sg-why','sg-email'].forEach(id => {
+    const f = document.getElementById(id);
+    if (f) f.value = '';
+  });
+}
+
+function submitSuggest() {
+  const name  = document.getElementById('sg-name')?.value.trim()  || '';
+  const loc   = document.getElementById('sg-loc')?.value.trim()   || '';
+  const why   = document.getElementById('sg-why')?.value.trim()   || '';
+  const email = document.getElementById('sg-email')?.value.trim() || '';
+  if (!name) { document.getElementById('sg-name')?.focus(); return; }
+  const body = [
+    'Camp name: ' + name,
+    loc   ? 'Location: ' + loc   : '',
+    why   ? 'Why: '      + why   : '',
+    email ? 'Contact: '  + email : '',
+  ].filter(Boolean).join('\n');
+  const mailto = `mailto:hello@campgrounder.io?subject=${encodeURIComponent('Camp suggestion: ' + name)}&body=${encodeURIComponent(body)}`;
+  window.open(mailto, '_self');
+  closeSuggestSheet();
 }
 
 /* ── Review Sources Sheet ──────────────────────────────── */
@@ -7938,6 +8252,14 @@ function renderConnectivity(c) {
           ${r.tech ? `<div class="conn-tech" style="color:${r.color};border-color:${r.color}">${r.tech}</div>` : `<div style="margin-left:auto"></div>`}
         </div>`).join('')}
       <div class="conn-note">Estimated area coverage · signal varies within camp</div>
+      <a href="https://starlink.com/residential?referral=RC-3470234-53151-53" target="_blank" rel="noopener noreferrer" class="starlink-ref">
+        <div class="starlink-ref-icon">☆</div>
+        <div class="starlink-ref-body">
+          <div class="starlink-ref-title">Starlink — Get 1 Month Free</div>
+          <div class="starlink-ref-sub">Sign up with our referral link &amp; you get a free month</div>
+        </div>
+        <div class="starlink-ref-arrow">→</div>
+      </a>
     </div>`;
 }
 
