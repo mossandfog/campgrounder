@@ -251,13 +251,13 @@ html, body {
     min-height: 0;
     padding: 14px 28px 12px !important;
     border: none !important;
-    border-top: 1.5px solid var(--line) !important;
-    border-right: 1.5px solid var(--line) !important;
+    border-top: 1px solid rgba(255,255,255,0.1) !important;
+    border-right: 1px solid rgba(255,255,255,0.1) !important;
   }
-  .cat-cell:nth-child(2n) { border-right: 1.5px solid var(--line) !important; }
+  .cat-cell:nth-child(2n) { border-right: 1px solid rgba(255,255,255,0.1) !important; }
   .cat-cell:nth-child(4n) { border-right: none !important; }
   /* Bottom border on last row of cells */
-  .cat-cell:nth-last-child(-n+4) { border-bottom: 1.5px solid var(--line) !important; }
+  .cat-cell:nth-last-child(-n+5) { border-bottom: 1px solid rgba(255,255,255,0.1) !important; }
   .cat-cell:hover { background: rgba(232,72,28,0.06) !important; }
   /* Hide "Last Minute" cell on desktop so 8 cells form clean 2×4 grid */
   .lm-cell { display: none !important; }
@@ -274,14 +274,14 @@ html, body {
     grid-template-columns: repeat(4, 1fr) !important;
     gap: 0 !important;
     margin: 0 !important;
-    border-left: 1.5px solid var(--line) !important;
-    border-right: 1.5px solid var(--line) !important;
-    border-bottom: 1.5px solid var(--line) !important;
+    border-left: 1px solid rgba(255,255,255,0.1) !important;
+    border-right: 1px solid rgba(255,255,255,0.1) !important;
+    border-bottom: 1px solid rgba(255,255,255,0.1) !important;
   }
   .region-cell {
     padding: 18px 28px 16px !important;
-    border-right: 1.5px solid var(--line) !important;
-    border-top: 1.5px solid var(--line) !important;
+    border-right: 1px solid rgba(255,255,255,0.1) !important;
+    border-top: 1px solid rgba(255,255,255,0.1) !important;
   }
   .region-cell:nth-child(4n) { border-right: none !important; }
   .region-cell:nth-last-child(-n+4) { border-bottom: none !important; }
@@ -591,13 +591,13 @@ html, body {
 .filter-scroll::after { content: ''; display: block; min-width: 16px; flex-shrink: 0; }
 
 .cat-section { padding: 10px 0 0; }
-.section-eyebrow { font-size: 12px; font-weight: 800; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.55); padding: 14px 24px; text-align: center; border-top: 1.5px solid var(--line); border-bottom: 1.5px solid var(--line); }
+.section-eyebrow { font-size: 12px; font-weight: 800; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.55); padding: 14px 24px; text-align: center; border-top: 1px solid rgba(255,255,255,0.1); border-bottom: 1px solid rgba(255,255,255,0.1); }
 .cat-grid {
   display: grid; grid-template-columns: 1fr 1fr;
-  border-top: 1.5px solid var(--line);
-  border-left: 1.5px solid var(--line);
-  border-right: 1.5px solid var(--line);
-  border-bottom: 1.5px solid var(--line);
+  border-top: 1px solid rgba(255,255,255,0.1);
+  border-left: 1px solid rgba(255,255,255,0.1);
+  border-right: 1px solid rgba(255,255,255,0.1);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
   margin-top: 10px;
 }
 @keyframes cat-fade-up {
@@ -606,7 +606,7 @@ html, body {
 }
 .cat-cell {
   padding: 14px 16px 12px;
-  border-right: 1.5px solid var(--line); border-bottom: 1.5px solid var(--line);
+  border-right: 1px solid rgba(255,255,255,0.1); border-bottom: 1px solid rgba(255,255,255,0.1);
   cursor: pointer; transition: background 0.18s;
   display: flex; flex-direction: column; justify-content: space-between;
   aspect-ratio: 1.1 / 1; position: relative;
@@ -620,7 +620,10 @@ html, body {
 .cat-cell:nth-child(6) { animation-delay: 0.40s; }
 .cat-cell:nth-child(7) { animation-delay: 0.47s; }
 .cat-cell:nth-child(8) { animation-delay: 0.54s; }
-.cat-cell:nth-child(9) { animation-delay: 0.61s; }
+.cat-cell:nth-child(9)  { animation-delay: 0.61s; }
+.cat-cell:nth-child(10) { animation-delay: 0.68s; }
+.cat-cell:nth-child(11) { animation-delay: 0.75s; }
+.cat-cell:nth-child(12) { animation-delay: 0.82s; }
 .cat-cell svg { width: 44px; height: 44px; }
 /* 2-col: right column has no right border (grid edge covers it) */
 .cat-cell:nth-child(2n) { border-right: none; }
@@ -2391,22 +2394,26 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
 .conn-note         { color: rgba(255,255,255,0.38) !important; }
 .share-sheet-title { color: rgba(255,255,255,0.55) !important; }
 
-/* ── Starlink Referral Promo ──────────────────────────────────────────────── */
-.starlink-ref {
-  display: flex; align-items: center; gap: 10px;
-  margin: 0 0 10px; padding: 10px 14px;
-  border: 1.5px solid rgba(232,72,28,0.28);
-  background: rgba(232,72,28,0.05);
-  cursor: pointer; text-decoration: none;
-  transition: border-color 0.15s, background 0.15s;
-  -webkit-tap-highlight-color: transparent;
+/* ── Starlink Referral Tooltip ─────────────────────────────────────────────── */
+.starlink-tip { position: relative; display: inline-flex; align-items: center; margin-left: 6px; flex-shrink: 0; }
+.starlink-tip-icon { width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(232,72,28,0.45); color: var(--o); font-size: 9px; cursor: pointer; opacity: 0.55; transition: opacity 0.15s; line-height: 1; }
+.starlink-tip:hover .starlink-tip-icon,
+.starlink-tip:focus-within .starlink-tip-icon { opacity: 1; }
+.starlink-tip-popup {
+  position: absolute; bottom: calc(100% + 7px); right: 0;
+  background: var(--o); color: #fff;
+  font-size: 10px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 7px 10px; white-space: nowrap; line-height: 1.4;
+  pointer-events: none; opacity: 0; transform: translateY(4px);
+  transition: opacity 0.15s, transform 0.15s;
+  text-decoration: none; display: block;
 }
-.starlink-ref:hover, .starlink-ref:focus { border-color: var(--o); background: rgba(232,72,28,0.1); outline: none; }
-.starlink-ref-icon { width: 26px; height: 26px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(232,72,28,0.35); color: var(--o); font-size: 13px; }
-.starlink-ref-body { flex: 1; min-width: 0; }
-.starlink-ref-title { font-size: 11px; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.88); }
-.starlink-ref-sub { font-size: 11px; color: rgba(255,255,255,0.38); margin-top: 2px; letter-spacing: 0.02em; }
-.starlink-ref-arrow { font-size: 11px; color: var(--o); flex-shrink: 0; font-weight: 900; }
+.starlink-tip-popup::after {
+  content: ''; position: absolute; top: 100%; right: 4px;
+  border: 5px solid transparent; border-top-color: var(--o);
+}
+.starlink-tip:hover .starlink-tip-popup,
+.starlink-tip:focus-within .starlink-tip-popup { opacity: 1; transform: translateY(0); pointer-events: auto; }
 
 /* ── Suggest a Camp Sheet ─────────────────────────────────────────────────── */
 .suggest-field {
@@ -2671,6 +2678,21 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
         <span style="position:absolute;top:12px;right:12px;font-size:10px;font-weight:900;letter-spacing:0.12em;text-transform:uppercase;color:#fff;background:var(--o);padding:2px 7px;border-radius:20px;">NEW</span>
         <svg width="44" height="44" style="color:#E8481C;stroke:currentColor;fill:none;"><use href="#ic-mountain"/></svg>
         <div><div class="cat-name">🍁 Canada</div><div class="cat-sub">Banff to Gros Morne</div></div>
+        <div class="cat-plus"></div>
+      </div>
+      <div class="cat-cell" onclick="goFilter('dark-sky')">
+        <svg width="44" height="44" style="color:#E8481C;stroke:currentColor;fill:none;"><use href="#ic-star"/></svg>
+        <div><div class="cat-name">Dark Sky</div><div class="cat-sub">Stargaze all night</div></div>
+        <div class="cat-plus"></div>
+      </div>
+      <div class="cat-cell" onclick="goFilter('winter-open')">
+        <svg width="44" height="44" style="color:#E8481C;stroke:currentColor;fill:none;"><use href="#ic-wx-snow"/></svg>
+        <div><div class="cat-name">Winter Trips</div><div class="cat-sub">Cold never felt this good</div></div>
+        <div class="cat-plus"></div>
+      </div>
+      <div class="cat-cell" onclick="goSearch('backcountry primitive hike-in remote')">
+        <svg width="44" height="44" style="color:#E8481C;stroke:currentColor;fill:none;"><use href="#ic-hike"/></svg>
+        <div><div class="cat-name">Backcountry</div><div class="cat-sub">No roads, no crowds</div></div>
         <div class="cat-plus"></div>
       </div>
       <div class="cat-cell lm-cell" onclick="openLastMinute()">
@@ -6816,6 +6838,18 @@ function sortNearMe(el) {
   }
 }
 
+// goFilter — navigate to results with any filter key, highlights matching pill
+function goFilter(key) {
+  currentFilter = key;
+  go('results', 'home');
+  setTimeout(() => {
+    const pills = document.querySelectorAll('#results-filters .pill');
+    pills.forEach(p => p.classList.remove('on'));
+    const match = pills && Array.from(pills).find(p => (p.getAttribute('onclick') || '').includes("'" + key + "'"));
+    if (match) match.classList.add('on'); else if (pills[0]) pills[0].classList.add('on');
+  }, 50);
+}
+
 // Home pills just set filter and navigate
 function homeFilter(el, key) {
   el.closest('.filter-scroll').querySelectorAll('.pill').forEach(p => p.classList.remove('on'));
@@ -8275,6 +8309,7 @@ function getConnectivityData(c) {
 
 function renderConnectivity(c) {
   const rows = getConnectivityData(c);
+  const REF_URL = 'https://starlink.com/residential?referral=RC-3470234-53151-53';
   document.getElementById('d-connectivity').innerHTML =
     `<div class="conn-block">
       ${rows.map(r => `
@@ -8287,16 +8322,13 @@ function renderConnectivity(c) {
           </div>
           <div class="conn-quality" style="color:${r.color}">${r.label}</div>
           ${r.tech ? `<div class="conn-tech" style="color:${r.color};border-color:${r.color}">${r.tech}</div>` : `<div style="margin-left:auto"></div>`}
+          ${r.name === 'Starlink' ? `
+          <div class="starlink-tip">
+            <div class="starlink-tip-icon" tabindex="0" role="button" aria-label="Starlink referral offer">☆</div>
+            <a href="${REF_URL}" target="_blank" rel="noopener noreferrer" class="starlink-tip-popup">Get 1 free month →</a>
+          </div>` : ''}
         </div>`).join('')}
       <div class="conn-note">Estimated area coverage · signal varies within camp</div>
-      <a href="https://starlink.com/residential?referral=RC-3470234-53151-53" target="_blank" rel="noopener noreferrer" class="starlink-ref">
-        <div class="starlink-ref-icon">☆</div>
-        <div class="starlink-ref-body">
-          <div class="starlink-ref-title">Starlink — Get 1 Month Free</div>
-          <div class="starlink-ref-sub">Sign up with our referral link &amp; you get a free month</div>
-        </div>
-        <div class="starlink-ref-arrow">→</div>
-      </a>
     </div>`;
 }
 
