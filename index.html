@@ -2236,6 +2236,17 @@ html, body {
 .pack-item.packed > span { opacity: 0.35; text-decoration: line-through; }
 .pack-item > span { font-size: 14px; color: rgba(255,255,255,0.8); line-height: 1.3; }
 
+/* ── GEAR / PACK INTERPLAY ──────────────────────── */
+.pick-chip { display:inline-flex; align-items:center; font-size:9px; font-weight:800;
+             letter-spacing:0.07em; text-transform:uppercase; color:var(--o);
+             background:rgba(232,72,28,0.08); border:1px solid rgba(232,72,28,0.22);
+             border-radius:4px; padding:2px 6px; margin-left:7px; flex-shrink:0;
+             cursor:pointer; -webkit-tap-highlight-color:transparent; transition:background 0.12s; }
+.pick-chip:hover { background:rgba(232,72,28,0.18); }
+.gear-card.gear-packed { opacity:0.3; pointer-events:none; }
+@keyframes packFlash { 0%{background:transparent} 35%{background:rgba(232,72,28,0.18)} 100%{background:transparent} }
+.pack-item.pack-flash { animation:packFlash 0.75s ease; border-radius:8px; }
+
 /* ── GEAR PICKS ─────────────────────────────────── */
 .gear-picks { margin: 8px 0 0; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.06); }
 .gear-picks-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
@@ -8418,49 +8429,56 @@ function renderNearby(c) {
 const TAG = 'mossandfog0f-20';
 const amz = q => `https://www.amazon.com/s?k=${encodeURIComponent(q)}&tag=${TAG}`;
 
+// packKey = exact string used in the pack list; enables bidirectional sync
 const GEAR = {
   base: [
-    { brand:'Hydro Flask', name:'32oz Wide Mouth',        desc:'Keeps cold 24hrs, hot 12. The one everyone has for a reason.',              url: amz('hydro flask 32oz wide mouth') },
-    { brand:'Black Diamond', name:'Spot 400 Headlamp',    desc:'Waterproof, rechargeable, 400 lumens. The benchmark.',                      url: amz('black diamond spot 400 headlamp') },
-    { brand:'Rumpl',       name:'Original Puffy Blanket', desc:'Packable, warm, and looks great around a fire.',                            url: amz('rumpl original puffy blanket') },
+    { brand:'Hydro Flask',   name:'32oz Wide Mouth',         packKey:'Water bottle (×2)',                          desc:'Keeps cold 24hrs, hot 12. The one everyone has for a reason.',              url: amz('hydro flask 32oz wide mouth') },
+    { brand:'Black Diamond', name:'Spot 400 Headlamp',       packKey:'Headlamp + spare batteries',                 desc:'Waterproof, rechargeable, 400 lumens. The benchmark.',                      url: amz('black diamond spot 400 headlamp') },
+    { brand:'Rumpl',         name:'Original Puffy Blanket',  packKey:null,                                         desc:'Packable, warm, and looks great around a fire.',                            url: amz('rumpl original puffy blanket') },
   ],
   tent: [
-    { brand:'NEMO',        name:'Hornet OSMO 2P',         desc:'Ultralight double-wall tent. 2.1 lbs and genuinely livable.',               url: amz('nemo hornet osmo 2p tent') },
-    { brand:'Therm-a-Rest', name:'NeoAir XLite NXT',      desc:'Best warmth-to-weight ratio in a sleeping pad. Full stop.',                 url: amz('thermarest neoair xlite nxt sleeping pad') },
-    { brand:'MSR',         name:'PocketRocket 2',         desc:'Boils water in 3.5 minutes. Fits in your palm.',                           url: amz('msr pocketrocket 2 stove') },
+    { brand:'NEMO',          name:'Hornet OSMO 2P',          packKey:'Tent + rainfly + stakes',                    desc:'Ultralight double-wall tent. 2.1 lbs and genuinely livable.',               url: amz('nemo hornet osmo 2p tent') },
+    { brand:'Therm-a-Rest',  name:'NeoAir XLite NXT',        packKey:'Sleeping pad',                               desc:'Best warmth-to-weight ratio in a sleeping pad. Full stop.',                 url: amz('thermarest neoair xlite nxt sleeping pad') },
+    { brand:'MSR',           name:'PocketRocket 2',          packKey:'Camp stove + fuel',                          desc:'Boils water in 3.5 minutes. Fits in your palm.',                           url: amz('msr pocketrocket 2 stove') },
   ],
   carCamping: [
-    { brand:'Snow Peak',   name:'Gigapower Stove',        desc:'Japanese precision engineering. A beautiful object that performs.',          url: amz('snow peak gigapower stove') },
-    { brand:'Stanley',     name:'Adventure Cook Set',     desc:'Nested, tough, and built to outlast the trip.',                             url: amz('stanley adventure camp cook set') },
-    { brand:'Yeti',        name:'Tundra 45 Cooler',       desc:'Bear-resistant and built forever. The serious car camping cooler.',          url: amz('yeti tundra 45 cooler') },
+    { brand:'Snow Peak',     name:'Gigapower Stove',         packKey:'Camp stove + fuel',                          desc:'Japanese precision engineering. A beautiful object that performs.',          url: amz('snow peak gigapower stove') },
+    { brand:'Stanley',       name:'Adventure Cook Set',      packKey:'Cookware + utensils',                        desc:'Nested, tough, and built to outlast the trip.',                             url: amz('stanley adventure camp cook set') },
+    { brand:'Yeti',          name:'Tundra 45 Cooler',        packKey:'Cooler + ice',                               desc:'Bear-resistant and built forever. The serious car camping cooler.',          url: amz('yeti tundra 45 cooler') },
   ],
   glamping: [
-    { brand:'Snow Peak',   name:'Titanium Mug 450',       desc:'The most beautiful camp mug ever made. Holds heat surprisingly well.',      url: amz('snow peak titanium single wall mug 450') },
-    { brand:'Rumpl',       name:'NanoLoft Blanket',       desc:'Lighter than the Original. Equally perfect around a fire.',                 url: amz('rumpl nanoloft blanket') },
-    { brand:'Goal Zero',   name:'Yeti 200X Power Station',desc:'Compact, solar-ready, keeps everything charged off-grid.',                  url: amz('goal zero yeti 200x power station') },
+    { brand:'Snow Peak',     name:'Titanium Mug 450',        packKey:null,                                         desc:'The most beautiful camp mug ever made. Holds heat surprisingly well.',      url: amz('snow peak titanium single wall mug 450') },
+    { brand:'Rumpl',         name:'NanoLoft Blanket',        packKey:null,                                         desc:'Lighter than the Original. Equally perfect around a fire.',                 url: amz('rumpl nanoloft blanket') },
+    { brand:'Goal Zero',     name:'Yeti 200X Power Station', packKey:'Phone charger + cable',                      desc:'Compact, solar-ready, keeps everything charged off-grid.',                  url: amz('goal zero yeti 200x power station') },
   ],
   dispersed: [
-    { brand:'Sawyer',      name:'Squeeze Water Filter',   desc:'Filter from any source. Lightweight and genuinely reliable.',               url: amz('sawyer squeeze water filter') },
-    { brand:'BearVault',   name:'BV500 Bear Canister',    desc:'Required in many wilderness areas. Clear lid so you find snacks fast.',     url: amz('bearvault bv500 bear canister') },
-    { brand:'Goal Zero',   name:'Venture 35 Solar Charger',desc:'Charges from the sun. Keeps your phone and headlamp alive off-grid.',     url: amz('goal zero venture 35 solar charger') },
+    { brand:'Sawyer',        name:'Squeeze Water Filter',    packKey:'Water filter / purifier',                    desc:'Filter from any source. Lightweight and genuinely reliable.',               url: amz('sawyer squeeze water filter') },
+    { brand:'BearVault',     name:'BV500 Bear Canister',     packKey:'Bear canister (check local rules)',          desc:'Required in many wilderness areas. Clear lid so you find snacks fast.',     url: amz('bearvault bv500 bear canister') },
+    { brand:'Goal Zero',     name:'Venture 35 Solar Charger',packKey:'Phone charger + cable',                      desc:'Charges from the sun. Keeps your phone and headlamp alive off-grid.',     url: amz('goal zero venture 35 solar charger') },
   ],
   stargazing: [
-    { brand:'Black Diamond', name:'Astro 300-R Headlamp', desc:'Red-light mode preserves your night vision. Essential for dark sky camps.', url: amz('black diamond astro 300 red headlamp') },
-    { brand:'Celestron',   name:'Nature DX 8x42 Binos',   desc:'Great for the Milky Way core and satellites. Excellent for wildlife too.',  url: amz('celestron nature dx 8x42 binoculars') },
+    { brand:'Black Diamond', name:'Astro 300-R Headlamp',    packKey:'Red-light headlamp (preserves night vision)',desc:'Red-light mode preserves your night vision. Essential for dark sky camps.', url: amz('black diamond astro 300 red headlamp') },
+    { brand:'Celestron',     name:'Nature DX 8x42 Binos',    packKey:'Star chart / app',                           desc:'Great for the Milky Way core and satellites. Excellent for wildlife too.',  url: amz('celestron nature dx 8x42 binoculars') },
   ],
   fishing: [
-    { brand:'Plano',       name:'Guide Series Tackle Bag', desc:'Organized, waterproof, holds everything.',                                 url: amz('plano guide series tackle bag') },
-    { brand:'Yeti',        name:'Hopper M30 Soft Cooler',  desc:'Keeps ice for days. Folds flat when empty.',                              url: amz('yeti hopper m30 soft cooler') },
+    { brand:'Plano',         name:'Guide Series Tackle Bag', packKey:'Rod + reel + tackle',                        desc:'Organized, waterproof, holds everything.',                                 url: amz('plano guide series tackle bag') },
+    { brand:'Yeti',          name:'Hopper M30 Soft Cooler',  packKey:'Cooler + ice',                               desc:'Keeps ice for days. Folds flat when empty.',                              url: amz('yeti hopper m30 soft cooler') },
   ],
   water: [
-    { brand:'Sea to Summit', name:'Hydraulic Dry Bag',    desc:'Actually waterproof, not just water-resistant. The real thing.',            url: amz('sea to summit hydraulic dry bag') },
-    { brand:'NRS',         name:"Bill's Bag Dry Bag",     desc:"The kayaker's go-to. Durable, simple, bombproof.",                         url: amz('nrs bills bag dry bag') },
+    { brand:'Sea to Summit', name:'Hydraulic Dry Bag',       packKey:'Dry bag',                                    desc:'Actually waterproof, not just water-resistant. The real thing.',            url: amz('sea to summit hydraulic dry bag') },
+    { brand:'NRS',           name:"Bill's Bag Dry Bag",      packKey:'Dry bag',                                    desc:"The kayaker's go-to. Durable, simple, bombproof.",                         url: amz('nrs bills bag dry bag') },
   ],
   winter: [
-    { brand:'Therm-a-Rest', name:'MondoKing 3D Pad',      desc:'Maximum insulation from cold ground. Car camping winter essential.',        url: amz('thermarest mondoking 3d sleeping pad') },
-    { brand:'Nalgene',     name:'Wide Mouth 32oz',         desc:'Fill with boiling water at bedtime. Best foot warmer ever made.',          url: amz('nalgene wide mouth 32oz') },
+    { brand:'Therm-a-Rest',  name:'MondoKing 3D Pad',        packKey:'Sleeping pad',                               desc:'Maximum insulation from cold ground. Car camping winter essential.',        url: amz('thermarest mondoking 3d sleeping pad') },
+    { brand:'Nalgene',       name:'Wide Mouth 32oz',          packKey:'Water bottle (×2)',                          desc:'Fill with boiling water at bedtime. Best foot warmer ever made.',          url: amz('nalgene wide mouth 32oz') },
   ],
 };
+
+// Build a lookup: packKey → gear entry (first match wins)
+const GEAR_BY_PACK_KEY = {};
+Object.values(GEAR).flat().forEach(g => {
+  if (g.packKey && !GEAR_BY_PACK_KEY[g.packKey]) GEAR_BY_PACK_KEY[g.packKey] = g;
+});
 
 function getGearPicks(c) {
   const has  = a => (c.amenities || []).includes(a);
@@ -8468,7 +8486,6 @@ function getGearPicks(c) {
   const month = checkInDate ? parseInt(checkInDate.split('-')[1]) : new Date().getMonth() + 1;
   const picks = [];
 
-  // Contextual first
   if (c.type === 'Glamping') {
     picks.push(...GEAR.glamping.slice(0, 2));
   } else if (has('Stargazing') || txt.includes('dark sky') || txt.includes('stargazing')) {
@@ -8481,18 +8498,58 @@ function getGearPicks(c) {
     picks.push(...GEAR.tent.slice(0, 2));
   }
 
-  // Activity additions
-  if (has('Fishing') || has('Boat Launch'))                          picks.push(GEAR.fishing[0]);
-  if (has('Swimming') || has('Kayaking') || has('Beach Access'))     picks.push(GEAR.water[0]);
-  if (month <= 2 || month === 12 || c.seasons?.includes('Winter'))   picks.push(GEAR.winter[0]);
+  if (has('Fishing') || has('Boat Launch'))                        picks.push(GEAR.fishing[0]);
+  if (has('Swimming') || has('Kayaking') || has('Beach Access'))   picks.push(GEAR.water[0]);
+  if (month <= 2 || month === 12 || c.seasons?.includes('Winter')) picks.push(GEAR.winter[0]);
 
-  // Fill to 4 with base items
   for (const item of GEAR.base) {
     if (picks.length >= 4) break;
     if (!picks.find(p => p.name === item.name)) picks.push(item);
   }
 
   return picks.slice(0, 4);
+}
+
+// Called when a pack item is tapped — syncs the gear card
+function togglePackItem(el, packKey) {
+  el.classList.toggle('packed');
+  if (!packKey) return;
+  const card = document.querySelector(`.gear-card[data-pack-key="${packKey}"]`);
+  if (card) card.classList.toggle('gear-packed', el.classList.contains('packed'));
+}
+
+// Called when a gear card is tapped — opens pack list and flashes the linked item
+function flashPackItem(packKey) {
+  if (!packKey) return;
+  const coll = document.getElementById('pack-collapsible');
+  const chev = document.getElementById('pack-chevron');
+  const preview = document.getElementById('pack-preview');
+  const wasHidden = coll && coll.style.display === 'none';
+  if (wasHidden) {
+    coll.style.display = 'block';
+    if (chev) chev.style.transform = 'rotate(180deg)';
+    if (preview) preview.style.display = 'none';
+  }
+  const item = document.querySelector(`.pack-item[data-pack-key="${packKey}"]`);
+  if (item) {
+    setTimeout(() => {
+      item.scrollIntoView({ behavior:'smooth', block:'center' });
+      item.classList.add('pack-flash');
+      setTimeout(() => item.classList.remove('pack-flash'), 800);
+    }, wasHidden ? 200 : 0);
+  }
+}
+
+// Called when a pack list chip is tapped — scrolls to the gear card below
+function scrollToGearCard(packKey) {
+  if (!packKey) return;
+  const card = document.querySelector(`.gear-card[data-pack-key="${packKey}"]`);
+  if (card) {
+    card.scrollIntoView({ behavior:'smooth', block:'center' });
+    card.style.transition = 'box-shadow 0.15s';
+    card.style.boxShadow = '0 0 0 2px var(--o)';
+    setTimeout(() => { card.style.boxShadow = ''; }, 700);
+  }
 }
 
 // ─── SMART PACK LIST ─────────────────────────────
@@ -8571,13 +8628,17 @@ function renderPackList(c) {
   preview.innerHTML = chips.join('');
   preview.style.display = 'flex';
 
-  // Full checklist
-  document.getElementById('d-pack-list').innerHTML = items.map(item =>
-    `<div class="pack-item" onclick="this.classList.toggle('packed')">
+  // Full checklist — with inline gear chips where a match exists
+  document.getElementById('d-pack-list').innerHTML = items.map(item => {
+    const gearMatch = GEAR_BY_PACK_KEY[item];
+    const chip = gearMatch
+      ? `<span class="pick-chip" onclick="event.stopPropagation();scrollToGearCard(${JSON.stringify(item)})">pick ↓</span>`
+      : '';
+    return `<div class="pack-item" data-pack-key="${item.replace(/"/g,'&quot;')}" onclick="togglePackItem(this,${JSON.stringify(item)})">
       <div class="pack-check"></div>
-      <span>${item}</span>
-    </div>`
-  ).join('');
+      <span>${item}</span>${chip}
+    </div>`;
+  }).join('');
 
   // Gear picks — rendered in their own always-visible strip below pack/drive grid
   const gearPicks = getGearPicks(c);
@@ -8592,7 +8653,9 @@ function renderPackList(c) {
         </div>
         <div class="gear-scroll">
           ${gearPicks.map(g => `
-            <a href="${g.url}" target="_blank" rel="noopener sponsored" class="gear-card">
+            <a href="${g.url}" target="_blank" rel="noopener sponsored"
+               class="gear-card" data-pack-key="${(g.packKey||'').replace(/"/g,'&quot;')}"
+               onclick="flashPackItem(${JSON.stringify(g.packKey||'')})">
               <div class="gear-brand">${g.brand}</div>
               <div class="gear-name">${g.name}</div>
               <div class="gear-desc">${g.desc}</div>
