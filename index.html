@@ -2255,30 +2255,38 @@ html, body {
 /* ── DRIVE CARD ─────────────────────────────────── */
 .drive-body { display: flex; align-items: center; justify-content: center; margin-bottom: 32px; min-height: 110px; }
 .drive-idle { display: flex; flex-direction: column; align-items: center; justify-content: center;
-              gap: 6px; padding: 20px 16px; width: 100%; text-align: center;
-              border: 1.5px dashed rgba(232,72,28,0.3); border-radius: 12px;
-              cursor: pointer; transition: border-color 0.15s;
+              gap: 4px; padding: 22px 16px; width: 100%; text-align: center;
+              border: 1.5px dashed rgba(232,72,28,0.35); border-radius: 14px;
+              cursor: pointer; transition: border-color 0.15s, background 0.15s;
+              background: rgba(232,72,28,0.04);
               -webkit-tap-highlight-color: transparent; }
-.drive-idle:active { border-color: rgba(232,72,28,0.7); }
-.drive-locate-label { font-size: 14px; color: rgba(255,255,255,0.62); line-height: 1.45; }
+.drive-idle:hover { border-color: rgba(232,72,28,0.6); background: rgba(232,72,28,0.07); }
+.drive-idle:active { border-color: rgba(232,72,28,0.8); }
+.drive-locate-label { font-size: 15px; font-weight: 600; color: rgba(255,255,255,0.75); line-height: 1.3; }
 .drive-calculating { font-size: 14px; color: rgba(255,255,255,0.55); text-align: center; padding: 28px 0; }
 .drive-result { width: 100%; }
-.drive-stats { display: flex; border: 1.5px solid rgba(255,255,255,0.08); border-radius: 10px;
-               overflow: hidden; margin-bottom: 10px; }
-.drive-stat { flex: 1; padding: 14px 10px; text-align: center; }
-.drive-stat + .drive-stat { border-left: 1.5px solid rgba(255,255,255,0.08); }
-.drive-stat-val { font-size: 22px; font-weight: 700; color: #fff; letter-spacing: -0.02em;
-                  line-height: 1; margin-bottom: 4px; }
-.drive-stat-label { font-size: 12px; color: rgba(255,255,255,0.52); text-transform: uppercase;
-                    letter-spacing: 0.08em; font-weight: 600; }
-.drive-nav-btn { display: block; text-align: center; padding: 11px 16px; background: var(--o);
-                 color: #fff; border-radius: 8px; font-size: 14px; font-weight: 700;
-                 letter-spacing: 0.04em; text-decoration: none; -webkit-tap-highlight-color: transparent; }
-.drive-recalc { font-size: 12px; color: rgba(255,255,255,0.48); text-align: center;
-                margin-top: 10px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.drive-stats { display: flex; border: 1.5px solid rgba(255,255,255,0.09); border-radius: 12px;
+               overflow: hidden; margin-bottom: 10px; background: rgba(255,255,255,0.02); }
+.drive-stat { flex: 1; padding: 16px 10px; text-align: center; }
+.drive-stat + .drive-stat { border-left: 1.5px solid rgba(255,255,255,0.09); }
+.drive-stat-val { font-size: 24px; font-weight: 700; color: #fff; letter-spacing: -0.03em;
+                  line-height: 1; margin-bottom: 5px; }
+.drive-stat-label { font-size: 11px; color: rgba(255,255,255,0.45); text-transform: uppercase;
+                    letter-spacing: 0.1em; font-weight: 600; }
+.drive-nav-btns { display: flex; gap: 8px; margin-bottom: 4px; }
+.drive-nav-btn { flex: 1; display: block; text-align: center; padding: 12px 10px; background: var(--o);
+                 color: #fff; border-radius: 10px; font-size: 13px; font-weight: 700;
+                 letter-spacing: 0.03em; text-decoration: none; -webkit-tap-highlight-color: transparent; }
+.drive-nav-btn.secondary { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.75); border: 1px solid rgba(255,255,255,0.1); }
+.drive-nav-btn.secondary:hover { background: rgba(255,255,255,0.12); }
+.drive-gas { font-size: 11px; color: rgba(255,255,255,0.32); text-align: center; margin: 8px 0 2px; letter-spacing: 0.02em; }
+.drive-recalc { font-size: 12px; color: rgba(255,255,255,0.35); text-align: center;
+                margin-top: 8px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .drive-recalc:hover { color: var(--o); }
 .drive-error { font-size: 12px; color: rgba(255,255,255,0.52); text-align: center;
                padding: 20px 8px; line-height: 1.6; }
+.drive-border-note { font-size: 11px; color: rgba(255,255,255,0.38); text-align:center;
+                     margin: 6px 0 0; line-height: 1.5; }
 .drive-error a { color: var(--o); cursor: pointer; }
 
 /* ── AMBIENT SOUND ──────────────────────────────── */
@@ -3686,12 +3694,15 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
         </div>
         <div id="drive-body" class="drive-body">
           <div class="drive-idle" onclick="calcDriveTime()">
-            <svg width="22" height="22" viewBox="0 0 24 24" style="color:rgba(232,72,28,0.55);stroke:currentColor;fill:none;margin-bottom:4px;" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
-            <div class="drive-locate-label">Tap to calculate<br>from your location</div>
+            <svg width="28" height="28" viewBox="0 0 24 24" style="color:var(--o);stroke:currentColor;fill:none;margin-bottom:8px;" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
+            <div class="drive-locate-label">How far is this?</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.28);margin-top:4px;">Tap to calculate from your location</div>
           </div>
         </div>
       </div>
     </div>
+    <!-- Gear Picks — always visible, below pack/drive grid -->
+    <div id="d-gear-picks" style="display:none; margin: 4px 0 24px;"></div>
     <div id="d-nearby"></div>
   </div>
   <div class="d-cta-bar">
@@ -8561,30 +8572,35 @@ function renderPackList(c) {
   preview.style.display = 'flex';
 
   // Full checklist
-  const gearPicks = getGearPicks(c);
-  const gearHTML = `
-    <div class="gear-picks">
-      <div class="gear-picks-header">
-        <span class="gear-picks-label">Gear Picks</span>
-        <span class="gear-affiliate-note">affiliate</span>
-      </div>
-      <div class="gear-scroll">
-        ${gearPicks.map(g => `
-          <a href="${g.url}" target="_blank" rel="noopener sponsored" class="gear-card">
-            <div class="gear-brand">${g.brand}</div>
-            <div class="gear-name">${g.name}</div>
-            <div class="gear-desc">${g.desc}</div>
-            <div class="gear-shop">Shop on Amazon →</div>
-          </a>`).join('')}
-      </div>
-    </div>`;
-
   document.getElementById('d-pack-list').innerHTML = items.map(item =>
     `<div class="pack-item" onclick="this.classList.toggle('packed')">
       <div class="pack-check"></div>
       <span>${item}</span>
     </div>`
-  ).join('') + gearHTML;
+  ).join('');
+
+  // Gear picks — rendered in their own always-visible strip below pack/drive grid
+  const gearPicks = getGearPicks(c);
+  const gearEl = document.getElementById('d-gear-picks');
+  if (gearEl) {
+    gearEl.style.display = 'block';
+    gearEl.innerHTML = `
+      <div class="gear-picks">
+        <div class="gear-picks-header">
+          <span class="gear-picks-label">Gear Picks</span>
+          <span class="gear-affiliate-note">affiliate</span>
+        </div>
+        <div class="gear-scroll">
+          ${gearPicks.map(g => `
+            <a href="${g.url}" target="_blank" rel="noopener sponsored" class="gear-card">
+              <div class="gear-brand">${g.brand}</div>
+              <div class="gear-name">${g.name}</div>
+              <div class="gear-desc">${g.desc}</div>
+              <div class="gear-shop">Shop on Amazon →</div>
+            </a>`).join('')}
+        </div>
+      </div>`;
+  }
 
   // Start collapsed, preview visible
   const coll = document.getElementById('pack-collapsible');
@@ -8628,10 +8644,13 @@ function calcDriveTime() {
     const straight = haversine(pos.coords.latitude, pos.coords.longitude, c.lat, c.lng);
     const road = Math.round(straight * 1.3);
     const mins = Math.round((road / 55) * 60);
-    const timeStr = mins < 60 ? `${mins} min`
-      : `${Math.floor(mins/60)}h${mins%60 > 0 ? ' ' + (mins%60) + 'm' : ''}`;
-    const mapsUrl = `https://maps.apple.com/?daddr=${c.lat},${c.lng}&dirflg=d`;
+    const hrs  = Math.floor(mins / 60);
+    const rem  = mins % 60;
+    const timeStr = mins < 60 ? `${mins}m` : (rem === 0 ? `${hrs}h` : `${hrs}h ${rem}m`);
+    const gasCost = Math.round((road / 28) * 3.80); // ~28mpg, ~$3.80/gal
+    const mapsUrl  = `https://maps.apple.com/?daddr=${c.lat},${c.lng}&dirflg=d`;
     const gmapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${c.lat},${c.lng}`;
+    const isCanadaDest = isCanada(c);
     document.getElementById('drive-dist-label').textContent = `~${road} mi`;
     body.innerHTML = `
       <div class="drive-result">
@@ -8644,8 +8663,16 @@ function calcDriveTime() {
             <div class="drive-stat-val">${timeStr}</div>
             <div class="drive-stat-label">est. drive</div>
           </div>
+          <div class="drive-stat">
+            <div class="drive-stat-val">~$${gasCost}</div>
+            <div class="drive-stat-label">gas est.</div>
+          </div>
         </div>
-        <a class="drive-nav-btn" href="${mapsUrl}" target="_blank" rel="noopener">Navigate →</a>
+        <div class="drive-nav-btns">
+          <a class="drive-nav-btn" href="${mapsUrl}" target="_blank" rel="noopener">Apple Maps →</a>
+          <a class="drive-nav-btn secondary" href="${gmapsUrl}" target="_blank" rel="noopener">Google Maps</a>
+        </div>
+        ${isCanadaDest ? `<div class="drive-border-note">🍁 Cross-border trip — bring your passport</div>` : ''}
         <div class="drive-recalc" onclick="resetDriveWidget()">recalculate</div>
       </div>`;
   }, () => {
@@ -8659,8 +8686,9 @@ function resetDriveWidget() {
   if (label) label.textContent = '';
   if (body) body.innerHTML = `
     <div class="drive-idle" onclick="calcDriveTime()">
-      <svg width="22" height="22" viewBox="0 0 24 24" style="color:rgba(232,72,28,0.55);stroke:currentColor;fill:none;margin-bottom:4px;" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
-      <div class="drive-locate-label">Tap to calculate<br>from your location</div>
+      <svg width="28" height="28" viewBox="0 0 24 24" style="color:var(--o);stroke:currentColor;fill:none;margin-bottom:8px;" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
+      <div class="drive-locate-label">How far is this?</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.28);margin-top:4px;">Tap to calculate from your location</div>
     </div>`;
 }
 
