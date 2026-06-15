@@ -378,14 +378,11 @@ html, body {
   .about-stat-num { font-size: 40px; }
   .about-stat { padding: 28px 24px 24px; }
 
-  /* Roadmap: 4-col on desktop */
+  /* Roadmap: 4-col on desktop, 2 rows of 4 */
   .about-roadmap-eyebrow { padding: 22px 40px 0; }
   .about-roadmap-grid { grid-template-columns: repeat(4, 1fr); }
-  .about-roadmap-item { border-right: 1.5px solid var(--line); }
-  .about-roadmap-item:last-child { border-right: none; }
-  .about-roadmap-item:nth-child(even) { border-right: 1.5px solid var(--line); }
-  .about-roadmap-item:last-child { border-right: none; }
-  .about-roadmap-item { padding: 20px 28px 24px; }
+  .about-roadmap-item { border-right: 1.5px solid var(--line); padding: 20px 28px 24px; }
+  .about-roadmap-item:nth-child(4n) { border-right: none; }
 
   /* Signature: wider padding */
   .about-sig { padding: 32px 40px 28px; }
@@ -2239,6 +2236,22 @@ html, body {
 .pack-item.packed > span { opacity: 0.35; text-decoration: line-through; }
 .pack-item > span { font-size: 14px; color: rgba(255,255,255,0.8); line-height: 1.3; }
 
+/* ── GEAR PICKS ─────────────────────────────────── */
+.gear-picks { margin: 8px 0 0; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.06); }
+.gear-picks-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.gear-picks-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.35); }
+.gear-affiliate-note { font-size: 9px; color: rgba(255,255,255,0.18); letter-spacing: 0.06em; text-transform: uppercase; }
+.gear-scroll { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: none; }
+.gear-scroll::-webkit-scrollbar { display: none; }
+.gear-card { flex: 0 0 148px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);
+             border-radius: 12px; padding: 13px 14px; text-decoration: none; display: flex;
+             flex-direction: column; gap: 3px; transition: background 0.15s, border-color 0.15s; }
+.gear-card:hover { background: rgba(255,255,255,0.07); border-color: rgba(232,72,28,0.3); }
+.gear-brand { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.28); }
+.gear-name  { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.85); line-height: 1.3; }
+.gear-desc  { font-size: 11px; color: rgba(255,255,255,0.38); line-height: 1.4; margin-top: 3px; flex: 1; }
+.gear-shop  { font-size: 11px; color: var(--o); margin-top: 9px; font-weight: 600; }
+
 /* ── DRIVE CARD ─────────────────────────────────── */
 .drive-body { display: flex; align-items: center; justify-content: center; margin-bottom: 32px; min-height: 110px; }
 .drive-idle { display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -3346,22 +3359,42 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
         <div class="about-roadmap-item">
           <div class="about-roadmap-icon">⚡</div>
           <div class="about-roadmap-title">Live Availability</div>
-          <div class="about-roadmap-body">Real-time site availability pulled directly from Recreation.gov and state park APIs.</div>
-        </div>
-        <div class="about-roadmap-item">
-          <div class="about-roadmap-icon">🗺</div>
-          <div class="about-roadmap-title">Trip Planner</div>
-          <div class="about-roadmap-body">Multi-stop itineraries with drive time, elevation, and weather built in.</div>
+          <div class="about-roadmap-body">Real-time site counts from Recreation.gov — coming first to the 87 national park and federal campgrounds already in our database.</div>
         </div>
         <div class="about-roadmap-item">
           <div class="about-roadmap-icon">🔔</div>
-          <div class="about-roadmap-title">Cancellation Alerts</div>
-          <div class="about-roadmap-body">Get notified the moment a site opens up at a sold-out campground.</div>
+          <div class="about-roadmap-title">Cancellation Watcher</div>
+          <div class="about-roadmap-body">Watch any sold-out campground and get a text the moment a site opens. Yosemite in July. Glacier in August. We'll be faster than any bot.</div>
+        </div>
+        <div class="about-roadmap-item">
+          <div class="about-roadmap-icon">🤖</div>
+          <div class="about-roadmap-title">AI Trip Builder</div>
+          <div class="about-roadmap-body">Tell us what you want — "four nights in the Cascades, dog-friendly, under $30, good stars" — and we'll build the itinerary, including drive time and weather.</div>
+        </div>
+        <div class="about-roadmap-item">
+          <div class="about-roadmap-icon">🗺</div>
+          <div class="about-roadmap-title">Offline Maps</div>
+          <div class="about-roadmap-body">Cache your saved camps for offline use. No signal? No problem. Your sites, trails, and coordinates — available without a bar of cell service.</div>
+        </div>
+        <div class="about-roadmap-item">
+          <div class="about-roadmap-icon">📸</div>
+          <div class="about-roadmap-title">Community Photos</div>
+          <div class="about-roadmap-body">Real photos from real campers. Know what the view from site 14 actually looks like before you book. Crowd-sourced truth over stock imagery.</div>
+        </div>
+        <div class="about-roadmap-item">
+          <div class="about-roadmap-icon">💬</div>
+          <div class="about-roadmap-title">Local Intel</div>
+          <div class="about-roadmap-body">Crowd-sourced tips from people who've actually been there — the quiet loop, the spots closest to water, what to avoid on holiday weekends.</div>
+        </div>
+        <div class="about-roadmap-item">
+          <div class="about-roadmap-icon">🔥</div>
+          <div class="about-roadmap-title">Live Fire Conditions</div>
+          <div class="about-roadmap-body">Real-time fire restriction data and air quality at every campground, pulled from agency sources. Know before you drive four hours.</div>
         </div>
         <div class="about-roadmap-item">
           <div class="about-roadmap-icon">📱</div>
           <div class="about-roadmap-title">Native App</div>
-          <div class="about-roadmap-body">Offline maps, saved trips, and one-tap booking — iOS and Android.</div>
+          <div class="about-roadmap-body">Everything Campgrounder does, built for the trail. Offline-first, GPS-aware, and designed for people who leave the pavement behind.</div>
         </div>
       </div>
     </div>
@@ -3515,7 +3548,7 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
 
       <div class="privacy-section">
         <div class="privacy-heading">6. Affiliate &amp; Referral Disclosure</div>
-        <p>Campgrounder may earn referral credits when users sign up for third-party services through links on this site. Currently this includes Starlink (satellite internet). These relationships do not affect our editorial decisions — we include Starlink because it genuinely improves the camping experience in remote areas, not because of any financial arrangement. Referral links are clearly labeled on the site.</p>
+        <p>Campgrounder participates in the Amazon Services LLC Associates Program, an affiliate advertising program designed to provide a means for sites to earn advertising fees by linking to Amazon.com. Gear Picks shown in the pack list use affiliate links tagged with our Associates ID. Campgrounder also may earn referral credits when users sign up for third-party services through links on this site, including Starlink (satellite internet). These relationships do not affect our editorial decisions — we only recommend gear and services we'd genuinely use. Affiliate links are clearly labeled on the site.</p>
       </div>
 
       <div class="privacy-section">
@@ -8370,6 +8403,87 @@ function renderNearby(c) {
     </div>`;
 }
 
+// ─── GEAR PICKS ──────────────────────────────────
+const TAG = 'mossandfog0f-20';
+const amz = q => `https://www.amazon.com/s?k=${encodeURIComponent(q)}&tag=${TAG}`;
+
+const GEAR = {
+  base: [
+    { brand:'Hydro Flask', name:'32oz Wide Mouth',        desc:'Keeps cold 24hrs, hot 12. The one everyone has for a reason.',              url: amz('hydro flask 32oz wide mouth') },
+    { brand:'Black Diamond', name:'Spot 400 Headlamp',    desc:'Waterproof, rechargeable, 400 lumens. The benchmark.',                      url: amz('black diamond spot 400 headlamp') },
+    { brand:'Rumpl',       name:'Original Puffy Blanket', desc:'Packable, warm, and looks great around a fire.',                            url: amz('rumpl original puffy blanket') },
+  ],
+  tent: [
+    { brand:'NEMO',        name:'Hornet OSMO 2P',         desc:'Ultralight double-wall tent. 2.1 lbs and genuinely livable.',               url: amz('nemo hornet osmo 2p tent') },
+    { brand:'Therm-a-Rest', name:'NeoAir XLite NXT',      desc:'Best warmth-to-weight ratio in a sleeping pad. Full stop.',                 url: amz('thermarest neoair xlite nxt sleeping pad') },
+    { brand:'MSR',         name:'PocketRocket 2',         desc:'Boils water in 3.5 minutes. Fits in your palm.',                           url: amz('msr pocketrocket 2 stove') },
+  ],
+  carCamping: [
+    { brand:'Snow Peak',   name:'Gigapower Stove',        desc:'Japanese precision engineering. A beautiful object that performs.',          url: amz('snow peak gigapower stove') },
+    { brand:'Stanley',     name:'Adventure Cook Set',     desc:'Nested, tough, and built to outlast the trip.',                             url: amz('stanley adventure camp cook set') },
+    { brand:'Yeti',        name:'Tundra 45 Cooler',       desc:'Bear-resistant and built forever. The serious car camping cooler.',          url: amz('yeti tundra 45 cooler') },
+  ],
+  glamping: [
+    { brand:'Snow Peak',   name:'Titanium Mug 450',       desc:'The most beautiful camp mug ever made. Holds heat surprisingly well.',      url: amz('snow peak titanium single wall mug 450') },
+    { brand:'Rumpl',       name:'NanoLoft Blanket',       desc:'Lighter than the Original. Equally perfect around a fire.',                 url: amz('rumpl nanoloft blanket') },
+    { brand:'Goal Zero',   name:'Yeti 200X Power Station',desc:'Compact, solar-ready, keeps everything charged off-grid.',                  url: amz('goal zero yeti 200x power station') },
+  ],
+  dispersed: [
+    { brand:'Sawyer',      name:'Squeeze Water Filter',   desc:'Filter from any source. Lightweight and genuinely reliable.',               url: amz('sawyer squeeze water filter') },
+    { brand:'BearVault',   name:'BV500 Bear Canister',    desc:'Required in many wilderness areas. Clear lid so you find snacks fast.',     url: amz('bearvault bv500 bear canister') },
+    { brand:'Goal Zero',   name:'Venture 35 Solar Charger',desc:'Charges from the sun. Keeps your phone and headlamp alive off-grid.',     url: amz('goal zero venture 35 solar charger') },
+  ],
+  stargazing: [
+    { brand:'Black Diamond', name:'Astro 300-R Headlamp', desc:'Red-light mode preserves your night vision. Essential for dark sky camps.', url: amz('black diamond astro 300 red headlamp') },
+    { brand:'Celestron',   name:'Nature DX 8x42 Binos',   desc:'Great for the Milky Way core and satellites. Excellent for wildlife too.',  url: amz('celestron nature dx 8x42 binoculars') },
+  ],
+  fishing: [
+    { brand:'Plano',       name:'Guide Series Tackle Bag', desc:'Organized, waterproof, holds everything.',                                 url: amz('plano guide series tackle bag') },
+    { brand:'Yeti',        name:'Hopper M30 Soft Cooler',  desc:'Keeps ice for days. Folds flat when empty.',                              url: amz('yeti hopper m30 soft cooler') },
+  ],
+  water: [
+    { brand:'Sea to Summit', name:'Hydraulic Dry Bag',    desc:'Actually waterproof, not just water-resistant. The real thing.',            url: amz('sea to summit hydraulic dry bag') },
+    { brand:'NRS',         name:"Bill's Bag Dry Bag",     desc:"The kayaker's go-to. Durable, simple, bombproof.",                         url: amz('nrs bills bag dry bag') },
+  ],
+  winter: [
+    { brand:'Therm-a-Rest', name:'MondoKing 3D Pad',      desc:'Maximum insulation from cold ground. Car camping winter essential.',        url: amz('thermarest mondoking 3d sleeping pad') },
+    { brand:'Nalgene',     name:'Wide Mouth 32oz',         desc:'Fill with boiling water at bedtime. Best foot warmer ever made.',          url: amz('nalgene wide mouth 32oz') },
+  ],
+};
+
+function getGearPicks(c) {
+  const has  = a => (c.amenities || []).includes(a);
+  const txt  = (c.loc + ' ' + c.desc + ' ' + (c.type || '')).toLowerCase();
+  const month = checkInDate ? parseInt(checkInDate.split('-')[1]) : new Date().getMonth() + 1;
+  const picks = [];
+
+  // Contextual first
+  if (c.type === 'Glamping') {
+    picks.push(...GEAR.glamping.slice(0, 2));
+  } else if (has('Stargazing') || txt.includes('dark sky') || txt.includes('stargazing')) {
+    picks.push(...GEAR.stargazing);
+  } else if (['BLM','Forest Service'].includes(c.type) || txt.includes('dispersed') || txt.includes('primitive') || c.price === 0) {
+    picks.push(...GEAR.dispersed.slice(0, 2));
+  } else if (c.type === 'National Park' || c.type === 'State Park' || c.type === 'Provincial Park') {
+    picks.push(GEAR.carCamping[0], GEAR.tent[0]);
+  } else {
+    picks.push(...GEAR.tent.slice(0, 2));
+  }
+
+  // Activity additions
+  if (has('Fishing') || has('Boat Launch'))                          picks.push(GEAR.fishing[0]);
+  if (has('Swimming') || has('Kayaking') || has('Beach Access'))     picks.push(GEAR.water[0]);
+  if (month <= 2 || month === 12 || c.seasons?.includes('Winter'))   picks.push(GEAR.winter[0]);
+
+  // Fill to 4 with base items
+  for (const item of GEAR.base) {
+    if (picks.length >= 4) break;
+    if (!picks.find(p => p.name === item.name)) picks.push(item);
+  }
+
+  return picks.slice(0, 4);
+}
+
 // ─── SMART PACK LIST ─────────────────────────────
 function generatePackList(c) {
   const items = [];
@@ -8447,12 +8561,30 @@ function renderPackList(c) {
   preview.style.display = 'flex';
 
   // Full checklist
+  const gearPicks = getGearPicks(c);
+  const gearHTML = `
+    <div class="gear-picks">
+      <div class="gear-picks-header">
+        <span class="gear-picks-label">Gear Picks</span>
+        <span class="gear-affiliate-note">affiliate</span>
+      </div>
+      <div class="gear-scroll">
+        ${gearPicks.map(g => `
+          <a href="${g.url}" target="_blank" rel="noopener sponsored" class="gear-card">
+            <div class="gear-brand">${g.brand}</div>
+            <div class="gear-name">${g.name}</div>
+            <div class="gear-desc">${g.desc}</div>
+            <div class="gear-shop">Shop on Amazon →</div>
+          </a>`).join('')}
+      </div>
+    </div>`;
+
   document.getElementById('d-pack-list').innerHTML = items.map(item =>
     `<div class="pack-item" onclick="this.classList.toggle('packed')">
       <div class="pack-check"></div>
       <span>${item}</span>
     </div>`
-  ).join('');
+  ).join('') + gearHTML;
 
   // Start collapsed, preview visible
   const coll = document.getElementById('pack-collapsible');
