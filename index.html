@@ -2167,6 +2167,76 @@ html, body {
 .cta-sq { width: 54px; border: 1.5px solid var(--w2); background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.16s; }
 .cta-sq:hover { border-color: var(--o); }
 
+/* ── TRIP CARD MODAL ─────────────────────────────── */
+.tc-overlay {
+  position: fixed; inset: 0; z-index: 300;
+  background: rgba(8,18,12,0.92);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: flex-start;
+  padding: 0; overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.tc-overlay-inner {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 14px;
+  padding: 20px 20px calc(28px + var(--safe-bot));
+  min-height: 100%; justify-content: center;
+}
+.tc-topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  width: 100%; max-width: 340px;
+}
+.tc-title { font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--w3); }
+.tc-close { width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border: 1.5px solid var(--w2); border-radius: 50%; cursor: pointer; color: rgba(255,255,255,0.7); transition: border-color 0.15s; }
+.tc-close:hover { border-color: var(--o); }
+.tc-card-wrap {
+  position: relative; width: 100%; max-width: 340px;
+  border-radius: 20px; overflow: hidden;
+  box-shadow: 0 0 0 3px #E8481C, 0 24px 60px rgba(0,0,0,0.7);
+  background: #132B1C;
+  flex-shrink: 0;
+}
+.tc-card-wrap::after {
+  content: ''; position: absolute; inset: 0;
+  border-radius: 20px; border: 3px solid #E8481C;
+  pointer-events: none; z-index: 10;
+}
+.tc-scene { width: 100%; aspect-ratio: 16/9; display: block; overflow: hidden; position: relative; }
+.tc-scene svg { width: 100%; height: 100%; display: block; }
+.tc-scene-divider { height: 3px; background: #E8481C; opacity: 0.5; }
+.tc-info { padding: 16px 18px 20px; }
+.tc-camp-name { font-size: 20px; font-weight: 800; color: #fff; line-height: 1.15; margin-bottom: 3px; }
+.tc-camp-loc { font-size: 10px; color: #8CA898; margin-bottom: 13px; }
+.tc-divider { height: 0.5px; background: #1E3D2A; margin: 10px 0; }
+.tc-dates-row { display: flex; gap: 12px; margin-bottom: 4px; }
+.tc-date-field { flex: 1; }
+.tc-date-label { font-size: 7px; font-weight: 700; letter-spacing: 0.14em; color: #E8481C; text-transform: uppercase; margin-bottom: 3px; }
+.tc-date-input {
+  width: 100%; background: #0C1F15; border: 1px solid #1E3D2A;
+  color: #fff; font-family: inherit; font-size: 13px; font-weight: 700;
+  padding: 7px 8px; outline: none; border-radius: 4px;
+  -webkit-appearance: none; color-scheme: dark;
+}
+.tc-date-input:focus { border-color: #E8481C; }
+.tc-stats-row { display: flex; gap: 0; margin: 10px 0 2px; }
+.tc-stat { flex: 1; }
+.tc-stat-label { font-size: 7px; font-weight: 700; letter-spacing: 0.12em; color: #E8481C; text-transform: uppercase; margin-bottom: 3px; }
+.tc-stat-value { font-size: 18px; font-weight: 800; color: #fff; }
+.tc-type-pill { display: inline-block; font-size: 8px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #E8481C; background: rgba(232,72,28,0.1); border: 1px solid rgba(232,72,28,0.25); border-radius: 20px; padding: 3px 9px; margin-top: 4px; }
+.tc-amenities { font-size: 9px; color: #8CA898; margin: 8px 0 6px; line-height: 1.6; }
+.tc-footer { font-size: 7px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #1E3D2A; margin-top: 10px; }
+.tc-actions { display: flex; gap: 9px; width: 100%; max-width: 340px; }
+.tc-btn-save { flex: 1; background: transparent; border: 1.5px solid rgba(255,255,255,0.18); color: rgba(255,255,255,0.75); font-family: inherit; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 12px 0; cursor: pointer; transition: border-color 0.15s; border-radius: 3px; }
+.tc-btn-save:hover { border-color: rgba(255,255,255,0.4); }
+.tc-btn-share { flex: 1; background: transparent; border: 1.5px solid rgba(255,255,255,0.18); color: rgba(255,255,255,0.75); font-family: inherit; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 12px 0; cursor: pointer; transition: border-color 0.15s; border-radius: 3px; }
+.tc-btn-share:hover { border-color: rgba(255,255,255,0.4); }
+.tc-btn-book { flex: 1.5; background: #E8481C; color: #fff; font-family: inherit; font-size: 11px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; padding: 12px 0; cursor: pointer; border: none; text-decoration: none; display: flex; align-items: center; justify-content: center; border-radius: 3px; transition: opacity 0.15s; }
+.tc-btn-book:hover { opacity: 0.85; }
+.tc-note { font-size: 10px; color: rgba(255,255,255,0.28); text-align: center; }
+/* CTA bar trip card button */
+.cta-sq-tc { width: 54px; border: 1.5px solid #E8481C; background: rgba(232,72,28,0.08); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.16s; color: #E8481C; flex-shrink: 0; }
+.cta-sq-tc:hover { background: rgba(232,72,28,0.18); }
+
 /* ── DETAIL BOTTOM GRID (pack + drive) ─────────── */
 .detail-bottom-grid { display: block; padding-top: 4px; }
 @media (min-width: 768px) {
@@ -2177,6 +2247,18 @@ html, body {
 .pack-toggle { cursor: pointer; -webkit-tap-highlight-color: transparent; user-select: none; display: flex; align-items: center; gap: 6px; }
 .pack-toggle:hover #pack-chevron { color: rgba(255,255,255,0.7) !important; }
 .pack-hint { font-size: 12px; color: rgba(255,255,255,0.25); margin-bottom: 16px; letter-spacing: 0.02em; }
+
+/* ── Dismissible hint strips ──────────────────────── */
+.hint-strip { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 11px; color: rgba(255,255,255,0.42); letter-spacing: 0.02em; }
+.hint-strip span { flex: 1; }
+.hint-x { background: none; border: none; font-size: 16px; color: rgba(255,255,255,0.22); cursor: pointer; padding: 0 2px; line-height: 1; font-family: inherit; flex-shrink: 0; transition: color 0.15s; }
+.hint-x:hover { color: rgba(255,255,255,0.55); }
+/* Trip card hint — sits just above the CTA bar */
+.hint-tripcard { padding: 9px 16px; background: rgba(232,72,28,0.05); border-top: 1px solid rgba(232,72,28,0.14); }
+/* Pack hint — replaces static pack-hint text */
+.hint-packgear { padding: 0 0 14px; }
+/* Rating hint — sits just below the star row */
+.hint-rating { padding: 8px 0 20px; border-bottom: 1px solid var(--line); margin-bottom: 4px; }
 /* ── PACK PREVIEW CHIPS ─────────────────────────── */
 .pack-preview { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0 6px; }
 .pack-chip { font-size: 12px; color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.05);
@@ -3855,6 +3937,10 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
       <div class="d-rct"   id="d-reviews">1,240 Reviews</div>
       <div class="d-rview-cta" aria-hidden="true">SOURCES →</div>
     </div>
+    <div id="hint-rating" class="hint-strip hint-rating" style="display:none">
+      <span>Tap the stars to see where these reviews come from</span>
+      <button class="hint-x" onclick="dismissHint('hint-rating')" aria-label="Dismiss">×</button>
+    </div>
     <div class="stat-row">
       <div class="stat-box"><div class="stat-val" id="d-price" style="color:var(--o);">$35</div><div class="stat-lbl">Per night</div></div>
       <div class="stat-box"><div class="stat-val" id="d-sites">240</div><div class="stat-lbl">Sites</div></div>
@@ -3893,7 +3979,10 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
         </div>
         <div id="pack-preview" class="pack-preview"></div>
         <div id="pack-collapsible" style="display:none;">
-          <div class="pack-hint">Tap any item to check it off</div>
+          <div id="hint-pack" class="hint-strip hint-packgear" style="display:none">
+            <span>Tap an item to check it off and highlight its gear pick below</span>
+            <button class="hint-x" onclick="dismissHint('hint-pack')" aria-label="Dismiss">×</button>
+          </div>
           <div id="d-pack-list" class="pack-list"></div>
         </div>
       </div>
@@ -3916,8 +4005,15 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
     <div id="d-gear-picks" style="display:none; margin: 4px 0 24px;"></div>
     <div id="d-nearby"></div>
   </div>
+  <div class="hint-strip hint-tripcard" id="hint-tripcard" style="display:none">
+    <span>Tap the card icon to make a shareable trip card</span>
+    <button class="hint-x" onclick="dismissHint('hint-tripcard')" aria-label="Dismiss">×</button>
+  </div>
   <div class="d-cta-bar">
     <a class="cta-main" id="d-cta-link" href="#" target="_blank" rel="noopener">Check Availability →</a>
+    <div class="cta-sq-tc" onclick="openTripCard()" title="My Trip Card" aria-label="Create trip card" role="button" tabindex="0">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3H8"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+    </div>
     <div class="cta-sq" onclick="addToCalendar()" title="Add to Calendar" aria-label="Add to Calendar" role="button">
       <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
     </div>
@@ -7702,6 +7798,10 @@ function openDetail(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('detail').classList.add('active');
   document.getElementById('detail').scrollTop = 0;
+
+  // Dismissible hints
+  _showHint('hint-tripcard');
+  _showHint('hint-rating');
 }
 
 // ─── SHARE CARD ──────────────────────────────────
@@ -7971,6 +8071,493 @@ async function shareCamp() {
 
 function closeShareSheet() {
   document.getElementById('share-sheet')?.remove();
+}
+
+// ─── DISMISSIBLE HINTS ───────────────────────────────
+
+function _hintSeen(id) {
+  try { return !!localStorage.getItem('cg_h_' + id); } catch(e) { return false; }
+}
+
+function dismissHint(id) {
+  const el = document.getElementById(id);
+  if (el) {
+    el.style.transition = 'opacity 0.2s, max-height 0.25s';
+    el.style.opacity = '0';
+    el.style.overflow = 'hidden';
+    el.style.maxHeight = el.offsetHeight + 'px';
+    requestAnimationFrame(() => { el.style.maxHeight = '0'; el.style.padding = '0'; });
+    setTimeout(() => el.remove(), 280);
+  }
+  try { localStorage.setItem('cg_h_' + id, '1'); } catch(e) {}
+}
+
+function _showHint(id) {
+  if (_hintSeen(id)) return;
+  const el = document.getElementById(id);
+  if (el) el.style.display = 'flex';
+}
+
+// ─── TRIP CARD ────────────────────────────────────────
+
+let _tcCamp = null;
+
+function _tcSceneSVG(type) {
+  // Returns an inline SVG string for the illustration, adapted by camp type
+  const isDesert  = ['BLM','Dispersed','Primitive'].includes(type);
+  const isWater   = ['Water','Beach'].includes(type);
+  const isWinter  = type === 'Ski / Winter';
+
+  if (isDesert) {
+    // Desert: warm night sky, buttes, stars, cactus silhouettes
+    return `<svg viewBox="0 0 340 191" xmlns="http://www.w3.org/2000/svg" width="340" height="191" preserveAspectRatio="xMidYMid slice">
+      <rect width="340" height="191" fill="#0C1F15"/>
+      <rect width="340" height="191" fill="#140E05" opacity="0.6"/>
+      <!-- stars -->
+      <circle cx="22" cy="18" r="1.4" fill="#fff" opacity="0.55"/>
+      <circle cx="60" cy="10" r="1" fill="#fff" opacity="0.6"/>
+      <circle cx="100" cy="24" r="0.9" fill="#fff" opacity="0.45"/>
+      <circle cx="148" cy="8" r="1.3" fill="#fff" opacity="0.5"/>
+      <circle cx="195" cy="19" r="0.9" fill="#fff" opacity="0.55"/>
+      <circle cx="240" cy="11" r="1.1" fill="#fff" opacity="0.4"/>
+      <circle cx="282" cy="22" r="1" fill="#fff" opacity="0.5"/>
+      <circle cx="310" cy="9" r="0.8" fill="#fff" opacity="0.45"/>
+      <circle cx="44" cy="42" r="0.8" fill="#fff" opacity="0.35"/>
+      <circle cx="130" cy="38" r="0.9" fill="#fff" opacity="0.4"/>
+      <circle cx="220" cy="34" r="0.8" fill="#fff" opacity="0.38"/>
+      <!-- moon -->
+      <circle cx="296" cy="36" r="18" fill="#E8481C"/>
+      <circle cx="304" cy="28" r="14" fill="#100B04"/>
+      <!-- buttes -->
+      <polygon points="0,150 0,191 80,191 55,100" fill="#1C120A"/>
+      <polygon points="60,191 90,115 120,191" fill="#1C120A"/>
+      <polygon points="200,191 230,110 260,191" fill="#1C120A"/>
+      <polygon points="270,191 295,120 340,140 340,191" fill="#1C120A"/>
+      <!-- ground -->
+      <rect x="0" y="168" width="340" height="23" fill="#150E06"/>
+      <!-- cactus left -->
+      <rect x="30" y="138" width="6" height="30" fill="#0E1A0E"/>
+      <rect x="18" y="148" width="12" height="5" rx="2" fill="#0E1A0E"/>
+      <!-- cactus right -->
+      <rect x="310" y="142" width="6" height="26" fill="#0E1A0E"/>
+      <rect x="316" y="150" width="12" height="5" rx="2" fill="#0E1A0E"/>
+      <!-- campfire glow -->
+      <ellipse cx="170" cy="181" rx="22" ry="6" fill="#E8481C" opacity="0.1"/>
+      <polygon points="170,158 164,181 176,181" fill="#E8481C" opacity="0.6"/>
+      <polygon points="170,163 166,181 174,181" fill="#F5C060" opacity="0.7"/>
+    </svg>`;
+  }
+
+  if (isWater) {
+    // Coastal/water: night water, moon reflection, hills
+    return `<svg viewBox="0 0 340 191" xmlns="http://www.w3.org/2000/svg" width="340" height="191" preserveAspectRatio="xMidYMid slice">
+      <rect width="340" height="191" fill="#0A1820"/>
+      <circle cx="170" cy="40" r="22" fill="#E8481C"/>
+      <circle cx="180" cy="30" r="17" fill="#0A1820"/>
+      <circle cx="28" cy="16" r="1.2" fill="#fff" opacity="0.5"/>
+      <circle cx="80" cy="10" r="1" fill="#fff" opacity="0.55"/>
+      <circle cx="260" cy="18" r="1.1" fill="#fff" opacity="0.45"/>
+      <circle cx="310" cy="12" r="0.9" fill="#fff" opacity="0.5"/>
+      <polygon points="0,120 0,191 340,191 340,120 280,90 200,108 130,85 60,110" fill="#0D2018"/>
+      <rect x="0" y="130" width="340" height="61" fill="#0A1E26"/>
+      <ellipse cx="170" cy="135" rx="18" ry="40" fill="#E8481C" opacity="0.08"/>
+      <path d="M40,145 Q80,138 120,145 Q160,152 200,145 Q240,138 280,145" stroke="rgba(255,255,255,0.06)" stroke-width="1.5" fill="none"/>
+      <path d="M20,158 Q70,150 120,158 Q170,166 220,158 Q270,150 320,158" stroke="rgba(255,255,255,0.05)" stroke-width="1.5" fill="none"/>
+      <polygon points="0,100 0,135 50,135 30,100" fill="#0B1C13"/>
+      <polygon points="290,100 310,135 340,135 340,100 320,88" fill="#0B1C13"/>
+    </svg>`;
+  }
+
+  // Default: mountain / forest / campfire (NP, SP, Forest, Car Camping, etc.)
+  return `<svg viewBox="0 0 340 191" xmlns="http://www.w3.org/2000/svg" width="340" height="191" preserveAspectRatio="xMidYMid slice">
+    <rect width="340" height="191" fill="#0C1F15"/>
+    <!-- stars -->
+    <circle cx="22" cy="18" r="1.3" fill="#fff" opacity="0.5"/>
+    <circle cx="58" cy="10" r="1.1" fill="#fff" opacity="0.6"/>
+    <circle cx="100" cy="26" r="0.9" fill="#fff" opacity="0.45"/>
+    <circle cx="152" cy="9" r="1.2" fill="#fff" opacity="0.55"/>
+    <circle cx="200" cy="21" r="0.8" fill="#fff" opacity="0.4"/>
+    <circle cx="242" cy="12" r="1" fill="#fff" opacity="0.5"/>
+    <circle cx="290" cy="19" r="1.1" fill="#fff" opacity="0.45"/>
+    <circle cx="318" cy="8" r="0.9" fill="#fff" opacity="0.5"/>
+    <circle cx="38" cy="40" r="0.8" fill="#fff" opacity="0.35"/>
+    <circle cx="122" cy="36" r="0.9" fill="#fff" opacity="0.38"/>
+    <circle cx="268" cy="32" r="0.8" fill="#fff" opacity="0.4"/>
+    <!-- crescent moon -->
+    <circle cx="302" cy="34" r="20" fill="#E8481C"/>
+    <circle cx="311" cy="26" r="16" fill="#0C1F15"/>
+    <!-- mountains back -->
+    <polygon points="0,130 42,70 84,130" fill="#183325"/>
+    <polygon points="50,130 100,55 150,130" fill="#183325"/>
+    <polygon points="120,130 170,60 220,130" fill="#183325"/>
+    <polygon points="190,130 240,68 290,130" fill="#183325"/>
+    <polygon points="260,130 305,78 340,100 340,130" fill="#183325"/>
+    <!-- mountains front -->
+    <polygon points="0,155 0,191 55,191 26,120" fill="#0F2719"/>
+    <polygon points="18,191 62,118 106,191" fill="#0F2719"/>
+    <polygon points="84,191 122,115 160,191" fill="#0F2719"/>
+    <polygon points="136,191 178,108 220,191" fill="#0F2719"/>
+    <polygon points="198,191 238,120 278,191" fill="#0F2719"/>
+    <polygon points="258,191 296,128 340,152 340,191" fill="#0F2719"/>
+    <!-- treeline -->
+    <polygon points="8,191 4,174 12,174" fill="#0A1E11"/>
+    <polygon points="20,191 16,170 24,170" fill="#0A1E11"/>
+    <polygon points="32,191 28,176 36,176" fill="#0A1E11"/>
+    <polygon points="300,191 296,174 304,174" fill="#0A1E11"/>
+    <polygon points="314,191 310,170 318,170" fill="#0A1E11"/>
+    <polygon points="328,191 324,176 332,176" fill="#0A1E11"/>
+    <!-- campfire glow -->
+    <ellipse cx="170" cy="188" rx="26" ry="7" fill="#E8481C" opacity="0.12"/>
+    <polygon points="170,168 163,188 177,188" fill="#E8481C" opacity="0.65"/>
+    <polygon points="170,173 166,188 174,188" fill="#F5C060" opacity="0.72"/>
+  </svg>`;
+}
+
+function openTripCard() {
+  if (!currentDetailId) return;
+  const c = CAMPS.find(x => x.id === currentDetailId);
+  if (!c) return;
+  _tcCamp = c;
+
+  // Scene
+  document.getElementById('tc-scene').innerHTML = _tcSceneSVG(c.type);
+
+  // Info
+  document.getElementById('tc-name').textContent = c.name;
+  document.getElementById('tc-loc').textContent  = c.loc;
+  document.getElementById('tc-type').textContent = c.type;
+  document.getElementById('tc-amenities').textContent = (c.amenities || []).slice(0,4).join(' · ');
+
+  // Dates: pre-fill from any stored check-in if available
+  const today     = new Date();
+  const tomorrow  = new Date(today); tomorrow.setDate(today.getDate() + 1);
+  const fmt = d => d.toISOString().split('T')[0];
+  const ciEl = document.getElementById('tc-checkin');
+  const coEl = document.getElementById('tc-checkout');
+  if (!ciEl.value) ciEl.value = fmt(today);
+  if (!coEl.value) coEl.value = fmt(tomorrow);
+  tcUpdateNights();
+
+  // Book link
+  document.getElementById('tc-book-link').href = buildBookingUrl(c);
+
+  // Show native share button only if supported
+  const shareBtn = document.getElementById('tc-share-btn');
+  if (navigator.share || navigator.canShare) {
+    shareBtn.style.display = 'flex';
+  }
+
+  // Show overlay
+  const overlay = document.getElementById('tc-overlay');
+  overlay.style.display = 'flex';
+  overlay.scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+}
+
+function closeTripCard() {
+  document.getElementById('tc-overlay').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+function tcUpdateNights() {
+  const ci = document.getElementById('tc-checkin').value;
+  const co = document.getElementById('tc-checkout').value;
+  const el = document.getElementById('tc-nights');
+  if (ci && co) {
+    const nights = Math.round((new Date(co) - new Date(ci)) / 86400000);
+    el.textContent = nights > 0 ? String(nights) : '--';
+  } else {
+    el.textContent = '--';
+  }
+}
+
+async function tcSave() {
+  if (!_tcCamp) return;
+  showToast('Building card…');
+  await new Promise(r => setTimeout(r, 60));
+  // Generate canvas card
+  const canvas = _tcBuildCanvas(_tcCamp);
+  const filename = (_tcCamp.name || 'camp').toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-trip-card.png';
+  const a = document.createElement('a');
+  a.download = filename;
+  a.href = canvas.toDataURL('image/png');
+  a.click();
+  showToast('Card saved!');
+}
+
+async function tcShare() {
+  if (!_tcCamp || !navigator.share) return;
+  showToast('Building card…');
+  await new Promise(r => setTimeout(r, 60));
+  const canvas = _tcBuildCanvas(_tcCamp);
+  const filename = (_tcCamp.name || 'camp').toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-trip-card.png';
+  canvas.toBlob(async blob => {
+    if (!blob) return;
+    try {
+      const file = new File([blob], filename, { type: 'image/png' });
+      await navigator.share({ files: [file], title: `My trip to ${_tcCamp.name}`, text: `Camping at ${_tcCamp.name} via Campgrounder.io` });
+    } catch(e) {
+      if (e.name !== 'AbortError') showToast('Share failed');
+    }
+  }, 'image/png');
+}
+
+function _tcBuildCanvas(c) {
+  // Card canvas: 800x1100 portrait
+  const W = 800, H = 1100;
+  const pad = 6; // orange border padding
+  const canvas = document.createElement('canvas');
+  canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext('2d');
+
+  const g0 = '#0C1F15', g1 = '#132B1C', g2 = '#1E3D2A';
+  const oc = '#E8481C', wt = '#FFFFFF', sg = '#8CA898', dm = '#1E3D2A';
+  const r  = 36; // corner radius
+
+  // Background
+  ctx.fillStyle = g0;
+  ctx.fillRect(0, 0, W, H);
+
+  // Card background with rounded corners
+  function roundRect(x, y, w, h, rad) {
+    ctx.beginPath();
+    ctx.moveTo(x + rad, y);
+    ctx.arcTo(x + w, y, x + w, y + h, rad);
+    ctx.arcTo(x + w, y + h, x, y + h, rad);
+    ctx.arcTo(x, y + h, x, y, rad);
+    ctx.arcTo(x, y, x + w, y, rad);
+    ctx.closePath();
+  }
+
+  // Orange border glow
+  ctx.save();
+  roundRect(pad, pad, W - pad*2, H - pad*2, r);
+  ctx.strokeStyle = oc;
+  ctx.lineWidth = 8;
+  ctx.stroke();
+  ctx.restore();
+
+  // Card fill
+  ctx.save();
+  roundRect(pad + 4, pad + 4, W - (pad + 4)*2, H - (pad + 4)*2, r - 2);
+  ctx.fillStyle = g1;
+  ctx.fill();
+  ctx.restore();
+
+  // Clip everything inside card
+  ctx.save();
+  roundRect(pad + 4, pad + 4, W - (pad + 4)*2, H - (pad + 4)*2, r - 2);
+  ctx.clip();
+
+  // ── Illustration (top 40%) ──────────────────────
+  const sceneH = Math.floor(H * 0.40);
+  const isDesert = ['BLM','Dispersed','Primitive'].includes(c.type);
+  const isWater  = ['Water','Beach'].includes(c.type);
+  _tcDrawScene(ctx, c.type, pad + 4, pad + 4, W - (pad + 4)*2, sceneH);
+
+  // Orange divider
+  ctx.fillStyle = oc;
+  ctx.globalAlpha = 0.5;
+  ctx.fillRect(pad + 4, pad + 4 + sceneH, W - (pad + 4)*2, 4);
+  ctx.globalAlpha = 1;
+
+  // ── Info section ────────────────────────────────
+  const ix = 54, iy = pad + 4 + sceneH + 4;
+  const iw = W - ix * 2;
+  let y = iy + 52;
+
+  // Camp name
+  ctx.font = '800 48px "Helvetica Neue",Helvetica,Arial,sans-serif';
+  ctx.fillStyle = wt;
+  ctx.textAlign = 'left';
+  // Wrap long names
+  const nameLines = _wrapText(ctx, c.name, iw, 2);
+  nameLines.forEach((line, i) => {
+    ctx.fillText(line, ix, y + i * 54);
+  });
+  y += nameLines.length * 54 + 12;
+
+  // Location
+  ctx.font = '400 24px "Helvetica Neue",Helvetica,Arial,sans-serif';
+  ctx.fillStyle = sg;
+  ctx.fillText(c.loc, ix, y);
+  y += 44;
+
+  // Divider
+  ctx.fillStyle = g2;
+  ctx.fillRect(ix, y, iw, 1);
+  y += 32;
+
+  // Dates row
+  const ci = document.getElementById('tc-checkin')?.value || '';
+  const co = document.getElementById('tc-checkout')?.value || '';
+  const nights = (ci && co) ? Math.max(0, Math.round((new Date(co) - new Date(ci)) / 86400000)) : null;
+
+  const colW = iw / 2;
+  // Check-in
+  ctx.font = '700 16px "Helvetica Neue",Helvetica,Arial,sans-serif';
+  ctx.fillStyle = oc;
+  ctx.letterSpacing = '0.12em';
+  ctx.fillText('CHECK-IN', ix, y);
+  ctx.letterSpacing = '0';
+  ctx.font = '800 38px "Helvetica Neue",Helvetica,Arial,sans-serif';
+  ctx.fillStyle = wt;
+  ctx.fillText(ci ? _fmtCardDate(ci) : '--', ix, y + 44);
+  // Check-out
+  ctx.font = '700 16px "Helvetica Neue",Helvetica,Arial,sans-serif';
+  ctx.fillStyle = oc;
+  ctx.letterSpacing = '0.12em';
+  ctx.fillText('CHECK-OUT', ix + colW, y);
+  ctx.letterSpacing = '0';
+  ctx.font = '800 38px "Helvetica Neue",Helvetica,Arial,sans-serif';
+  ctx.fillStyle = wt;
+  ctx.fillText(co ? _fmtCardDate(co) : '--', ix + colW, y + 44);
+  y += 80;
+
+  // Divider
+  ctx.fillStyle = g2;
+  ctx.fillRect(ix, y, iw, 1);
+  y += 32;
+
+  // Nights + Type
+  ctx.font = '700 16px "Helvetica Neue",Helvetica,Arial,sans-serif';
+  ctx.fillStyle = oc;
+  ctx.letterSpacing = '0.12em';
+  ctx.fillText('NIGHTS', ix, y);
+  ctx.fillText('TYPE', ix + colW, y);
+  ctx.letterSpacing = '0';
+  ctx.font = '800 38px "Helvetica Neue",Helvetica,Arial,sans-serif';
+  ctx.fillStyle = wt;
+  ctx.fillText(nights !== null ? String(nights) : '--', ix, y + 44);
+  ctx.font = '700 24px "Helvetica Neue",Helvetica,Arial,sans-serif';
+  ctx.fillText(c.type, ix + colW, y + 44);
+  y += 80;
+
+  // Divider
+  ctx.fillStyle = g2;
+  ctx.fillRect(ix, y, iw, 1);
+  y += 32;
+
+  // Amenities
+  const amenStr = (c.amenities || []).slice(0, 4).join('  ·  ');
+  ctx.font = '400 22px "Helvetica Neue",Helvetica,Arial,sans-serif';
+  ctx.fillStyle = sg;
+  ctx.fillText(amenStr, ix, y);
+  y += 60;
+
+  // Footer
+  ctx.fillStyle = g2;
+  ctx.font = '700 18px "Helvetica Neue",Helvetica,Arial,sans-serif';
+  ctx.letterSpacing = '0.2em';
+  ctx.fillText('CAMPGROUNDER.IO', ix, H - 40);
+  ctx.letterSpacing = '0';
+
+  ctx.restore(); // end card clip
+
+  return canvas;
+}
+
+function _fmtCardDate(isoStr) {
+  // "2026-06-28" -> "Jun 28"
+  const [, m, d] = isoStr.split('-');
+  const months = ['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return months[parseInt(m)] + ' ' + parseInt(d);
+}
+
+function _tcDrawScene(ctx, type, x, y, w, h) {
+  const g0 = '#0C1F15', oc = '#E8481C';
+  const isDesert = ['BLM','Dispersed','Primitive'].includes(type);
+  const isWater  = ['Water','Beach'].includes(type);
+
+  if (isDesert) {
+    // Desert night
+    ctx.fillStyle = '#140E05';
+    ctx.fillRect(x, y, w, h);
+    _tcStars(ctx, x, y, w, h * 0.65, 20);
+    // Moon
+    ctx.beginPath(); ctx.arc(x + w * 0.88, y + h * 0.22, h * 0.22, 0, Math.PI * 2); ctx.fillStyle = oc; ctx.fill();
+    ctx.beginPath(); ctx.arc(x + w * 0.91, y + h * 0.16, h * 0.17, 0, Math.PI * 2); ctx.fillStyle = '#140E05'; ctx.fill();
+    // Buttes
+    ctx.fillStyle = '#1C120A';
+    [[0, h, 0.24*w, h, 0.16*w, 0.48*h], [0.18*w, h, 0.38*w, h, 0.28*w, 0.55*h],
+     [0.6*w, h, 0.8*w, h, 0.7*w, 0.52*h], [0.78*w, h, w, h, w, 0.65*h]].forEach(pts => {
+      ctx.beginPath(); ctx.moveTo(x + pts[0], y + pts[1]); ctx.lineTo(x + pts[2], y + pts[3]); ctx.lineTo(x + pts[4], y + pts[5]); ctx.closePath(); ctx.fill();
+    });
+    // Campfire
+    ctx.globalAlpha = 0.12; ctx.beginPath(); ctx.ellipse(x + w/2, y + h, 36, 10, 0, 0, Math.PI * 2); ctx.fillStyle = oc; ctx.fill(); ctx.globalAlpha = 1;
+    ctx.fillStyle = oc; ctx.globalAlpha = 0.65;
+    ctx.beginPath(); ctx.moveTo(x + w/2, y + h - 30); ctx.lineTo(x + w/2 - 12, y + h); ctx.lineTo(x + w/2 + 12, y + h); ctx.closePath(); ctx.fill();
+    ctx.globalAlpha = 1;
+    return;
+  }
+
+  if (isWater) {
+    // Coastal night
+    ctx.fillStyle = '#0A1820';
+    ctx.fillRect(x, y, w, h);
+    _tcStars(ctx, x, y, w, h * 0.5, 14);
+    ctx.beginPath(); ctx.arc(x + w/2, y + h * 0.28, h * 0.24, 0, Math.PI * 2); ctx.fillStyle = oc; ctx.fill();
+    ctx.beginPath(); ctx.arc(x + w/2 + h*0.08, y + h * 0.2, h * 0.18, 0, Math.PI * 2); ctx.fillStyle = '#0A1820'; ctx.fill();
+    ctx.fillStyle = '#0D2018';
+    ctx.beginPath(); ctx.moveTo(x, y + h * 0.62); ctx.lineTo(x + w * 0.16, y + h * 0.44); ctx.lineTo(x + w * 0.4, y + h * 0.56); ctx.lineTo(x + w * 0.65, y + h * 0.42); ctx.lineTo(x + w * 0.82, y + h * 0.5); ctx.lineTo(x + w, y + h * 0.62); ctx.lineTo(x + w, y + h); ctx.lineTo(x, y + h); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#0A1E26';
+    ctx.fillRect(x, y + h * 0.68, w, h * 0.32);
+    return;
+  }
+
+  // Default: mountain / forest / campfire
+  ctx.fillStyle = g0;
+  ctx.fillRect(x, y, w, h);
+  _tcStars(ctx, x, y, w, h * 0.55, 18);
+  // Moon
+  ctx.beginPath(); ctx.arc(x + w * 0.88, y + h * 0.22, h * 0.22, 0, Math.PI * 2); ctx.fillStyle = oc; ctx.fill();
+  ctx.beginPath(); ctx.arc(x + w * 0.91, y + h * 0.16, h * 0.17, 0, Math.PI * 2); ctx.fillStyle = g0; ctx.fill();
+  // Mountains back
+  ctx.fillStyle = '#183325';
+  [[0, h, 0.12*w, 0.34*h, 0.25*w, h], [0.15*w, h, 0.3*w, 0.26*h, 0.45*w, h],
+   [0.35*w, h, 0.5*w, 0.3*h, 0.65*w, h], [0.56*w, h, 0.71*w, 0.32*h, 0.86*w, h],
+   [0.76*w, h, 0.9*w, 0.38*h, w, h]].forEach(pts => {
+    ctx.beginPath(); ctx.moveTo(x + pts[0], y + pts[1]); ctx.lineTo(x + pts[2], y + pts[3]); ctx.lineTo(x + pts[4], y + pts[5]); ctx.closePath(); ctx.fill();
+  });
+  // Mountains front
+  ctx.fillStyle = '#0F2719';
+  [[0, h, 0.08*w, 0.55*h, 0.17*w, h], [0.1*w, h, 0.2*w, 0.5*h, 0.3*w, h],
+   [0.24*w, h, 0.36*w, 0.44*h, 0.48*w, h], [0.4*w, h, 0.52*w, 0.46*h, 0.64*w, h],
+   [0.58*w, h, 0.7*w, 0.5*h, 0.82*w, h], [0.76*w, h, 0.88*w, 0.56*h, w, h]].forEach(pts => {
+    ctx.beginPath(); ctx.moveTo(x + pts[0], y + pts[1]); ctx.lineTo(x + pts[2], y + pts[3]); ctx.lineTo(x + pts[4], y + pts[5]); ctx.closePath(); ctx.fill();
+  });
+  // Trees
+  ctx.fillStyle = '#0A1E11';
+  [0.02*w, 0.06*w, 0.1*w, 0.86*w, 0.9*w, 0.94*w].forEach(tx => {
+    const th2 = h * 0.18;
+    ctx.beginPath(); ctx.moveTo(x + tx, y + h); ctx.lineTo(x + tx - w*0.015, y + h - th2); ctx.lineTo(x + tx + w*0.015, y + h - th2); ctx.closePath(); ctx.fill();
+  });
+  // Campfire
+  ctx.globalAlpha = 0.12; ctx.beginPath(); ctx.ellipse(x + w/2, y + h, 36, 9, 0, 0, Math.PI * 2); ctx.fillStyle = oc; ctx.fill(); ctx.globalAlpha = 1;
+  ctx.fillStyle = oc; ctx.globalAlpha = 0.65;
+  ctx.beginPath(); ctx.moveTo(x + w/2, y + h - 28); ctx.lineTo(x + w/2 - 11, y + h); ctx.lineTo(x + w/2 + 11, y + h); ctx.closePath(); ctx.fill();
+  ctx.globalAlpha = 0.72; ctx.fillStyle = '#F5C060';
+  ctx.beginPath(); ctx.moveTo(x + w/2, y + h - 20); ctx.lineTo(x + w/2 - 7, y + h); ctx.lineTo(x + w/2 + 7, y + h); ctx.closePath(); ctx.fill();
+  ctx.globalAlpha = 1;
+}
+
+function _tcStars(ctx, x, y, w, maxY, count) {
+  ctx.fillStyle = '#FFFFFF';
+  const positions = [
+    [0.06, 0.09], [0.17, 0.05], [0.29, 0.14], [0.44, 0.04], [0.58, 0.11],
+    [0.71, 0.06], [0.85, 0.13], [0.93, 0.04], [0.11, 0.22], [0.38, 0.19],
+    [0.65, 0.17], [0.79, 0.23], [0.24, 0.28], [0.52, 0.25], [0.88, 0.26],
+    [0.34, 0.08], [0.96, 0.18], [0.48, 0.31], [0.08, 0.35], [0.76, 0.08]
+  ].slice(0, count);
+  positions.forEach(([px, py], i) => {
+    const r = 1.5 + (i % 3) * 0.6;
+    const opacity = 0.35 + (i % 5) * 0.06;
+    ctx.globalAlpha = opacity;
+    ctx.beginPath();
+    ctx.arc(x + px * w, y + py * maxY, r, 0, Math.PI * 2);
+    ctx.fill();
+  });
+  ctx.globalAlpha = 1;
 }
 
 /* ── Suggest a Campground Sheet ─────────────────────────── */
@@ -8865,6 +9452,9 @@ function renderPackList(c) {
       </div>`;
   }
 
+  // Pack hint
+  _showHint('hint-pack');
+
   // Start collapsed, preview visible
   const coll = document.getElementById('pack-collapsible');
   const chev = document.getElementById('pack-chevron');
@@ -9175,6 +9765,56 @@ function dismissWelcome() {
 <!-- Global persistent compass (shows on all screens except home + map) -->
 <div class="compass-global" id="compass-global" onclick="locateMe()">
   <svg width="22" height="22" style="color:white;stroke:currentColor;fill:none;"><use href="#ic-compass"/></svg>
+</div>
+
+<!-- ── TRIP CARD MODAL ──────────────────────────────── -->
+<div id="tc-overlay" class="tc-overlay" style="display:none" role="dialog" aria-modal="true" aria-label="Trip Card">
+  <div class="tc-overlay-inner">
+    <div class="tc-topbar">
+      <div class="tc-title">My Trip Card</div>
+      <div class="tc-close" onclick="closeTripCard()" aria-label="Close" role="button" tabindex="0">
+        <svg width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </div>
+    </div>
+    <div class="tc-card-wrap" id="tc-card">
+      <div class="tc-scene" id="tc-scene"></div>
+      <div class="tc-scene-divider"></div>
+      <div class="tc-info">
+        <div class="tc-camp-name" id="tc-name"></div>
+        <div class="tc-camp-loc" id="tc-loc"></div>
+        <div class="tc-divider"></div>
+        <div class="tc-dates-row">
+          <div class="tc-date-field">
+            <div class="tc-date-label">Check-in</div>
+            <input type="date" class="tc-date-input" id="tc-checkin" onchange="tcUpdateNights()">
+          </div>
+          <div class="tc-date-field">
+            <div class="tc-date-label">Check-out</div>
+            <input type="date" class="tc-date-input" id="tc-checkout" onchange="tcUpdateNights()">
+          </div>
+        </div>
+        <div class="tc-stats-row" style="margin-top:12px">
+          <div class="tc-stat">
+            <div class="tc-stat-label">Nights</div>
+            <div class="tc-stat-value" id="tc-nights">--</div>
+          </div>
+          <div class="tc-stat">
+            <div class="tc-stat-label">Type</div>
+            <div class="tc-type-pill" id="tc-type"></div>
+          </div>
+        </div>
+        <div class="tc-divider" style="margin-top:12px"></div>
+        <div class="tc-amenities" id="tc-amenities"></div>
+        <div class="tc-footer">CAMPGROUNDER.IO</div>
+      </div>
+    </div>
+    <div class="tc-actions">
+      <button class="tc-btn-save" onclick="tcSave()">Save Image</button>
+      <button class="tc-btn-share" id="tc-share-btn" onclick="tcShare()" style="display:none">Share</button>
+      <a class="tc-btn-book" id="tc-book-link" href="#" target="_blank" rel="noopener">Book Now</a>
+    </div>
+    <div class="tc-note">Set your dates, then save or share.</div>
+  </div>
 </div>
 
 </body>
