@@ -7647,95 +7647,11 @@ function openDetail(id) {
   currentDetailId = id;
   history.replaceState(null, '', '#camp-' + id);
 
-  // State-based hero photos via Lorem Picsum (picsum.photos) — free, no API key.
-  // IDs verified programmatically: flesh < 5%, nature+sky > 35%.
-  // Verified good IDs: 10, 15, 29, 57, 68, 82, 114, 253, 280, 390, 577
-  const U = 'https://picsum.photos/id/';
-  const Q = '/900/500';
-  const STATE_PHOTOS = {
-    // ── Pacific Northwest — lush forest, waterfall (ID 29 ✓) ───────────
-    'Washington':     '29',
-    'Oregon':         '29',
-    // ── California — open sky, water reflection (ID 280 ✓) ────────────
-    'California':     '280',
-    // ── Southwest Desert — rocky open landscape (ID 82 ✓) ─────────────
-    'Utah':           '82',
-    'Arizona':        '82',
-    'Nevada':         '82',
-    'New Mexico':     '82',
-    'Texas':          '82',
-    'South Dakota':   '82',
-    // ── Rocky Mountains — green peaks, big sky (ID 15 ✓) ──────────────
-    'Colorado':       '15',
-    'Wyoming':        '15',
-    'Montana':        '57',   // ID 57 ✓ replaces 219 (was portrait photo)
-    'Idaho':          '57',
-    // ── Alaska — open sky, dramatic (ID 10 ✓) ──────────────────────────
-    'Alaska':         '10',
-    // ── Great Plains — open sky landscape (ID 390 ✓) ───────────────────
-    'Nebraska':       '390',
-    'North Dakota':   '390',
-    'Kansas':         '390',
-    'Oklahoma':       '390',
-    'Iowa':           '390',
-    // ── Great Lakes — nature + sky (ID 114 ✓) ──────────────────────────
-    'Michigan':       '114',  // replaces 428 (was portrait photo)
-    'Wisconsin':      '114',
-    'Minnesota':      '114',  // replaces 336 (was suspect)
-    // ── Appalachian / Smoky — green mountain landscape (ID 15 ✓) ───────
-    'Tennessee':      '15',
-    'North Carolina': '15',
-    'Virginia':       '15',
-    'West Virginia':  '15',
-    // ── Southern Appalachian — dense green forest (ID 68 ✓) ────────────
-    'Georgia':        '68',
-    'Kentucky':       '68',
-    // ── Southern & Midwest Forest — green woodland (ID 68 ✓) ──────────
-    'Alabama':        '68',   // replaces 127 (was portrait photo)
-    'Arkansas':       '68',
-    'Missouri':       '68',
-    'Mississippi':    '68',
-    'Louisiana':      '68',
-    'South Carolina': '68',
-    'Illinois':       '68',
-    'Indiana':        '68',
-    'Ohio':           '15',
-    // ── Northeast — rocky coastal (ID 253 ✓) ───────────────────────────
-    'Maine':          '253',
-    'Massachusetts':  '253',
-    'Rhode Island':   '253',
-    'New Jersey':     '253',
-    'Delaware':       '253',
-    'New Hampshire':  '15',
-    'Vermont':        '15',
-    'New York':       '1542762933-ab3502717ce7',
-    'Pennsylvania':   '1542762933-ab3502717ce7',
-    'Maryland':       '253',
-    'Connecticut':    '15',
-    'New York':       '15',
-    'Pennsylvania':   '15',
-    // ── Florida — lush green (ID 577 ✓) ────────────────────────────────
-    'Florida':        '577',
-    // ── Hawaii — very green, tropical (ID 577 ✓) ───────────────────────
-    'Hawaii':         '577',
-  };
-  // Type-based fallback — all IDs verified as landscape photos
-  const TYPE_PHOTOS = {
-    'National Park':  '15',   // ✓ green peaks + sky
-    'State Park':     '15',   // ✓ green peaks + sky
-    'Forest Service': '29',   // ✓ forest waterfall
-    'BLM':            '82',   // ✓ rocky open landscape (replaces 64 portrait)
-    'Army Corps':     '114',  // ✓ nature + sky (replaces 428 portrait)
-    'Glamping':       '68',   // ✓ dense green forest (replaces 167 portrait)
-    'Private':        '68',   // ✓ dense green forest (replaces 127 portrait)
-    'RV Park':        '390',  // ✓ open plains landscape
-  };
-  const campState = (c.loc.split('·')[1] || '').trim();
-  const photoId = STATE_PHOTOS[campState] || TYPE_PHOTOS[c.type] || '15';
   const dHero = document.getElementById('d-hero');
-  // Use real RIDB photo when available, fall back to Picsum placeholder
-  const heroImg = c.photo || `${U}${photoId}${Q}`;
-  dHero.style.backgroundImage = `url(${heroImg}), linear-gradient(160deg, var(--g2) 0%, var(--g0) 100%)`;
+  // Use real RIDB photo when available; otherwise show abstract gradient (no misleading placeholder)
+  dHero.style.backgroundImage = c.photo
+    ? `url(${c.photo}), linear-gradient(160deg, var(--g2) 0%, var(--g0) 100%)`
+    : `linear-gradient(160deg, var(--g2) 0%, var(--g0) 100%)`;
   document.getElementById('d-glyph').innerHTML = '';
 
   document.getElementById('d-type').textContent    = c.type;
