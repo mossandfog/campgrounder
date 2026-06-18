@@ -2164,8 +2164,36 @@ html, body {
 .d-rview-cta { margin-left: auto; font-size: 9px; font-weight: 900; letter-spacing: 0.2em; text-transform: uppercase; color: var(--o); opacity: 0.5; padding: 4px 8px; border: 1px solid rgba(232,72,28,0.3); transition: opacity 0.15s; flex-shrink: 0; }
 .cta-main  { flex: 1; background: var(--o); color: white; border: none; padding: 13px 17px; font-family: inherit; font-size: 12px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; cursor: pointer; transition: opacity 0.18s; text-decoration: none; display: flex; align-items: center; justify-content: center; }
 .cta-main:hover { opacity: 0.85; }
-.cta-sq { width: 54px; border: 1.5px solid var(--w2); background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.16s; }
+.cta-sq { width: 54px; border: 1.5px solid var(--w2); background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.16s; position: relative; }
 .cta-sq:hover { border-color: var(--o); }
+
+/* ── ICON TOOLTIPS ───────────────────────────────── */
+.cta-sq[data-tooltip], .cta-sq-tc[data-tooltip], .compass-top-btn[data-tooltip] { position: relative; }
+.cta-sq[data-tooltip]::before, .cta-sq-tc[data-tooltip]::before, .compass-top-btn[data-tooltip]::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 9px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(12,20,14,0.96);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.82);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 5px 9px;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  z-index: 200;
+}
+.cta-sq[data-tooltip]:hover::before, .cta-sq-tc[data-tooltip]:hover::before { opacity: 1; }
+/* Compass tooltip points downward since button is near top of screen */
+.compass-top-btn[data-tooltip]::before { bottom: auto; top: calc(100% + 9px); right: 0; left: auto; transform: none; }
+.compass-top-btn[data-tooltip]:hover::before { opacity: 1; }
 
 /* ── TRIP CARD MODAL ─────────────────────────────── */
 .tc-overlay {
@@ -2779,7 +2807,7 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
     </div>
     <div class="home-top-actions">
       <a href="#" onclick="go('about','home');return false;" class="about-topnav-link">About</a>
-      <div class="compass-top-btn" id="compass-top" onclick="locateMe();dismissCompassHint();" title="Find camps near me">
+      <div class="compass-top-btn" id="compass-top" onclick="locateMe();dismissCompassHint();" title="Find camps near me" data-tooltip="Find Camps Near Me">
         <svg width="20" height="20" style="color:white;stroke:currentColor;fill:none;"><use href="#ic-compass"/></svg>
         <div id="compass-ping" class="compass-ping" style="display:none;"></div>
         <div id="compass-tip"  class="compass-tip">Camps near you →</div>
@@ -4015,13 +4043,13 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
   </div>
   <div class="d-cta-bar">
     <a class="cta-main" id="d-cta-link" href="#" target="_blank" rel="noopener">Check Availability →</a>
-    <div class="cta-sq-tc" onclick="openTripCard()" title="My Trip Card" aria-label="Create trip card" role="button" tabindex="0">
+    <div class="cta-sq-tc" onclick="openTripCard()" title="My Trip Card" data-tooltip="Trip Card" aria-label="Create trip card" role="button" tabindex="0">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3H8"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
     </div>
-    <div class="cta-sq" onclick="addToCalendar()" title="Add to Calendar" aria-label="Add to Calendar" role="button">
+    <div class="cta-sq" onclick="addToCalendar()" title="Add to Calendar" data-tooltip="Add to Calendar" aria-label="Add to Calendar" role="button">
       <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
     </div>
-    <div class="cta-sq" onclick="shareCamp()" aria-label="Share campground" role="button">
+    <div class="cta-sq" onclick="shareCamp()" data-tooltip="Share" aria-label="Share campground" role="button">
       <svg width="17" height="17" style="color:rgba(255,255,255,0.6);stroke:currentColor;fill:none;" aria-hidden="true"><use href="#ic-share"/></svg>
     </div>
   </div>
