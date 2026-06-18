@@ -2445,14 +2445,15 @@ html, body {
 .gear-affiliate-note { font-size: 9px; color: rgba(255,255,255,0.18); letter-spacing: 0.06em; text-transform: uppercase; }
 .gear-scroll { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: none; }
 .gear-scroll::-webkit-scrollbar { display: none; }
-.gear-card { flex: 0 0 148px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);
+.gear-card { flex: 0 0 156px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);
              border-radius: 12px; padding: 13px 14px; text-decoration: none; display: flex;
              flex-direction: column; gap: 3px; transition: background 0.15s, border-color 0.15s; }
 .gear-card:hover { background: rgba(255,255,255,0.07); border-color: rgba(232,72,28,0.3); }
 .gear-brand { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.28); }
-.gear-name  { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.85); line-height: 1.3; }
-.gear-desc  { font-size: 11px; color: rgba(255,255,255,0.38); line-height: 1.4; margin-top: 3px; flex: 1; }
+.gear-name  { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.85); line-height: 1.3; overflow-wrap: break-word; }
+.gear-desc  { font-size: 11px; color: rgba(255,255,255,0.38); line-height: 1.4; flex: 1; }
 .gear-shop  { font-size: 11px; color: var(--o); margin-top: 9px; font-weight: 600; }
+.gear-price { display: block; font-size: 10px; color: rgba(255,255,255,0.42); font-weight: 400; margin-bottom: 3px; }
 
 /* ── DRIVE CARD ─────────────────────────────────── */
 .drive-body { display: flex; align-items: center; justify-content: center; margin-bottom: 32px; min-height: 110px; }
@@ -9138,45 +9139,45 @@ const amz = q => `https://www.amazon.com/s?k=${encodeURIComponent(q)}&tag=${TAG}
 // packKey = exact string used in the pack list; enables bidirectional sync
 const GEAR = {
   base: [
-    { brand:'Hydro Flask',   name:'32oz Wide Mouth',         packKey:'Water bottle (×2)',                          desc:'Keeps cold 24hrs, hot 12. The one everyone has for a reason.',              url: amz('hydro flask 32oz wide mouth') },
-    { brand:'Black Diamond', name:'Spot 400 Headlamp',       packKey:'Headlamp + spare batteries',                 desc:'Waterproof, rechargeable, 400 lumens. The benchmark.',                      url: amz('black diamond spot 400 headlamp') },
-    { brand:'Rumpl',         name:'Original Puffy Blanket',  packKey:null,                                         desc:'Packable, warm, and looks great around a fire.',                            url: amz('rumpl original puffy blanket') },
+    { brand:'Hydro Flask',   name:'32oz Wide Mouth',         packKey:'Water bottle (×2)',                          desc:'Keeps cold 24hrs, hot 12. The one everyone has for a reason.',              price:'~$45',  url: amz('hydro flask 32oz wide mouth') },
+    { brand:'Black Diamond', name:'Spot 400 Headlamp',       packKey:'Headlamp + spare batteries',                 desc:'Waterproof, rechargeable, 400 lumens. The benchmark.',                      price:'~$50',  url: amz('black diamond spot 400 headlamp') },
+    { brand:'Rumpl',         name:'Original Puffy Blanket',  packKey:null,                                         desc:'Packable, warm, and looks great around a fire.',                            price:'~$110', url: amz('rumpl original puffy blanket') },
   ],
   tent: [
-    { brand:'NEMO',          name:'Hornet OSMO 2P',          packKey:'Tent + rainfly + stakes',                    desc:'Ultralight double-wall tent. 2.1 lbs and genuinely livable.',               url: amz('nemo hornet osmo 2p tent') },
-    { brand:'Therm-a-Rest',  name:'NeoAir XLite NXT',        packKey:'Sleeping pad',                               desc:'Best warmth-to-weight ratio in a sleeping pad. Full stop.',                 url: amz('thermarest neoair xlite nxt sleeping pad') },
-    { brand:'MSR',           name:'PocketRocket 2',          packKey:'Camp stove + fuel',                          desc:'Boils water in 3.5 minutes. Fits in your palm.',                           url: amz('msr pocketrocket 2 stove') },
+    { brand:'NEMO',          name:'Hornet OSMO 2P',          packKey:'Tent + rainfly + stakes',                    desc:'Ultralight double-wall tent. 2.1 lbs and genuinely livable.',               price:'~$450', url: amz('nemo hornet osmo 2p tent') },
+    { brand:'Therm-a-Rest',  name:'NeoAir XLite NXT',        packKey:'Sleeping pad',                               desc:'Best warmth-to-weight ratio in a sleeping pad. Full stop.',                 price:'~$220', url: amz('thermarest neoair xlite nxt sleeping pad') },
+    { brand:'MSR',           name:'PocketRocket 2',          packKey:'Camp stove + fuel',                          desc:'Boils water in 3.5 minutes. Fits in your palm.',                           price:'~$55',  url: amz('msr pocketrocket 2 stove') },
   ],
   carCamping: [
-    { brand:'Snow Peak',     name:'Gigapower Stove',         packKey:'Camp stove + fuel',                          desc:'Japanese precision engineering. A beautiful object that performs.',          url: amz('snow peak gigapower stove') },
-    { brand:'Stanley',       name:'Adventure Cook Set',      packKey:'Cookware + utensils',                        desc:'Nested, tough, and built to outlast the trip.',                             url: amz('stanley adventure camp cook set') },
-    { brand:'Yeti',          name:'Tundra 45 Cooler',        packKey:'Cooler + ice',                               desc:'Bear-resistant and built forever. The serious car camping cooler.',          url: amz('yeti tundra 45 cooler') },
+    { brand:'Snow Peak',     name:'Gigapower Stove',         packKey:'Camp stove + fuel',                          desc:'Japanese precision engineering. A beautiful object that performs.',          price:'~$65',  url: amz('snow peak gigapower stove') },
+    { brand:'Stanley',       name:'Adventure Cook Set',      packKey:'Cookware + utensils',                        desc:'Nested, tough, and built to outlast the trip.',                             price:'~$55',  url: amz('stanley adventure camp cook set') },
+    { brand:'Yeti',          name:'Tundra 45 Cooler',        packKey:'Cooler + ice',                               desc:'Bear-resistant and built forever. The serious car camping cooler.',          price:'~$350', url: amz('yeti tundra 45 cooler') },
   ],
   glamping: [
-    { brand:'Snow Peak',     name:'Titanium Mug 450',        packKey:null,                                         desc:'The most beautiful camp mug ever made. Holds heat surprisingly well.',      url: amz('snow peak titanium single wall mug 450') },
-    { brand:'Rumpl',         name:'NanoLoft Blanket',        packKey:null,                                         desc:'Lighter than the Original. Equally perfect around a fire.',                 url: amz('rumpl nanoloft blanket') },
-    { brand:'Goal Zero',     name:'Yeti 200X Power Station', packKey:'Phone charger + cable',                      desc:'Compact, solar-ready, keeps everything charged off-grid.',                  url: amz('goal zero yeti 200x power station') },
+    { brand:'Snow Peak',     name:'Titanium Mug 450',        packKey:null,                                         desc:'The most beautiful camp mug ever made. Holds heat surprisingly well.',      price:'~$35',  url: amz('snow peak titanium single wall mug 450') },
+    { brand:'Rumpl',         name:'NanoLoft Blanket',        packKey:null,                                         desc:'Lighter than the Original. Equally perfect around a fire.',                 price:'~$95',  url: amz('rumpl nanoloft blanket') },
+    { brand:'Goal Zero',     name:'Yeti 200X Power Station', packKey:'Phone charger + cable',                      desc:'Compact, solar-ready, keeps everything charged off-grid.',                  price:'~$300', url: amz('goal zero yeti 200x power station') },
   ],
   dispersed: [
-    { brand:'Sawyer',        name:'Squeeze Water Filter',    packKey:'Water filter / purifier',                    desc:'Filter from any source. Lightweight and genuinely reliable.',               url: amz('sawyer squeeze water filter') },
-    { brand:'BearVault',     name:'BV500 Bear Canister',     packKey:'Bear canister (check local rules)',          desc:'Required in many wilderness areas. Clear lid so you find snacks fast.',     url: amz('bearvault bv500 bear canister') },
-    { brand:'Goal Zero',     name:'Venture 35 Solar Charger',packKey:'Phone charger + cable',                      desc:'Charges from the sun. Keeps your phone and headlamp alive off-grid.',     url: amz('goal zero venture 35 solar charger') },
+    { brand:'Sawyer',        name:'Squeeze Water Filter',    packKey:'Water filter / purifier',                    desc:'Filter from any source. Lightweight and genuinely reliable.',               price:'~$40',  url: amz('sawyer squeeze water filter') },
+    { brand:'BearVault',     name:'BV500 Bear Canister',     packKey:'Bear canister (check local rules)',          desc:'Required in many wilderness areas. Clear lid so you find snacks fast.',     price:'~$85',  url: amz('bearvault bv500 bear canister') },
+    { brand:'Goal Zero',     name:'Venture 35 Solar Charger',packKey:'Phone charger + cable',                      desc:'Charges from the sun. Keeps your phone and headlamp alive off-grid.',     price:'~$120', url: amz('goal zero venture 35 solar charger') },
   ],
   stargazing: [
-    { brand:'Black Diamond', name:'Astro 300-R Headlamp',    packKey:'Red-light headlamp (preserves night vision)',desc:'Red-light mode preserves your night vision. Essential for dark sky camps.', url: amz('black diamond astro 300 red headlamp') },
-    { brand:'Celestron',     name:'Nature DX 8x42 Binos',    packKey:'Star chart / app',                           desc:'Great for the Milky Way core and satellites. Excellent for wildlife too.',  url: amz('celestron nature dx 8x42 binoculars') },
+    { brand:'Black Diamond', name:'Astro 300-R Headlamp',    packKey:'Red-light headlamp (preserves night vision)',desc:'Red-light mode preserves your night vision. Essential for dark sky camps.', price:'~$45',  url: amz('black diamond astro 300 red headlamp') },
+    { brand:'Celestron',     name:'Nature DX 8x42 Binos',    packKey:'Star chart / app',                           desc:'Great for the Milky Way core and satellites. Excellent for wildlife too.',  price:'~$190', url: amz('celestron nature dx 8x42 binoculars') },
   ],
   fishing: [
-    { brand:'Plano',         name:'Guide Series Tackle Bag', packKey:'Rod + reel + tackle',                        desc:'Organized, waterproof, holds everything.',                                 url: amz('plano guide series tackle bag') },
-    { brand:'Yeti',          name:'Hopper M30 Soft Cooler',  packKey:'Cooler + ice',                               desc:'Keeps ice for days. Folds flat when empty.',                              url: amz('yeti hopper m30 soft cooler') },
+    { brand:'Plano',         name:'Guide Series Tackle Bag', packKey:'Rod + reel + tackle',                        desc:'Organized, waterproof, holds everything.',                                 price:'~$65',  url: amz('plano guide series tackle bag') },
+    { brand:'Yeti',          name:'Hopper M30 Soft Cooler',  packKey:'Cooler + ice',                               desc:'Keeps ice for days. Folds flat when empty.',                              price:'~$350', url: amz('yeti hopper m30 soft cooler') },
   ],
   water: [
-    { brand:'Sea to Summit', name:'Hydraulic Dry Bag',       packKey:'Dry bag',                                    desc:'Actually waterproof, not just water-resistant. The real thing.',            url: amz('sea to summit hydraulic dry bag') },
-    { brand:'NRS',           name:"Bill's Bag Dry Bag",      packKey:'Dry bag',                                    desc:"The kayaker's go-to. Durable, simple, bombproof.",                         url: amz('nrs bills bag dry bag') },
+    { brand:'Sea to Summit', name:'Hydraulic Dry Bag',       packKey:'Dry bag',                                    desc:'Actually waterproof, not just water-resistant. The real thing.',            price:'~$55',  url: amz('sea to summit hydraulic dry bag') },
+    { brand:'NRS',           name:"Bill's Bag Dry Bag",      packKey:'Dry bag',                                    desc:"The kayaker's go-to. Durable, simple, bombproof.",                         price:'~$30',  url: amz('nrs bills bag dry bag') },
   ],
   winter: [
-    { brand:'Therm-a-Rest',  name:'MondoKing 3D Pad',        packKey:'Sleeping pad',                               desc:'Maximum insulation from cold ground. Car camping winter essential.',        url: amz('thermarest mondoking 3d sleeping pad') },
-    { brand:'Nalgene',       name:'Wide Mouth 32oz',          packKey:'Water bottle (×2)',                          desc:'Fill with boiling water at bedtime. Best foot warmer ever made.',          url: amz('nalgene wide mouth 32oz') },
+    { brand:'Therm-a-Rest',  name:'MondoKing 3D Pad',        packKey:'Sleeping pad',                               desc:'Maximum insulation from cold ground. Car camping winter essential.',        price:'~$130', url: amz('thermarest mondoking 3d sleeping pad') },
+    { brand:'Nalgene',       name:'Wide Mouth 32oz',          packKey:'Water bottle (×2)',                          desc:'Fill with boiling water at bedtime. Best foot warmer ever made.',          price:'~$15',  url: amz('nalgene wide mouth 32oz') },
   ],
 };
 
@@ -9365,7 +9366,7 @@ function renderPackList(c) {
               <div class="gear-brand">${g.brand}</div>
               <div class="gear-name">${g.name}</div>
               <div class="gear-desc">${g.desc}</div>
-              <div class="gear-shop">Shop on Amazon →</div>
+              <div class="gear-shop"><span class="gear-price">${g.price || ''}</span>Shop on Amazon →</div>
             </a>`).join('')}
         </div>
       </div>`;
