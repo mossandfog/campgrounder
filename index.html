@@ -2169,6 +2169,28 @@ html, body {
 .cta-sq { width: 54px; border: 1.5px solid var(--w2); background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.16s; position: relative; }
 .cta-sq:hover { border-color: var(--o); }
 
+/* ── RESERVATION NOTIFY STRIP ───────────────────── */
+.notif-strip { flex-shrink: 0; padding: 0 24px; background: var(--g0); overflow: hidden; max-height: 0; transition: max-height 0.28s ease, padding 0.28s ease; }
+.notif-strip.open { max-height: 160px; padding: 14px 24px; border-top: 1px solid rgba(255,255,255,0.06); }
+.notif-trigger { display: flex; align-items: center; gap: 10px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.notif-bell { width: 32px; height: 32px; flex-shrink: 0; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.5); transition: border-color 0.15s, color 0.15s; }
+.notif-trigger:hover .notif-bell { border-color: var(--o); color: var(--o); }
+.notif-trigger-text { flex: 1; }
+.notif-trigger-title { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.75); }
+.notif-trigger-sub   { font-size: 10px; color: rgba(255,255,255,0.35); margin-top: 1px; }
+.notif-chevron { font-size: 14px; color: rgba(255,255,255,0.25); transition: transform 0.2s; }
+.notif-strip.open .notif-chevron { transform: rotate(180deg); }
+.notif-form { margin-top: 12px; display: none; flex-direction: column; gap: 8px; }
+.notif-strip.open .notif-form { display: flex; }
+.notif-input-row { display: flex; gap: 8px; }
+.notif-email { flex: 1; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; padding: 10px 13px; font-size: 13px; font-family: inherit; color: rgba(255,255,255,0.85); outline: none; transition: border-color 0.15s; }
+.notif-email::placeholder { color: rgba(255,255,255,0.25); }
+.notif-email:focus { border-color: rgba(255,255,255,0.3); }
+.notif-submit { flex-shrink: 0; background: var(--o); color: white; border: none; border-radius: 8px; padding: 10px 16px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; font-family: inherit; transition: opacity 0.15s; white-space: nowrap; }
+.notif-submit:hover { opacity: 0.85; }
+.notif-submit:disabled { opacity: 0.4; cursor: default; }
+.notif-success { font-size: 12px; color: rgba(255,255,255,0.55); text-align: center; padding: 4px 0 2px; display: none; }
+
 /* ── ICON TOOLTIPS ───────────────────────────────── */
 .cta-sq[data-tooltip], .cta-sq-tc[data-tooltip], .compass-top-btn[data-tooltip] { position: relative; }
 .cta-sq[data-tooltip]::before, .cta-sq-tc[data-tooltip]::before, .compass-top-btn[data-tooltip]::before {
@@ -4066,6 +4088,27 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
     <div id="d-gear-picks" style="display:none; margin: 4px 0 24px;"></div>
     <div id="d-nearby"></div>
   </div>
+  <!-- Reservation Notify Strip -->
+  <div class="notif-strip" id="notif-strip">
+    <div class="notif-trigger" onclick="toggleNotifStrip()">
+      <div class="notif-bell">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </div>
+      <div class="notif-trigger-text">
+        <div class="notif-trigger-title">Notify me when reservations open</div>
+        <div class="notif-trigger-sub" id="notif-date-hint">We'll email you before the window opens</div>
+      </div>
+      <div class="notif-chevron">›</div>
+    </div>
+    <div class="notif-form" id="notif-form">
+      <div class="notif-input-row">
+        <input type="email" class="notif-email" id="notif-email" placeholder="your@email.com" autocomplete="email">
+        <button class="notif-submit" id="notif-submit" onclick="submitNotifEmail()">Notify Me</button>
+      </div>
+      <div class="notif-success" id="notif-success">✓ You're on the list — we'll email you before reservations open.</div>
+    </div>
+  </div>
+
   <div class="hint-strip hint-tripcard" id="hint-tripcard" style="display:none">
     <span>Tap the card icon to make a shareable trip card</span>
     <button class="hint-x" onclick="dismissHint('hint-tripcard')" aria-label="Dismiss">×</button>
@@ -7779,6 +7822,84 @@ function openDetail(id) {
   // Dismissible hints
   _showHint('hint-tripcard');
   _showHint('hint-rating');
+
+  // Reservation notify strip
+  resetNotifStrip();
+  const rd = RESERVATION_DATES[id];
+  const dateHint = document.getElementById('notif-date-hint');
+  if (dateHint) {
+    dateHint.textContent = rd
+      ? rd.note
+      : 'We\'ll email you before the reservation window opens';
+  }
+}
+
+// ─── RESERVATION REMINDERS ───────────────────────
+// Known reservation opening windows (estimated; update annually)
+const RESERVATION_DATES = {
+  1:   { date: 'rolling, ~5 months out', note: 'Yosemite books up same day — set a reminder' },
+  5:   { date: 'rolling, ~6 months out', note: 'Spots go fast in spring and fall' },
+  6:   { date: 'Jan 1 for summer season', note: 'Olympic books up early for July–Aug' },
+  10:  { date: 'Jan 1, 6 months rolling', note: 'Mather sells out within hours of opening' },
+  11:  { date: 'rolling, ~6 months out', note: 'Watchman fills weeks in advance' },
+  12:  { date: 'May 1 for summer season', note: 'Yellowstone sites go fast in spring' },
+  13:  { date: 'rolling, ~6 months out', note: 'Rocky Mountain books up quickly in summer' },
+  15:  { date: 'rolling, ~6 months out', note: 'Glacier sites sell out within days of opening' },
+  16:  { date: 'rolling, ~6 months out', note: 'Devil\'s Garden — one of the hardest to get' },
+  18:  { date: 'rolling, ~6 months out', note: 'Crater Lake fills fast in July–Aug' },
+  20:  { date: 'rolling, ~6 months out', note: 'Bryce books 2–3 months out in peak season' },
+  21:  { date: 'rolling, ~6 months out', note: 'Sequoia summer sites go quickly' },
+  173: { date: 'rolling, ~6 months out', note: 'Kalaloch oceanfront — extremely competitive' },
+  197: { date: 'rolling, ~6 months out', note: 'Blackwoods fills fast for summer weekends' },
+  347: { date: 'rolling, ~6 months out', note: 'Aspenglen — books out weeks in advance' },
+};
+
+function toggleNotifStrip() {
+  const strip = document.getElementById('notif-strip');
+  strip.classList.toggle('open');
+}
+
+function resetNotifStrip() {
+  const strip   = document.getElementById('notif-strip');
+  const success = document.getElementById('notif-success');
+  const submit  = document.getElementById('notif-submit');
+  const email   = document.getElementById('notif-email');
+  strip.classList.remove('open');
+  success.style.display = 'none';
+  submit.disabled = false;
+  submit.textContent = 'Notify Me';
+  if (email) email.value = '';
+}
+
+async function submitNotifEmail() {
+  const c = CAMPS.find(x => x.id === currentDetailId);
+  if (!c) return;
+  const emailEl  = document.getElementById('notif-email');
+  const submitEl = document.getElementById('notif-submit');
+  const successEl = document.getElementById('notif-success');
+  const email = emailEl.value.trim();
+  if (!email || !email.includes('@')) { emailEl.focus(); return; }
+
+  submitEl.disabled = true;
+  submitEl.textContent = '…';
+
+  try {
+    await fetch('/api/notify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email,
+        campId:   c.id,
+        campName: c.name,
+        campLoc:  c.loc,
+        date:     RESERVATION_DATES[c.id]?.date || null
+      })
+    });
+  } catch(e) { /* fail silently — UX should still succeed */ }
+
+  successEl.style.display = 'block';
+  submitEl.style.display  = 'none';
+  emailEl.style.display   = 'none';
 }
 
 // ─── SHARE CARD ──────────────────────────────────
