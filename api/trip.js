@@ -2,9 +2,9 @@
 // POST /api/trip  → save trip data to Upstash Redis, returns { shortcode }
 // GET  /api/trip?id=abc123 → retrieve trip by shortcode
 //
-// Required env vars (auto-injected when you add Upstash Redis via Vercel Marketplace):
-//   UPSTASH_REDIS_REST_URL   — e.g. https://xxxx.upstash.io
-//   UPSTASH_REDIS_REST_TOKEN — Upstash REST token
+// Required env vars (auto-injected when you add Upstash for Redis via Vercel Marketplace):
+//   KV_REST_API_URL   — e.g. https://xxxx.upstash.io
+//   KV_REST_API_TOKEN — Upstash REST token
 //
 // Trip data stored: { name, campIds: [42, 7, ...], createdAt }
 // TTL: 180 days
@@ -31,11 +31,11 @@ module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(204).end();
 
-  const kvUrl   = process.env.UPSTASH_REDIS_REST_URL;
-  const kvToken = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const kvUrl   = process.env.KV_REST_API_URL;
+  const kvToken = process.env.KV_REST_API_TOKEN;
 
   if (!kvUrl || !kvToken) {
-    console.error('Upstash env vars not set');
+    console.error('KV env vars not set');
     return res.status(500).json({ error: 'Storage not configured' });
   }
 
