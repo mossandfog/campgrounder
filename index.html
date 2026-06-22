@@ -2247,18 +2247,18 @@ html, body {
 .tc-card-wrap {
   position: relative; width: 100%; max-width: 340px;
   border-radius: 20px; overflow: hidden;
-  box-shadow: 0 0 0 3px #E8481C, 0 24px 60px rgba(0,0,0,0.7);
+  box-shadow: 0 0 0 2px #E8481C, 0 24px 60px rgba(0,0,0,0.7);
   background: #132B1C;
   flex-shrink: 0;
 }
 .tc-card-wrap::after {
   content: ''; position: absolute; inset: 0;
-  border-radius: 20px; border: 3px solid #E8481C;
+  border-radius: 20px; border: 2px solid #E8481C;
   pointer-events: none; z-index: 10;
 }
 .tc-scene { width: 100%; aspect-ratio: 16/9; display: block; overflow: hidden; position: relative; }
 .tc-scene svg { width: 100%; height: 100%; display: block; }
-.tc-scene-divider { height: 3px; background: #E8481C; opacity: 0.5; }
+.tc-scene-divider { height: 2px; background: #E8481C; opacity: 0.5; }
 .tc-info { padding: 16px 18px 20px; }
 .tc-camp-name { font-size: 20px; font-weight: 800; color: #fff; line-height: 1.15; margin-bottom: 3px; }
 .tc-camp-loc { font-size: 10px; color: #8CA898; margin-bottom: 13px; }
@@ -2285,9 +2285,11 @@ html, body {
 .tc-btn-save:hover { border-color: rgba(255,255,255,0.4); }
 .tc-btn-share { flex: 1; background: transparent; border: 1.5px solid rgba(255,255,255,0.18); color: rgba(255,255,255,0.75); font-family: inherit; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 12px 0; cursor: pointer; transition: border-color 0.15s; border-radius: 3px; }
 .tc-btn-share:hover { border-color: rgba(255,255,255,0.4); }
-.tc-btn-book { flex: 1.5; background: #E8481C; color: #fff; font-family: inherit; font-size: 11px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; padding: 12px 0; cursor: pointer; border: none; text-decoration: none; display: flex; align-items: center; justify-content: center; border-radius: 3px; transition: opacity 0.15s; }
+.tc-btn-book { flex: 1; background: #E8481C; color: #fff; font-family: inherit; font-size: 11px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; padding: 12px 0; cursor: pointer; border: none; text-decoration: none; display: flex; align-items: center; justify-content: center; border-radius: 3px; transition: opacity 0.15s; }
 .tc-btn-book:hover { opacity: 0.85; }
 .tc-note { font-size: 10px; color: rgba(255,255,255,0.28); text-align: center; }
+.tc-footer-row { display: flex; align-items: flex-end; justify-content: space-between; margin-top: 12px; }
+.tc-qr canvas, .tc-qr img { display: block; border-radius: 4px; }
 /* CTA bar trip card button */
 .cta-sq-tc { width: 54px; border: 1.5px solid #E8481C; background: rgba(232,72,28,0.08); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.16s; color: #E8481C; flex-shrink: 0; }
 .cta-sq-tc:hover { background: rgba(232,72,28,0.18); }
@@ -3635,15 +3637,15 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
     <!-- Stats row -->
     <div class="about-stats">
       <div class="about-stat">
-        <div class="about-stat-num">325</div>
+        <div class="about-stat-num">1000s</div>
         <div class="about-stat-label">Campgrounds</div>
       </div>
       <div class="about-stat">
-        <div class="about-stat-num">42</div>
-        <div class="about-stat-label">States</div>
+        <div class="about-stat-num">50+</div>
+        <div class="about-stat-label">States + Canada</div>
       </div>
       <div class="about-stat">
-        <div class="about-stat-num">8</div>
+        <div class="about-stat-num">9</div>
         <div class="about-stat-label">Categories</div>
       </div>
       <div class="about-stat">
@@ -3676,8 +3678,8 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
 
       <div class="about-cell about-cell--full" role="listitem">
         <div class="about-cell-num">03</div>
-        <div class="about-cell-title">Born in the PNW.<br>Built for Everywhere.</div>
-        <div class="about-cell-body">Started under tall firs and grey skies in the Pacific Northwest. Designed for every forest, desert, canyon, and shoreline that comes after.</div>
+        <div class="about-cell-title">Born in the PNW.<br>Built for North America.</div>
+        <div class="about-cell-body">Started under tall firs and grey skies in the Pacific Northwest. Now covering every US state and Canada, from Banff to the Florida Keys.</div>
       </div>
 
     </div>
@@ -3687,9 +3689,29 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
       <div class="about-roadmap-eyebrow">What's Next</div>
       <div class="about-roadmap-grid">
         <div class="about-roadmap-item">
+          <div class="about-roadmap-icon">🌎</div>
+          <div class="about-roadmap-title">Recreation.gov API ✓</div>
+          <div class="about-roadmap-body">Thousands of federal campgrounds now searchable via the Recreation.gov RIDB. National parks, forests, BLM, Army Corps and more, all in one place.</div>
+        </div>
+        <div class="about-roadmap-item">
+          <div class="about-roadmap-icon">🍁</div>
+          <div class="about-roadmap-title">Canada ✓</div>
+          <div class="about-roadmap-body">Parks Canada, BC Parks, Ontario Parks, and more. Campgrounder now covers top destinations across every Canadian province and territory.</div>
+        </div>
+        <div class="about-roadmap-item">
+          <div class="about-roadmap-icon">🔗</div>
+          <div class="about-roadmap-title">Shareable Trip Links ✓</div>
+          <div class="about-roadmap-body">Save your camps, generate a link, and share your trip with anyone. No account required. Links stay active for 180 days.</div>
+        </div>
+        <div class="about-roadmap-item">
+          <div class="about-roadmap-icon">🔥</div>
+          <div class="about-roadmap-title">Wildfire Watch ✓</div>
+          <div class="about-roadmap-body">Live fire data from NASA EONET and NIFC. Active fires mapped nationwide, with state-level breakdowns. Already on the home screen.</div>
+        </div>
+        <div class="about-roadmap-item">
           <div class="about-roadmap-icon">⚡</div>
           <div class="about-roadmap-title">Live Availability</div>
-          <div class="about-roadmap-body">Real-time site counts from Recreation.gov — coming first to the 87 national park and federal campgrounds already in our database.</div>
+          <div class="about-roadmap-body">Real-time site counts pulled directly from Recreation.gov, covering thousands of federal campgrounds. Direct booking links already live for most sites.</div>
         </div>
         <div class="about-roadmap-item">
           <div class="about-roadmap-icon">🔔</div>
@@ -3699,12 +3721,7 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
         <div class="about-roadmap-item">
           <div class="about-roadmap-icon">🤖</div>
           <div class="about-roadmap-title">AI Trip Builder</div>
-          <div class="about-roadmap-body">Tell us what you want — "four nights in the Cascades, dog-friendly, under $30, good stars" — and we'll build the itinerary, including drive time and weather.</div>
-        </div>
-        <div class="about-roadmap-item">
-          <div class="about-roadmap-icon">🗺</div>
-          <div class="about-roadmap-title">Offline Maps</div>
-          <div class="about-roadmap-body">Cache your saved camps for offline use. No signal? No problem. Your sites, trails, and coordinates — available without a bar of cell service.</div>
+          <div class="about-roadmap-body">Tell us what you want: four nights in the Cascades, dog-friendly, under $30, good stars. We'll build the itinerary, including drive time and weather.</div>
         </div>
         <div class="about-roadmap-item">
           <div class="about-roadmap-icon">📸</div>
@@ -3714,16 +3731,16 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
         <div class="about-roadmap-item">
           <div class="about-roadmap-icon">💬</div>
           <div class="about-roadmap-title">Local Intel</div>
-          <div class="about-roadmap-body">Crowd-sourced tips from people who've actually been there — the quiet loop, the spots closest to water, what to avoid on holiday weekends.</div>
+          <div class="about-roadmap-body">Crowd-sourced tips from people who've actually been there: the quiet loop, the spots closest to water, what to avoid on holiday weekends.</div>
         </div>
         <div class="about-roadmap-item">
-          <div class="about-roadmap-icon">🔥</div>
-          <div class="about-roadmap-title">Wildfire Watch ✓</div>
-          <div class="about-roadmap-body">Live fire data from NASA EONET and NIFC — active fires mapped nationwide, with state-level breakdowns. Already on the home screen.</div>
+          <div class="about-roadmap-icon">🗺</div>
+          <div class="about-roadmap-title">Offline Maps</div>
+          <div class="about-roadmap-body">Cache your saved camps for offline use. No signal? No problem. Your sites, trails, and coordinates, available without a bar of cell service.</div>
         </div>
         <div class="about-roadmap-item">
           <div class="about-roadmap-icon">📱</div>
-          <div class="about-roadmap-title">iOS App — Under Review</div>
+          <div class="about-roadmap-title">iOS App: Under Review</div>
           <div class="about-roadmap-body">Submitted to the App Store. Offline-first, GPS-aware, and designed for people who leave the pavement behind. Coming very soon.</div>
         </div>
       </div>
@@ -8630,6 +8647,10 @@ function openTripCard() {
   document.getElementById('tc-type').textContent = c.type;
   document.getElementById('tc-amenities').textContent = (c.amenities || []).slice(0,4).join(' · ');
 
+  // Price
+  const priceEl = document.getElementById('tc-price');
+  if (priceEl) priceEl.textContent = c.price != null ? `$${c.price}` : 'Free';
+
   // Dates: pre-fill from any stored check-in if available
   const today     = new Date();
   const tomorrow  = new Date(today); tomorrow.setDate(today.getDate() + 1);
@@ -8641,12 +8662,30 @@ function openTripCard() {
   tcUpdateNights();
 
   // Book link
-  document.getElementById('tc-book-link').href = buildBookingUrl(c);
+  const bookUrl = buildBookingUrl(c);
+  document.getElementById('tc-book-link').href = bookUrl;
 
-  // Show native share button only if supported
+  // Share button label: native share on mobile, copy link on desktop
   const shareBtn = document.getElementById('tc-share-btn');
-  if (navigator.share || navigator.canShare) {
-    shareBtn.style.display = 'flex';
+  shareBtn.textContent = navigator.share ? 'Share' : 'Copy Link';
+
+  // QR code linking to booking URL
+  const qrContainer = document.getElementById('tc-qr');
+  if (qrContainer) {
+    qrContainer.innerHTML = '';
+    const qrUrl = (bookUrl && bookUrl !== '#') ? bookUrl : 'https://campgrounder.io';
+    if (typeof QRCode !== 'undefined') {
+      try {
+        new QRCode(qrContainer, {
+          text: qrUrl,
+          width: 60,
+          height: 60,
+          colorDark: '#E8481C',
+          colorLight: '#0C1F15',
+          correctLevel: QRCode.CorrectLevel.M
+        });
+      } catch(e) { /* graceful skip */ }
+    }
   }
 
   // Show overlay
@@ -8688,25 +8727,41 @@ async function tcSave() {
 }
 
 async function tcShare() {
-  if (!_tcCamp || !navigator.share) return;
-  showToast('Building card…');
-  await new Promise(r => setTimeout(r, 60));
-  const canvas = _tcBuildCanvas(_tcCamp);
-  const filename = (_tcCamp.name || 'camp').toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-trip-card.png';
-  canvas.toBlob(async blob => {
-    if (!blob) return;
-    try {
-      const file = new File([blob], filename, { type: 'image/png' });
-      await navigator.share({ files: [file], title: `My trip to ${_tcCamp.name}`, text: `Camping at ${_tcCamp.name} via Campgrounder.io` });
-    } catch(e) {
-      if (e.name !== 'AbortError') showToast('Share failed');
+  if (!_tcCamp) return;
+  if (navigator.share) {
+    showToast('Building card…');
+    await new Promise(r => setTimeout(r, 60));
+    const canvas = _tcBuildCanvas(_tcCamp);
+    const filename = (_tcCamp.name || 'camp').toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-trip-card.png';
+    canvas.toBlob(async blob => {
+      if (!blob) return;
+      try {
+        const file = new File([blob], filename, { type: 'image/png' });
+        await navigator.share({ files: [file], title: `My trip to ${_tcCamp.name}`, text: `Camping at ${_tcCamp.name} via Campgrounder.io` });
+      } catch(e) {
+        if (e.name !== 'AbortError') showToast('Share failed');
+      }
+    }, 'image/png');
+  } else {
+    // Desktop: copy booking URL
+    const url = buildBookingUrl(_tcCamp);
+    if (url && url !== '#') {
+      try {
+        await navigator.clipboard.writeText(url);
+        showToast('Booking link copied!');
+      } catch(e) { showToast('Copy failed'); }
+    } else {
+      try {
+        await navigator.clipboard.writeText(`https://campgrounder.io`);
+        showToast('Link copied!');
+      } catch(e) { showToast('Copy failed'); }
     }
-  }, 'image/png');
+  }
 }
 
 function _tcBuildCanvas(c) {
-  // Card canvas: 800x1100 portrait
-  const W = 800, H = 1100;
+  // Card canvas: 800x1200 portrait
+  const W = 800, H = 1200;
   const pad = 6; // orange border padding
   const canvas = document.createElement('canvas');
   canvas.width = W; canvas.height = H;
@@ -8735,7 +8790,7 @@ function _tcBuildCanvas(c) {
   ctx.save();
   roundRect(pad, pad, W - pad*2, H - pad*2, r);
   ctx.strokeStyle = oc;
-  ctx.lineWidth = 8;
+  ctx.lineWidth = 4;
   ctx.stroke();
   ctx.restore();
 
@@ -8821,18 +8876,21 @@ function _tcBuildCanvas(c) {
   ctx.fillRect(ix, y, iw, 1);
   y += 32;
 
-  // Nights + Type
+  // Nights + Type + Price
+  const col3W = iw / 3;
   ctx.font = '700 16px "Helvetica Neue",Helvetica,Arial,sans-serif';
   ctx.fillStyle = oc;
   ctx.letterSpacing = '0.12em';
   ctx.fillText('NIGHTS', ix, y);
-  ctx.fillText('TYPE', ix + colW, y);
+  ctx.fillText('TYPE', ix + col3W, y);
+  ctx.fillText('PER NIGHT', ix + col3W * 2, y);
   ctx.letterSpacing = '0';
   ctx.font = '800 38px "Helvetica Neue",Helvetica,Arial,sans-serif';
   ctx.fillStyle = wt;
   ctx.fillText(nights !== null ? String(nights) : '--', ix, y + 44);
   ctx.font = '700 24px "Helvetica Neue",Helvetica,Arial,sans-serif';
-  ctx.fillText(c.type, ix + colW, y + 44);
+  ctx.fillText(c.type, ix + col3W, y + 44);
+  ctx.fillText(c.price != null ? `$${c.price}` : 'Free', ix + col3W * 2, y + 44);
   y += 80;
 
   // Divider
@@ -8847,11 +8905,36 @@ function _tcBuildCanvas(c) {
   ctx.fillText(amenStr, ix, y);
   y += 60;
 
-  // Footer
+  // Divider before footer
+  ctx.fillStyle = g2;
+  ctx.fillRect(ix, y, iw, 1);
+  y += 32;
+
+  // QR code (right side of footer)
+  const qrSrc = document.querySelector('#tc-qr canvas');
+  const qrSz = 100;
+  const qrX = W - ix - qrSz;
+  const qrY = y;
+  if (qrSrc) {
+    // Dark background patch behind QR
+    ctx.fillStyle = '#0C1F15';
+    ctx.fillRect(qrX - 4, qrY - 4, qrSz + 8, qrSz + 8);
+    ctx.drawImage(qrSrc, qrX, qrY, qrSz, qrSz);
+    // "SCAN TO BOOK" label
+    ctx.font = '600 13px "Helvetica Neue",Helvetica,Arial,sans-serif';
+    ctx.fillStyle = sg;
+    ctx.letterSpacing = '0.06em';
+    ctx.textAlign = 'right';
+    ctx.fillText('SCAN TO BOOK', W - ix, qrY + qrSz + 18);
+    ctx.textAlign = 'left';
+    ctx.letterSpacing = '0';
+  }
+
+  // CAMPGROUNDER.IO footer text (left side)
   ctx.fillStyle = g2;
   ctx.font = '700 18px "Helvetica Neue",Helvetica,Arial,sans-serif';
   ctx.letterSpacing = '0.2em';
-  ctx.fillText('CAMPGROUNDER.IO', ix, H - 40);
+  ctx.fillText('CAMPGROUNDER.IO', ix, H - 44);
   ctx.letterSpacing = '0';
 
   ctx.restore(); // end card clip
@@ -10229,15 +10312,22 @@ function dismissWelcome() {
             <div class="tc-stat-label">Type</div>
             <div class="tc-type-pill" id="tc-type"></div>
           </div>
+          <div class="tc-stat">
+            <div class="tc-stat-label">Per Night</div>
+            <div class="tc-stat-value" id="tc-price">--</div>
+          </div>
         </div>
         <div class="tc-divider" style="margin-top:12px"></div>
         <div class="tc-amenities" id="tc-amenities"></div>
-        <div class="tc-footer">CAMPGROUNDER.IO</div>
+        <div class="tc-footer-row">
+          <div class="tc-footer">CAMPGROUNDER.IO</div>
+          <div id="tc-qr" class="tc-qr"></div>
+        </div>
       </div>
     </div>
     <div class="tc-actions">
       <button class="tc-btn-save" onclick="tcSave()">Save Image</button>
-      <button class="tc-btn-share" id="tc-share-btn" onclick="tcShare()" style="display:none">Share</button>
+      <button class="tc-btn-share" id="tc-share-btn" onclick="tcShare()">Share</button>
       <a class="tc-btn-book" id="tc-book-link" href="#" target="_blank" rel="noopener">Book Now</a>
     </div>
     <div class="tc-note">Set your dates, then save or share.</div>
@@ -10269,5 +10359,8 @@ function dismissWelcome() {
   </div>
 </div>
 
+
+<!-- QR code generation for Trip Cards -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </body>
 </html>
