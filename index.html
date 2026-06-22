@@ -2909,8 +2909,8 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
   <!-- ── STATS BAR ──────────────────────────────── -->
   <div class="stats-bar">
     <div class="stats-cell">
-      <div class="stats-num" id="home-camp-count">375+</div>
-      <div class="stats-label">Handpicked Camps</div>
+      <div class="stats-num" id="home-camp-count">Thousands</div>
+      <div class="stats-label">of Handpicked Camps</div>
     </div>
     <div class="stats-cell">
       <div class="stats-num">4.8<span style="font-size:14px;color:var(--o);">★</span></div>
@@ -9301,7 +9301,7 @@ setTimeout(initWildfireSection, 400);
 (function() {
   const count = CAMPS.length;
   const homeCount = document.getElementById('home-camp-count');
-  if (homeCount) homeCount.textContent = count + '+';
+  if (homeCount) homeCount.textContent = 'Thousands';
   const sugCount = document.getElementById('sug-all-count');
   if (sugCount) sugCount.textContent = count;
 })();
