@@ -41,19 +41,25 @@ module.exports = async function handler(req, res) {
 
   // ── POST: save a new trip ──────────────────────────────────
   if (req.method === 'POST') {
-    const { name, campIds } = req.body || {};
+    const { name, campIds, camps } = req.body || {};
 
-    if (!Array.isArray(campIds) || campIds.length === 0) {
-      return res.status(400).json({ error: 'campIds array required' });
+    // Accept either full camp objects (new) or just IDs (legacy)
+    const tripCamps = Array.isArray(camps) && camps.length > 0
+      ? camps
+      : Array.isArray(campIds) ? campIds.map(id => ({ id })) : [];
+
+    if (tripCamps.length === 0) {
+      return res.status(400).json({ error: 'camps or campIds array required' });
     }
-    if (campIds.length > 50) {
+    if (tripCamps.length > 50) {
       return res.status(400).json({ error: 'Too many camps (max 50)' });
     }
 
     const shortcode = makeShortcode();
     const payload   = JSON.stringify({
       name:      (name || 'My Trip').slice(0, 80),
-      campIds:   campIds.map(Number).filter(n => n > 0),
+      camps:     tripCamps,
+      campIds:   tripCamps.map(c => c.id || c).filter(Boolean), // backward compat
       createdAt: Date.now(),
     });
 

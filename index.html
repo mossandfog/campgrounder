@@ -6437,6 +6437,16 @@ let savedIds = (() => {
   try { return new Set(JSON.parse(localStorage.getItem('cg_saved') || '[]')); }
   catch { return new Set(); }
 })();
+// RIDB/API state — persisted camp objects for API-sourced saved camps
+let savedCampsData = (() => {
+  try { return JSON.parse(localStorage.getItem('cg_saved_data') || '{}'); }
+  catch { return {}; }
+})();
+const apiCampsCache  = {};   // in-memory: facilityId (int) → camp object
+let apiSearchResults = null; // null = not searched, [] = no results, [...] = results
+let apiSearchQuery   = '';   // query that produced apiSearchResults
+let apiSearchLoading = false;
+
 let prevScreen      = 'home';
 let currentFilter   = 'all';
 let currentDetailId = null;
@@ -7257,6 +7267,8 @@ function closeSearch() {
 }
 function clearSearch() {
   searchQuery = '';
+  apiSearchResults = null;
+  apiSearchQuery   = '';
   lastMinuteMode = false;
   document.getElementById('results-input').value = '';
 }
@@ -7432,12 +7444,49 @@ function openLastMinute() {
   go('results', 'home');
 }
 
+// ─── RIDB / API HELPERS ──────────────────────────
+// Unified camp lookup: checks hardcoded CAMPS, live API cache, and saved data
+function lookupCamp(id) {
+  return CAMPS.find(c => c.id == id)
+      || apiCampsCache[id]  || apiCampsCache[+id]
+      || savedCampsData[id] || savedCampsData[+id]
+      || null;
+}
+function persistSavedData() {
+  try { localStorage.setItem('cg_saved_data', JSON.stringify(savedCampsData)); } catch {}
+}
+async function fetchApiSearch(query) {
+  if (apiSearchLoading) return;
+  apiSearchLoading = true;
+  renderResults(); // show loading state immediately
+  try {
+    const resp = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+    if (!resp.ok) throw new Error('Search failed');
+    const data = await resp.json();
+    apiSearchResults = data.results || [];
+    apiSearchQuery   = query;
+    apiSearchResults.forEach(c => { apiCampsCache[c.id] = c; });
+  } catch (err) {
+    console.error('RIDB search error:', err);
+    apiSearchResults = [];
+    apiSearchQuery   = query;
+  }
+  apiSearchLoading = false;
+  renderResults();
+}
+
 function getFilteredCamps() {
   const hasSearch = searchQuery && currentFilter !== 'nearby';
 
+  // Text searches go to RIDB API — return cached results or trigger fetch
+  if (hasSearch) {
+    if (apiSearchQuery === searchQuery && apiSearchResults !== null) return apiSearchResults;
+    if (!apiSearchLoading) fetchApiSearch(searchQuery);
+    return null; // null = loading; renderResults shows spinner
+  }
+
   let list = CAMPS.filter(c => {
-    // When there's a text search, include only camps with a positive semantic score
-    if (hasSearch) return semanticScore(c, searchQuery) > 0;
+    if (false) return semanticScore(c, searchQuery) > 0; // kept for future local search
     if (currentFilter === 'all')    return true;
     if (currentFilter === 'pet')      return c.amenities.includes('Pet Friendly');
     if (currentFilter === 'water')    return hasWater(c);
@@ -7497,6 +7546,12 @@ function renderResults() {
       </div>`;
   } else {
     camps = getFilteredCamps();
+    if (camps === null) {
+      document.getElementById('results-count').textContent = 'Searching…';
+      document.getElementById('results-list').innerHTML =
+        '<div style="text-align:center;padding:60px 20px;color:rgba(255,255,255,0.35);font-size:14px;letter-spacing:.04em;">Searching campgrounds…</div>';
+      return;
+    }
     document.getElementById('results-count').textContent = `${camps.length} Campground${camps.length !== 1 ? 's' : ''}`;
   }
 
@@ -7511,15 +7566,15 @@ function renderResults() {
   }
 
   document.getElementById('results-list').innerHTML = headerExtra + camps.map(c => `
-    <div class="camp-card" onclick="openDetail(${c.id})" role="button" tabindex="0" aria-label="${c.name}, ${c.loc}, ${c.rating} stars, $${c.price} per night">
+    <div class="camp-card" onclick="openDetail(${c.id})" role="button" tabindex="0" aria-label="${c.name}, ${c.loc}${c.rating?', '+c.rating+' stars':''}">
       <div class="card-box" aria-hidden="true">${glyph(TYPE_GLYPH[c.type]||'#ic-tent',30)}</div>
       <div class="card-body">
         <div class="card-type">${c.type}</div>
         <div class="card-name">${c.name}</div>
         <div class="card-loc">${c.loc}</div>
         <div class="card-foot">
-          <div class="card-stats">★ ${c.rating} &nbsp;·&nbsp; ${c.avail} open${distLabel(c)}${fireChipHTML(getCampfireStatus(c))}<span class="wx-chip" data-cid="${c.id}"></span></div>
-          <div><div class="card-pnum">$${c.price}</div><div class="card-punit">/ Night</div></div>
+          <div class="card-stats">${c.rating?'★ '+c.rating+' &nbsp;·&nbsp; ':''}${c.avail!=null?c.avail+' open':''}${distLabel(c)}${fireChipHTML(getCampfireStatus(c))}<span class="wx-chip" data-cid="${c.id}"></span></div>
+          <div><div class="card-pnum">${c.price?'$'+c.price:'—'}</div><div class="card-punit">${c.price?'/ Night':''}</div></div>
         </div>
       </div>
       <div class="card-chevron" aria-hidden="true"></div>
@@ -7531,7 +7586,7 @@ function renderResults() {
 
 // ─── RENDER SAVED ───────────────────────────────
 function renderSaved() {
-  const camps = CAMPS.filter(c => savedIds.has(c.id));
+  const camps = [...savedIds].map(id => lookupCamp(id)).filter(Boolean);
   document.getElementById('saved-count').textContent = `${camps.length} campground${camps.length !== 1 ? 's':''}`;
   if (camps.length === 0) {
     document.getElementById('saved-list').innerHTML = `
@@ -7717,12 +7772,19 @@ async function generateTripLink() {
 
   const name    = (document.getElementById('trip-name-input').value || '').trim() || 'My Trip';
   const campIds = [...savedIds];
+  // Include full camp objects so shared recipients can view them (works for RIDB camps too)
+  const camps   = campIds.map(id => {
+    const c = lookupCamp(id);
+    if (!c) return null;
+    return { id: c.id, name: c.name, loc: c.loc, type: c.type,
+             photo: c.photo || null, rating: c.rating, price: c.price, lat: c.lat, lng: c.lng };
+  }).filter(Boolean);
 
   try {
     const resp = await fetch('/api/trip', {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ name, campIds }),
+      body:    JSON.stringify({ name, campIds, camps }),
     });
     const data = await resp.json();
     if (!resp.ok || !data.shortcode) throw new Error(data.error || 'Failed');
@@ -7768,11 +7830,17 @@ async function loadSharedTrip(code) {
     if (!resp.ok) throw new Error('not found');
     const data = await resp.json();
 
-    const tripName  = data.name || 'Shared Trip';
-    const campIds   = (data.campIds || []).map(Number);
-    const camps     = CAMPS.filter(c => campIds.includes(c.id));
-    // Preserve the order the sharer saved them
-    camps.sort((a, b) => campIds.indexOf(a.id) - campIds.indexOf(b.id));
+    const tripName = data.name || 'Shared Trip';
+    let camps;
+    if (data.camps && data.camps.length > 0) {
+      // New format: full camp objects embedded in trip payload
+      camps = data.camps;
+      camps.forEach(c => { if (c.id) apiCampsCache[c.id] = c; }); // cache for detail view
+    } else {
+      // Legacy format: only campIds, look up from local data
+      const campIds = (data.campIds || []).map(Number);
+      camps = campIds.map(id => lookupCamp(id)).filter(Boolean);
+    }
 
     document.getElementById('shared-title').textContent = tripName;
     document.getElementById('shared-sub').textContent   =
@@ -7815,6 +7883,9 @@ async function loadSharedTrip(code) {
 
 function saveCampFromShared(id) {
   savedIds.add(id);
+  // Persist camp data if it came from an API result (cached in loadSharedTrip)
+  const campObj = apiCampsCache[id] || apiCampsCache[+id];
+  if (campObj) { savedCampsData[id] = campObj; persistSavedData(); }
   persistSaved();
   updateBadges();
   const btn = document.getElementById(`save-shared-${id}`);
@@ -7844,15 +7915,25 @@ function toggleSave() {
     showToast('Saved  ＋');
   }
   persistSaved();
+  // Persist RIDB camp data so it survives page reload in the saved list
+  const _cd = apiCampsCache[currentDetailId] || apiCampsCache[+currentDetailId];
+  if (_cd) {
+    if (savedIds.has(currentDetailId)) { savedCampsData[currentDetailId] = _cd; }
+    else { delete savedCampsData[currentDetailId]; delete savedCampsData[+currentDetailId]; }
+    persistSavedData();
+  }
   updateBadges();
 }
 function unsave(id, e) {
-  e.stopPropagation(); savedIds.delete(id); persistSaved(); updateBadges(); renderSaved(); showToast('Removed');
+  e.stopPropagation();
+  savedIds.delete(id);
+  delete savedCampsData[id]; delete savedCampsData[+id];
+  persistSaved(); persistSavedData(); updateBadges(); renderSaved(); showToast('Removed');
 }
 
 function addToCalendar() {
   if (!currentDetailId) return;
-  const c = CAMPS.find(x => x.id === currentDetailId);
+  const c = lookupCamp(currentDetailId);
   if (!c) return;
 
   let startStr = checkInDate;
@@ -7910,7 +7991,7 @@ function showToast(msg) {
 
 // ─── OPEN DETAIL ────────────────────────────────
 function openDetail(id) {
-  const c = CAMPS.find(x => x.id === id);
+  const c = lookupCamp(id);
   if (!c) return;
   prevScreen = document.querySelector('.screen.active')?.id || 'results';
   currentDetailId = id;
@@ -7926,11 +8007,11 @@ function openDetail(id) {
   document.getElementById('d-type').textContent    = c.type;
   document.getElementById('d-name').textContent    = c.name;
   document.getElementById('d-loc').textContent     = c.loc;
-  document.getElementById('d-rating').textContent  = c.rating;
-  document.getElementById('d-reviews').textContent = c.reviews.toLocaleString() + ' Reviews';
-  document.getElementById('d-price').textContent   = '$' + c.price;
-  document.getElementById('d-sites').textContent   = c.sites;
-  document.getElementById('d-avail').textContent   = c.avail;
+  document.getElementById('d-rating').textContent  = c.rating != null ? c.rating : '—';
+  document.getElementById('d-reviews').textContent = c.reviews ? c.reviews.toLocaleString() + ' Reviews' : '';
+  document.getElementById('d-price').textContent   = c.price != null ? '$' + c.price : 'Varies';
+  document.getElementById('d-sites').textContent   = c.sites != null ? c.sites : '—';
+  document.getElementById('d-avail').textContent   = c.avail != null ? c.avail : '—';
   document.getElementById('d-desc').textContent    = c.desc;
 
   // Distance stat — show only when user location is known
@@ -7952,7 +8033,7 @@ function openDetail(id) {
 
   const ALL_S = ['Spring','Summer','Fall','Winter'];
   document.getElementById('d-seasons').innerHTML = ALL_S.map(s =>
-    `<div class="season-chip ${c.seasons.includes(s)?'on':'off'}">${s}</div>`
+    `<div class="season-chip ${(c.seasons||[]).includes(s)?'on':'off'}">${s}</div>`
   ).join('');
 
   // Campfire status
@@ -8040,7 +8121,7 @@ function resetNotifStrip() {
 }
 
 async function submitNotifEmail() {
-  const c = CAMPS.find(x => x.id === currentDetailId);
+  const c = lookupCamp(currentDetailId);
   if (!c) return;
   const emailEl  = document.getElementById('notif-email');
   const submitEl = document.getElementById('notif-submit');
@@ -8283,7 +8364,7 @@ let _shareCanvas = null;
 
 async function shareCamp() {
   if (!currentDetailId) return;
-  const c = CAMPS.find(x => x.id === currentDetailId);
+  const c = lookupCamp(currentDetailId);
   if (!c) return;
   showToast('Building card…');
   await new Promise(r => setTimeout(r, 60));
@@ -8481,7 +8562,7 @@ function _tcSceneSVG(type) {
 
 function openTripCard() {
   if (!currentDetailId) return;
-  const c = CAMPS.find(x => x.id === currentDetailId);
+  const c = lookupCamp(currentDetailId);
   if (!c) return;
   _tcCamp = c;
 
@@ -8885,7 +8966,7 @@ function ratingDist(r) {
 
 function showReviewSheet() {
   if (!currentDetailId) return;
-  const c = CAMPS.find(x => x.id === currentDetailId);
+  const c = lookupCamp(currentDetailId);
   if (!c) return;
 
   const dist  = ratingDist(c.rating);
@@ -8985,7 +9066,7 @@ function closeReviewSheet() {
 function shareDownloadCard() {
   closeShareSheet();
   if (!_shareCanvas || !currentDetailId) return;
-  const c = CAMPS.find(x => x.id === currentDetailId);
+  const c = lookupCamp(currentDetailId);
   const filename = (c?.name || 'camp').toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-campgrounder.png';
   downloadCard(_shareCanvas, filename);
   showToast('Card saved ↓');
@@ -9772,7 +9853,7 @@ function haversine(lat1, lon1, lat2, lon2) {
 }
 
 function calcDriveTime() {
-  const c = CAMPS.find(x => x.id === currentDetailId);
+  const c = lookupCamp(currentDetailId);
   if (!c) return;
   const body = document.getElementById('drive-body');
   body.innerHTML = '<div class="drive-calculating">Finding your location…</div>';
@@ -9846,7 +9927,7 @@ let _flyActive     = false;
 let _mapboxLoaded  = false;
 
 function openFlyover() {
-  const c = CAMPS.find(x => x.id === currentDetailId);
+  const c = lookupCamp(currentDetailId);
   if (!c) return;
 
   document.getElementById('flyover-name').textContent = c.name;
