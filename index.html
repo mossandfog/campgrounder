@@ -3241,7 +3241,10 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
 <div class="screen" id="results">
   <div class="results-top">
     <div class="xbtn is-close" onclick="clearSearch();go('home','results')" aria-label="Clear and go home" role="button" tabindex="0"></div>
-    <div class="sbar"><input value="California" id="results-input"></div>
+    <div class="sbar"><input value="California" id="results-input"
+      oninput="onResultsInputChange(this.value)"
+      onkeydown="if(event.key==='Enter'){clearTimeout(_searchDebounce);submitSearch(this.value)}"
+    ></div>
     <div class="xbtn" onclick="openSearch()" aria-label="Open search" role="button" tabindex="0"></div>
   </div>
   <!-- Fire season advisory banner — shown June–September -->
@@ -7261,6 +7264,13 @@ async function submitSearch(query) {
   } else {
     searchQuery = query;
   }
+  // Reset filter state for each new search
+  currentFilter = 'all';
+  apiSearchResults = null;
+  apiSearchQuery   = '';
+  document.querySelectorAll('#results-filters .pill').forEach(p => p.classList.remove('on'));
+  const _ap = document.querySelector('#results-filters .pill');
+  if (_ap) _ap.classList.add('on');
   document.getElementById('results-input').value = searchQuery;
   go('results', 'search-overlay');
 }
@@ -7458,21 +7468,50 @@ function lookupCamp(id) {
 function persistSavedData() {
   try { localStorage.setItem('cg_saved_data', JSON.stringify(savedCampsData)); } catch {}
 }
+let _searchDebounce = null;
+function onResultsInputChange(val) {
+  val = (val || '').trim();
+  if (!val || val === searchQuery) return;
+  clearTimeout(_searchDebounce);
+  _searchDebounce = setTimeout(() => {
+    searchQuery = val;
+    currentFilter = 'all';
+    // Reset pill UI
+    document.querySelectorAll('#results-filters .pill').forEach(p => p.classList.remove('on'));
+    const allPill = document.querySelector('#results-filters .pill');
+    if (allPill) allPill.classList.add('on');
+    apiSearchResults = null;
+    apiSearchQuery   = '';
+    renderResults();
+  }, 450);
+}
+
 async function fetchApiSearch(query) {
-  if (apiSearchLoading) return;
+  if (apiSearchLoading) {
+    // If a different query is now active, let it wait and retry after current load
+    return;
+  }
   apiSearchLoading = true;
   renderResults(); // show loading state immediately
   try {
     const resp = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
     if (!resp.ok) throw new Error('Search failed');
+    // If the user changed the search query while we were loading, discard stale response
+    if (query !== searchQuery) {
+      apiSearchLoading = false;
+      fetchApiSearch(searchQuery);
+      return;
+    }
     const data = await resp.json();
     apiSearchResults = data.results || [];
     apiSearchQuery   = query;
     apiSearchResults.forEach(c => { apiCampsCache[c.id] = c; });
   } catch (err) {
     console.error('RIDB search error:', err);
-    apiSearchResults = [];
-    apiSearchQuery   = query;
+    if (query === searchQuery) {
+      apiSearchResults = [];
+      apiSearchQuery   = query;
+    }
   }
   apiSearchLoading = false;
   renderResults();
