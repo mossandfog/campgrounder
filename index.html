@@ -2124,6 +2124,9 @@ html, body {
 .share-sheet-opt-title { font-size: 14px; font-weight: 800; letter-spacing: 0.03em; margin-bottom: 3px; }
 .share-sheet-opt-sub { font-size: 12px; color: rgba(255,255,255,0.32); letter-spacing: 0.01em; }
 .share-sheet-cancel { width: 100%; padding: 13px; margin-top: 12px; background: transparent; border: 1.5px solid rgba(255,255,255,0.07); color: rgba(255,255,255,0.35); font-family: inherit; font-size: 12px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; cursor: pointer; transition: border-color 0.15s; }
+.share-trip-btn { display:flex; align-items:center; gap:6px; background:transparent; border:1.5px solid rgba(255,255,255,0.15); border-radius:8px; color:rgba(255,255,255,0.55); font-family:inherit; font-size:11px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; padding:7px 12px; cursor:pointer; transition:border-color 0.15s,color 0.15s; white-space:nowrap; }
+.share-trip-btn:hover { border-color:var(--o); color:var(--o); }
+@keyframes spin { from { transform:rotate(0deg) } to { transform:rotate(360deg) } }
 
 /* ── REVIEW SOURCES SHEET ─────────────────────────── */
 .rev-sheet { position: fixed; inset: 0; z-index: 400; display: flex; align-items: flex-end; justify-content: center; animation: fadeIn 0.18s ease; }
@@ -3344,7 +3347,13 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
       <div class="saved-heading">Saved</div>
       <div class="saved-count" id="saved-count">0 campgrounds</div>
     </div>
-    <div class="xbtn is-close" onclick="go('home','saved')" aria-label="Close saved list" role="button" tabindex="0"></div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button class="share-trip-btn" id="share-trip-btn" onclick="openTripShareSheet()" style="display:none" aria-label="Share trip">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+        Share
+      </button>
+      <div class="xbtn is-close" onclick="go('home','saved')" aria-label="Close saved list" role="button" tabindex="0"></div>
+    </div>
   </div>
   <div class="saved-scroll" id="saved-list"></div>
   <nav class="bnav">
@@ -3352,6 +3361,31 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
     <div class="ntab" onclick="go('map-screen','saved')"><svg><use href="#ic-map"/></svg>Map</div>
     <div class="ntab on"><svg><use href="#ic-heart"/></svg>Saved</div>
     <div class="ntab" onclick="go('profile','saved')"><svg><use href="#ic-user"/></svg>Profile</div>
+  </nav>
+</div>
+
+
+<!-- ══════════════════════════════════════
+  SHARED TRIP SCREEN
+══════════════════════════════════════ -->
+<div class="screen" id="shared">
+  <div class="saved-top">
+    <div>
+      <div class="saved-heading" id="shared-title">Shared Trip</div>
+      <div class="saved-count" id="shared-sub">Loading…</div>
+    </div>
+    <div class="xbtn is-close" onclick="go('home','shared')" aria-label="Close" role="button" tabindex="0"></div>
+  </div>
+  <div id="shared-loading" style="display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:14px;color:rgba(255,255,255,0.35);font-size:13px;padding-bottom:60px;">
+    <div style="width:28px;height:28px;border:2px solid rgba(255,255,255,0.1);border-top-color:var(--o);border-radius:50%;animation:spin 0.8s linear infinite;"></div>
+    Loading trip…
+  </div>
+  <div id="shared-list" class="saved-scroll" style="display:none;flex:1;overflow-y:auto;"></div>
+  <nav class="bnav">
+    <div class="ntab" onclick="go('home','shared')"><svg><use href="#ic-home"/></svg>Explore</div>
+    <div class="ntab" onclick="go('map-screen','shared')"><svg><use href="#ic-map"/></svg>Map</div>
+    <div class="ntab" onclick="go('saved','shared')"><svg><use href="#ic-heart"/></svg>Saved</div>
+    <div class="ntab" onclick="go('profile','shared')"><svg><use href="#ic-user"/></svg>Profile</div>
   </nav>
 </div>
 
@@ -7507,8 +7541,12 @@ function renderSaved() {
         <div class="empty-sub">Tap the heart on any campground<br>to save it here.</div>
         <button class="empty-cta" onclick="go('results','saved')">Start Exploring</button>
       </div>`;
+    const shareBtn = document.getElementById('share-trip-btn');
+    if (shareBtn) shareBtn.style.display = 'none';
     return;
   }
+  const shareBtn = document.getElementById('share-trip-btn');
+  if (shareBtn) shareBtn.style.display = 'flex';
   document.getElementById('saved-list').innerHTML = camps.map(c => `
     <div class="saved-card" onclick="openDetail(${c.id})" role="button" tabindex="0" aria-label="${c.name}, ${c.loc}">
       <div class="saved-sat-thumb" style="background-image:url(${mapboxStatic(c.lat, c.lng, 144, 144, 11, 20, 45)})" aria-hidden="true"></div>
@@ -7654,6 +7692,136 @@ function updateBadges() {
   const n = savedIds.size;
   document.querySelectorAll('.badge').forEach(b => { b.textContent = n; b.classList.toggle('show', n > 0); });
 }
+
+// ── TRIP SHARING ─────────────────────────────────────────────
+
+function openTripShareSheet() {
+  const sheet = document.getElementById('trip-share-sheet');
+  // Reset to form state
+  document.getElementById('trip-share-form').style.display = '';
+  document.getElementById('trip-share-result').style.display = 'none';
+  document.getElementById('trip-name-input').value = '';
+  const genBtn = document.getElementById('trip-gen-btn');
+  if (genBtn) { genBtn.disabled = false; genBtn.textContent = 'Generate Link'; }
+  sheet.style.display = 'flex';
+}
+
+function closeTripShareSheet() {
+  document.getElementById('trip-share-sheet').style.display = 'none';
+}
+
+async function generateTripLink() {
+  const btn = document.getElementById('trip-gen-btn');
+  btn.disabled = true;
+  btn.textContent = 'Generating…';
+
+  const name    = (document.getElementById('trip-name-input').value || '').trim() || 'My Trip';
+  const campIds = [...savedIds];
+
+  try {
+    const resp = await fetch('/api/trip', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ name, campIds }),
+    });
+    const data = await resp.json();
+    if (!resp.ok || !data.shortcode) throw new Error(data.error || 'Failed');
+
+    const link = `https://campgrounder.io/#trip-${data.shortcode}`;
+    document.getElementById('trip-link-display').value = link;
+    document.getElementById('trip-share-form').style.display = 'none';
+    document.getElementById('trip-share-result').style.display = '';
+  } catch (err) {
+    console.error('Trip link error:', err);
+    btn.disabled = false;
+    btn.textContent = 'Try Again';
+    showToast('Could not generate link — try again');
+  }
+}
+
+function copyTripLink() {
+  const input = document.getElementById('trip-link-display');
+  const btn   = document.getElementById('trip-copy-btn');
+  if (!input) return;
+  try {
+    navigator.clipboard.writeText(input.value).then(() => {
+      btn.textContent = 'Copied!';
+      setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+    });
+  } catch {
+    input.select();
+    document.execCommand('copy');
+    btn.textContent = 'Copied!';
+    setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+  }
+}
+
+async function loadSharedTrip(code) {
+  // Show shared screen with loading state
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('shared').classList.add('active');
+  document.getElementById('shared-loading').style.display = 'flex';
+  document.getElementById('shared-list').style.display    = 'none';
+
+  try {
+    const resp = await fetch(`/api/trip?id=${encodeURIComponent(code)}`);
+    if (!resp.ok) throw new Error('not found');
+    const data = await resp.json();
+
+    const tripName  = data.name || 'Shared Trip';
+    const campIds   = (data.campIds || []).map(Number);
+    const camps     = CAMPS.filter(c => campIds.includes(c.id));
+    // Preserve the order the sharer saved them
+    camps.sort((a, b) => campIds.indexOf(a.id) - campIds.indexOf(b.id));
+
+    document.getElementById('shared-title').textContent = tripName;
+    document.getElementById('shared-sub').textContent   =
+      `${camps.length} campground${camps.length !== 1 ? 's' : ''} · shared trip`;
+
+    if (camps.length === 0) {
+      document.getElementById('shared-list').innerHTML = `
+        <div class="empty-state">
+          <div class="empty-title" style="margin-top:0">No camps found</div>
+          <div class="empty-sub">This trip's campgrounds may have been removed.</div>
+        </div>`;
+    } else {
+      document.getElementById('shared-list').innerHTML = camps.map(c => `
+        <div class="saved-card" onclick="openDetail(${c.id})" role="button" tabindex="0" aria-label="${c.name}, ${c.loc}">
+          <div class="saved-sat-thumb" style="background-image:url(${mapboxStatic(c.lat, c.lng, 144, 144, 11, 20, 45)})" aria-hidden="true"></div>
+          <div class="card-body" style="flex:1;">
+            <div class="card-type">${c.type}</div>
+            <div class="card-name">${c.name}</div>
+            <div class="card-loc">${c.loc}</div>
+            <div class="card-stats" style="font-size:12px;color:rgba(255,255,255,0.5);">★ ${c.rating} &nbsp;·&nbsp; $${c.price} / night</div>
+          </div>
+          <button class="share-trip-btn" style="flex-shrink:0;font-size:10px;padding:6px 10px;border-radius:6px;" onclick="event.stopPropagation();saveCampFromShared(${c.id})" id="save-shared-${c.id}">
+            ${savedIds.has(c.id) ? '✓ Saved' : '+ Save'}
+          </button>
+        </div>`).join('');
+    }
+
+    document.getElementById('shared-loading').style.display = 'none';
+    document.getElementById('shared-list').style.display    = '';
+
+  } catch (err) {
+    document.getElementById('shared-title').textContent = 'Trip Not Found';
+    document.getElementById('shared-sub').textContent   = 'This link may have expired';
+    document.getElementById('shared-loading').innerHTML = `
+      <div style="font-size:32px;margin-bottom:8px;">🏕️</div>
+      <div style="font-size:15px;font-weight:700;color:rgba(255,255,255,0.6);">Trip not found</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.3);margin-top:6px;">This link may have expired or been removed.</div>`;
+  }
+}
+
+function saveCampFromShared(id) {
+  savedIds.add(id);
+  persistSaved();
+  updateBadges();
+  const btn = document.getElementById(`save-shared-${id}`);
+  if (btn) { btn.textContent = '✓ Saved'; btn.style.color = 'var(--o)'; btn.style.borderColor = 'var(--o)'; }
+  showToast('Saved  ＋');
+}
+
 function persistSaved() {
   try { localStorage.setItem('cg_saved', JSON.stringify([...savedIds])); } catch {}
 }
@@ -9073,6 +9241,10 @@ setTimeout(initWildfireSection, 400);
     const id = parseInt(hash.slice(6));
     if (!isNaN(id)) { requestAnimationFrame(() => openDetail(id)); return; }
   }
+  if (hash.startsWith('#trip-')) {
+    const code = hash.slice(6).replace(/[^a-z0-9]/gi, '').slice(0, 20);
+    if (code) { requestAnimationFrame(() => loadSharedTrip(code)); return; }
+  }
   const params = new URLSearchParams(window.location.search);
   const action = params.get('action');
   if (action === 'saved') {
@@ -9931,6 +10103,31 @@ function dismissWelcome() {
       <a class="tc-btn-book" id="tc-book-link" href="#" target="_blank" rel="noopener">Book Now</a>
     </div>
     <div class="tc-note">Set your dates, then save or share.</div>
+  </div>
+</div>
+
+
+<!-- ── TRIP SHARE SHEET ──────────────────────────── -->
+<div class="share-sheet" id="trip-share-sheet" style="display:none">
+  <div class="share-sheet-bg" onclick="closeTripShareSheet()"></div>
+  <div class="share-sheet-panel">
+    <div class="share-sheet-title">Share Your Trip</div>
+    <div id="trip-share-form">
+      <div style="margin-bottom:14px;">
+        <label style="display:block;font-size:11px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:8px;">Trip Name (optional)</label>
+        <input type="text" id="trip-name-input" class="notif-email" placeholder="e.g. Olympic Coast 2025" maxlength="80" style="width:100%;box-sizing:border-box;">
+      </div>
+      <button class="notif-submit" id="trip-gen-btn" style="width:100%;padding:13px;font-size:12px;border-radius:8px;" onclick="generateTripLink()">Generate Link</button>
+    </div>
+    <div id="trip-share-result" style="display:none;margin-top:4px;">
+      <div style="font-size:11px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:8px;">Your trip link</div>
+      <div style="display:flex;gap:8px;">
+        <input type="text" id="trip-link-display" readonly style="flex:1;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:10px 12px;font-size:11px;font-family:monospace;color:rgba(255,255,255,0.7);min-width:0;">
+        <button class="notif-submit" id="trip-copy-btn" style="flex-shrink:0;border-radius:8px;" onclick="copyTripLink()">Copy</button>
+      </div>
+      <div style="margin-top:10px;font-size:11px;color:rgba(255,255,255,0.28);line-height:1.65;">Anyone with this link can view your trip and save camps to their list. Link expires in 180 days.</div>
+    </div>
+    <button class="share-sheet-cancel" onclick="closeTripShareSheet()" style="margin-top:12px;">Close</button>
   </div>
 </div>
 
