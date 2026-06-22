@@ -4260,6 +4260,9 @@ function buildBookingUrl(c) {
   const q   = encodeURIComponent(c.name);
   const loc = c.loc.toLowerCase();
 
+  // RIDB camps with a direct reservation URL — always use it when available
+  if (c.source === 'ridb' && c.reservationUrl) return c.reservationUrl;
+
   // Free / dispersed / primitive — no booking needed; link to info page
   if (c.price === 0)
     return `https://www.recreation.gov/search?q=${q}&entity_type=campground`;
@@ -7480,7 +7483,20 @@ function getFilteredCamps() {
 
   // Text searches go to RIDB API — return cached results or trigger fetch
   if (hasSearch) {
-    if (apiSearchQuery === searchQuery && apiSearchResults !== null) return apiSearchResults;
+    if (apiSearchQuery === searchQuery && apiSearchResults !== null) {
+      // Apply active filter to API results too
+      if (currentFilter === 'all') return apiSearchResults;
+      return apiSearchResults.filter(c => {
+        const amen = c.amenities || [];
+        if (currentFilter === 'pet')           return amen.includes('Pet Friendly');
+        if (currentFilter === 'tent-friendly') return c.type !== 'RV Park';
+        if (currentFilter === 'rv-ready')      return c.type === 'RV Park' || amen.some(a => /hookup/i.test(a));
+        if (currentFilter === 'dark-sky')      return amen.includes('Stargazing');
+        if (currentFilter === 'wifi')          return amen.includes('WiFi');
+        if (currentFilter === 'water')         return amen.some(a => /swim|lake|river|beach|kayak/i.test(a));
+        return c.type === currentFilter;
+      });
+    }
     if (!apiSearchLoading) fetchApiSearch(searchQuery);
     return null; // null = loading; renderResults shows spinner
   }
@@ -9166,7 +9182,7 @@ function addMarker(c) {
     iconSize:[20,20], iconAnchor:[10,20], className:''
   });
   const price = L.divIcon({
-    html: `<div style="background:#E8481C;color:#fff;padding:4px 9px;font-family:Helvetica Neue,sans-serif;font-size:12px;font-weight:800;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,0.45);cursor:pointer;transform:translateX(-50%) translateY(-44px);">$${c.price}</div>`,
+    html: `<div style="background:#E8481C;color:#fff;padding:4px 9px;font-family:Helvetica Neue,sans-serif;font-size:12px;font-weight:800;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,0.45);cursor:pointer;transform:translateX(-50%) translateY(-44px);">${c.price != null ? '$'+c.price : 'Free'}</div>`,
     iconSize:[1,1], iconAnchor:[0,0], className:''
   });
   const pm = L.marker([c.lat,c.lng],{icon:pin  }).addTo(lMap).on('click',()=>openDetail(c.id));
@@ -9176,7 +9192,9 @@ function addMarker(c) {
 
 function updateMapMarkers() {
   if (!mapReady || !lMap) return;
-  const visible = new Set(getFilteredCamps().map(c => c.id));
+  const _fc = getFilteredCamps();
+  if (!_fc) return; // still loading API results
+  const visible = new Set(_fc.map(c => c.id));
   CAMPS.forEach(c => {
     const [pm, pr] = mapMarkerMap[c.id] || [];
     if (!pm) return;
