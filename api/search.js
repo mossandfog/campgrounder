@@ -43,7 +43,7 @@ function mapType(recAreaName, orgName) {
   const r = (recAreaName || '').toLowerCase();
   const o = (orgName || '').toLowerCase();
   if (r.includes('national park') || o.includes('national park service') || o.includes('nps')) return 'National Park';
-  if (r.includes('national forest') || o.includes('forest service') || o.includes('usfs')) return 'National Forest';
+  if (r.includes('national forest') || o.includes('forest service') || o.includes('usfs')) return 'Forest Service';
   if (r.includes('state park') || r.includes('state forest') || o.includes('state')) return 'State Park';
   if (r.includes('national lakeshore') || r.includes('national seashore') || r.includes('national recreation') || r.includes('national monument')) return 'National Park';
   if (r.includes('bureau of land') || o.includes('bureau of land management') || o.includes('blm')) return 'BLM';
