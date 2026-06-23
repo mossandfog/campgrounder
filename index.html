@@ -2261,7 +2261,8 @@ html, body {
 .tc-scene-divider { height: 2px; background: #E8481C; opacity: 0.5; }
 .tc-info { padding: 16px 18px 20px; }
 .tc-camp-name { font-size: 20px; font-weight: 800; color: #fff; line-height: 1.15; margin-bottom: 3px; }
-.tc-camp-loc { font-size: 10px; color: #8CA898; margin-bottom: 13px; }
+.tc-camp-loc { font-size: 10px; color: #8CA898; margin-bottom: 3px; }
+.tc-meta { font-size: 10px; color: #8CA898; margin-bottom: 10px; letter-spacing: 0.02em; }
 .tc-divider { height: 0.5px; background: #1E3D2A; margin: 10px 0; }
 .tc-dates-row { display: flex; gap: 12px; margin-bottom: 4px; }
 .tc-date-field { flex: 1; }
@@ -8644,6 +8645,14 @@ function openTripCard() {
   // Info
   document.getElementById('tc-name').textContent = c.name;
   document.getElementById('tc-loc').textContent  = c.loc;
+  // Rating + sites sub-line
+  const metaEl = document.getElementById('tc-meta');
+  if (metaEl) {
+    const metaParts = [];
+    if (c.rating) metaParts.push(`★ ${c.rating}`);
+    if (c.sites)  metaParts.push(`${c.sites} sites`);
+    metaEl.textContent = metaParts.join('  ·  ');
+  }
   document.getElementById('tc-type').textContent = c.type;
   document.getElementById('tc-amenities').textContent = (c.amenities || []).slice(0,4).join(' · ');
 
@@ -8838,7 +8847,19 @@ function _tcBuildCanvas(c) {
   ctx.font = '400 24px "Helvetica Neue",Helvetica,Arial,sans-serif';
   ctx.fillStyle = sg;
   ctx.fillText(c.loc, ix, y);
-  y += 44;
+  y += 30;
+
+  // Rating + sites
+  const metaParts = [];
+  if (c.rating) metaParts.push(`★ ${c.rating}`);
+  if (c.sites)  metaParts.push(`${c.sites} sites`);
+  if (metaParts.length > 0) {
+    ctx.font = '400 22px "Helvetica Neue",Helvetica,Arial,sans-serif';
+    ctx.fillStyle = sg;
+    ctx.fillText(metaParts.join('   ·   '), ix, y);
+    y += 30;
+  }
+  y += 14;
 
   // Divider
   ctx.fillStyle = g2;
@@ -10292,6 +10313,7 @@ function dismissWelcome() {
       <div class="tc-info">
         <div class="tc-camp-name" id="tc-name"></div>
         <div class="tc-camp-loc" id="tc-loc"></div>
+        <div class="tc-meta" id="tc-meta"></div>
         <div class="tc-divider"></div>
         <div class="tc-dates-row">
           <div class="tc-date-field">
