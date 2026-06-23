@@ -6723,7 +6723,7 @@ const PUBLIC_TYPES = ['National Park','State Park','Forest Service','BLM','Army 
 
 function campState(camp) {
   // loc format: "Place Name · State"
-  const parts = camp.loc.split('·');
+  const parts = (camp.loc || '').split('·');
   return parts[parts.length - 1].trim();
 }
 
@@ -7702,7 +7702,7 @@ function renderSaved() {
         <div class="card-type">${c.type}</div>
         <div class="card-name">${c.name}</div>
         <div class="card-loc">${c.loc}</div>
-        <div class="card-stats" style="font-size:12px;color:rgba(255,255,255,0.5);">★ ${c.rating} &nbsp;·&nbsp; $${c.price} / night</div>
+        <div class="card-stats" style="font-size:12px;color:rgba(255,255,255,0.5);">${c.rating!=null?'★ '+c.rating+' &nbsp;·&nbsp; ':''}${c.price!=null?'$'+c.price+' / night':'Free / Varies'}</div>
       </div>
       <div class="unsave-btn" onclick="unsave(${c.id},event)" aria-label="Remove ${c.name} from saved" role="button"></div>
     </div>`).join('');
@@ -7953,7 +7953,7 @@ async function loadSharedTrip(code) {
             <div class="card-type">${c.type}</div>
             <div class="card-name">${c.name}</div>
             <div class="card-loc">${c.loc}</div>
-            <div class="card-stats" style="font-size:12px;color:rgba(255,255,255,0.5);">★ ${c.rating} &nbsp;·&nbsp; $${c.price} / night</div>
+            <div class="card-stats" style="font-size:12px;color:rgba(255,255,255,0.5);">${c.rating!=null?'★ '+c.rating+' &nbsp;·&nbsp; ':''}${c.price!=null?'$'+c.price+' / night':'Free / Varies'}</div>
           </div>
           <button class="share-trip-btn" style="flex-shrink:0;font-size:10px;padding:6px 10px;border-radius:6px;" onclick="event.stopPropagation();saveCampFromShared(${c.id})" id="save-shared-${c.id}">
             ${savedIds.has(c.id) ? '✓ Saved' : '+ Save'}
@@ -8091,6 +8091,11 @@ function openDetail(id) {
   currentDetailId = id;
   history.replaceState(null, '', '#camp-' + id);
 
+  // Navigate first so the screen opens even if a render call below throws
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('detail').classList.add('active');
+  document.getElementById('detail').scrollTop = 0;
+
   const dHero = document.getElementById('d-hero');
   // Use real RIDB photo when available; otherwise show abstract gradient (no misleading placeholder)
   dHero.style.backgroundImage = c.photo
@@ -8157,10 +8162,6 @@ function openDetail(id) {
   const btn = document.getElementById('save-btn');
   if (savedIds.has(id)) { svg.style.color='#E8481C'; btn.classList.add('saved'); }
   else                  { svg.style.color='rgba(255,255,255,0.7)'; btn.classList.remove('saved'); }
-
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById('detail').classList.add('active');
-  document.getElementById('detail').scrollTop = 0;
 
   // Dismissible hints
   _showHint('hint-tripcard');
@@ -8342,7 +8343,7 @@ function generateShareCard(c) {
   ctx.fillStyle = '#E8C21C';
   ctx.fillText('★', PAD, rY);
   ctx.fillStyle = '#FFFFFF';
-  ctx.fillText(' ' + c.rating, PAD + 24, rY);
+  ctx.fillText(' ' + (c.rating != null ? c.rating : '—'), PAD + 24, rY);
   ls('0.1em');
   ctx.font = '500 18px "Helvetica Neue",Helvetica,Arial,sans-serif';
   ctx.fillStyle = 'rgba(255,255,255,0.28)';
@@ -8358,9 +8359,9 @@ function generateShareCard(c) {
   const stH = 108;
   const colW = (W - PAD * 2) / 3;
   const stats = [
-    { val: '$' + c.price, label: 'PER NIGHT',   color: O },
-    { val: c.sites,       label: 'TOTAL SITES',  color: '#FFFFFF' },
-    { val: '★ ' + c.rating, label: 'RATING',    color: '#E8C21C' },
+    { val: c.price != null ? '$' + c.price : 'Varies', label: 'PER NIGHT',   color: O },
+    { val: c.sites != null ? c.sites : '—',            label: 'TOTAL SITES',  color: '#FFFFFF' },
+    { val: '★ ' + (c.rating != null ? c.rating : '—'), label: 'RATING',       color: '#E8C21C' },
   ];
   ctx.strokeStyle = 'rgba(232,72,28,0.3)';
   ctx.lineWidth = 1.5;
@@ -9147,7 +9148,7 @@ function ratingDist(r) {
 function showReviewSheet() {
   if (!currentDetailId) return;
   const c = lookupCamp(currentDetailId);
-  if (!c) return;
+  if (!c || c.rating == null) return;
 
   const dist  = ratingDist(c.rating);
   const stars = ['★★★★★','★★★★☆','★★★☆☆','★★☆☆☆','★☆☆☆☆'];
@@ -9334,7 +9335,7 @@ function initMap() {
       <div style="margin-bottom:7px;">${glyph(TYPE_GLYPH[c.type]||'#ic-tent',18,'var(--o)')}</div>
       <div class="mini-type">${c.type}</div>
       <div class="mini-name">${c.name}</div>
-      <div class="mini-price">$${c.price}<span> / night</span></div>
+      <div class="mini-price">${c.price!=null?'$'+c.price:'Free'}<span> / night</span></div>
     </div>`).join('');
 
   setTimeout(() => lMap.invalidateSize(), 100);
@@ -9902,7 +9903,7 @@ function scrollToGearCard(packKey) {
 // ─── SMART PACK LIST ─────────────────────────────
 function generatePackList(c) {
   const items = [];
-  const has   = a => c.amenities.includes(a);
+  const has   = a => (c.amenities || []).includes(a);
   const txt   = (c.loc + ' ' + c.desc).toLowerCase();
 
   // Sleep
