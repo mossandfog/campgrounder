@@ -7528,12 +7528,28 @@ async function fetchApiSearch(query) {
   } catch (err) {
     console.error('RIDB search error:', err);
     if (query === searchQuery) {
-      apiSearchResults = [];
+      // API failed — fall back to local CAMPS text match so user sees something
+      apiSearchResults = _localTextSearch(query);
       apiSearchQuery   = query;
     }
   }
   apiSearchLoading = false;
   renderResults();
+}
+
+// Local text search across hardcoded CAMPS as fallback when RIDB is unavailable.
+// Splits query into meaningful words and returns any camp that matches at least one.
+const _SEARCH_STOP = new Set(['camping','camp','campground','campgrounds','the','and','or','for','with','near','great','good','best','friendly','in','at','a','an','to','by']);
+function _localTextSearch(q) {
+  const words = q.toLowerCase().split(/\s+/).filter(w => w.length > 2 && !_SEARCH_STOP.has(w));
+  if (!words.length) return [];
+  return CAMPS.filter(c => {
+    const hay = [
+      c.name, c.loc, c.type, c.desc || '',
+      (c.amenities || []).join(' ')
+    ].join(' ').toLowerCase();
+    return words.some(w => hay.includes(w));
+  });
 }
 
 function getFilteredCamps() {
@@ -7542,9 +7558,12 @@ function getFilteredCamps() {
   // Text searches go to RIDB API — return cached results or trigger fetch
   if (hasSearch) {
     if (apiSearchQuery === searchQuery && apiSearchResults !== null) {
-      // Apply active filter to API results too
-      if (currentFilter === 'all') return apiSearchResults;
-      return apiSearchResults.filter(c => {
+      // Merge RIDB results with any matching hardcoded camps (deduped by id)
+      const localMatches = _localTextSearch(searchQuery);
+      const ridbIds = new Set(apiSearchResults.map(c => c.id));
+      const merged = [...apiSearchResults, ...localMatches.filter(c => !ridbIds.has(c.id))];
+      if (currentFilter === 'all') return merged;
+      return merged.filter(c => {
         const amen = c.amenities || [];
         if (currentFilter === 'pet')           return amen.includes('Pet Friendly');
         if (currentFilter === 'tent-friendly') return c.type !== 'RV Park';
