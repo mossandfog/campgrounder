@@ -8067,7 +8067,8 @@ function showToast(msg) {
 function openDetail(id) {
   const c = lookupCamp(id);
   if (!c) return;
-  prevScreen = document.querySelector('.screen.active')?.id || 'results';
+  const _activeNow = document.querySelector('.screen.active')?.id;
+  if (_activeNow !== 'detail') prevScreen = _activeNow || 'results';
   currentDetailId = id;
   history.replaceState(null, '', '#camp-' + id);
 
