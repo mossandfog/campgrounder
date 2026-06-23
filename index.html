@@ -2843,7 +2843,7 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
 <div class="screen active" id="home">
 <div class="home-scroll">
   <div class="home-top">
-    <div>
+    <div onclick="document.getElementById('home').querySelector('.home-scroll').scrollTo({top:0,behavior:'smooth'})" role="button" tabindex="0" aria-label="Go to top" style="cursor:pointer;display:flex;align-items:center;gap:10px;-webkit-tap-highlight-color:transparent;">
       <svg width="36" height="36" viewBox="0 0 100 100" aria-label="Campgrounder logo" role="img"><use href="#ic-logo"/></svg>
       <div class="wordmark">Campgrounder</div>
     </div>
