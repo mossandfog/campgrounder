@@ -1,0 +1,18 @@
+# Dependencies
+node_modules/
+
+# iOS Pods (installed locally by CocoaPods)
+ios/App/Pods/
+ios/App/App.xcworkspace/xcuserdata/
+ios/App/*.xcworkspace/xcuserdata/
+ios/.xcode.env.local
+
+# Android
+android/
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Capacitor
+.capacitor/

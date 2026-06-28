@@ -1,8 +1,7 @@
 {
   "appId": "io.campgrounder.app",
   "appName": "Campgrounder",
-  "webDir": ".",
-  "bundledWebRuntime": false,
+  "webDir": "www",
   "server": {
     "androidScheme": "https"
   },

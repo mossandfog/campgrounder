@@ -1,0 +1,21 @@
+{
+  "name": "campgrounder",
+  "version": "1.0.0",
+  "description": "Campgrounder — discover and save your favorite campgrounds",
+  "private": true,
+  "scripts": {
+    "build": "cp index.html sw.js manifest.json favicon.ico favicon.png favicon-16.png icon-192.png icon-512.png logo.png og-image.png search.js www/ 2>/dev/null; echo 'Build complete — www/ is ready'",
+    "sync": "npm run build && npx cap sync ios",
+    "open": "npx cap open ios"
+  },
+  "dependencies": {
+    "@capacitor/core": "^6.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.0.0",
+    "@capacitor/ios": "^6.0.0",
+    "@capacitor/local-notifications": "^6.0.0",
+    "@capacitor/splash-screen": "^6.0.0",
+    "@capacitor/status-bar": "^6.0.0"
+  }
+}
