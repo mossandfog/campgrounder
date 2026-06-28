@@ -2723,6 +2723,209 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
 .suggest-submit { width: 100%; padding: 14px; background: var(--o); border: none; color: white; font-family: inherit; font-size: 12px; font-weight: 900; letter-spacing: 0.22em; text-transform: uppercase; cursor: pointer; transition: background 0.15s; margin-top: 4px; }
 .suggest-submit:hover { background: #D03C12; }
 .suggest-note { font-size: 11px; color: rgba(255,255,255,0.28); text-align: center; margin-top: 10px; line-height: 1.6; }
+
+/* ── FIRST LIGHT ─────────────────────────────────────────────── */
+/* CTA bar button */
+.cta-fl {
+  display: flex; align-items: center; gap: 7px;
+  padding: 0 14px; height: 48px; flex-shrink: 0;
+  background: rgba(245,166,35,0.10); border: 1.5px solid rgba(245,166,35,0.4);
+  color: rgba(245,166,35,0.9); font-family: inherit;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
+  cursor: pointer; white-space: nowrap; transition: background 0.15s, border-color 0.15s;
+}
+.cta-fl:hover { background: rgba(245,166,35,0.18); border-color: rgba(245,166,35,0.7); }
+.cta-fl.set { background: rgba(245,166,35,0.18); border-color: rgba(245,166,35,0.85); color: rgba(245,166,35,1); }
+.cta-fl-icon { font-size: 14px; line-height: 1; }
+
+/* Date-picker sheet */
+.fl-sheet {
+  position: fixed; inset: 0; z-index: 600;
+  display: none; align-items: flex-end; justify-content: center;
+  background: rgba(0,0,0,0.72);
+}
+.fl-sheet.open { display: flex; }
+.fl-sheet-inner {
+  width: 100%; max-width: 520px;
+  background: var(--g1); border-top: 1px solid rgba(245,166,35,0.25);
+  padding: 28px 28px calc(28px + env(safe-area-inset-bottom, 0px));
+  animation: flSheetUp 0.28s cubic-bezier(0.22,1,0.36,1);
+}
+@keyframes flSheetUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.fl-sheet-eyebrow { font-size: 9px; letter-spacing: 4px; text-transform: uppercase; color: rgba(245,166,35,0.65); margin-bottom: 8px; }
+.fl-sheet-title { font-size: 22px; font-weight: 300; color: #f4f0e8; margin-bottom: 6px; }
+.fl-sheet-sub { font-size: 12px; color: rgba(255,255,255,0.42); line-height: 1.6; margin-bottom: 22px; }
+.fl-urgency { font-size: 11px; color: rgba(245,166,35,0.75); background: rgba(245,166,35,0.08); border-left: 2px solid rgba(245,166,35,0.4); padding: 9px 12px; margin-bottom: 22px; line-height: 1.6; }
+.fl-date-row { display: flex; gap: 10px; margin-bottom: 18px; }
+.fl-date-field { flex: 1; display: flex; flex-direction: column; gap: 5px; }
+.fl-date-label { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.3); }
+.fl-date-input {
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+  color: #f4f0e8; font-family: inherit; font-size: 14px; padding: 11px 12px;
+  outline: none; appearance: none; -webkit-appearance: none;
+  color-scheme: dark;
+}
+.fl-date-input:focus { border-color: rgba(245,166,35,0.5); }
+.fl-open-preview {
+  text-align: center; padding: 14px; margin-bottom: 18px;
+  background: rgba(245,166,35,0.06); border: 1px solid rgba(245,166,35,0.18);
+  display: none;
+}
+.fl-open-preview.visible { display: block; }
+.fl-open-label { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: rgba(245,166,35,0.55); margin-bottom: 5px; }
+.fl-open-date  { font-size: 20px; font-weight: 200; color: #f4f0e8; margin-bottom: 3px; }
+.fl-open-time  { font-size: 11px; color: rgba(245,166,35,0.7); }
+.fl-set-btn {
+  width: 100%; padding: 15px; background: rgba(245,166,35,0.85);
+  border: none; color: #0c0e10; font-family: inherit;
+  font-size: 11px; font-weight: 900; letter-spacing: 0.22em; text-transform: uppercase;
+  cursor: pointer; transition: background 0.15s;
+}
+.fl-set-btn:hover { background: rgba(245,166,35,1); }
+.fl-cancel { width: 100%; padding: 12px; background: none; border: none; color: rgba(255,255,255,0.3); font-family: inherit; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; margin-top: 8px; }
+
+/* Sunrise moment overlay */
+.fl-moment {
+  position: fixed; inset: 0; z-index: 700;
+  display: none; flex-direction: column; align-items: center; justify-content: flex-end;
+  pointer-events: none;
+}
+.fl-moment.visible { display: flex; }
+.fl-moment-glow {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 60%; background: radial-gradient(ellipse 80% 100% at 50% 100%, rgba(245,166,35,0.22) 0%, rgba(245,100,15,0.08) 50%, transparent 100%);
+  animation: flGlowIn 1.2s ease forwards;
+}
+.fl-moment-horizon {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(245,166,35,0.6), transparent);
+  animation: flGlowIn 0.8s ease forwards;
+}
+.fl-moment-card {
+  position: relative; z-index: 10; text-align: center;
+  padding: 32px 36px calc(52px + env(safe-area-inset-bottom, 0px));
+  animation: flCardUp 0.55s cubic-bezier(0.22,1,0.36,1) 0.2s both;
+}
+.fl-moment-icon { font-size: 32px; margin-bottom: 14px; }
+.fl-moment-title { font-size: 26px; font-weight: 200; color: #f4f0e8; margin-bottom: 6px; }
+.fl-moment-sub { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: rgba(245,166,35,0.7); margin-bottom: 18px; }
+.fl-moment-detail { font-size: 12px; color: rgba(244,240,232,0.5); line-height: 1.7; margin-bottom: 28px; }
+.fl-moment-dismiss { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.25); cursor: pointer; pointer-events: all; animation: flTap 2.2s ease-in-out 1.5s infinite; }
+@keyframes flGlowIn  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes flCardUp  { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes flTap     { 0%,100% { opacity: .2; } 50% { opacity: .6; } }
+
+/* Saved list badge */
+.fl-badge {
+  display: none; align-items: center; gap: 4px;
+  margin-top: 5px; font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+  color: rgba(245,166,35,0.75);
+}
+.fl-badge.visible { display: flex; }
+.fl-badge-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(245,166,35,0.75); flex-shrink: 0; }
+
+/* ── THE TRAIL ──────────────────────────────────────────────── */
+#trail { background: #0b0e10; overflow: hidden; }
+#trail canvas { position: absolute; top: 0; left: 0; display: block; }
+.trail-canvas-wrap { position: absolute; inset: 0; }
+.trail-header {
+  position: absolute; top: 0; left: 0; right: 0; z-index: 20;
+  padding: max(52px, calc(44px + env(safe-area-inset-top, 0px))) 22px 14px;
+  pointer-events: none;
+}
+.trail-wordmark {
+  font-size: 9px; letter-spacing: 5px; text-transform: uppercase;
+  color: rgba(200,168,95,0.5); margin-bottom: 7px;
+}
+.trail-title {
+  font-size: 28px; font-weight: 100; letter-spacing: 11px;
+  text-transform: uppercase; color: #f4f0e8;
+}
+.trail-stats {
+  position: absolute; bottom: 0; left: 0; right: 0; z-index: 20;
+  display: flex; align-items: stretch;
+  background: rgba(8,10,12,0.9);
+  border-top: 1px solid rgba(200,168,95,0.12);
+  padding: 14px 22px calc(14px + env(safe-area-inset-bottom, 0px));
+}
+.trail-stat { flex: 1; padding-right: 16px; border-right: 1px solid rgba(255,255,255,0.07); margin-right: 16px; }
+.trail-stat:last-of-type { border-right: none; margin-right: 0; }
+.trail-stat-lbl { font-size: 7px; letter-spacing: 3px; text-transform: uppercase; color: rgba(200,168,95,0.55); margin-bottom: 4px; }
+.trail-stat-num { font-size: 20px; font-weight: 100; color: #f4f0e8; line-height: 1; }
+.trail-share-btn {
+  flex-shrink: 0; align-self: center;
+  background: rgba(200,168,95,0.12); border: 1px solid rgba(200,168,95,0.32);
+  color: rgba(200,168,95,0.85); padding: 9px 15px;
+  font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+  font-family: inherit; cursor: pointer; white-space: nowrap;
+}
+.trail-back {
+  position: absolute; top: max(16px, calc(10px + env(safe-area-inset-top, 0px)));
+  right: 18px; z-index: 30; pointer-events: all;
+}
+.trail-night-btn {
+  position: absolute; top: max(16px, calc(10px + env(safe-area-inset-top, 0px)));
+  left: 18px; z-index: 30; pointer-events: all;
+  background: rgba(0,0,0,0.45); border: 1px solid rgba(200,168,95,0.25);
+  color: rgba(200,168,95,0.65); padding: 7px 12px;
+  font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+  font-family: inherit; cursor: pointer; transition: all 0.3s;
+}
+.trail-night-btn.on { background: rgba(200,168,95,0.18); border-color: rgba(200,168,95,0.55); color: rgba(200,168,95,1); }
+
+/* ── TRAIL DISCOVERY OVERLAY ────────────────────────────────── */
+#trail-discover {
+  position: fixed; inset: 0; z-index: 500;
+  display: none; flex-direction: column;
+  align-items: center; justify-content: center;
+  background: #060809; overflow: hidden;
+  cursor: pointer;
+}
+#trail-discover.visible { display: flex; }
+#trail-discover canvas { position: absolute; top: 0; left: 0; display: block; }
+.td-content {
+  position: relative; z-index: 10;
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; padding: 32px;
+  opacity: 0; transition: opacity 1.2s ease;
+}
+.td-content.visible { opacity: 1; }
+.td-headline {
+  font-size: clamp(26px, 7vw, 38px); font-weight: 100;
+  color: #f4f0e8; line-height: 1.45; margin-bottom: 14px; letter-spacing: 0.3px;
+}
+.td-sub {
+  font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
+  color: rgba(200,168,95,0.65); margin-bottom: 32px;
+}
+.td-dots { display: flex; gap: 10px; margin-bottom: 48px; }
+.td-dot {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: rgba(255,160,60,0.9);
+  animation: tdDotGlow 2s ease-in-out infinite;
+}
+.td-tap { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: rgba(244,240,232,0.28); animation: tdTap 2.2s ease-in-out infinite; }
+@keyframes tdDotGlow { 0%,100%{box-shadow:0 0 4px 2px rgba(255,150,50,.35)} 50%{box-shadow:0 0 9px 5px rgba(255,150,50,.72)} }
+@keyframes tdTap { 0%,100%{opacity:.25} 50%{opacity:.65} }
+
+/* ── PROFILE TRAIL ENTRY ─────────────────────────────────────── */
+.profile-trail-entry {
+  display: none; margin: 0 22px 6px;
+  border: 1px solid rgba(200,168,95,0.22);
+  cursor: pointer; overflow: hidden; position: relative;
+  transition: border-color 0.18s;
+}
+.profile-trail-entry:hover { border-color: rgba(200,168,95,0.5); }
+.profile-trail-entry.discovered { display: block; }
+.trail-entry-canvas { display: block; width: 100%; height: 80px; }
+.trail-entry-label {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: space-between;
+  padding: 0 18px; pointer-events: none;
+}
+.trail-entry-left { display: flex; flex-direction: column; gap: 3px; }
+.trail-entry-eyebrow { font-size: 8px; letter-spacing: 4px; text-transform: uppercase; color: rgba(200,168,95,0.6); }
+.trail-entry-name { font-size: 16px; font-weight: 100; letter-spacing: 6px; text-transform: uppercase; color: #f4f0e8; }
+.trail-entry-arrow { font-size: 14px; color: rgba(200,168,95,0.5); }
 </style>
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
@@ -3467,6 +3670,18 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
       </div>
     </div>
 
+    <!-- The Trail entry (revealed after discovery) -->
+    <div class="profile-trail-entry" id="profile-trail-entry" onclick="go('trail','profile')">
+      <canvas class="trail-entry-canvas" id="trail-entry-canvas"></canvas>
+      <div class="trail-entry-label">
+        <div class="trail-entry-left">
+          <div class="trail-entry-eyebrow">Your journey</div>
+          <div class="trail-entry-name">The Trail</div>
+        </div>
+        <div class="trail-entry-arrow">→</div>
+      </div>
+    </div>
+
     <!-- Outfit -->
     <div class="profile-section-label">Gear Up</div>
     <div class="outfit-sublabel">No judgment.</div>
@@ -3608,6 +3823,57 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
     <div class="ntab" onclick="go('saved','profile')"><svg><use href="#ic-heart"/></svg>Saved</div>
     <div class="ntab on"><svg><use href="#ic-user"/></svg>Profile</div>
   </nav>
+</div>
+
+<!-- ══════════════════════════════════════
+  THE TRAIL
+══════════════════════════════════════ -->
+<div class="screen" id="trail">
+  <div class="trail-canvas-wrap">
+    <canvas id="trail-c-terrain"></canvas>
+    <canvas id="trail-c-fog"></canvas>
+    <canvas id="trail-c-anim"></canvas>
+  </div>
+
+  <button class="trail-night-btn" id="trail-night-btn" onclick="trailToggleNight()">★ Night sky</button>
+  <div class="trail-back">
+    <div class="xbtn is-close dark-bg" onclick="go('profile','trail')" aria-label="Close trail" role="button" tabindex="0"></div>
+  </div>
+
+  <div class="trail-header">
+    <div class="trail-wordmark">Campgrounder</div>
+    <div class="trail-title">The Trail</div>
+  </div>
+
+  <div class="trail-stats">
+    <div class="trail-stat">
+      <div class="trail-stat-lbl">Camps</div>
+      <div class="trail-stat-num" id="trail-stat-camps">0</div>
+    </div>
+    <div class="trail-stat">
+      <div class="trail-stat-lbl">Miles</div>
+      <div class="trail-stat-num" id="trail-stat-miles">—</div>
+    </div>
+    <div class="trail-stat">
+      <div class="trail-stat-lbl">States</div>
+      <div class="trail-stat-num" id="trail-stat-states">—</div>
+    </div>
+    <button class="trail-share-btn" onclick="trailShare()">Share trail</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  TRAIL DISCOVERY OVERLAY
+══════════════════════════════════════ -->
+<div id="trail-discover" onclick="trailDiscoverDismiss()">
+  <canvas id="td-terrain"></canvas>
+  <canvas id="td-fog"></canvas>
+  <div class="td-content" id="td-content">
+    <div class="td-headline">We've been<br>keeping track.</div>
+    <div class="td-sub" id="td-sub">— camps saved —</div>
+    <div class="td-dots" id="td-dots"></div>
+    <div class="td-tap">tap to explore your trail</div>
+  </div>
 </div>
 
 <!-- ══════════════════════════════════════
@@ -4170,15 +4436,55 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
   </div>
   <div class="d-cta-bar">
     <a class="cta-main" id="d-cta-link" href="#" target="_blank" rel="noopener">Check Availability →</a>
+    <button class="cta-fl" id="fl-btn" onclick="showFirstLight()" aria-label="Set First Light reminder" title="First Light">
+      <span class="cta-fl-icon">🌅</span>First Light
+    </button>
     <div class="cta-sq-tc" onclick="openTripCard()" title="My Trip Card" data-tooltip="Trip Card" aria-label="Create trip card" role="button" tabindex="0">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3H8"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
-    </div>
-    <div class="cta-sq" onclick="addToCalendar()" title="Add to Calendar" data-tooltip="Add to Calendar" aria-label="Add to Calendar" role="button">
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
     </div>
     <div class="cta-sq" onclick="shareCamp()" data-tooltip="Share" aria-label="Share campground" role="button">
       <svg width="17" height="17" style="color:rgba(255,255,255,0.6);stroke:currentColor;fill:none;" aria-hidden="true"><use href="#ic-share"/></svg>
     </div>
+  </div>
+</div>
+
+<!-- ── FIRST LIGHT DATE SHEET ──────────────────────── -->
+<div class="fl-sheet" id="fl-sheet" onclick="flSheetClickOut(event)">
+  <div class="fl-sheet-inner">
+    <div class="fl-sheet-eyebrow">First Light</div>
+    <div class="fl-sheet-title" id="fl-sheet-name">Set your reminder</div>
+    <div class="fl-sheet-sub">When are you planning to camp? Campgrounder will remind you the morning reservations open — with a direct link to book.</div>
+    <div class="fl-urgency" id="fl-urgency">Recreation.gov opens at <strong>10am ET / 7am PT</strong>. Popular sites fill in under 2 minutes. Your reminder fires at <strong>6:55am your time</strong> — 5 minutes before the window opens.</div>
+    <div class="fl-date-row">
+      <div class="fl-date-field">
+        <label class="fl-date-label" for="fl-checkin">Check-in</label>
+        <input class="fl-date-input" type="date" id="fl-checkin" onchange="flUpdatePreview()">
+      </div>
+      <div class="fl-date-field">
+        <label class="fl-date-label" for="fl-checkout">Check-out</label>
+        <input class="fl-date-input" type="date" id="fl-checkout" onchange="flUpdatePreview()">
+      </div>
+    </div>
+    <div class="fl-open-preview" id="fl-open-preview">
+      <div class="fl-open-label">Reservations open</div>
+      <div class="fl-open-date" id="fl-open-date">—</div>
+      <div class="fl-open-time" id="fl-open-time">Reminder fires at 6:55am your local time</div>
+    </div>
+    <button class="fl-set-btn" id="fl-set-btn" onclick="setFirstLight()" disabled>Set First Light Reminder</button>
+    <button class="fl-cancel" onclick="flSheetClose()">Cancel</button>
+  </div>
+</div>
+
+<!-- ── FIRST LIGHT MOMENT ──────────────────────────── -->
+<div class="fl-moment" id="fl-moment">
+  <div class="fl-moment-glow"></div>
+  <div class="fl-moment-horizon"></div>
+  <div class="fl-moment-card">
+    <div class="fl-moment-icon">🌅</div>
+    <div class="fl-moment-title">First Light is set.</div>
+    <div class="fl-moment-sub" id="fl-moment-sub">Reminder added</div>
+    <div class="fl-moment-detail" id="fl-moment-detail">Your calendar will wake you at 6:55am — 5 minutes before reservations open.</div>
+    <div class="fl-moment-dismiss" onclick="flMomentDismiss()">tap to continue</div>
   </div>
 </div>
 
@@ -7001,6 +7307,7 @@ function go(toId, fromId) {
   if (toId === 'saved')      renderSaved();
   if (toId === 'profile')    renderProfile();
   if (toId === 'home')       initWildfireSection();
+  if (toId === 'trail' && typeof renderTrail === 'function') renderTrail();
   // Show global compass on results + saved screens only (home and map have their own; detail has CTA bar)
   const cg = document.getElementById('compass-global');
   if (cg) cg.classList.toggle('vis', toId === 'results' || toId === 'saved');
@@ -8016,6 +8323,10 @@ function toggleSave() {
     persistSavedData();
   }
   updateBadges();
+  // Check if user has reached The Trail threshold
+  if (savedIds.has(currentDetailId) && typeof checkTrailDiscovery === 'function') {
+    setTimeout(checkTrailDiscovery, 800);
+  }
 }
 function unsave(id, e) {
   e.stopPropagation();
@@ -10288,6 +10599,289 @@ function dismissWelcome() {
     }
   });
 })();
+
+/* ═══════════════════════════════════════════════════════════════
+   THE TRAIL  — terrain visualisation, fog of war, campfire markers
+═══════════════════════════════════════════════════════════════ */
+(function() {
+
+  /* ── Noise ── */
+  function N(x, y) {
+    let v = Math.sin(x*2.1+y*1.7)*0.5 + Math.sin(x*4.3-y*3.9+Math.cos(x*2))*0.25;
+    v += Math.sin(x*8.7+y*7.3)*0.125 + Math.sin(x*17.1-y*15.3)*0.063 + Math.sin(x*34.7+y*31.1)*0.031;
+    return (v+1)*0.5;
+  }
+  function WN(x, y) { return N(x+N(x+1.7,y+9.2)*0.8, y+N(x+8.3,y+2.8)*0.8); }
+
+  /* ── Terrain color ramp ── */
+  function terrainColor(h) {
+    const R=[[0,[10,13,10]],[0.15,[13,18,12]],[0.30,[18,24,16]],[0.45,[24,31,20]],
+             [0.60,[32,40,26]],[0.75,[42,50,33]],[0.88,[54,60,44]],[1.0,[68,68,56]]];
+    for (let i=1; i<R.length; i++) {
+      if (h<=R[i][0]) {
+        const t=(h-R[i-1][0])/(R[i][0]-R[i-1][0]), a=R[i-1][1], b=R[i][1];
+        return `rgb(${Math.round(a[0]+(b[0]-a[0])*t)},${Math.round(a[1]+(b[1]-a[1])*t)},${Math.round(a[2]+(b[2]-a[2])*t)})`;
+      }
+    }
+    return 'rgb(68,68,56)';
+  }
+
+  /* ── Draw terrain onto a canvas context ── */
+  function drawTerrain(ctx, W, H) {
+    const res=4, cols=Math.ceil(W/res), rows=Math.ceil(H/res);
+    const hm = new Float32Array(cols*rows);
+    for (let j=0;j<rows;j++) for (let i=0;i<cols;i++)
+      hm[j*cols+i] = WN(i/cols*3.5+0.5, j/rows*2.5+0.3);
+    for (let j=0;j<rows;j++) for (let i=0;i<cols;i++) {
+      ctx.fillStyle = terrainColor(hm[j*cols+i]);
+      ctx.fillRect(i*res, j*res, res+1, res+1);
+    }
+    for (let lv=0.10; lv<=0.95; lv+=0.05) {
+      ctx.beginPath(); ctx.lineWidth=0.4;
+      ctx.strokeStyle = (Math.round(lv*100)%25===0) ? 'rgba(190,162,95,0.13)' : 'rgba(190,162,95,0.05)';
+      for (let j=0;j<rows-1;j++) for (let i=0;i<cols-1;i++) {
+        const h00=hm[j*cols+i], h10=hm[j*cols+i+1], h01=hm[(j+1)*cols+i];
+        if ((h00>lv)!=(h10>lv)) { const tx=(i+(lv-h00)/(h10-h00))*res,ty=j*res; ctx.moveTo(tx,ty); ctx.lineTo(tx,ty+res); }
+        if ((h00>lv)!=(h01>lv)) { const tx=i*res,ty=(j+(lv-h00)/(h01-h00))*res; ctx.moveTo(tx,ty); ctx.lineTo(tx+res,ty); }
+      }
+      ctx.stroke();
+    }
+    const vg = ctx.createRadialGradient(W/2,H/2,Math.min(W,H)*0.05,W/2,H/2,Math.max(W,H)*0.85);
+    vg.addColorStop(0,'rgba(0,0,0,0)'); vg.addColorStop(1,'rgba(0,0,0,0.72)');
+    ctx.fillStyle=vg; ctx.fillRect(0,0,W,H);
+  }
+
+  /* ── Draw fog-of-war onto a fog context ── */
+  function drawFog(ctx, W, H, sites, nightMode) {
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle = nightMode ? 'rgba(4,6,20,0.93)' : 'rgba(11,14,16,0.87)';
+    ctx.fillRect(0,0,W,H);
+    if (nightMode) {
+      for (let i=0;i<400;i++) {
+        ctx.beginPath(); ctx.arc(Math.random()*W, Math.random()*H, Math.random()*1.3, 0, 6.28);
+        ctx.fillStyle=`rgba(210,220,255,${(Math.random()*0.7+0.1).toFixed(2)})`; ctx.fill();
+      }
+    }
+    if (!sites.length) return;
+    ctx.globalCompositeOperation='destination-out';
+    sites.forEach(s => {
+      const px=s.px, py=s.py, r=Math.min(W,H)*0.13;
+      const g=ctx.createRadialGradient(px,py,0,px,py,r);
+      g.addColorStop(0,'rgba(0,0,0,0.96)'); g.addColorStop(0.4,'rgba(0,0,0,0.65)');
+      g.addColorStop(0.75,'rgba(0,0,0,0.25)'); g.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=g; ctx.fillRect(px-r,py-r,r*2,r*2);
+    });
+    for (let i=0;i<sites.length-1;i++) {
+      const a=sites[i], b=sites[i+1];
+      for (let t=0;t<=1;t+=0.025) {
+        const px=(a.px+(b.px-a.px)*t), py=(a.py+(b.py-a.py)*t), r=Math.min(W,H)*0.025;
+        const g=ctx.createRadialGradient(px,py,0,px,py,r);
+        g.addColorStop(0,'rgba(0,0,0,0.22)'); g.addColorStop(1,'rgba(0,0,0,0)');
+        ctx.fillStyle=g; ctx.fillRect(px-r,py-r,r*2,r*2);
+      }
+    }
+    ctx.globalCompositeOperation='source-over';
+  }
+
+  /* ── Project real lat/lng → canvas pixel ── */
+  function project(lat, lng, W, H) {
+    const latMin=24, latMax=50, lngMin=-125, lngMax=-65;
+    const x = (lng-lngMin)/(lngMax-lngMin)*W;
+    const y = (1-(lat-latMin)/(latMax-latMin))*H;
+    return { px: Math.max(24, Math.min(W-24, x)), py: Math.max(24, Math.min(H-24, y)) };
+  }
+
+  /* ── Haversine distance (miles) ── */
+  function miles(lat1,lng1,lat2,lng2) {
+    const R=3959, dLat=(lat2-lat1)*Math.PI/180, dLng=(lng2-lng1)*Math.PI/180;
+    const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
+    return 2*R*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+  }
+
+  /* ── Build site list from savedCampsData ── */
+  function buildSites(W, H) {
+    const sites = [];
+    Object.values(savedCampsData).forEach(c => {
+      if (c && typeof c.lat === 'number' && typeof c.lng === 'number') {
+        const p = project(c.lat, c.lng, W, H);
+        sites.push({ name: c.name||'', state: c.state||'', lat: c.lat, lng: c.lng, px: p.px, py: p.py });
+      }
+    });
+    return sites;
+  }
+
+  /* ═══ MAIN TRAIL SCREEN ═══ */
+  let trailW=0, trailH=0, trailSites=[], trailNight=false;
+  let trailTick=0, trailPulse=0, trailRAF=null, trailDirty=true;
+
+  window.renderTrail = function() {
+    const wrap = document.getElementById('trail');
+    if (!wrap) return;
+    trailW = wrap.offsetWidth; trailH = wrap.offsetHeight;
+
+    const cT = document.getElementById('trail-c-terrain');
+    const cF = document.getElementById('trail-c-fog');
+    const cA = document.getElementById('trail-c-anim');
+    [cT,cF,cA].forEach(c => { c.width=trailW; c.height=trailH; c.style.width=trailW+'px'; c.style.height=trailH+'px'; });
+
+    trailSites = buildSites(trailW, trailH);
+    drawTerrain(cT.getContext('2d'), trailW, trailH);
+    drawFog(cF.getContext('2d'), trailW, trailH, trailSites, trailNight);
+
+    // Update stats
+    document.getElementById('trail-stat-camps').textContent = trailSites.length || savedIds.size;
+    let totalMiles = 0;
+    for (let i=0;i<trailSites.length-1;i++) totalMiles += miles(trailSites[i].lat,trailSites[i].lng,trailSites[i+1].lat,trailSites[i+1].lng);
+    document.getElementById('trail-stat-miles').textContent = trailSites.length > 1 ? Math.round(totalMiles).toLocaleString() : '—';
+    const states = new Set(trailSites.map(s=>s.state).filter(Boolean));
+    document.getElementById('trail-stat-states').textContent = states.size || '—';
+
+    if (trailRAF) cancelAnimationFrame(trailRAF);
+    trailTick=0; trailPulse=0;
+    function trailLoop() {
+      const active = document.getElementById('trail').classList.contains('active');
+      if (!active) { trailRAF=null; return; }
+      trailTick+=0.016; trailPulse+=0.025;
+      const aCtx = cA.getContext('2d');
+      aCtx.clearRect(0,0,trailW,trailH);
+      // Route lines
+      for (let i=0;i<trailSites.length-1;i++) {
+        const s=trailSites[i], b=trailSites[i+1];
+        aCtx.save();
+        aCtx.strokeStyle='rgba(200,168,80,0.18)'; aCtx.lineWidth=3; aCtx.setLineDash([]);
+        aCtx.beginPath(); aCtx.moveTo(s.px,s.py); aCtx.lineTo(b.px,b.py); aCtx.stroke();
+        aCtx.strokeStyle='rgba(200,168,80,0.68)'; aCtx.lineWidth=1;
+        aCtx.setLineDash([5,10]); aCtx.lineDashOffset=-trailTick*15;
+        aCtx.beginPath(); aCtx.moveTo(s.px,s.py); aCtx.lineTo(b.px,b.py); aCtx.stroke();
+        aCtx.restore();
+      }
+      // Campfire markers
+      trailSites.forEach((s, idx) => {
+        const fl=0.88+Math.sin(trailPulse*2.1+idx*1.9)*0.07+Math.sin(trailPulse*5.3+idx*3.1)*0.04;
+        const g1=aCtx.createRadialGradient(s.px,s.py,0,s.px,s.py,24*fl);
+        g1.addColorStop(0,'rgba(255,155,55,0.48)'); g1.addColorStop(0.5,'rgba(255,110,30,0.14)'); g1.addColorStop(1,'rgba(0,0,0,0)');
+        aCtx.fillStyle=g1; aCtx.fillRect(s.px-24,s.py-24,48,48);
+        const g2=aCtx.createRadialGradient(s.px,s.py,0,s.px,s.py,8*fl);
+        g2.addColorStop(0,'rgba(255,225,145,0.95)'); g2.addColorStop(1,'rgba(255,120,40,0)');
+        aCtx.fillStyle=g2; aCtx.fillRect(s.px-8,s.py-8,16,16);
+        aCtx.beginPath(); aCtx.arc(s.px,s.py,3.2*fl,0,6.28);
+        aCtx.fillStyle='rgba(255,245,210,1)'; aCtx.fill();
+        // Label
+        if (s.name) {
+          const onR = s.px < trailW*0.75, lx = onR ? s.px+14 : s.px-14;
+          aCtx.save(); aCtx.textAlign = onR?'left':'right';
+          aCtx.font='bold 9px -apple-system,Helvetica Neue,sans-serif';
+          aCtx.fillStyle='rgba(200,168,80,0.85)'; aCtx.fillText(s.name.toUpperCase(), lx, s.py-13);
+          if (s.state) { aCtx.font='8px -apple-system,Helvetica Neue,sans-serif'; aCtx.fillStyle='rgba(244,240,232,0.45)'; aCtx.fillText(s.state, lx, s.py-2); }
+          aCtx.restore();
+        }
+      });
+      trailRAF = requestAnimationFrame(trailLoop);
+    }
+    trailRAF = requestAnimationFrame(trailLoop);
+  };
+
+  window.trailToggleNight = function() {
+    trailNight = !trailNight;
+    const btn = document.getElementById('trail-night-btn');
+    if (btn) btn.classList.toggle('on', trailNight);
+    const cF = document.getElementById('trail-c-fog');
+    if (cF) drawFog(cF.getContext('2d'), trailW, trailH, trailSites, trailNight);
+  };
+
+  window.trailShare = function() {
+    const url = 'https://campgrounder.io';
+    if (navigator.share) {
+      navigator.share({ title: 'My Trail — Campgrounder', text: 'My camping trail so far.', url }).catch(()=>{});
+    } else {
+      navigator.clipboard.writeText(url).then(()=>showToast('Link copied')).catch(()=>showToast('campgrounder.io'));
+    }
+  };
+
+  /* ═══ PROFILE ENTRY MINI-MAP ═══ */
+  function renderTrailEntry() {
+    const canvas = document.getElementById('trail-entry-canvas');
+    if (!canvas) return;
+    const W = canvas.offsetWidth || canvas.parentElement.offsetWidth || 320;
+    const H = 80;
+    canvas.width = W; canvas.height = H;
+    canvas.style.width = W+'px'; canvas.style.height = H+'px';
+    const ctx = canvas.getContext('2d');
+    drawTerrain(ctx, W, H);
+    // Slight amber overlay tint
+    ctx.fillStyle='rgba(200,168,80,0.06)'; ctx.fillRect(0,0,W,H);
+    // Soft fog — don't fully illuminate, just tease
+    ctx.fillStyle='rgba(11,14,16,0.72)'; ctx.fillRect(0,0,W,H);
+    // Tiny campfire dots for each saved camp (random positions — just decorative here)
+    const sites = buildSites(W, H);
+    sites.forEach(s => {
+      const g=ctx.createRadialGradient(s.px,s.py,0,s.px,s.py,10);
+      g.addColorStop(0,'rgba(255,155,55,0.6)'); g.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=g; ctx.fillRect(s.px-10,s.py-10,20,20);
+      ctx.beginPath(); ctx.arc(s.px,s.py,2.5,0,6.28);
+      ctx.fillStyle='rgba(255,245,210,0.9)'; ctx.fill();
+    });
+  }
+
+  /* ═══ DISCOVERY OVERLAY ═══ */
+  window.checkTrailDiscovery = function() {
+    if (localStorage.getItem('cg_trail_discovered')) return;
+    if (savedIds.size < 5) return;
+    showTrailDiscovery();
+  };
+
+  function showTrailDiscovery() {
+    localStorage.setItem('cg_trail_discovered', '1');
+    const overlay = document.getElementById('trail-discover');
+    if (!overlay) return;
+    overlay.classList.add('visible');
+    const W = window.innerWidth, H = window.innerHeight;
+    const cT = document.getElementById('td-terrain');
+    const cF = document.getElementById('td-fog');
+    [cT,cF].forEach(c => { c.width=W; c.height=H; c.style.width=W+'px'; c.style.height=H+'px'; });
+    drawTerrain(cT.getContext('2d'), W, H);
+    const fCtx = cF.getContext('2d');
+    fCtx.fillStyle='rgba(6,8,10,0.96)'; fCtx.fillRect(0,0,W,H);
+    // Update sub-label
+    const sub = document.getElementById('td-sub');
+    if (sub) sub.textContent = savedIds.size + (savedIds.size===1?' camp':' camps') + ' saved';
+    // Build dots
+    const dotsEl = document.getElementById('td-dots');
+    if (dotsEl) {
+      dotsEl.innerHTML = '';
+      const count = Math.min(savedIds.size, 10);
+      for (let i=0;i<count;i++) {
+        const d = document.createElement('div');
+        d.className='td-dot'; d.style.animationDelay=(i*0.28).toFixed(2)+'s';
+        dotsEl.appendChild(d);
+      }
+    }
+    // Staged reveal
+    setTimeout(() => { const c=document.getElementById('td-content'); if(c) c.classList.add('visible'); }, 700);
+  }
+
+  window.trailDiscoverDismiss = function() {
+    const overlay = document.getElementById('trail-discover');
+    if (overlay) { overlay.style.opacity='0'; overlay.style.transition='opacity 0.6s ease'; setTimeout(()=>{ overlay.classList.remove('visible'); overlay.style.opacity=''; overlay.style.transition=''; }, 650); }
+    // Reveal profile entry point
+    const entry = document.getElementById('profile-trail-entry');
+    if (entry) entry.classList.add('discovered');
+    go('trail', document.querySelector('.screen.active')?.id || 'home');
+  };
+
+  /* ═══ HOOK INTO renderProfile ═══ */
+  const _origRenderProfile = window.renderProfile;
+  window.renderProfile = function() {
+    if (_origRenderProfile) _origRenderProfile();
+    const discovered = !!localStorage.getItem('cg_trail_discovered');
+    const entry = document.getElementById('profile-trail-entry');
+    if (entry) {
+      entry.classList.toggle('discovered', discovered);
+      if (discovered) setTimeout(renderTrailEntry, 50);
+    }
+  };
+
+})();
 </script>
 
 <!-- ── WELCOME MODAL ── -->
@@ -10416,5 +11010,315 @@ function dismissWelcome() {
 
 <!-- QR code generation for Trip Cards -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   FIRST LIGHT  — smart reservation-window reminders
+   ICS calendar drop + 6:55am timing + direct booking URL
+═══════════════════════════════════════════════════════════════ */
+(function() {
+
+  /* ── LocalStorage ── */
+  let flData = {};
+  try { flData = JSON.parse(localStorage.getItem('cg_firstlight') || '{}'); } catch(e) {}
+  function persistFL() { try { localStorage.setItem('cg_firstlight', JSON.stringify(flData)); } catch(e) {} }
+
+  /* ── Urgency copy by campground popularity tier ──
+     Rough heuristic: national parks = hot, everything else = normal */
+  const HOT_KEYWORDS = ['yosemite','zion','yellowstone','grand canyon','glacier','olympic',
+    'smoky','acadia','grand teton','rocky mountain','arches','bryce','canyonlands','crater lake',
+    'joshua tree','death valley','mount rainier','shenandoah','everglades','hot springs'];
+
+  function isHotSite(name) {
+    const n = (name||'').toLowerCase();
+    return HOT_KEYWORDS.some(k => n.includes(k));
+  }
+
+  function urgencyText(name, ridb_id) {
+    if (isHotSite(name)) {
+      return `⚠️ <strong>${name.split(',')[0]}</strong> fills in under 2 minutes. Recreation.gov opens at <strong>10am ET / 7am PT</strong>. Your reminder fires at <strong>6:55am your local time</strong> — 5 minutes before the window opens.`;
+    }
+    if (ridb_id) {
+      return `Recreation.gov opens reservations at <strong>10am ET / 7am PT</strong>. Your reminder fires at <strong>6:55am your local time</strong> — 5 minutes before the window opens.`;
+    }
+    return `Most campgrounds open reservations <strong>6 months ahead</strong>. Your reminder fires the morning the window opens so you're ready to book.`;
+  }
+
+  /* ── Calculate reservation opening date ──
+     Recreation.gov (RIDB): exactly 6 calendar months before check-in.
+     Others: 6 months as a safe default. */
+  function openingDate(checkInDateStr) {
+    const d = new Date(checkInDateStr + 'T12:00:00');
+    d.setMonth(d.getMonth() - 6);
+    return d;
+  }
+
+  /* ── Format date nicely ── */
+  function fmtDate(d) {
+    return d.toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric', year:'numeric' });
+  }
+  function fmtDateShort(d) {
+    return d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+  }
+  function icsDate(d) {
+    const y = d.getFullYear(), m = String(d.getMonth()+1).padStart(2,'0'), day = String(d.getDate()).padStart(2,'0');
+    return `${y}${m}${day}`;
+  }
+  function icsDateTime(d) {
+    const y = d.getFullYear(), m = String(d.getMonth()+1).padStart(2,'0'), day = String(d.getDate()).padStart(2,'0');
+    return `${y}${m}${day}T065500`;  // 6:55am local — 5 min before 7am PT window
+  }
+
+  /* ── Build the ICS string ── */
+  function buildICS(camp, openDate, checkInStr, checkOutStr) {
+    const bookURL = camp.ridb_id
+      ? `https://www.recreation.gov/camping/campgrounds/${camp.ridb_id}`
+      : `https://campgrounder.io`;
+    const hot = isHotSite(camp.name);
+    const urgency = hot
+      ? `${camp.name} fills fast — you have a narrow window. Book immediately when this alarm fires.`
+      : `Reservations open today. Book now to secure your spot.`;
+
+    const dtStart = icsDateTime(openDate);
+    const dtDate  = icsDate(openDate);
+    const nowStamp = new Date().toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';
+
+    return [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//Campgrounder//First Light//EN',
+      'CALSCALE:GREGORIAN',
+      'METHOD:PUBLISH',
+      'BEGIN:VEVENT',
+      `DTSTART;TZID=America/Los_Angeles:${dtStart}`,
+      `DTEND;TZID=America/Los_Angeles:${icsDateTime(new Date(openDate.getTime() + 3600000))}`,
+      `DTSTAMP:${nowStamp}`,
+      `SUMMARY:🌅 ${camp.name} — Reservations open today`,
+      `DESCRIPTION:${urgency}\\n\\nCamp dates: ${checkInStr} → ${checkOutStr}\\n\\nBook now: ${bookURL}\\n\\nSet by Campgrounder First Light`,
+      `URL:${bookURL}`,
+      `LOCATION:${camp.loc || camp.name}`,
+      'BEGIN:VALARM',
+      'ACTION:DISPLAY',
+      'TRIGGER:PT0S',
+      `DESCRIPTION:🌅 ${camp.name} reservations open now — book immediately`,
+      'END:VALARM',
+      'END:VEVENT',
+      'END:VCALENDAR'
+    ].join('\r\n');
+  }
+
+  /* ── Download the ICS file ── */
+  function downloadICS(ics, filename) {
+    const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href = url; a.download = filename; a.style.display = 'none';
+    document.body.appendChild(a); a.click();
+    setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1500);
+  }
+
+  /* ── Capacitor local notification (native app only) ── */
+  function scheduleNativeNotification(camp, openDate) {
+    try {
+      if (window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform()) {
+        const { LocalNotifications } = window.Capacitor.Plugins || {};
+        if (LocalNotifications) {
+          const fireAt = new Date(openDate);
+          fireAt.setHours(6, 55, 0, 0);
+          LocalNotifications.schedule({ notifications: [{
+            id: Math.abs(hashCode(camp.name)) % 100000,
+            title: `🌅 ${camp.name} — Reservations open today`,
+            body: `Book now. ${isHotSite(camp.name) ? 'Sites fill in under 2 minutes.' : 'Secure your spot.'}`,
+            schedule: { at: fireAt },
+            extra: { url: camp.ridb_id ? `https://www.recreation.gov/camping/campgrounds/${camp.ridb_id}` : 'https://campgrounder.io' }
+          }]});
+        }
+      }
+    } catch(e) { /* graceful — web doesn't have Capacitor */ }
+  }
+  function hashCode(s) { let h=0; for(let i=0;i<s.length;i++) h=Math.imul(31,h)+s.charCodeAt(i)|0; return h; }
+
+  /* ═══ UI FUNCTIONS ═══ */
+
+  /* Open the date picker sheet */
+  window.showFirstLight = function() {
+    const camp = currentDetailId !== null ? lookupCamp(currentDetailId) : null;
+    if (!camp) return;
+
+    // Update sheet header + urgency
+    const nameEl = document.getElementById('fl-sheet-name');
+    if (nameEl) nameEl.textContent = camp.name;
+    const urgEl = document.getElementById('fl-urgency');
+    if (urgEl) urgEl.innerHTML = urgencyText(camp.name, camp.ridb_id);
+
+    // Pre-fill dates if check-in/out already set from detail screen
+    const ciEl = document.getElementById('fl-checkin');
+    const coEl = document.getElementById('fl-checkout');
+    if (ciEl && checkInDate)  ciEl.value = checkInDate;
+    if (coEl && checkOutDate) coEl.value = checkOutDate;
+
+    // If already set, show the existing reminder date
+    if (flData[currentDetailId]) {
+      const existing = flData[currentDetailId];
+      const oDate = new Date(existing.openDate + 'T12:00:00');
+      const prevEl = document.getElementById('fl-open-preview');
+      const dateEl = document.getElementById('fl-open-date');
+      const timeEl = document.getElementById('fl-open-time');
+      if (prevEl && dateEl) {
+        prevEl.classList.add('visible');
+        dateEl.textContent = fmtDate(oDate);
+        if (timeEl) timeEl.textContent = 'Reminder already set · tap to update';
+      }
+      const btn = document.getElementById('fl-set-btn');
+      if (btn) { btn.textContent = 'Update Reminder'; btn.disabled = false; }
+    }
+
+    // Open sheet
+    const sheet = document.getElementById('fl-sheet');
+    if (sheet) sheet.classList.add('open');
+
+    // Update preview if dates already filled
+    flUpdatePreview();
+  };
+
+  /* Sheet click-outside to close */
+  window.flSheetClickOut = function(e) {
+    if (e.target.id === 'fl-sheet') flSheetClose();
+  };
+  window.flSheetClose = function() {
+    const sheet = document.getElementById('fl-sheet');
+    if (sheet) sheet.classList.remove('open');
+    // Reset
+    const btn = document.getElementById('fl-set-btn');
+    if (btn) { btn.textContent = 'Set First Light Reminder'; btn.disabled = true; }
+    const prev = document.getElementById('fl-open-preview');
+    if (prev) prev.classList.remove('visible');
+  };
+
+  /* Update the opening date preview as user changes dates */
+  window.flUpdatePreview = function() {
+    const ci = document.getElementById('fl-checkin')?.value;
+    const co = document.getElementById('fl-checkout')?.value;
+    const prev = document.getElementById('fl-open-preview');
+    const dateEl = document.getElementById('fl-open-date');
+    const timeEl = document.getElementById('fl-open-time');
+    const btn  = document.getElementById('fl-set-btn');
+    if (!ci) { if (prev) prev.classList.remove('visible'); if (btn) btn.disabled = true; return; }
+
+    const oDate = openingDate(ci);
+    const today = new Date(); today.setHours(0,0,0,0);
+    if (oDate < today) {
+      if (dateEl) dateEl.textContent = 'Opening date has passed';
+      if (timeEl) timeEl.textContent = 'Choose a future camping date';
+      if (prev) prev.classList.add('visible');
+      if (btn) btn.disabled = true;
+      return;
+    }
+
+    if (prev) prev.classList.add('visible');
+    if (dateEl) dateEl.textContent = fmtDate(oDate);
+    if (timeEl) timeEl.textContent = 'Your reminder fires at 6:55am local time';
+    if (btn) { btn.disabled = false; btn.textContent = 'Set First Light Reminder'; }
+  };
+
+  /* Confirm — generate ICS + download + show moment */
+  window.setFirstLight = function() {
+    const camp = currentDetailId !== null ? lookupCamp(currentDetailId) : null;
+    if (!camp) return;
+    const ci = document.getElementById('fl-checkin')?.value;
+    const co = document.getElementById('fl-checkout')?.value || ci;
+    if (!ci) return;
+
+    const oDate = openingDate(ci);
+    const ics   = buildICS(camp, oDate, ci, co);
+    const slug  = (camp.name || 'camp').toLowerCase().replace(/[^a-z0-9]+/g,'-').slice(0,30);
+    downloadICS(ics, `first-light-${slug}.ics`);
+
+    // Schedule native notification if in Capacitor
+    scheduleNativeNotification(camp, oDate);
+
+    // Persist
+    flData[currentDetailId] = { campName: camp.name, campId: currentDetailId, openDate: icsDate(oDate), checkIn: ci, checkOut: co };
+    persistFL();
+
+    // Close sheet
+    flSheetClose();
+
+    // Show the moment
+    const sub    = document.getElementById('fl-moment-sub');
+    const detail = document.getElementById('fl-moment-detail');
+    if (sub)    sub.textContent    = fmtDateShort(oDate) + ' at 6:55am';
+    if (detail) detail.textContent = isHotSite(camp.name)
+      ? `${camp.name} fills fast. You'll be ready the moment the window opens.`
+      : `Your calendar will wake you 5 minutes before ${camp.name} opens for booking.`;
+
+    const moment = document.getElementById('fl-moment');
+    if (moment) {
+      moment.classList.add('visible');
+      moment.style.pointerEvents = 'all';
+      setTimeout(() => { if (document.getElementById('fl-moment').classList.contains('visible')) flMomentDismiss(); }, 6000);
+    }
+
+    // Update CTA button state
+    updateFLBtn();
+  };
+
+  window.flMomentDismiss = function() {
+    const moment = document.getElementById('fl-moment');
+    if (moment) {
+      moment.style.opacity = '0';
+      moment.style.transition = 'opacity 0.5s ease';
+      setTimeout(() => {
+        moment.classList.remove('visible');
+        moment.style.opacity = ''; moment.style.transition = '';
+        moment.style.pointerEvents = '';
+      }, 520);
+    }
+  };
+
+  /* Update the CTA button appearance based on whether reminder is set */
+  function updateFLBtn() {
+    const btn = document.getElementById('fl-btn');
+    if (!btn) return;
+    const isSet = currentDetailId !== null && !!flData[currentDetailId];
+    btn.classList.toggle('set', isSet);
+    btn.innerHTML = isSet
+      ? `<span class="cta-fl-icon">🌅</span>First Light ✓`
+      : `<span class="cta-fl-icon">🌅</span>First Light`;
+  }
+
+  /* Hook into openDetail to update button state */
+  const _origOpenDetail = window.openDetail;
+  window.openDetail = function(id) {
+    if (_origOpenDetail) _origOpenDetail(id);
+    setTimeout(updateFLBtn, 80);
+  };
+
+  /* ═══ SAVED LIST BADGES ═══ */
+  const _origRenderSaved = window.renderSaved;
+  window.renderSaved = function() {
+    if (_origRenderSaved) _origRenderSaved();
+    // Inject FL badges into rendered saved cards
+    Object.keys(flData).forEach(id => {
+      const data = flData[id];
+      if (!data) return;
+      const card = document.querySelector(`.saved-card[onclick*="openDetail(${id})"] .card-stats`);
+      if (!card) return;
+      const existing = card.parentElement.querySelector('.fl-badge');
+      if (existing) return;
+      const oDate = new Date(data.openDate.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3') + 'T12:00:00');
+      const today = new Date(); today.setHours(0,0,0,0);
+      const isToday = oDate.toDateString() === today.toDateString();
+      const isPast  = oDate < today;
+      const badge = document.createElement('div');
+      badge.className = 'fl-badge visible';
+      badge.innerHTML = `<div class="fl-badge-dot"></div>${isToday ? '🌅 Opens today!' : isPast ? '🌅 Window passed' : `🌅 Opens ${fmtDateShort(oDate)}`}`;
+      card.parentElement.appendChild(badge);
+    });
+  };
+
+})();
+</script>
+
 </body>
 </html>
