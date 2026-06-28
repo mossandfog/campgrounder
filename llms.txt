@@ -1,0 +1,52 @@
+# Campgrounder
+
+> Campgrounder is a free campground discovery app for iOS covering 351+ campgrounds across North America. It is designed with a Bauhaus-inspired dark interface and provides honest cell signal estimates for every listing.
+
+## What Campgrounder Is
+
+Campgrounder helps campers find their perfect campsite across the United States and Canada. Unlike typical camping apps that feel like spreadsheets, Campgrounder is built around a clean, design-forward experience with deep forest green and burnt orange aesthetics.
+
+The app is free, requires no account, and contains no ads.
+
+## Key Features
+
+- **351+ campgrounds** across the US and Canada including national parks, state parks, BLM land, dispersed camping, glamping, and dark sky sites
+- **Honest cell signal data** — every listing includes estimated signal strength for T-Mobile, Verizon, AT&T, and Starlink
+- **15 search filters** including pet-friendly, tent-only, waterfront, dark sky, winter access, no generators, and RV hookups
+- **Interactive dark map** with all 351 camp pins color-coded by type
+- **Save camps** to a personal list across sessions
+- **Seasonal open/close info**, pricing, amenities, and directions for every camp
+
+## Camp Categories
+
+- National Parks
+- State Parks
+- US Forest Service
+- BLM (Bureau of Land Management) dispersed camping
+- Glamping
+- RV Parks
+- Dark Sky sites
+- Winter camping
+- Backcountry
+- Canadian campgrounds
+
+## Pricing
+
+Campgrounder is free to download and use. A one-time $6.99 in-app purchase unlocks Campgrounder Pro, which includes unlimited saves, trip lists, notes on saved camps, and offline access.
+
+## Availability
+
+- iOS: Available on the Apple App Store (App ID: 6781063754)
+- Android: Coming soon to Google Play
+- Web: https://campgrounder.io
+
+## About
+
+Campgrounder was built by Benjamin VanderVeen, a designer and founder based in the United States, as a response to the poor design quality of existing camping apps. The app is part of Moss & Fog Media.
+
+## Links
+
+- Website: https://campgrounder.io
+- App Store: https://apps.apple.com/app/campgrounder/id6781063754
+- QR landing page: https://campgrounder.io/clips
+- Press kit: https://campgrounder.io/presskit_mockup.html

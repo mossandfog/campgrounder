@@ -3156,7 +3156,7 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
         <div><div class="cat-name">State Parks</div><div class="cat-sub">Close to home</div></div>
         <div class="cat-plus"></div>
       </div>
-      <div class="cat-cell" onclick="goSearch('free camping dispersed')">
+      <div class="cat-cell" onclick="goFilter('free')">
         <svg width="44" height="44" style="color:#E8481C;stroke:currentColor;fill:none;"><use href="#ic-fire"/></svg>
         <div><div class="cat-name">Free Camping</div><div class="cat-sub">No fees, just nature</div></div>
         <div class="cat-plus"></div>
@@ -3490,6 +3490,7 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
     <div class="pill"    onclick="setFilter(this,'rv-ready')">🚐 RV-Ready</div>
     <div class="pill"    onclick="setFilter(this,'wifi')">📶 Has WiFi</div>
     <div class="pill"    onclick="setFilter(this,'winter-open')">❄️ Open in Winter</div>
+    <div class="pill"    onclick="setFilter(this,'free')" style="border-color:rgba(232,72,28,0.6);">🪵 Free / Dispersed <span style="font-size:10px;font-weight:900;letter-spacing:0.1em;background:var(--o);color:#fff;padding:1px 5px;border-radius:10px;margin-left:4px;">NEW</span></div>
   </div>
   <div class="type-blurb" id="type-blurb">
     <div class="type-blurb-title" id="type-blurb-title"></div>
@@ -6755,10 +6756,131 @@ const CAMPS = [
     type:"National Park", price:24, sites:255, avail:18, rating:4.7, reviews:1190,
     desc:"La Mauricie is the only national park in Quebec's Laurentian Shield — a mosaic of lakes, rivers, and boreal forest three hours from Montreal. The park is a paddler's dream: a canoe circuit links nearly a dozen lakes through a wilderness corridor with backcountry camping at every turn. By car, the parkway threads through the highlands with views across the forest. Moose wade the beaver ponds. Loons echo at night. The swimming in the clear Laurentian lakes is exceptional. The closest true wilderness to one of North America's great cities.",
     amenities:["Flush Toilets","Running Water","Fire Rings","Boat Launch","Fishing","Amphitheater","Accessible","Pet Friendly"],
-    seasons:["Spring","Summer","Fall"], lat:46.7500, lng:-72.9167 }
+    seasons:["Spring","Summer","Fall"], lat:46.7500, lng:-72.9167 },
 
+  // ── FREE / DISPERSED CAMPING ──────────────────────────────────────────────
 
-,
+  { id:374, name:"Toroweap Overlook", loc:"Grand Canyon NP · Arizona",
+    type:"National Park", price:0, sites:10, avail:10, rating:4.9, reviews:820,
+    desc:"Three thousand feet straight down to the Colorado River — no guardrail, no crowds, no fee. Toroweap is the most dramatic viewpoint in the Grand Canyon and one of the most remote campgrounds on the continent. Sixty miles of dirt road to reach it. A handful of primitive sites at the rim. Wake at sunrise to the sound of nothing but wind in the canyon walls. No reservations, no services, no cell signal — just the grandest possible exposure to the earth's interior. Worth every mile.",
+    amenities:["Vault Toilets","Pet Friendly","Stargazing"],
+    seasons:["Spring","Fall","Winter"], lat:36.2022, lng:-112.9278 },
+
+  { id:375, name:"Grand Staircase-Escalante BLM", loc:"Escalante · Utah",
+    type:"BLM", price:0, sites:0, avail:99, rating:4.8, reviews:1640,
+    desc:"A half-million acres of slickrock, slot canyons, and painted desert where the Colorado Plateau stacks layer over geological layer. Camp anywhere off established roads, wake to sunrise lighting the badlands orange, and spend your days exploring canyons that barely appear on maps. The Hole-in-the-Rock Road, Coyote Gulch, Peek-a-Boo and Spooky — all free, all first-come. One of the last great stretches of untrammeled desert in America.",
+    amenities:["Pet Friendly","Hiking","Stargazing"],
+    seasons:["Spring","Fall"], lat:37.4893, lng:-111.3873 },
+
+  { id:376, name:"Steens Mountain", loc:"Frenchglen · Oregon",
+    type:"BLM", price:0, sites:0, avail:99, rating:4.8, reviews:960,
+    desc:"A fault-block mountain rising 5,000 feet above the Oregon high desert — one of the most isolated landscapes in the American West. Free dispersed camping along the summit loop road at nearly 10,000 feet, with views into the Alvord Desert and Malheur Wildlife Refuge below. Steens Mountain is a place of genuine extremes: ancient glacial gorges, roaming wild mustangs, biting alpine wind, and silence so complete it has a texture. Come in late summer or early fall when the aspens turn gold.",
+    amenities:["Pet Friendly","Hiking","Stargazing","Fishing"],
+    seasons:["Summer","Fall"], lat:42.6404, lng:-118.5500 },
+
+  { id:377, name:"Sawtooth National Recreation Area", loc:"Stanley · Idaho",
+    type:"Forest Service", price:0, sites:0, avail:99, rating:4.9, reviews:1820,
+    desc:"Fifty jagged granite peaks over 10,000 feet reflected in crystal glacial lakes. The Sawtooth is one of the most scenic places in America that most people have never heard of. Free dispersed camping along forest roads and river corridors, with the White Cloud Mountains closing in on every side. The Salmon River runs cold and clear at your feet. At dusk, the peaks go pink then purple. No crowds, no fees, just the kind of beauty that stops you mid-sentence.",
+    amenities:["Pet Friendly","Hiking","Fishing","Stargazing"],
+    seasons:["Summer","Fall"], lat:44.1427, lng:-114.9336 },
+
+  { id:378, name:"Gila Wilderness", loc:"Silver City · New Mexico",
+    type:"Forest Service", price:0, sites:0, avail:99, rating:4.7, reviews:740,
+    desc:"The first designated wilderness in the United States, established in 1924 by Aldo Leopold. Hot springs you can soak in after miles of trail, ancient Cliff Dwellings carved into volcanic tuff, and dispersed camping across 800 square miles of pine-covered mountains in the high desert of New Mexico. The Gila River crossings are cold, the pine air is sharp, and the remoteness is total. A pilgrimage site for anyone who cares about the history of American conservation.",
+    amenities:["Pet Friendly","Hiking","Fishing","Stargazing"],
+    seasons:["Spring","Summer","Fall"], lat:33.2285, lng:-108.2922 },
+
+  { id:379, name:"Ocala National Forest", loc:"Ocala · Florida",
+    type:"Forest Service", price:0, sites:0, avail:99, rating:4.6, reviews:1110,
+    desc:"The southernmost national forest in the continental US sits on a sandy ridge above crystal-clear springs in the heart of Florida. Free dispersed camping in the scrub among wild azaleas and longleaf pines — with some of the most surreal swimming holes on earth just a short walk away. Alexander Springs, Juniper Springs, Salt Springs: each one a different shade of aquamarine, constant 68°F year-round. Camp here in January when the rest of the country is frozen.",
+    amenities:["Vault Toilets","Pet Friendly","Hiking","Fishing"],
+    seasons:["Fall","Winter","Spring"], lat:29.1844, lng:-81.7134 },
+
+  { id:380, name:"Ouachita National Forest", loc:"Hot Springs · Arkansas",
+    type:"Forest Service", price:0, sites:0, avail:99, rating:4.6, reviews:880,
+    desc:"The oldest national forest west of the Mississippi stretches across three million acres of ridgelines and hardwood hollows from Arkansas into Oklahoma. Dispersed camping on forest roads, ridge walks with sweeping Ouachita views, and spring wildflower displays that have to be seen to be believed. The Ouachita Trail runs 223 miles through the heart of it — one of the best long-distance hikes in the South, and almost entirely free to walk and camp along.",
+    amenities:["Pet Friendly","Hiking","Fishing","Fire Rings"],
+    seasons:["Spring","Fall","Winter"], lat:34.8590, lng:-93.3455 },
+
+  { id:381, name:"Bighorn National Forest", loc:"Sheridan · Wyoming",
+    type:"Forest Service", price:0, sites:0, avail:99, rating:4.7, reviews:710,
+    desc:"A compact but spectacular mountain range rising straight above the Wyoming plains, with roads that climb to 9,000 feet and dispersed sites surrounded by alpine meadows and limestone canyons. The Cloud Peak Wilderness at the center is a maze of glacial lakes and high-country solitude. Great for overlanders — show up anywhere along the forest roads with a self-contained rig and you've got free camping with stars that have no competition from city lights.",
+    amenities:["Pet Friendly","Hiking","Fishing","Stargazing"],
+    seasons:["Summer","Fall"], lat:44.5083, lng:-107.4545 },
+
+  { id:382, name:"White River National Forest", loc:"Glenwood Springs · Colorado",
+    type:"Forest Service", price:0, sites:0, avail:99, rating:4.8, reviews:2040,
+    desc:"Eight wilderness areas, 2.3 million acres, and some of the most iconic terrain in Colorado — the Maroon Bells, Holy Cross, Flat Tops, Eagles Nest. Hundreds of miles of dispersed camping on forest roads, with high meadows, ghost towns, and 14ers rising in every direction. Most people pay to stay in Aspen. You can camp free in the same mountains, with better views and nobody telling you to be quiet by 10pm.",
+    amenities:["Pet Friendly","Hiking","Fishing","Stargazing"],
+    seasons:["Summer","Fall"], lat:39.5484, lng:-107.0039 },
+
+  { id:383, name:"Okanogan-Wenatchee National Forest", loc:"Leavenworth · Washington",
+    type:"Forest Service", price:0, sites:0, avail:99, rating:4.8, reviews:1580,
+    desc:"Where the Cascades transition from rainforest to dry ponderosa pine country, this four-million-acre forest offers dispersed camping across a landscape of glaciers, alpine lakes, canyon rivers, and sagebrush ridges. The Enchantments require a permit — but the countless free dispersed sites on forest roads around them do not. Some of the best free camping in the Pacific Northwest, right outside one of the country's most scenic small towns.",
+    amenities:["Pet Friendly","Hiking","Fishing","Stargazing"],
+    seasons:["Summer","Fall"], lat:47.5965, lng:-120.6615 },
+
+  { id:384, name:"Mark Twain National Forest", loc:"Salem · Missouri",
+    type:"Forest Service", price:0, sites:0, avail:99, rating:4.5, reviews:620,
+    desc:"Ozark hollows, clear spring-fed streams, and the kind of rolling hardwood forest that defined the American frontier. Dispersed camping on forest roads across 1.5 million Missouri acres — surprisingly remote, genuinely peaceful, and entirely free. Float the Jacks Fork or Current River by day and camp on a gravel bar at night. In October the maples and oaks turn the hills into fire. A Midwest secret hiding in plain sight.",
+    amenities:["Pet Friendly","Hiking","Fishing","Fire Rings"],
+    seasons:["Spring","Summer","Fall"], lat:37.6234, lng:-91.5344 },
+
+  { id:385, name:"Chequamegon-Nicolet National Forest", loc:"Rhinelander · Wisconsin",
+    type:"Forest Service", price:0, sites:0, avail:99, rating:4.6, reviews:830,
+    desc:"A million acres of northern Wisconsin lake country where dispersed camping puts you in the pine woods minutes from a different lake every day. Walleye fishing at dawn, loon calls at midnight, blueberry picking on the portage trails. In October, hardwood color that rivals anything in New England — and not a crowd in sight. Bring a canoe, a camp stove, and enough time to actually slow down. This is why people live in the Midwest.",
+    amenities:["Pet Friendly","Hiking","Fishing","Stargazing","Fire Rings"],
+    seasons:["Spring","Summer","Fall"], lat:45.6274, lng:-89.4123 },
+
+  // ── MICHIGAN UPPER PENINSULA ──────────────────────────────────────────────
+
+  { id:386, name:"Isle Royale — Rock Harbor", loc:"Lake Superior · Michigan",
+    type:"National Park", price:7, sites:25, avail:15, rating:4.9, reviews:412,
+    desc:"The main gateway to the least-visited national park in the Lower 48, Rock Harbor sits at the eastern tip of a 45-mile island in the middle of Lake Superior — reachable by seaplane from Houghton or ferry from Copper Harbor. No roads reach Isle Royale. Moose wade the harbors at sunrise. Wolves move through the forest at night. The hiking is extraordinary, the solitude is absolute, and the Northern Lights appear over open water with nothing between you and the horizon. A once-in-a-lifetime trip hiding in Michigan's backyard.",
+    amenities:["Flush Toilets","Running Water","Dock","Fishing","Kayaking","Wildlife Viewing","Stargazing"],
+    seasons:["Summer","Fall"], lat:47.9900, lng:-88.4923 },
+
+  { id:387, name:"Isle Royale — Windigo", loc:"Lake Superior · Michigan",
+    type:"National Park", price:7, sites:10, avail:9, rating:4.9, reviews:214,
+    desc:"The western terminus of Isle Royale, Windigo is where the Minong Trail ends and the island's remotest backcountry begins. Accessible by ferry from Grand Portage, Minnesota — or by seaplane. Camp here and kayak Washington Harbor at dawn, spot moose wading the wetland edges, and connect to the inland lakes trail system that crosses the spine of the island. Far fewer visitors than Rock Harbor, even deeper quiet, and a front-row view of Lake Superior's open water in every direction.",
+    amenities:["Vault Toilets","Water Pump","Dock","Kayaking","Hiking","Wildlife Viewing","Stargazing"],
+    seasons:["Summer","Fall"], lat:47.9108, lng:-89.1622 },
+
+  { id:388, name:"Fort Wilkins State Park", loc:"Copper Harbor · Michigan",
+    type:"State Park", price:23, sites:165, avail:22, rating:4.8, reviews:890,
+    desc:"At the northernmost tip of the Keweenaw Peninsula — surrounded by Lake Superior on three sides — Fort Wilkins is one of the most dramatically sited state parks in the Midwest. The 1840s copper rush military fort is fully restored and walkable. Camp on the shore of Lake Fanny Hooe with Lake Superior visible beyond: a twin-lake finger of land jutting into cold deep water. Copper Harbor's lighthouse, the Brockway Mountain Drive, and some of the best fall color in Michigan are right outside the gate. This is the far edge of the map — and it's worth every mile.",
+    amenities:["Hot Showers","Flush Toilets","Fire Rings","Boat Launch","Fishing","Hiking","Pet Friendly","Accessible"],
+    seasons:["Spring","Summer","Fall"], lat:47.4671, lng:-87.8746 },
+
+  { id:389, name:"McLain State Park", loc:"Hancock · Michigan",
+    type:"State Park", price:20, sites:103, avail:30, rating:4.7, reviews:710,
+    desc:"Sunsets over Lake Superior from the Keweenaw Peninsula — McLain sits on the shore just 20 miles north of Houghton, making it the most accessible Lake Superior frontage in the UP. Camp in the pines and walk to an agate-strewn beach where the lake runs cold and impossibly clear. The cities of Houghton and Hancock are minutes south, Michigan Tech's campus is close, and the Keweenaw Water Trail connects the entire peninsula by kayak. Stay a night and you'll understand why people stay a week.",
+    amenities:["Hot Showers","Flush Toilets","Fire Rings","Beach Access","Fishing","Pet Friendly","Playground"],
+    seasons:["Spring","Summer","Fall"], lat:47.1654, lng:-88.6048 },
+
+  { id:390, name:"Tahquamenon Falls State Park", loc:"Paradise · Michigan",
+    type:"State Park", price:22, sites:188, avail:25, rating:4.8, reviews:1340,
+    desc:"The Tahquamenon River runs the color of root beer — stained amber by tannins leached from the cedar swamps upstream. The Lower Falls split around an island you can reach by rowboat; the Upper Falls are among the largest east of the Mississippi, 200 feet wide and 50 feet tall. Camp under towering hemlock and maple, walk to both falls in a single day, and listen for sandhill cranes calling across the wetlands at dusk. One of the true iconic experiences of Michigan's Upper Peninsula.",
+    amenities:["Hot Showers","Flush Toilets","Fire Rings","Hiking","Fishing","Boat Launch","Pet Friendly","Accessible"],
+    seasons:["Spring","Summer","Fall"], lat:46.5992, lng:-85.2522 },
+
+  { id:391, name:"Van Riper State Park", loc:"Champion · Michigan",
+    type:"State Park", price:20, sites:147, avail:35, rating:4.6, reviews:620,
+    desc:"Lake Michigamme sits at the center of Michigan's Upper Peninsula — a deep, clear lake ringed by hardwood forest with a loon on every quiet bay. Van Riper is a classic Michigan state park: sandy beach, boat launch, forested campsites, excellent walleye and bass fishing. Marquette is 30 miles east. The backcountry beyond the park stretches into Ottawa National Forest with no edge in sight. The moose population is dense in this corridor — ask the rangers where to look at dawn.",
+    amenities:["Hot Showers","Flush Toilets","Fire Rings","Beach Access","Boat Launch","Fishing","Pet Friendly","Wildlife Viewing"],
+    seasons:["Spring","Summer","Fall"], lat:46.5343, lng:-88.1522 },
+
+  { id:392, name:"Ottawa NF — Black River", loc:"Bessemer · Michigan",
+    type:"Forest Service", price:16, sites:40, avail:28, rating:4.7, reviews:480,
+    desc:"Five waterfalls in five miles — the Black River drops through Algonquin, Gorge, Potawatomi, Great Conglomerate, and Rainbow Falls before pouring into Lake Superior. Camp in the Ottawa National Forest and hike to each cascade on maintained trails through old-growth cedar. Copper Peak — the only ski-flying hill in the Western Hemisphere, now a summer observation deck — looms above the forest with 50-mile views over the UP. A classic western UP itinerary with maximum payoff per hour.",
+    amenities:["Vault Toilets","Running Water","Fire Rings","Hiking","Fishing","Pet Friendly"],
+    seasons:["Spring","Summer","Fall"], lat:46.6612, lng:-90.2091 },
+
+  { id:393, name:"Bond Falls", loc:"Paulding · Michigan",
+    type:"Forest Service", price:0, sites:0, avail:99, rating:4.7, reviews:560,
+    desc:"A staircase of pink granite shelves where the Ontonagon River fans out wide and white before continuing through the Ottawa National Forest — Bond Falls is one of the most photographed waterfalls in Michigan. Dispersed camping free on the surrounding National Forest land, with a short trail to the falls overlook and deep fishing pools below. Come in late May when snowmelt pushes the volume to its peak, or in October when the surrounding maple forest detonates in color around the white water.",
+    amenities:["Vault Toilets","Pet Friendly","Hiking","Fishing","Stargazing"],
+    seasons:["Spring","Summer","Fall"], lat:46.4164, lng:-89.0764 }
 
 ];
 
@@ -7636,11 +7758,20 @@ const TYPE_BLURBS = {
   'rv-ready':       { title: '🚐 RV-Ready with Hookups', desc: "Campgrounds with electrical hookups, water connections, or full-service RV pads. Pull through with your rig, plug in, and make yourself comfortable. Power and conveniences included." },
   'wifi':           { title: '📶 Wi-Fi Available', desc: "Campgrounds with on-site Wi-Fi — useful for remote workers, streaming campers, or staying in touch on longer trips. Coverage strength varies; don't expect a fiber connection in the backcountry." },
   'winter-open':    { title: '❄️ Open in Winter', desc: "Campgrounds accessible during the winter season — from Southern desert camps warm year-round, to ski-area sites and hardy Northern parks. Pack layers, check road conditions, and enjoy the crowds staying home." },
+  'free':           { title: '🪵 Free &amp; Dispersed Camping', desc: "No fees, no reservations, no check-in lines. BLM and National Forest dispersed camping puts you on public land with nothing between you and the landscape. Show up, camp anywhere that's legal and low-impact, and stay as long as regulations allow. Bring your own water, pack out everything, and leave the site cleaner than you found it." },
 };
 
 function setFilter(el, key) {
   lastMinuteMode = false; // exit last-minute mode when filter is changed
   currentFilter = key;
+  // Clear any active search so the filter shows the full unfiltered list for this type
+  if (searchQuery) {
+    searchQuery      = '';
+    apiSearchResults = null;
+    apiSearchQuery   = '';
+    const input = document.getElementById('results-input');
+    if (input) input.value = '';
+  }
   el.closest('.results-filters').querySelectorAll('.pill').forEach(p => p.classList.remove('on'));
   el.classList.add('on');
   // Update type blurb
@@ -7878,6 +8009,7 @@ function getFilteredCamps() {
         if (currentFilter === 'dark-sky')      return amen.includes('Stargazing');
         if (currentFilter === 'wifi')          return amen.includes('WiFi');
         if (currentFilter === 'water')         return amen.some(a => /swim|lake|river|beach|kayak/i.test(a));
+        if (currentFilter === 'free')          return c.price === 0 || (c.type === 'BLM' && c.price == null);
         return c.type === currentFilter;
       });
     }
@@ -7901,6 +8033,7 @@ function getFilteredCamps() {
         c.amenities.some(a => /hookup/i.test(a));
     if (currentFilter === 'wifi') return c.amenities.includes('WiFi');
     if (currentFilter === 'winter-open') return Array.isArray(c.seasons) && c.seasons.includes('Winter');
+    if (currentFilter === 'free') return c.price === 0;
     return c.type === currentFilter;
   });
 
