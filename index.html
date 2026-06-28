@@ -60,7 +60,23 @@ html, body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: var(--w);
   -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;          /* prevent rubber-band on app shell */
+  -webkit-text-size-adjust: 100%;     /* prevent iOS text size adjustment */
 }
+
+/* ── Global interactive element polish ──────── */
+button, [role="button"], a, .ntab, .saved-card, .pill, .vbtn, .cta-sq, .cta-sq-tc, .cta-main, .cta-fl {
+  touch-action: manipulation;         /* remove 300ms tap delay on iOS */
+}
+button, [role="button"], .ntab, .pill, .vbtn, .cta-sq, .cta-sq-tc, .outfit-opt {
+  -webkit-user-select: none;
+  user-select: none;                  /* no accidental text selection on UI chrome */
+}
+/* Prevent iOS from zooming inputs — set globally, font-size overrides below */
+input, textarea, select { font-size: 16px; }
+
+/* Pause ALL CSS animations on inactive screens — big perf win on mobile */
+.screen:not(.active) * { animation-play-state: paused !important; }
 
 /* ── SCREENS ─────────────────────────────────── */
 .screen {
@@ -71,6 +87,7 @@ html, body {
   transform: translateY(8px);
   overflow: hidden;
   background: var(--g0);
+  will-change: opacity, transform;    /* GPU compositing for screen transitions */
 }
 .screen.active { opacity: 1; pointer-events: all; transform: translateY(0); z-index: 10; }
 
@@ -2186,7 +2203,7 @@ html, body {
 .notif-form { margin-top: 12px; display: none; flex-direction: column; gap: 8px; }
 .notif-strip.open .notif-form { display: flex; }
 .notif-input-row { display: flex; gap: 8px; }
-.notif-email { flex: 1; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; padding: 10px 13px; font-size: 13px; font-family: inherit; color: rgba(255,255,255,0.85); outline: none; transition: border-color 0.15s; }
+.notif-email { flex: 1; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; padding: 10px 13px; font-size: 16px; font-family: inherit; color: rgba(255,255,255,0.85); outline: none; transition: border-color 0.15s; }
 .notif-email::placeholder { color: rgba(255,255,255,0.25); }
 .notif-email:focus { border-color: rgba(255,255,255,0.3); }
 .notif-submit { flex-shrink: 0; background: var(--o); color: white; border: none; border-radius: 8px; padding: 10px 16px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; font-family: inherit; transition: opacity 0.15s; white-space: nowrap; }
@@ -2269,7 +2286,7 @@ html, body {
 .tc-date-label { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; color: #E8481C; text-transform: uppercase; margin-bottom: 3px; }
 .tc-date-input {
   width: 100%; background: #0C1F15; border: 1px solid #1E3D2A;
-  color: #fff; font-family: inherit; font-size: 13px; font-weight: 700;
+  color: #fff; font-family: inherit; font-size: 16px; font-weight: 700;
   padding: 7px 8px; outline: none; border-radius: 4px;
   -webkit-appearance: none; color-scheme: dark;
 }
@@ -2761,7 +2778,7 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
 .fl-date-label { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.3); }
 .fl-date-input {
   background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
-  color: #f4f0e8; font-family: inherit; font-size: 14px; padding: 11px 12px;
+  color: #f4f0e8; font-family: inherit; font-size: 16px; padding: 11px 12px;
   outline: none; appearance: none; -webkit-appearance: none;
   color-scheme: dark;
 }
@@ -11010,9 +11027,27 @@ function dismissWelcome() {
     const entry = document.getElementById('profile-trail-entry');
     if (entry) {
       entry.classList.toggle('discovered', discovered);
-      if (discovered) setTimeout(renderTrailEntry, 50);
+      // Defer until after layout so offsetWidth is available
+      if (discovered) requestAnimationFrame(() => setTimeout(renderTrailEntry, 0));
     }
   };
+
+  /* ═══ RE-RENDER ON ORIENTATION CHANGE / RESIZE ═══ */
+  let _trailResizeTimer = null;
+  window.addEventListener('resize', () => {
+    clearTimeout(_trailResizeTimer);
+    _trailResizeTimer = setTimeout(() => {
+      // Re-render Trail canvas if it's currently active
+      if (document.getElementById('trail')?.classList.contains('active')) {
+        renderTrail();
+      }
+      // Re-render mini-map if profile is active and discovered
+      if (document.getElementById('profile')?.classList.contains('active') &&
+          localStorage.getItem('cg_trail_discovered')) {
+        requestAnimationFrame(renderTrailEntry);
+      }
+    }, 150);
+  });
 
 })();
 </script>
@@ -11131,7 +11166,7 @@ function dismissWelcome() {
     <div id="trip-share-result" style="display:none;margin-top:4px;">
       <div style="font-size:11px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:8px;">Your trip link</div>
       <div style="display:flex;gap:8px;">
-        <input type="text" id="trip-link-display" readonly style="flex:1;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:10px 12px;font-size:11px;font-family:monospace;color:rgba(255,255,255,0.7);min-width:0;">
+        <input type="text" id="trip-link-display" readonly style="flex:1;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:10px 12px;font-size:16px;font-family:monospace;color:rgba(255,255,255,0.7);min-width:0;">
         <button class="notif-submit" id="trip-copy-btn" style="flex-shrink:0;border-radius:8px;" onclick="copyTripLink()">Copy</button>
       </div>
       <div style="margin-top:10px;font-size:11px;color:rgba(255,255,255,0.28);line-height:1.65;">Anyone with this link can view your trip and save camps to their list. Link expires in 180 days.</div>
