@@ -2212,8 +2212,8 @@ input, textarea, select { font-size: 16px; }
 .notif-success { font-size: 12px; color: rgba(255,255,255,0.55); text-align: center; padding: 4px 0 2px; display: none; }
 
 /* ── ICON TOOLTIPS ───────────────────────────────── */
-.cta-sq[data-tooltip], .cta-sq-tc[data-tooltip], .compass-top-btn[data-tooltip] { position: relative; }
-.cta-sq[data-tooltip]::before, .cta-sq-tc[data-tooltip]::before, .compass-top-btn[data-tooltip]::before {
+.cta-sq[data-tooltip], .cta-sq-tc[data-tooltip], .compass-top-btn[data-tooltip], .cta-fl[data-tooltip] { position: relative; }
+.cta-sq[data-tooltip]::before, .cta-sq-tc[data-tooltip]::before, .compass-top-btn[data-tooltip]::before, .cta-fl[data-tooltip]::before {
   content: attr(data-tooltip);
   position: absolute;
   bottom: calc(100% + 9px);
@@ -2234,7 +2234,7 @@ input, textarea, select { font-size: 16px; }
   transition: opacity 0.15s;
   z-index: 200;
 }
-.cta-sq[data-tooltip]:hover::before, .cta-sq-tc[data-tooltip]:hover::before { opacity: 1; }
+.cta-sq[data-tooltip]:hover::before, .cta-sq-tc[data-tooltip]:hover::before, .cta-fl[data-tooltip]:hover::before { opacity: 1; }
 /* Compass tooltip points downward since button is near top of screen */
 .compass-top-btn[data-tooltip]::before { bottom: auto; top: calc(100% + 9px); right: 0; left: auto; transform: none; }
 .compass-top-btn[data-tooltip]:hover::before { opacity: 1; }
@@ -3145,20 +3145,7 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
     </div>
   </div>
 
-  <!-- iOS App Banner -->
-  <div class="app-banner" id="app-banner">
-    <div class="app-banner-inner">
-      <div class="app-banner-icon">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18" stroke-width="2.5"/></svg>
-      </div>
-      <div class="app-banner-text">
-        <div class="app-banner-title">iOS App — Coming Soon</div>
-        <div class="app-banner-sub">Under review on the App Store. Offline maps, GPS-aware, built for the trail.</div>
-      </div>
-      <div class="app-banner-cta">Notify Me</div>
-    </div>
-    <button class="app-banner-dismiss" onclick="document.getElementById('app-banner').style.display='none';localStorage.setItem('cg_app_banner_dismissed','1')" aria-label="Dismiss">×</button>
-  </div>
+  <!-- iOS App Banner removed — app is live -->
 
   <div class="cat-section">
     <div class="section-eyebrow">Browse by type</div>
@@ -4454,7 +4441,7 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
   </div>
   <div class="d-cta-bar">
     <a class="cta-main" id="d-cta-link" href="#" target="_blank" rel="noopener">Check Availability →</a>
-    <button class="cta-fl" id="fl-btn" onclick="showFirstLight()" aria-label="Set First Light reminder" title="First Light">
+    <button class="cta-fl" id="fl-btn" onclick="showFirstLight()" aria-label="Set First Light reminder" data-tooltip="Remind me when reservations open">
       <span class="cta-fl-icon">🌅</span>First Light
     </button>
     <div class="cta-sq-tc" onclick="openTripCard()" title="My Trip Card" data-tooltip="Trip Card" aria-label="Create trip card" role="button" tabindex="0">
@@ -11275,30 +11262,36 @@ function dismissWelcome() {
 
   /* ── Download the ICS file ── */
   function downloadICS(ics, filename) {
-    const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
-    const url  = URL.createObjectURL(blob);
-    const a    = document.createElement('a');
-    a.href = url; a.download = filename; a.style.display = 'none';
-    document.body.appendChild(a); a.click();
-    setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1500);
+    // Skip ICS blob download on native — WKWebView blocks it; native notification handles the reminder
+    if (window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform()) return;
+    try {
+      const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement('a');
+      a.href = url; a.download = filename; a.style.display = 'none';
+      document.body.appendChild(a); a.click();
+      setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1500);
+    } catch(e) { /* ignore — moment overlay still confirms the reminder */ }
   }
 
   /* ── Capacitor local notification (native app only) ── */
-  function scheduleNativeNotification(camp, openDate) {
+  async function scheduleNativeNotification(camp, openDate) {
     try {
       if (window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform()) {
         const { LocalNotifications } = window.Capacitor.Plugins || {};
-        if (LocalNotifications) {
-          const fireAt = new Date(openDate);
-          fireAt.setHours(6, 55, 0, 0);
-          LocalNotifications.schedule({ notifications: [{
-            id: Math.abs(hashCode(camp.name)) % 100000,
-            title: `🌅 ${camp.name} — Reservations open today`,
-            body: `Book now. ${isHotSite(camp.name) ? 'Sites fill in under 2 minutes.' : 'Secure your spot.'}`,
-            schedule: { at: fireAt },
-            extra: { url: camp.ridb_id ? `https://www.recreation.gov/camping/campgrounds/${camp.ridb_id}` : 'https://campgrounder.io' }
-          }]});
-        }
+        if (!LocalNotifications) return;
+        // Request permission first — required on iOS
+        const perm = await LocalNotifications.requestPermissions();
+        if (perm.display !== 'granted') return;
+        const fireAt = new Date(openDate);
+        fireAt.setHours(6, 55, 0, 0);
+        await LocalNotifications.schedule({ notifications: [{
+          id: Math.abs(hashCode(camp.name)) % 100000,
+          title: `🌅 ${camp.name} — Reservations open today`,
+          body: `Book now. ${isHotSite(camp.name) ? 'Sites fill in under 2 minutes.' : 'Secure your spot.'}`,
+          schedule: { at: fireAt },
+          extra: { url: camp.ridb_id ? `https://www.recreation.gov/camping/campgrounds/${camp.ridb_id}` : 'https://campgrounder.io' }
+        }]});
       }
     } catch(e) { /* graceful — web doesn't have Capacitor */ }
   }
