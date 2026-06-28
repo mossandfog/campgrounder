@@ -7362,30 +7362,25 @@ async function loadWildfireData() {
   const cEl = document.getElementById('wf-count');
   const uEl = document.getElementById('wf-updated');
 
-  // Primary: NIFC ESRI (has POOState + acreage)
+  // Primary: NIFC IRWIN public layer (no auth required)
   try {
     const r = await fetch(
-      'https://services3.arcgis.com/T4QMspbfLg3qTGWY/arcgis/rest/services/Active_Fires/FeatureServer/0/query' +
-      '?where=1%3D1&outFields=IncidentName,GISAcres,POOState,FireDiscoveryDateTime' +
-      '&geometry=-126,24,-65,50&geometryType=esriGeometryEnvelope&spatialRel=esriSpatialRelIntersects' +
-      '&inSR=4326&f=json&resultRecordCount=300',
-      { signal: AbortSignal.timeout(8000) }
+      'https://services9.arcgis.com/RHVPKKiFTONKtxq3/arcgis/rest/services/USA_Wildfires_v1/FeatureServer/0/query' +
+      '?where=IncidentTypeCategory%3D%27WF%27' +
+      '&outFields=IncidentName,POOState,DailyAcres,FireDiscoveryDateTime' +
+      '&returnGeometry=true&inSR=4326&f=json&resultRecordCount=500',
+      { signal: AbortSignal.timeout(10000) }
     );
     const d = await r.json();
     if (d.features?.length) {
       const fires = [], stateMap = {};
       d.features.forEach(f => {
         const a = f.attributes || {};
-        const raw = a.POOState;
-        const state = raw ? (WF_STATE_ABBR[raw] || (raw.length === 2 ? raw.toUpperCase() : null)) : null;
+        const raw = a.POOState || '';
+        // POOState comes as "US-CA" — extract the 2-letter code
+        const state = raw.includes('-') ? raw.split('-').pop().toUpperCase() : (raw.length === 2 ? raw.toUpperCase() : null);
         let coords = null;
         if (f.geometry?.x != null) coords = [f.geometry.y, f.geometry.x];
-        else if (f.geometry?.rings) {
-          const pts = f.geometry.rings[0];
-          const lng = pts.reduce((s,p)=>s+p[0],0)/pts.length;
-          const lat = pts.reduce((s,p)=>s+p[1],0)/pts.length;
-          coords = [lat, lng];
-        }
         const ms = a.FireDiscoveryDateTime || 0;
         if (state) stateMap[state] = (stateMap[state]||0) + 1;
         fires.push({ title: a.IncidentName || 'Active Fire', state, coords, ms });
@@ -7397,7 +7392,7 @@ async function loadWildfireData() {
       wfCheckProximity(fires);
       return;
     }
-  } catch {}
+  } catch(e) {}
 
   // Fallback: NASA EONET
   try {
@@ -7413,6 +7408,7 @@ async function loadWildfireData() {
         const [lng,lat] = g.coordinates;
         return lat > 24.5 && lat < 49.5 && lng > -124.8 && lng < -66.9;
       });
+      if (!usEvts.length) throw new Error('no US events');
       const fires = [], stateMap = {};
       usEvts.forEach(e => {
         const g = e.geometry[e.geometry.length-1];
@@ -7422,15 +7418,17 @@ async function loadWildfireData() {
         if (state) stateMap[state] = (stateMap[state]||0) + 1;
         fires.push({ title: e.title, state, coords: [lat,lng], ms });
       });
-      if (cEl) cEl.textContent = usEvts.length || '0';
+      if (cEl) cEl.textContent = usEvts.length;
       if (uEl) { const t = new Date(); uEl.textContent = `Live · ${t.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}`; }
       renderWfGrid(stateMap);
       renderWfCards(fires);
       wfCheckProximity(fires);
       return;
     }
-  } catch {}
+  } catch(e) {}
 
+  // Both failed — reset flag so next visit retries
+  wfLoaded = false;
   if (cEl) cEl.textContent = '—';
   if (uEl) uEl.textContent = 'Unavailable';
   renderWfCards([]);
