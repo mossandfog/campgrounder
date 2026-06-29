@@ -2771,6 +2771,7 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
 
 /* ── THE TORCH ── */
 #torch-handle {
+  display: none; /* shown only on touch devices via JS */
   position: fixed;
   bottom: calc(14px + var(--safe-bot));
   left: 50%;
@@ -10176,6 +10177,13 @@ function dismissWelcome() {
       labelOn.classList.remove('active-label');
       labelOff.classList.add('inactive-label');
     }
+  }
+
+  // Only show on touch/mobile devices or native Capacitor app
+  const isTouchDevice = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+  const isNative = window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform();
+  if (isTouchDevice || isNative) {
+    document.getElementById('torch-handle').style.display = 'flex';
   }
 
   // Expose to global scope for onclick handlers
