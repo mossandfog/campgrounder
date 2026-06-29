@@ -2690,6 +2690,228 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
 .suggest-submit { width: 100%; padding: 14px; background: var(--o); border: none; color: white; font-family: inherit; font-size: 12px; font-weight: 900; letter-spacing: 0.22em; text-transform: uppercase; cursor: pointer; transition: background 0.15s; margin-top: 4px; }
 .suggest-submit:hover { background: #D03C12; }
 .suggest-note { font-size: 11px; color: rgba(255,255,255,0.28); text-align: center; margin-top: 10px; line-height: 1.6; }
+
+/* ── THE TORCH ── */
+#torch-handle {
+  position: fixed;
+  bottom: calc(14px + var(--safe-bot));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 800;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 18px 8px 14px;
+  background: rgba(19, 43, 28, 0.82);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 100px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.4);
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+#torch-handle.torch-lit {
+  background: rgba(60, 28, 5, 0.9);
+  border-color: rgba(232, 120, 40, 0.4);
+  box-shadow: 0 0 20px rgba(232, 120, 40, 0.3), 0 2px 16px rgba(0,0,0,0.4);
+}
+#torch-handle svg.torch-icon { flex-shrink: 0; transition: all 0.3s ease; }
+#torch-handle.torch-lit svg.torch-icon { filter: drop-shadow(0 0 4px rgba(255,160,60,0.8)); }
+.torch-handle-label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  transition: color 0.25s;
+}
+#torch-handle.torch-lit .torch-handle-label { color: rgba(255,180,80,0.9); }
+
+/* Torch Drawer */
+#torch-drawer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 900;
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+  pointer-events: none;
+}
+#torch-drawer.open {
+  transform: translateY(0);
+  pointer-events: all;
+}
+#torch-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 899;
+  background: rgba(0,0,0,0);
+  pointer-events: none;
+  transition: background 0.35s ease;
+}
+#torch-backdrop.visible {
+  background: rgba(0,0,0,0.55);
+  pointer-events: all;
+}
+.torch-sheet {
+  background: linear-gradient(180deg, #0f1f14 0%, #0C1F15 100%);
+  border-radius: 24px 24px 0 0;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  padding-bottom: calc(32px + var(--safe-bot));
+  overflow: hidden;
+}
+.torch-sheet-glow {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 180px;
+  background: radial-gradient(ellipse at 50% -20%, rgba(232,120,30,0) 0%, transparent 70%);
+  transition: background 0.5s ease;
+  pointer-events: none;
+}
+#torch-drawer.torch-lit .torch-sheet-glow {
+  background: radial-gradient(ellipse at 50% -10%, rgba(232,120,30,0.35) 0%, transparent 65%);
+}
+.torch-pill-bar {
+  display: flex;
+  justify-content: center;
+  padding: 12px 0 0;
+}
+.torch-pill {
+  width: 36px; height: 4px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 2px;
+}
+.torch-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 28px 8px;
+}
+.torch-title {
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  transition: color 0.4s;
+}
+#torch-drawer.torch-lit .torch-title { color: rgba(255,170,70,0.8); }
+.torch-close-btn {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+  border: none;
+  color: rgba(255,255,255,0.4);
+  font-size: 16px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Rivian-style vertical slider */
+.torch-slider-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 28px 28px;
+  gap: 20px;
+}
+.torch-slider-wrap {
+  position: relative;
+  width: 72px;
+  height: 220px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+.torch-track {
+  position: absolute;
+  inset: 0;
+  border-radius: 36px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  overflow: hidden;
+}
+.torch-track-fill {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 0%;
+  background: linear-gradient(0deg, rgba(232,100,20,0.9) 0%, rgba(255,180,60,0.7) 100%);
+  border-radius: 0 0 36px 36px;
+  transition: height 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+#torch-drawer.torch-lit .torch-track-fill { height: 100%; border-radius: 36px; }
+.torch-track-glow {
+  position: absolute;
+  inset: -1px;
+  border-radius: 36px;
+  border: 1px solid rgba(232,120,30,0);
+  transition: border-color 0.4s, box-shadow 0.4s;
+}
+#torch-drawer.torch-lit .torch-track-glow {
+  border-color: rgba(232,120,30,0.5);
+  box-shadow: 0 0 24px rgba(232,100,20,0.4), inset 0 0 30px rgba(232,100,20,0.1);
+}
+.torch-thumb {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(30,61,42,0.95);
+  border: 1.5px solid rgba(255,255,255,0.12);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.5);
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  /* off: bottom position */
+  bottom: 8px;
+}
+#torch-drawer.torch-lit .torch-thumb {
+  /* on: top position */
+  bottom: calc(100% - 64px);
+  background: rgba(80,35,5,0.95);
+  border-color: rgba(232,120,30,0.6);
+  box-shadow: 0 0 20px rgba(232,100,20,0.5), 0 2px 12px rgba(0,0,0,0.5);
+}
+.torch-thumb-icon { transition: all 0.4s ease; }
+#torch-drawer.torch-lit .torch-thumb-icon { filter: drop-shadow(0 0 6px rgba(255,160,60,1)); }
+.torch-status-row {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+.torch-status-label {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.2);
+  transition: color 0.4s;
+}
+.torch-status-label.active-label { color: rgba(255,160,60,0.9); }
+.torch-status-label.inactive-label { color: rgba(255,255,255,0.4); }
+.torch-status-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  transition: all 0.4s;
+  flex-shrink: 0;
+}
+#torch-drawer.torch-lit .torch-status-dot {
+  background: #E87820;
+  box-shadow: 0 0 8px rgba(232,120,32,0.8);
+}
+.torch-hint {
+  font-size: 11px;
+  color: rgba(255,255,255,0.18);
+  letter-spacing: 0.04em;
+  text-align: center;
+}
 </style>
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
@@ -9785,6 +10007,116 @@ function dismissWelcome() {
     }
   });
 })();
+
+/* ── THE TORCH ── */
+(function() {
+  let torchOn = false;
+  let torchStream = null;
+  let torchTrack = null;
+
+  function openTorchDrawer() {
+    document.getElementById('torch-drawer').classList.add('open');
+    document.getElementById('torch-backdrop').classList.add('visible');
+  }
+
+  function closeTorchDrawer() {
+    document.getElementById('torch-drawer').classList.remove('open');
+    document.getElementById('torch-backdrop').classList.remove('visible');
+  }
+
+  async function enableFlashlight() {
+    // Try Capacitor community torch plugin first
+    try {
+      const Torch = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Torch;
+      if (Torch && typeof Torch.enable === 'function') {
+        await Torch.enable();
+        return true;
+      }
+    } catch(e) { /* fall through */ }
+
+    // Web fallback: getUserMedia with torch constraint
+    try {
+      torchStream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: { exact: 'environment' } }
+      });
+      torchTrack = torchStream.getVideoTracks()[0];
+      const caps = torchTrack.getCapabilities ? torchTrack.getCapabilities() : {};
+      if (caps.torch) {
+        await torchTrack.applyConstraints({ advanced: [{ torch: true }] });
+        return true;
+      }
+      // Device doesn't support torch constraint — stop stream and fail gracefully
+      torchTrack.stop();
+      torchStream = null;
+      torchTrack = null;
+    } catch(e) { /* camera unavailable or permission denied */ }
+    return false;
+  }
+
+  async function disableFlashlight() {
+    // Try Capacitor torch plugin first
+    try {
+      const Torch = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Torch;
+      if (Torch && typeof Torch.disable === 'function') {
+        await Torch.disable();
+        return;
+      }
+    } catch(e) { /* fall through */ }
+
+    // Stop the media stream
+    if (torchTrack) {
+      try { await torchTrack.applyConstraints({ advanced: [{ torch: false }] }); } catch(e) {}
+      torchTrack.stop();
+      torchTrack = null;
+    }
+    if (torchStream) {
+      torchStream.getTracks().forEach(t => t.stop());
+      torchStream = null;
+    }
+  }
+
+  async function toggleTorchLight() {
+    const drawer = document.getElementById('torch-drawer');
+    const handle = document.getElementById('torch-handle');
+    const labelOn = document.getElementById('torch-label-on');
+    const labelOff = document.getElementById('torch-label-off');
+
+    if (!torchOn) {
+      const success = await enableFlashlight();
+      if (success) {
+        torchOn = true;
+        drawer.classList.add('torch-lit');
+        handle.classList.add('torch-lit');
+        labelOn.classList.add('active-label');
+        labelOff.classList.remove('inactive-label');
+      }
+    } else {
+      await disableFlashlight();
+      torchOn = false;
+      drawer.classList.remove('torch-lit');
+      handle.classList.remove('torch-lit');
+      labelOn.classList.remove('active-label');
+      labelOff.classList.add('inactive-label');
+    }
+  }
+
+  // Expose to global scope for onclick handlers
+  window.openTorchDrawer = openTorchDrawer;
+  window.closeTorchDrawer = closeTorchDrawer;
+  window.toggleTorchLight = toggleTorchLight;
+
+  // Turn off torch if user navigates away / app goes to background
+  document.addEventListener('visibilitychange', function() {
+    if (document.visibilityState === 'hidden' && torchOn) {
+      disableFlashlight();
+      torchOn = false;
+      document.getElementById('torch-drawer').classList.remove('torch-lit');
+      document.getElementById('torch-handle').classList.remove('torch-lit');
+      document.getElementById('torch-label-on').classList.remove('active-label');
+      document.getElementById('torch-label-off').classList.add('inactive-label');
+    }
+  });
+})();
 </script>
 
 <!-- ── WELCOME MODAL ── -->
@@ -9874,6 +10206,52 @@ function dismissWelcome() {
       <a class="tc-btn-book" id="tc-book-link" href="#" target="_blank" rel="noopener">Book Now</a>
     </div>
     <div class="tc-note">Set your dates, then save or share.</div>
+  </div>
+</div>
+
+<!-- ── THE TORCH ── -->
+<div id="torch-backdrop" onclick="closeTorchDrawer()"></div>
+
+<!-- Floating handle -->
+<div id="torch-handle" onclick="openTorchDrawer()" role="button" aria-label="Open The Torch">
+  <svg class="torch-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M9 2C9 2 8 5 8 8C8 11 10 12 10 12H14C14 12 16 11 16 8C16 5 15 2 15 2H9Z" stroke="rgba(255,255,255,0.55)" stroke-width="1.5" stroke-linejoin="round"/>
+    <path d="M10 12L8 22H16L14 12" stroke="rgba(255,255,255,0.55)" stroke-width="1.5" stroke-linejoin="round"/>
+    <path d="M9 16H15" stroke="rgba(255,255,255,0.55)" stroke-width="1.5" stroke-linecap="round"/>
+  </svg>
+  <span class="torch-handle-label">The Torch</span>
+</div>
+
+<!-- Slide-up drawer -->
+<div id="torch-drawer">
+  <div class="torch-sheet" style="position:relative;">
+    <div class="torch-sheet-glow"></div>
+    <div class="torch-pill-bar"><div class="torch-pill"></div></div>
+    <div class="torch-header">
+      <span class="torch-title">The Torch</span>
+      <button class="torch-close-btn" onclick="closeTorchDrawer()">✕</button>
+    </div>
+    <div class="torch-slider-area">
+      <div class="torch-slider-wrap" onclick="toggleTorchLight()" id="torch-slider">
+        <div class="torch-track">
+          <div class="torch-track-fill"></div>
+        </div>
+        <div class="torch-track-glow"></div>
+        <div class="torch-thumb">
+          <svg class="torch-thumb-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 2C9 2 8 5 8 8C8 11 10 12 10 12H14C14 12 16 11 16 8C16 5 15 2 15 2H9Z" stroke="rgba(255,255,255,0.7)" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M10 12L8 22H16L14 12" stroke="rgba(255,255,255,0.7)" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M9 16H15" stroke="rgba(255,255,255,0.7)" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+      <div class="torch-status-row">
+        <span class="torch-status-label inactive-label" id="torch-label-off">OFF</span>
+        <div class="torch-status-dot"></div>
+        <span class="torch-status-label" id="torch-label-on">ON</span>
+      </div>
+      <div class="torch-hint">Tap to toggle · Tap outside to close</div>
+    </div>
   </div>
 </div>
 
