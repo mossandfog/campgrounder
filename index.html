@@ -24,6 +24,42 @@
 <meta name="twitter:title" content="Campgrounder — Find Your Perfect Campsite">
 <meta name="twitter:description" content="One clean place to find your perfect campsite. National parks, state parks, BLM, glamping, and more. Clean, fast, beautiful.">
 <meta name="twitter:image" content="https://campgrounder.io/og-image.png">
+<!-- Structured Data for AI and search engines -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MobileApplication",
+  "name": "Campgrounder",
+  "description": "Find 351+ campgrounds across North America — national parks, BLM land, dark sky sites, glamping and more. Free, no ads, no account required. Includes honest cell signal estimates for T-Mobile, Verizon, AT&T, and Starlink.",
+  "url": "https://campgrounder.io",
+  "applicationCategory": "TravelApplication",
+  "operatingSystem": "iOS",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "351+ campgrounds across the US and Canada",
+    "Cell signal estimates for T-Mobile, Verizon, AT&T, and Starlink",
+    "15 search filters including dark sky, pet-friendly, tent-only, waterfront",
+    "Interactive dark map with all camp pins",
+    "National parks, state parks, BLM land, dispersed camping, glamping",
+    "No account required",
+    "No ads"
+  ],
+  "screenshot": "https://campgrounder.io/og-image.png",
+  "author": {
+    "@type": "Person",
+    "name": "Benjamin VanderVeen"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Moss & Fog Media",
+    "url": "https://campgrounder.io"
+  }
+}
+</script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <!--
@@ -60,23 +96,7 @@ html, body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: var(--w);
   -webkit-font-smoothing: antialiased;
-  overscroll-behavior: none;          /* prevent rubber-band on app shell */
-  -webkit-text-size-adjust: 100%;     /* prevent iOS text size adjustment */
 }
-
-/* ── Global interactive element polish ──────── */
-button, [role="button"], a, .ntab, .saved-card, .pill, .vbtn, .cta-sq, .cta-sq-tc, .cta-main, .cta-fl {
-  touch-action: manipulation;         /* remove 300ms tap delay on iOS */
-}
-button, [role="button"], .ntab, .pill, .vbtn, .cta-sq, .cta-sq-tc, .outfit-opt {
-  -webkit-user-select: none;
-  user-select: none;                  /* no accidental text selection on UI chrome */
-}
-/* Prevent iOS from zooming inputs — set globally, font-size overrides below */
-input, textarea, select { font-size: 16px; }
-
-/* Pause ALL CSS animations on inactive screens — big perf win on mobile */
-.screen:not(.active) * { animation-play-state: paused !important; }
 
 /* ── SCREENS ─────────────────────────────────── */
 .screen {
@@ -87,7 +107,6 @@ input, textarea, select { font-size: 16px; }
   transform: translateY(8px);
   overflow: hidden;
   background: var(--g0);
-  will-change: opacity, transform;    /* GPU compositing for screen transitions */
 }
 .screen.active { opacity: 1; pointer-events: all; transform: translateY(0); z-index: 10; }
 
@@ -348,7 +367,6 @@ input, textarea, select { font-size: 16px; }
 
   /* ── ABOUT TOP NAV LINK (desktop only) ── */
   .about-topnav-link {
-    display: flex;
     font-size: 12px; font-weight: 900; letter-spacing: 0.22em;
     text-transform: uppercase; color: rgba(255,255,255,0.52);
     text-decoration: none; transition: color 0.15s;
@@ -466,7 +484,6 @@ input, textarea, select { font-size: 16px; }
   animation: wFadeIn 0.35s ease;
 }
 @keyframes wFadeIn { from { opacity: 0 } to { opacity: 1 } }
-@keyframes fadeIn  { from { opacity: 0 } to { opacity: 1 } }
 #welcome-overlay.out { animation: wFadeOut 0.22s ease forwards; }
 @keyframes wFadeOut { to { opacity: 0; transform: scale(0.97); } }
 
@@ -488,7 +505,7 @@ input, textarea, select { font-size: 16px; }
 .wm-rule {
   height: 1.5px;
   background: rgba(255,255,255,0.1);
-  margin: 0 32px 16px;
+  margin: 0 32px;
 }
 
 .wm-body {
@@ -1207,7 +1224,7 @@ input, textarea, select { font-size: 16px; }
 .saved-card { display: flex; align-items: center; border-bottom: 1px solid rgba(232,72,28,0.18); border-left: 3px solid var(--o); cursor: pointer; padding: 16px 0 16px 14px; transition: background 0.16s; gap: 14px; }
 .saved-card:first-child { margin-top: 16px; border-top: 1px solid rgba(232,72,28,0.18); }
 .saved-card:hover { background: var(--w1); }
-.unsave-btn { width: 30px; height: 30px; border: 1.5px solid rgba(232,72,28,0.35); display: flex; align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer; position: relative; transition: all 0.15s; }
+.unsave-btn { width: 44px; height: 44px; border: 1.5px solid rgba(232,72,28,0.35); display: flex; align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer; position: relative; transition: all 0.15s; }
 .unsave-btn::before { content:''; position:absolute; width:12px; height:1.5px; background:var(--o); transform:rotate(45deg); }
 .unsave-btn::after  { content:''; position:absolute; width:1.5px; height:12px; background:var(--o); transform:rotate(45deg); }
 .unsave-btn:hover   { background: rgba(232,72,28,0.12); border-color: var(--o); }
@@ -1378,7 +1395,7 @@ input, textarea, select { font-size: 16px; }
 .outfit-stage::before {
   content: 'YOUR LOADOUT';
   position: absolute; top: 10px; left: 14px;
-  font-size: 9px; font-weight: 900; letter-spacing: 0.24em;
+  font-size: 7px; font-weight: 900; letter-spacing: 0.24em;
   text-transform: uppercase; color: rgba(255,255,255,0.2);
 }
 .outfit-svg { width: 88px; height: 145px; overflow: visible; }
@@ -1450,7 +1467,7 @@ input, textarea, select { font-size: 16px; }
   width: 36px; height: 36px; flex-shrink: 0;
   stroke: var(--o); fill: none;
 }
-.profile-install-text { font-size: 12px; color: var(--w5); line-height: 1.5; }
+.profile-install-text {}
 .profile-install-title {
   font-size: 12px; font-weight: 800; letter-spacing: 0.1em;
   text-transform: uppercase; color: var(--o);
@@ -2141,9 +2158,6 @@ input, textarea, select { font-size: 16px; }
 .share-sheet-opt-title { font-size: 14px; font-weight: 800; letter-spacing: 0.03em; margin-bottom: 3px; }
 .share-sheet-opt-sub { font-size: 12px; color: rgba(255,255,255,0.32); letter-spacing: 0.01em; }
 .share-sheet-cancel { width: 100%; padding: 13px; margin-top: 12px; background: transparent; border: 1.5px solid rgba(255,255,255,0.07); color: rgba(255,255,255,0.35); font-family: inherit; font-size: 12px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; cursor: pointer; transition: border-color 0.15s; }
-.share-trip-btn { display:flex; align-items:center; gap:6px; background:transparent; border:1.5px solid rgba(255,255,255,0.15); border-radius:8px; color:rgba(255,255,255,0.55); font-family:inherit; font-size:11px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; padding:7px 12px; cursor:pointer; transition:border-color 0.15s,color 0.15s; white-space:nowrap; }
-.share-trip-btn:hover { border-color:var(--o); color:var(--o); }
-@keyframes spin { from { transform:rotate(0deg) } to { transform:rotate(360deg) } }
 
 /* ── REVIEW SOURCES SHEET ─────────────────────────── */
 .rev-sheet { position: fixed; inset: 0; z-index: 400; display: flex; align-items: flex-end; justify-content: center; animation: fadeIn 0.18s ease; }
@@ -2186,58 +2200,8 @@ input, textarea, select { font-size: 16px; }
 .d-rview-cta { margin-left: auto; font-size: 9px; font-weight: 900; letter-spacing: 0.2em; text-transform: uppercase; color: var(--o); opacity: 0.5; padding: 4px 8px; border: 1px solid rgba(232,72,28,0.3); transition: opacity 0.15s; flex-shrink: 0; }
 .cta-main  { flex: 1; background: var(--o); color: white; border: none; padding: 13px 17px; font-family: inherit; font-size: 12px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; cursor: pointer; transition: opacity 0.18s; text-decoration: none; display: flex; align-items: center; justify-content: center; }
 .cta-main:hover { opacity: 0.85; }
-.cta-sq { width: 54px; border: 1.5px solid var(--w2); background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.16s; position: relative; }
+.cta-sq { width: 54px; border: 1.5px solid var(--w2); background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.16s; }
 .cta-sq:hover { border-color: var(--o); }
-
-/* ── RESERVATION NOTIFY STRIP ───────────────────── */
-.notif-strip { flex-shrink: 0; padding: 0 24px; background: var(--g0); overflow: hidden; max-height: 0; transition: max-height 0.28s ease, padding 0.28s ease; }
-.notif-strip.open { max-height: 160px; padding: 14px 24px; border-top: 1px solid rgba(255,255,255,0.06); }
-.notif-trigger { display: flex; align-items: center; gap: 10px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-.notif-bell { width: 32px; height: 32px; flex-shrink: 0; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.5); transition: border-color 0.15s, color 0.15s; }
-.notif-trigger:hover .notif-bell { border-color: var(--o); color: var(--o); }
-.notif-trigger-text { flex: 1; }
-.notif-trigger-title { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.75); }
-.notif-trigger-sub   { font-size: 10px; color: rgba(255,255,255,0.35); margin-top: 1px; }
-.notif-chevron { font-size: 14px; color: rgba(255,255,255,0.25); transition: transform 0.2s; }
-.notif-strip.open .notif-chevron { transform: rotate(180deg); }
-.notif-form { margin-top: 12px; display: none; flex-direction: column; gap: 8px; }
-.notif-strip.open .notif-form { display: flex; }
-.notif-input-row { display: flex; gap: 8px; }
-.notif-email { flex: 1; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; padding: 10px 13px; font-size: 16px; font-family: inherit; color: rgba(255,255,255,0.85); outline: none; transition: border-color 0.15s; }
-.notif-email::placeholder { color: rgba(255,255,255,0.25); }
-.notif-email:focus { border-color: rgba(255,255,255,0.3); }
-.notif-submit { flex-shrink: 0; background: var(--o); color: white; border: none; border-radius: 8px; padding: 10px 16px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; font-family: inherit; transition: opacity 0.15s; white-space: nowrap; }
-.notif-submit:hover { opacity: 0.85; }
-.notif-submit:disabled { opacity: 0.4; cursor: default; }
-.notif-success { font-size: 12px; color: rgba(255,255,255,0.55); text-align: center; padding: 4px 0 2px; display: none; }
-
-/* ── ICON TOOLTIPS ───────────────────────────────── */
-.cta-sq[data-tooltip], .cta-sq-tc[data-tooltip], .compass-top-btn[data-tooltip], .cta-fl[data-tooltip] { position: relative; }
-.cta-sq[data-tooltip]::before, .cta-sq-tc[data-tooltip]::before, .compass-top-btn[data-tooltip]::before, .cta-fl[data-tooltip]::before {
-  content: attr(data-tooltip);
-  position: absolute;
-  bottom: calc(100% + 9px);
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(12,20,14,0.96);
-  border: 1px solid rgba(255,255,255,0.12);
-  color: rgba(255,255,255,0.82);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  padding: 5px 9px;
-  border-radius: 4px;
-  white-space: nowrap;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.15s;
-  z-index: 200;
-}
-.cta-sq[data-tooltip]:hover::before, .cta-sq-tc[data-tooltip]:hover::before, .cta-fl[data-tooltip]:hover::before { opacity: 1; }
-/* Compass tooltip points downward since button is near top of screen */
-.compass-top-btn[data-tooltip]::before { bottom: auto; top: calc(100% + 9px); right: 0; left: auto; transform: none; }
-.compass-top-btn[data-tooltip]:hover::before { opacity: 1; }
 
 /* ── TRIP CARD MODAL ─────────────────────────────── */
 .tc-overlay {
@@ -2258,56 +2222,53 @@ input, textarea, select { font-size: 16px; }
   display: flex; align-items: center; justify-content: space-between;
   width: 100%; max-width: 340px;
 }
-.tc-title { font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--w5); }
+.tc-title { font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--w3); }
 .tc-close { width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border: 1.5px solid var(--w2); border-radius: 50%; cursor: pointer; color: rgba(255,255,255,0.7); transition: border-color 0.15s; }
 .tc-close:hover { border-color: var(--o); }
 .tc-card-wrap {
   position: relative; width: 100%; max-width: 340px;
   border-radius: 20px; overflow: hidden;
-  box-shadow: 0 0 0 2px #E8481C, 0 24px 60px rgba(0,0,0,0.7);
+  box-shadow: 0 0 0 3px #E8481C, 0 24px 60px rgba(0,0,0,0.7);
   background: #132B1C;
   flex-shrink: 0;
 }
 .tc-card-wrap::after {
   content: ''; position: absolute; inset: 0;
-  border-radius: 20px; border: 2px solid #E8481C;
+  border-radius: 20px; border: 3px solid #E8481C;
   pointer-events: none; z-index: 10;
 }
 .tc-scene { width: 100%; aspect-ratio: 16/9; display: block; overflow: hidden; position: relative; }
 .tc-scene svg { width: 100%; height: 100%; display: block; }
-.tc-scene-divider { height: 2px; background: #E8481C; opacity: 0.5; }
+.tc-scene-divider { height: 3px; background: #E8481C; opacity: 0.5; }
 .tc-info { padding: 16px 18px 20px; }
 .tc-camp-name { font-size: 20px; font-weight: 800; color: #fff; line-height: 1.15; margin-bottom: 3px; }
-.tc-camp-loc { font-size: 10px; color: #8CA898; margin-bottom: 3px; }
-.tc-meta { font-size: 10px; color: #8CA898; margin-bottom: 10px; letter-spacing: 0.02em; }
+.tc-camp-loc { font-size: 10px; color: #8CA898; margin-bottom: 13px; }
 .tc-divider { height: 0.5px; background: #1E3D2A; margin: 10px 0; }
 .tc-dates-row { display: flex; gap: 12px; margin-bottom: 4px; }
 .tc-date-field { flex: 1; }
-.tc-date-label { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; color: #E8481C; text-transform: uppercase; margin-bottom: 3px; }
+.tc-date-label { font-size: 7px; font-weight: 700; letter-spacing: 0.14em; color: #E8481C; text-transform: uppercase; margin-bottom: 3px; }
 .tc-date-input {
   width: 100%; background: #0C1F15; border: 1px solid #1E3D2A;
-  color: #fff; font-family: inherit; font-size: 16px; font-weight: 700;
+  color: #fff; font-family: inherit; font-size: 13px; font-weight: 700;
   padding: 7px 8px; outline: none; border-radius: 4px;
   -webkit-appearance: none; color-scheme: dark;
 }
 .tc-date-input:focus { border-color: #E8481C; }
 .tc-stats-row { display: flex; gap: 0; margin: 10px 0 2px; }
 .tc-stat { flex: 1; }
-.tc-stat-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; color: #E8481C; text-transform: uppercase; margin-bottom: 3px; }
+.tc-stat-label { font-size: 7px; font-weight: 700; letter-spacing: 0.12em; color: #E8481C; text-transform: uppercase; margin-bottom: 3px; }
 .tc-stat-value { font-size: 18px; font-weight: 800; color: #fff; }
 .tc-type-pill { display: inline-block; font-size: 8px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #E8481C; background: rgba(232,72,28,0.1); border: 1px solid rgba(232,72,28,0.25); border-radius: 20px; padding: 3px 9px; margin-top: 4px; }
 .tc-amenities { font-size: 9px; color: #8CA898; margin: 8px 0 6px; line-height: 1.6; }
-.tc-footer { font-size: 9px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #1E3D2A; margin-top: 10px; }
+.tc-footer { font-size: 7px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #1E3D2A; margin-top: 10px; }
 .tc-actions { display: flex; gap: 9px; width: 100%; max-width: 340px; }
 .tc-btn-save { flex: 1; background: transparent; border: 1.5px solid rgba(255,255,255,0.18); color: rgba(255,255,255,0.75); font-family: inherit; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 12px 0; cursor: pointer; transition: border-color 0.15s; border-radius: 3px; }
 .tc-btn-save:hover { border-color: rgba(255,255,255,0.4); }
 .tc-btn-share { flex: 1; background: transparent; border: 1.5px solid rgba(255,255,255,0.18); color: rgba(255,255,255,0.75); font-family: inherit; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 12px 0; cursor: pointer; transition: border-color 0.15s; border-radius: 3px; }
 .tc-btn-share:hover { border-color: rgba(255,255,255,0.4); }
-.tc-btn-book { flex: 1; background: #E8481C; color: #fff; font-family: inherit; font-size: 11px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; padding: 12px 0; cursor: pointer; border: none; text-decoration: none; display: flex; align-items: center; justify-content: center; border-radius: 3px; transition: opacity 0.15s; }
+.tc-btn-book { flex: 1.5; background: #E8481C; color: #fff; font-family: inherit; font-size: 11px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; padding: 12px 0; cursor: pointer; border: none; text-decoration: none; display: flex; align-items: center; justify-content: center; border-radius: 3px; transition: opacity 0.15s; }
 .tc-btn-book:hover { opacity: 0.85; }
 .tc-note { font-size: 10px; color: rgba(255,255,255,0.28); text-align: center; }
-.tc-footer-row { display: flex; align-items: flex-end; justify-content: space-between; margin-top: 12px; }
-.tc-qr canvas, .tc-qr img { display: block; border-radius: 4px; }
 /* CTA bar trip card button */
 .cta-sq-tc { width: 54px; border: 1.5px solid #E8481C; background: rgba(232,72,28,0.08); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.16s; color: #E8481C; flex-shrink: 0; }
 .cta-sq-tc:hover { background: rgba(232,72,28,0.18); }
@@ -2520,27 +2481,14 @@ input, textarea, select { font-size: 16px; }
 .gear-affiliate-note { font-size: 9px; color: rgba(255,255,255,0.18); letter-spacing: 0.06em; text-transform: uppercase; }
 .gear-scroll { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: none; }
 .gear-scroll::-webkit-scrollbar { display: none; }
-.gear-card { flex: 0 0 156px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);
+.gear-card { flex: 0 0 148px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);
              border-radius: 12px; padding: 13px 14px; text-decoration: none; display: flex;
              flex-direction: column; gap: 3px; transition: background 0.15s, border-color 0.15s; }
 .gear-card:hover { background: rgba(255,255,255,0.07); border-color: rgba(232,72,28,0.3); }
 .gear-brand { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.28); }
-.gear-name  { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.85); line-height: 1.3; overflow-wrap: break-word; }
-.gear-desc  { font-size: 11px; color: rgba(255,255,255,0.38); line-height: 1.4; flex: 1; }
+.gear-name  { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.85); line-height: 1.3; }
+.gear-desc  { font-size: 11px; color: rgba(255,255,255,0.38); line-height: 1.4; margin-top: 3px; flex: 1; }
 .gear-shop  { font-size: 11px; color: var(--o); margin-top: 9px; font-weight: 600; }
-.gear-price { display: block; font-size: 10px; color: rgba(255,255,255,0.42); font-weight: 400; margin-bottom: 3px; }
-
-/* ── iOS APP BANNER ─────────────────────────────── */
-.app-banner { position: relative; margin: 0 20px 20px; border: 1px solid rgba(232,72,28,0.3); border-radius: 12px; background: rgba(232,72,28,0.06); overflow: hidden; }
-.app-banner-inner { display: flex; align-items: center; justify-content: center; gap: 14px; padding: 14px 44px 14px 16px; }
-.app-banner-icon { flex-shrink: 0; width: 40px; height: 40px; background: rgba(232,72,28,0.12); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--o); }
-.app-banner-text { flex: 1; min-width: 0; }
-.app-banner-title { font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.9); margin-bottom: 2px; }
-.app-banner-sub { font-size: 11px; color: rgba(255,255,255,0.45); line-height: 1.4; }
-.app-banner-cta { flex-shrink: 0; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--o); border: 1px solid rgba(232,72,28,0.4); padding: 7px 12px; border-radius: 6px; white-space: nowrap; cursor: pointer; transition: background 0.15s; }
-.app-banner-cta:hover { background: rgba(232,72,28,0.1); }
-.app-banner-dismiss { position: absolute; top: 10px; right: 12px; background: none; border: none; color: rgba(255,255,255,0.3); font-size: 18px; cursor: pointer; padding: 0; line-height: 1; transition: color 0.15s; }
-.app-banner-dismiss:hover { color: rgba(255,255,255,0.6); }
 
 /* ── DRIVE CARD ─────────────────────────────────── */
 .drive-body { display: flex; align-items: center; justify-content: center; margin-bottom: 32px; min-height: 110px; }
@@ -2559,7 +2507,7 @@ input, textarea, select { font-size: 16px; }
                overflow: hidden; margin-bottom: 10px; background: rgba(255,255,255,0.02); }
 .drive-stat { flex: 1; padding: 16px 10px; text-align: center; }
 .drive-stat + .drive-stat { border-left: 1.5px solid rgba(255,255,255,0.09); }
-.drive-stat-val { font-size: 24px; font-weight: 700; color: #fff; letter-spacing: -0.03em; text-align: center;
+.drive-stat-val { font-size: 24px; font-weight: 700; color: #fff; letter-spacing: -0.03em;
                   line-height: 1; margin-bottom: 5px; }
 .drive-stat-label { font-size: 11px; color: rgba(255,255,255,0.45); text-transform: uppercase;
                     letter-spacing: 0.1em; font-weight: 600; }
@@ -2740,6 +2688,7 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
 .suggest-submit { width: 100%; padding: 14px; background: var(--o); border: none; color: white; font-family: inherit; font-size: 12px; font-weight: 900; letter-spacing: 0.22em; text-transform: uppercase; cursor: pointer; transition: background 0.15s; margin-top: 4px; }
 .suggest-submit:hover { background: #D03C12; }
 .suggest-note { font-size: 11px; color: rgba(255,255,255,0.28); text-align: center; margin-top: 10px; line-height: 1.6; }
+<<<<<<< HEAD
 
 /* ══ PREMIUM PARK SCREEN ═══════════════════════════════════════ */
 .pk-screen { overflow-y:auto; -webkit-overflow-scrolling:touch; background:var(--g0); }
@@ -3023,6 +2972,8 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
 .trail-entry-eyebrow { font-size: 8px; letter-spacing: 4px; text-transform: uppercase; color: rgba(200,168,95,0.6); }
 .trail-entry-name { font-size: 16px; font-weight: 100; letter-spacing: 6px; text-transform: uppercase; color: #f4f0e8; }
 .trail-entry-arrow { font-size: 14px; color: rgba(200,168,95,0.5); }
+=======
+>>>>>>> 3dee852f875f8bfa0d7d0f0470cb014cc3d23b9c
 </style>
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
@@ -3143,13 +3094,13 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
 <div class="screen active" id="home">
 <div class="home-scroll">
   <div class="home-top">
-    <div onclick="document.getElementById('home').querySelector('.home-scroll').scrollTo({top:0,behavior:'smooth'})" role="button" tabindex="0" aria-label="Go to top" style="cursor:pointer;display:flex;align-items:center;gap:10px;-webkit-tap-highlight-color:transparent;">
+    <div>
       <svg width="36" height="36" viewBox="0 0 100 100" aria-label="Campgrounder logo" role="img"><use href="#ic-logo"/></svg>
       <div class="wordmark">Campgrounder</div>
     </div>
     <div class="home-top-actions">
       <a href="#" onclick="go('about','home');return false;" class="about-topnav-link">About</a>
-      <div class="compass-top-btn" id="compass-top" onclick="locateMe();dismissCompassHint();" title="Find camps near me" data-tooltip="Find Camps Near Me">
+      <div class="compass-top-btn" id="compass-top" onclick="locateMe();dismissCompassHint();" title="Find camps near me">
         <svg width="20" height="20" style="color:white;stroke:currentColor;fill:none;"><use href="#ic-compass"/></svg>
         <div id="compass-ping" class="compass-ping" style="display:none;"></div>
         <div id="compass-tip"  class="compass-tip">Camps near you →</div>
@@ -3212,8 +3163,8 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
   <!-- ── STATS BAR ──────────────────────────────── -->
   <div class="stats-bar">
     <div class="stats-cell">
-      <div class="stats-num" id="home-camp-count">Thousands</div>
-      <div class="stats-label">of Handpicked Camps</div>
+      <div class="stats-num" style="font-size:14px;letter-spacing:0.04em;">Hundreds &amp; Hundreds</div>
+      <div class="stats-label">Handpicked Camps</div>
     </div>
     <div class="stats-cell">
       <div class="stats-num">4.8<span style="font-size:14px;color:var(--o);">★</span></div>
@@ -3224,8 +3175,6 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
       <div class="stats-label">Weekend Campers</div>
     </div>
   </div>
-
-  <!-- iOS App Banner removed — app is live -->
 
   <div class="cat-section">
     <div class="section-eyebrow">Browse by type</div>
@@ -3240,7 +3189,7 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
         <div><div class="cat-name">State Parks</div><div class="cat-sub">Close to home</div></div>
         <div class="cat-plus"></div>
       </div>
-      <div class="cat-cell" onclick="goFilter('free')">
+      <div class="cat-cell" onclick="goSearch('free camping dispersed')">
         <svg width="44" height="44" style="color:#E8481C;stroke:currentColor;fill:none;"><use href="#ic-fire"/></svg>
         <div><div class="cat-name">Free Camping</div><div class="cat-sub">No fees, just nature</div></div>
         <div class="cat-plus"></div>
@@ -3531,10 +3480,7 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
 <div class="screen" id="results">
   <div class="results-top">
     <div class="xbtn is-close" onclick="clearSearch();go('home','results')" aria-label="Clear and go home" role="button" tabindex="0"></div>
-    <div class="sbar"><input value="California" id="results-input"
-      oninput="onResultsInputChange(this.value)"
-      onkeydown="if(event.key==='Enter'){clearTimeout(_searchDebounce);submitSearch(this.value)}"
-    ></div>
+    <div class="sbar" onclick="openSearch()" style="cursor:pointer;"><input value="California" id="results-input" readonly style="cursor:pointer;pointer-events:none;"></div>
     <div class="xbtn" onclick="openSearch()" aria-label="Open search" role="button" tabindex="0"></div>
   </div>
   <!-- Fire season advisory banner — shown June–September -->
@@ -3546,7 +3492,7 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
   <div class="results-meta">
     <div class="results-count" id="results-count">8 Campgrounds</div>
     <div style="display:flex;align-items:center;gap:8px;">
-      <div class="date-badge" id="date-badge" onclick="goBack()" style="display:none;"></div>
+      <div class="date-badge" id="date-badge" onclick="openSearch()" title="Edit dates" style="display:none;"></div>
       <div class="view-toggle">
         <div class="vbtn on" id="vbtn-list" onclick="setView('list')">List</div>
         <div class="vbtn"    id="vbtn-map"  onclick="setView('map')">Map</div>
@@ -3574,7 +3520,6 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
     <div class="pill"    onclick="setFilter(this,'rv-ready')">🚐 RV-Ready</div>
     <div class="pill"    onclick="setFilter(this,'wifi')">📶 Has WiFi</div>
     <div class="pill"    onclick="setFilter(this,'winter-open')">❄️ Open in Winter</div>
-    <div class="pill"    onclick="setFilter(this,'free')" style="border-color:rgba(232,72,28,0.6);">🪵 Free / Dispersed <span style="font-size:10px;font-weight:900;letter-spacing:0.1em;background:var(--o);color:#fff;padding:1px 5px;border-radius:10px;margin-left:4px;">NEW</span></div>
   </div>
   <div class="type-blurb" id="type-blurb">
     <div class="type-blurb-title" id="type-blurb-title"></div>
@@ -3641,13 +3586,7 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
       <div class="saved-heading">Saved</div>
       <div class="saved-count" id="saved-count">0 campgrounds</div>
     </div>
-    <div style="display:flex;align-items:center;gap:10px;">
-      <button class="share-trip-btn" id="share-trip-btn" onclick="openTripShareSheet()" style="display:none" aria-label="Share trip">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
-        Share
-      </button>
-      <div class="xbtn is-close" onclick="go('home','saved')" aria-label="Close saved list" role="button" tabindex="0"></div>
-    </div>
+    <div class="xbtn is-close" onclick="go('home','saved')" aria-label="Close saved list" role="button" tabindex="0"></div>
   </div>
   <div class="saved-scroll" id="saved-list"></div>
   <nav class="bnav">
@@ -3655,31 +3594,6 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
     <div class="ntab" onclick="go('map-screen','saved')"><svg><use href="#ic-map"/></svg>Map</div>
     <div class="ntab on"><svg><use href="#ic-heart"/></svg>Saved</div>
     <div class="ntab" onclick="go('profile','saved')"><svg><use href="#ic-user"/></svg>Profile</div>
-  </nav>
-</div>
-
-
-<!-- ══════════════════════════════════════
-  SHARED TRIP SCREEN
-══════════════════════════════════════ -->
-<div class="screen" id="shared">
-  <div class="saved-top">
-    <div>
-      <div class="saved-heading" id="shared-title">Shared Trip</div>
-      <div class="saved-count" id="shared-sub">Loading…</div>
-    </div>
-    <div class="xbtn is-close" onclick="go('home','shared')" aria-label="Close" role="button" tabindex="0"></div>
-  </div>
-  <div id="shared-loading" style="display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:14px;color:rgba(255,255,255,0.35);font-size:13px;padding-bottom:60px;">
-    <div style="width:28px;height:28px;border:2px solid rgba(255,255,255,0.1);border-top-color:var(--o);border-radius:50%;animation:spin 0.8s linear infinite;"></div>
-    Loading trip…
-  </div>
-  <div id="shared-list" class="saved-scroll" style="display:none;flex:1;overflow-y:auto;"></div>
-  <nav class="bnav">
-    <div class="ntab" onclick="go('home','shared')"><svg><use href="#ic-home"/></svg>Explore</div>
-    <div class="ntab" onclick="go('map-screen','shared')"><svg><use href="#ic-map"/></svg>Map</div>
-    <div class="ntab" onclick="go('saved','shared')"><svg><use href="#ic-heart"/></svg>Saved</div>
-    <div class="ntab" onclick="go('profile','shared')"><svg><use href="#ic-user"/></svg>Profile</div>
   </nav>
 </div>
 
@@ -3752,18 +3666,6 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
       <div class="profile-stat">
         <div class="profile-stat-num">PNW</div>
         <div class="profile-stat-lbl">Spirit</div>
-      </div>
-    </div>
-
-    <!-- The Trail entry (revealed after discovery) -->
-    <div class="profile-trail-entry" id="profile-trail-entry" onclick="go('trail','profile')">
-      <canvas class="trail-entry-canvas" id="trail-entry-canvas"></canvas>
-      <div class="trail-entry-label">
-        <div class="trail-entry-left">
-          <div class="trail-entry-eyebrow">Your journey</div>
-          <div class="trail-entry-name">The Trail</div>
-        </div>
-        <div class="trail-entry-arrow">→</div>
       </div>
     </div>
 
@@ -3911,57 +3813,6 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
 </div>
 
 <!-- ══════════════════════════════════════
-  THE TRAIL
-══════════════════════════════════════ -->
-<div class="screen" id="trail">
-  <div class="trail-canvas-wrap">
-    <canvas id="trail-c-terrain"></canvas>
-    <canvas id="trail-c-fog"></canvas>
-    <canvas id="trail-c-anim"></canvas>
-  </div>
-
-  <button class="trail-night-btn" id="trail-night-btn" onclick="trailToggleNight()">★ Night sky</button>
-  <div class="trail-back">
-    <div class="xbtn is-close dark-bg" onclick="go('profile','trail')" aria-label="Close trail" role="button" tabindex="0"></div>
-  </div>
-
-  <div class="trail-header">
-    <div class="trail-wordmark">Campgrounder</div>
-    <div class="trail-title">The Trail</div>
-  </div>
-
-  <div class="trail-stats">
-    <div class="trail-stat">
-      <div class="trail-stat-lbl">Camps</div>
-      <div class="trail-stat-num" id="trail-stat-camps">0</div>
-    </div>
-    <div class="trail-stat">
-      <div class="trail-stat-lbl">Miles</div>
-      <div class="trail-stat-num" id="trail-stat-miles">—</div>
-    </div>
-    <div class="trail-stat">
-      <div class="trail-stat-lbl">States</div>
-      <div class="trail-stat-num" id="trail-stat-states">—</div>
-    </div>
-    <button class="trail-share-btn" onclick="trailShare()">Share trail</button>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════
-  TRAIL DISCOVERY OVERLAY
-══════════════════════════════════════ -->
-<div id="trail-discover" onclick="trailDiscoverDismiss()">
-  <canvas id="td-terrain"></canvas>
-  <canvas id="td-fog"></canvas>
-  <div class="td-content" id="td-content">
-    <div class="td-headline">We've been<br>keeping track.</div>
-    <div class="td-sub" id="td-sub">— camps saved —</div>
-    <div class="td-dots" id="td-dots"></div>
-    <div class="td-tap">tap to explore your trail</div>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════
   ABOUT
 ══════════════════════════════════════ -->
 <div class="screen" id="about">
@@ -3989,15 +3840,15 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
     <!-- Stats row -->
     <div class="about-stats">
       <div class="about-stat">
-        <div class="about-stat-num">1000s</div>
+        <div class="about-stat-num" id="about-camp-count">351+</div>
         <div class="about-stat-label">Campgrounds</div>
       </div>
       <div class="about-stat">
-        <div class="about-stat-num">50+</div>
-        <div class="about-stat-label">States + Canada</div>
+        <div class="about-stat-num" id="about-state-count">42</div>
+        <div class="about-stat-label">States &amp; Provinces</div>
       </div>
       <div class="about-stat">
-        <div class="about-stat-num">9</div>
+        <div class="about-stat-num">8</div>
         <div class="about-stat-label">Categories</div>
       </div>
       <div class="about-stat">
@@ -4025,13 +3876,13 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
       <div class="about-cell" role="listitem">
         <div class="about-cell-num">02</div>
         <div class="about-cell-title">One Tap<br>to Gone</div>
-        <div class="about-cell-body">From idea to booking in under a minute.</div>
+        <div class="about-cell-body">From idea to booking in under a minute. That's the design goal.</div>
       </div>
 
       <div class="about-cell about-cell--full" role="listitem">
         <div class="about-cell-num">03</div>
-        <div class="about-cell-title">Born in the PNW.<br>Built for North America.</div>
-        <div class="about-cell-body">Started under tall firs and grey skies in the Pacific Northwest. Now covering every US state and Canada, from Banff to the Florida Keys.</div>
+        <div class="about-cell-title">Born in the PNW.<br>Built for Everywhere.</div>
+        <div class="about-cell-body">Started under tall firs and grey skies in the Pacific Northwest. Designed for every forest, desert, canyon, and shoreline that comes after.</div>
       </div>
 
     </div>
@@ -4041,29 +3892,9 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
       <div class="about-roadmap-eyebrow">What's Next</div>
       <div class="about-roadmap-grid">
         <div class="about-roadmap-item">
-          <div class="about-roadmap-icon">🌎</div>
-          <div class="about-roadmap-title">Recreation.gov API ✓</div>
-          <div class="about-roadmap-body">Thousands of federal campgrounds now searchable via the Recreation.gov RIDB. National parks, forests, BLM, Army Corps and more, all in one place.</div>
-        </div>
-        <div class="about-roadmap-item">
-          <div class="about-roadmap-icon">🍁</div>
-          <div class="about-roadmap-title">Canada ✓</div>
-          <div class="about-roadmap-body">Parks Canada, BC Parks, Ontario Parks, and more. Campgrounder now covers top destinations across every Canadian province and territory.</div>
-        </div>
-        <div class="about-roadmap-item">
-          <div class="about-roadmap-icon">🔗</div>
-          <div class="about-roadmap-title">Shareable Trip Links ✓</div>
-          <div class="about-roadmap-body">Save your camps, generate a link, and share your trip with anyone. No account required. Links stay active for 180 days.</div>
-        </div>
-        <div class="about-roadmap-item">
-          <div class="about-roadmap-icon">🔥</div>
-          <div class="about-roadmap-title">Wildfire Watch ✓</div>
-          <div class="about-roadmap-body">Live fire data from NASA EONET and NIFC. Active fires mapped nationwide, with state-level breakdowns. Already on the home screen.</div>
-        </div>
-        <div class="about-roadmap-item">
           <div class="about-roadmap-icon">⚡</div>
           <div class="about-roadmap-title">Live Availability</div>
-          <div class="about-roadmap-body">Real-time site counts pulled directly from Recreation.gov, covering thousands of federal campgrounds. Direct booking links already live for most sites.</div>
+          <div class="about-roadmap-body">Real-time site counts from Recreation.gov — coming first to the 87 national park and federal campgrounds already in our database.</div>
         </div>
         <div class="about-roadmap-item">
           <div class="about-roadmap-icon">🔔</div>
@@ -4073,7 +3904,12 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
         <div class="about-roadmap-item">
           <div class="about-roadmap-icon">🤖</div>
           <div class="about-roadmap-title">AI Trip Builder</div>
-          <div class="about-roadmap-body">Tell us what you want: four nights in the Cascades, dog-friendly, under $30, good stars. We'll build the itinerary, including drive time and weather.</div>
+          <div class="about-roadmap-body">Tell us what you want — "four nights in the Cascades, dog-friendly, under $30, good stars" — and we'll build the itinerary, including drive time and weather.</div>
+        </div>
+        <div class="about-roadmap-item">
+          <div class="about-roadmap-icon">🗺</div>
+          <div class="about-roadmap-title">Offline Maps</div>
+          <div class="about-roadmap-body">Cache your saved camps for offline use. No signal? No problem. Your sites, trails, and coordinates — available without a bar of cell service.</div>
         </div>
         <div class="about-roadmap-item">
           <div class="about-roadmap-icon">📸</div>
@@ -4083,23 +3919,23 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
         <div class="about-roadmap-item">
           <div class="about-roadmap-icon">💬</div>
           <div class="about-roadmap-title">Local Intel</div>
-          <div class="about-roadmap-body">Crowd-sourced tips from people who've actually been there: the quiet loop, the spots closest to water, what to avoid on holiday weekends.</div>
+          <div class="about-roadmap-body">Crowd-sourced tips from people who've actually been there — the quiet loop, the spots closest to water, what to avoid on holiday weekends.</div>
         </div>
         <div class="about-roadmap-item">
-          <div class="about-roadmap-icon">🗺</div>
-          <div class="about-roadmap-title">Offline Maps</div>
-          <div class="about-roadmap-body">Cache your saved camps for offline use. No signal? No problem. Your sites, trails, and coordinates, available without a bar of cell service.</div>
+          <div class="about-roadmap-icon">🔥</div>
+          <div class="about-roadmap-title">Live Fire Conditions</div>
+          <div class="about-roadmap-body">Real-time fire restriction data and air quality at every campground, pulled from agency sources. Know before you drive four hours.</div>
         </div>
         <div class="about-roadmap-item">
           <div class="about-roadmap-icon">📱</div>
-          <div class="about-roadmap-title">iOS App: Under Review</div>
-          <div class="about-roadmap-body">Submitted to the App Store. Offline-first, GPS-aware, and designed for people who leave the pavement behind. Coming very soon.</div>
+          <div class="about-roadmap-title">Native App</div>
+          <div class="about-roadmap-body">Everything Campgrounder does, built for the trail. Offline-first, GPS-aware, and designed for people who leave the pavement behind.</div>
         </div>
       </div>
     </div>
 
     <!-- Partners CTA -->
-    <div class="about-partners-cta" onclick="go('partners','profile')" role="button" tabindex="0">
+    <div class="about-partners-cta" onclick="go('partners','about')" role="button" tabindex="0">
       <div class="about-partners-cta-inner">
         <div class="about-partners-cta-label">Work with us</div>
         <div class="about-partners-cta-sub">Sponsorships · press · affiliate · content</div>
@@ -4137,7 +3973,7 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
 
     <div class="partners-hero">
       <div class="partners-hero-label">Partnerships &amp; Press</div>
-      <div class="partners-hero-title">Let's build<br>something together</div>
+      <div class="partners-hero-title">Let's build<br>something together.</div>
       <div class="partners-hero-sub">Campgrounder is free, ad-free, and growing — built for people who actually camp. We partner with brands and creators who share that ethos.</div>
     </div>
 
@@ -4494,45 +4330,25 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
     <div id="d-gear-picks" style="display:none; margin: 4px 0 24px;"></div>
     <div id="d-nearby"></div>
   </div>
-  <!-- Reservation Notify Strip -->
-  <div class="notif-strip" id="notif-strip">
-    <div class="notif-trigger" onclick="toggleNotifStrip()">
-      <div class="notif-bell">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-      </div>
-      <div class="notif-trigger-text">
-        <div class="notif-trigger-title">Notify me when reservations open</div>
-        <div class="notif-trigger-sub" id="notif-date-hint">We'll email you before the window opens</div>
-      </div>
-      <div class="notif-chevron">›</div>
-    </div>
-    <div class="notif-form" id="notif-form">
-      <div class="notif-input-row">
-        <input type="email" class="notif-email" id="notif-email" placeholder="your@email.com" autocomplete="email">
-        <button class="notif-submit" id="notif-submit" onclick="submitNotifEmail()">Notify Me</button>
-      </div>
-      <div class="notif-success" id="notif-success">✓ You're on the list — we'll email you before reservations open.</div>
-    </div>
-  </div>
-
   <div class="hint-strip hint-tripcard" id="hint-tripcard" style="display:none">
     <span>Tap the card icon to make a shareable trip card</span>
     <button class="hint-x" onclick="dismissHint('hint-tripcard')" aria-label="Dismiss">×</button>
   </div>
   <div class="d-cta-bar">
     <a class="cta-main" id="d-cta-link" href="#" target="_blank" rel="noopener">Check Availability →</a>
-    <button class="cta-fl" id="fl-btn" onclick="showFirstLight()" aria-label="Set First Light reminder" data-tooltip="Remind me when reservations open">
-      <span class="cta-fl-icon">🌅</span>First Light
-    </button>
-    <div class="cta-sq-tc" onclick="openTripCard()" title="My Trip Card" data-tooltip="Trip Card" aria-label="Create trip card" role="button" tabindex="0">
+    <div class="cta-sq-tc" onclick="openTripCard()" title="My Trip Card" aria-label="Create trip card" role="button" tabindex="0">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3H8"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
     </div>
-    <div class="cta-sq" onclick="shareCamp()" data-tooltip="Share" aria-label="Share campground" role="button">
+    <div class="cta-sq" onclick="addToCalendar()" title="Add to Calendar" aria-label="Add to Calendar" role="button">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    </div>
+    <div class="cta-sq" onclick="shareCamp()" aria-label="Share campground" role="button">
       <svg width="17" height="17" style="color:rgba(255,255,255,0.6);stroke:currentColor;fill:none;" aria-hidden="true"><use href="#ic-share"/></svg>
     </div>
   </div>
 </div>
 
+<<<<<<< HEAD
 <!-- ══════════════════════════════════════
   PREMIUM PARK DETAIL
 ══════════════════════════════════════ -->
@@ -4643,6 +4459,8 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
   </div>
 </div>
 
+=======
+>>>>>>> 3dee852f875f8bfa0d7d0f0470cb014cc3d23b9c
 <!-- ── 3D FLYOVER OVERLAY ─────────────────────────── -->
 <div id="flyover-overlay">
   <div id="flyover-map"></div>
@@ -4741,9 +4559,6 @@ function _stateBookingUrl(c, q) {
 function buildBookingUrl(c) {
   const q   = encodeURIComponent(c.name);
   const loc = c.loc.toLowerCase();
-
-  // RIDB camps with a direct reservation URL — always use it when available
-  if (c.source === 'ridb' && c.reservationUrl) return c.reservationUrl;
 
   // Free / dispersed / primitive — no booking needed; link to info page
   if (c.price === 0)
@@ -6910,131 +6725,10 @@ const CAMPS = [
     type:"National Park", price:24, sites:255, avail:18, rating:4.7, reviews:1190,
     desc:"La Mauricie is the only national park in Quebec's Laurentian Shield — a mosaic of lakes, rivers, and boreal forest three hours from Montreal. The park is a paddler's dream: a canoe circuit links nearly a dozen lakes through a wilderness corridor with backcountry camping at every turn. By car, the parkway threads through the highlands with views across the forest. Moose wade the beaver ponds. Loons echo at night. The swimming in the clear Laurentian lakes is exceptional. The closest true wilderness to one of North America's great cities.",
     amenities:["Flush Toilets","Running Water","Fire Rings","Boat Launch","Fishing","Amphitheater","Accessible","Pet Friendly"],
-    seasons:["Spring","Summer","Fall"], lat:46.7500, lng:-72.9167 },
+    seasons:["Spring","Summer","Fall"], lat:46.7500, lng:-72.9167 }
 
-  // ── FREE / DISPERSED CAMPING ──────────────────────────────────────────────
 
-  { id:374, name:"Toroweap Overlook", loc:"Grand Canyon NP · Arizona",
-    type:"National Park", price:0, sites:10, avail:10, rating:4.9, reviews:820,
-    desc:"Three thousand feet straight down to the Colorado River — no guardrail, no crowds, no fee. Toroweap is the most dramatic viewpoint in the Grand Canyon and one of the most remote campgrounds on the continent. Sixty miles of dirt road to reach it. A handful of primitive sites at the rim. Wake at sunrise to the sound of nothing but wind in the canyon walls. No reservations, no services, no cell signal — just the grandest possible exposure to the earth's interior. Worth every mile.",
-    amenities:["Vault Toilets","Pet Friendly","Stargazing"],
-    seasons:["Spring","Fall","Winter"], lat:36.2022, lng:-112.9278 },
-
-  { id:375, name:"Grand Staircase-Escalante BLM", loc:"Escalante · Utah",
-    type:"BLM", price:0, sites:0, avail:99, rating:4.8, reviews:1640,
-    desc:"A half-million acres of slickrock, slot canyons, and painted desert where the Colorado Plateau stacks layer over geological layer. Camp anywhere off established roads, wake to sunrise lighting the badlands orange, and spend your days exploring canyons that barely appear on maps. The Hole-in-the-Rock Road, Coyote Gulch, Peek-a-Boo and Spooky — all free, all first-come. One of the last great stretches of untrammeled desert in America.",
-    amenities:["Pet Friendly","Hiking","Stargazing"],
-    seasons:["Spring","Fall"], lat:37.4893, lng:-111.3873 },
-
-  { id:376, name:"Steens Mountain", loc:"Frenchglen · Oregon",
-    type:"BLM", price:0, sites:0, avail:99, rating:4.8, reviews:960,
-    desc:"A fault-block mountain rising 5,000 feet above the Oregon high desert — one of the most isolated landscapes in the American West. Free dispersed camping along the summit loop road at nearly 10,000 feet, with views into the Alvord Desert and Malheur Wildlife Refuge below. Steens Mountain is a place of genuine extremes: ancient glacial gorges, roaming wild mustangs, biting alpine wind, and silence so complete it has a texture. Come in late summer or early fall when the aspens turn gold.",
-    amenities:["Pet Friendly","Hiking","Stargazing","Fishing"],
-    seasons:["Summer","Fall"], lat:42.6404, lng:-118.5500 },
-
-  { id:377, name:"Sawtooth National Recreation Area", loc:"Stanley · Idaho",
-    type:"Forest Service", price:0, sites:0, avail:99, rating:4.9, reviews:1820,
-    desc:"Fifty jagged granite peaks over 10,000 feet reflected in crystal glacial lakes. The Sawtooth is one of the most scenic places in America that most people have never heard of. Free dispersed camping along forest roads and river corridors, with the White Cloud Mountains closing in on every side. The Salmon River runs cold and clear at your feet. At dusk, the peaks go pink then purple. No crowds, no fees, just the kind of beauty that stops you mid-sentence.",
-    amenities:["Pet Friendly","Hiking","Fishing","Stargazing"],
-    seasons:["Summer","Fall"], lat:44.1427, lng:-114.9336 },
-
-  { id:378, name:"Gila Wilderness", loc:"Silver City · New Mexico",
-    type:"Forest Service", price:0, sites:0, avail:99, rating:4.7, reviews:740,
-    desc:"The first designated wilderness in the United States, established in 1924 by Aldo Leopold. Hot springs you can soak in after miles of trail, ancient Cliff Dwellings carved into volcanic tuff, and dispersed camping across 800 square miles of pine-covered mountains in the high desert of New Mexico. The Gila River crossings are cold, the pine air is sharp, and the remoteness is total. A pilgrimage site for anyone who cares about the history of American conservation.",
-    amenities:["Pet Friendly","Hiking","Fishing","Stargazing"],
-    seasons:["Spring","Summer","Fall"], lat:33.2285, lng:-108.2922 },
-
-  { id:379, name:"Ocala National Forest", loc:"Ocala · Florida",
-    type:"Forest Service", price:0, sites:0, avail:99, rating:4.6, reviews:1110,
-    desc:"The southernmost national forest in the continental US sits on a sandy ridge above crystal-clear springs in the heart of Florida. Free dispersed camping in the scrub among wild azaleas and longleaf pines — with some of the most surreal swimming holes on earth just a short walk away. Alexander Springs, Juniper Springs, Salt Springs: each one a different shade of aquamarine, constant 68°F year-round. Camp here in January when the rest of the country is frozen.",
-    amenities:["Vault Toilets","Pet Friendly","Hiking","Fishing"],
-    seasons:["Fall","Winter","Spring"], lat:29.1844, lng:-81.7134 },
-
-  { id:380, name:"Ouachita National Forest", loc:"Hot Springs · Arkansas",
-    type:"Forest Service", price:0, sites:0, avail:99, rating:4.6, reviews:880,
-    desc:"The oldest national forest west of the Mississippi stretches across three million acres of ridgelines and hardwood hollows from Arkansas into Oklahoma. Dispersed camping on forest roads, ridge walks with sweeping Ouachita views, and spring wildflower displays that have to be seen to be believed. The Ouachita Trail runs 223 miles through the heart of it — one of the best long-distance hikes in the South, and almost entirely free to walk and camp along.",
-    amenities:["Pet Friendly","Hiking","Fishing","Fire Rings"],
-    seasons:["Spring","Fall","Winter"], lat:34.8590, lng:-93.3455 },
-
-  { id:381, name:"Bighorn National Forest", loc:"Sheridan · Wyoming",
-    type:"Forest Service", price:0, sites:0, avail:99, rating:4.7, reviews:710,
-    desc:"A compact but spectacular mountain range rising straight above the Wyoming plains, with roads that climb to 9,000 feet and dispersed sites surrounded by alpine meadows and limestone canyons. The Cloud Peak Wilderness at the center is a maze of glacial lakes and high-country solitude. Great for overlanders — show up anywhere along the forest roads with a self-contained rig and you've got free camping with stars that have no competition from city lights.",
-    amenities:["Pet Friendly","Hiking","Fishing","Stargazing"],
-    seasons:["Summer","Fall"], lat:44.5083, lng:-107.4545 },
-
-  { id:382, name:"White River National Forest", loc:"Glenwood Springs · Colorado",
-    type:"Forest Service", price:0, sites:0, avail:99, rating:4.8, reviews:2040,
-    desc:"Eight wilderness areas, 2.3 million acres, and some of the most iconic terrain in Colorado — the Maroon Bells, Holy Cross, Flat Tops, Eagles Nest. Hundreds of miles of dispersed camping on forest roads, with high meadows, ghost towns, and 14ers rising in every direction. Most people pay to stay in Aspen. You can camp free in the same mountains, with better views and nobody telling you to be quiet by 10pm.",
-    amenities:["Pet Friendly","Hiking","Fishing","Stargazing"],
-    seasons:["Summer","Fall"], lat:39.5484, lng:-107.0039 },
-
-  { id:383, name:"Okanogan-Wenatchee National Forest", loc:"Leavenworth · Washington",
-    type:"Forest Service", price:0, sites:0, avail:99, rating:4.8, reviews:1580,
-    desc:"Where the Cascades transition from rainforest to dry ponderosa pine country, this four-million-acre forest offers dispersed camping across a landscape of glaciers, alpine lakes, canyon rivers, and sagebrush ridges. The Enchantments require a permit — but the countless free dispersed sites on forest roads around them do not. Some of the best free camping in the Pacific Northwest, right outside one of the country's most scenic small towns.",
-    amenities:["Pet Friendly","Hiking","Fishing","Stargazing"],
-    seasons:["Summer","Fall"], lat:47.5965, lng:-120.6615 },
-
-  { id:384, name:"Mark Twain National Forest", loc:"Salem · Missouri",
-    type:"Forest Service", price:0, sites:0, avail:99, rating:4.5, reviews:620,
-    desc:"Ozark hollows, clear spring-fed streams, and the kind of rolling hardwood forest that defined the American frontier. Dispersed camping on forest roads across 1.5 million Missouri acres — surprisingly remote, genuinely peaceful, and entirely free. Float the Jacks Fork or Current River by day and camp on a gravel bar at night. In October the maples and oaks turn the hills into fire. A Midwest secret hiding in plain sight.",
-    amenities:["Pet Friendly","Hiking","Fishing","Fire Rings"],
-    seasons:["Spring","Summer","Fall"], lat:37.6234, lng:-91.5344 },
-
-  { id:385, name:"Chequamegon-Nicolet National Forest", loc:"Rhinelander · Wisconsin",
-    type:"Forest Service", price:0, sites:0, avail:99, rating:4.6, reviews:830,
-    desc:"A million acres of northern Wisconsin lake country where dispersed camping puts you in the pine woods minutes from a different lake every day. Walleye fishing at dawn, loon calls at midnight, blueberry picking on the portage trails. In October, hardwood color that rivals anything in New England — and not a crowd in sight. Bring a canoe, a camp stove, and enough time to actually slow down. This is why people live in the Midwest.",
-    amenities:["Pet Friendly","Hiking","Fishing","Stargazing","Fire Rings"],
-    seasons:["Spring","Summer","Fall"], lat:45.6274, lng:-89.4123 },
-
-  // ── MICHIGAN UPPER PENINSULA ──────────────────────────────────────────────
-
-  { id:386, name:"Isle Royale — Rock Harbor", loc:"Lake Superior · Michigan",
-    type:"National Park", price:7, sites:25, avail:15, rating:4.9, reviews:412,
-    desc:"The main gateway to the least-visited national park in the Lower 48, Rock Harbor sits at the eastern tip of a 45-mile island in the middle of Lake Superior — reachable by seaplane from Houghton or ferry from Copper Harbor. No roads reach Isle Royale. Moose wade the harbors at sunrise. Wolves move through the forest at night. The hiking is extraordinary, the solitude is absolute, and the Northern Lights appear over open water with nothing between you and the horizon. A once-in-a-lifetime trip hiding in Michigan's backyard.",
-    amenities:["Flush Toilets","Running Water","Dock","Fishing","Kayaking","Wildlife Viewing","Stargazing"],
-    seasons:["Summer","Fall"], lat:47.9900, lng:-88.4923 },
-
-  { id:387, name:"Isle Royale — Windigo", loc:"Lake Superior · Michigan",
-    type:"National Park", price:7, sites:10, avail:9, rating:4.9, reviews:214,
-    desc:"The western terminus of Isle Royale, Windigo is where the Minong Trail ends and the island's remotest backcountry begins. Accessible by ferry from Grand Portage, Minnesota — or by seaplane. Camp here and kayak Washington Harbor at dawn, spot moose wading the wetland edges, and connect to the inland lakes trail system that crosses the spine of the island. Far fewer visitors than Rock Harbor, even deeper quiet, and a front-row view of Lake Superior's open water in every direction.",
-    amenities:["Vault Toilets","Water Pump","Dock","Kayaking","Hiking","Wildlife Viewing","Stargazing"],
-    seasons:["Summer","Fall"], lat:47.9108, lng:-89.1622 },
-
-  { id:388, name:"Fort Wilkins State Park", loc:"Copper Harbor · Michigan",
-    type:"State Park", price:23, sites:165, avail:22, rating:4.8, reviews:890,
-    desc:"At the northernmost tip of the Keweenaw Peninsula — surrounded by Lake Superior on three sides — Fort Wilkins is one of the most dramatically sited state parks in the Midwest. The 1840s copper rush military fort is fully restored and walkable. Camp on the shore of Lake Fanny Hooe with Lake Superior visible beyond: a twin-lake finger of land jutting into cold deep water. Copper Harbor's lighthouse, the Brockway Mountain Drive, and some of the best fall color in Michigan are right outside the gate. This is the far edge of the map — and it's worth every mile.",
-    amenities:["Hot Showers","Flush Toilets","Fire Rings","Boat Launch","Fishing","Hiking","Pet Friendly","Accessible"],
-    seasons:["Spring","Summer","Fall"], lat:47.4671, lng:-87.8746 },
-
-  { id:389, name:"McLain State Park", loc:"Hancock · Michigan",
-    type:"State Park", price:20, sites:103, avail:30, rating:4.7, reviews:710,
-    desc:"Sunsets over Lake Superior from the Keweenaw Peninsula — McLain sits on the shore just 20 miles north of Houghton, making it the most accessible Lake Superior frontage in the UP. Camp in the pines and walk to an agate-strewn beach where the lake runs cold and impossibly clear. The cities of Houghton and Hancock are minutes south, Michigan Tech's campus is close, and the Keweenaw Water Trail connects the entire peninsula by kayak. Stay a night and you'll understand why people stay a week.",
-    amenities:["Hot Showers","Flush Toilets","Fire Rings","Beach Access","Fishing","Pet Friendly","Playground"],
-    seasons:["Spring","Summer","Fall"], lat:47.1654, lng:-88.6048 },
-
-  { id:390, name:"Tahquamenon Falls State Park", loc:"Paradise · Michigan",
-    type:"State Park", price:22, sites:188, avail:25, rating:4.8, reviews:1340,
-    desc:"The Tahquamenon River runs the color of root beer — stained amber by tannins leached from the cedar swamps upstream. The Lower Falls split around an island you can reach by rowboat; the Upper Falls are among the largest east of the Mississippi, 200 feet wide and 50 feet tall. Camp under towering hemlock and maple, walk to both falls in a single day, and listen for sandhill cranes calling across the wetlands at dusk. One of the true iconic experiences of Michigan's Upper Peninsula.",
-    amenities:["Hot Showers","Flush Toilets","Fire Rings","Hiking","Fishing","Boat Launch","Pet Friendly","Accessible"],
-    seasons:["Spring","Summer","Fall"], lat:46.5992, lng:-85.2522 },
-
-  { id:391, name:"Van Riper State Park", loc:"Champion · Michigan",
-    type:"State Park", price:20, sites:147, avail:35, rating:4.6, reviews:620,
-    desc:"Lake Michigamme sits at the center of Michigan's Upper Peninsula — a deep, clear lake ringed by hardwood forest with a loon on every quiet bay. Van Riper is a classic Michigan state park: sandy beach, boat launch, forested campsites, excellent walleye and bass fishing. Marquette is 30 miles east. The backcountry beyond the park stretches into Ottawa National Forest with no edge in sight. The moose population is dense in this corridor — ask the rangers where to look at dawn.",
-    amenities:["Hot Showers","Flush Toilets","Fire Rings","Beach Access","Boat Launch","Fishing","Pet Friendly","Wildlife Viewing"],
-    seasons:["Spring","Summer","Fall"], lat:46.5343, lng:-88.1522 },
-
-  { id:392, name:"Ottawa NF — Black River", loc:"Bessemer · Michigan",
-    type:"Forest Service", price:16, sites:40, avail:28, rating:4.7, reviews:480,
-    desc:"Five waterfalls in five miles — the Black River drops through Algonquin, Gorge, Potawatomi, Great Conglomerate, and Rainbow Falls before pouring into Lake Superior. Camp in the Ottawa National Forest and hike to each cascade on maintained trails through old-growth cedar. Copper Peak — the only ski-flying hill in the Western Hemisphere, now a summer observation deck — looms above the forest with 50-mile views over the UP. A classic western UP itinerary with maximum payoff per hour.",
-    amenities:["Vault Toilets","Running Water","Fire Rings","Hiking","Fishing","Pet Friendly"],
-    seasons:["Spring","Summer","Fall"], lat:46.6612, lng:-90.2091 },
-
-  { id:393, name:"Bond Falls", loc:"Paulding · Michigan",
-    type:"Forest Service", price:0, sites:0, avail:99, rating:4.7, reviews:560,
-    desc:"A staircase of pink granite shelves where the Ontonagon River fans out wide and white before continuing through the Ottawa National Forest — Bond Falls is one of the most photographed waterfalls in Michigan. Dispersed camping free on the surrounding National Forest land, with a short trail to the falls overlook and deep fishing pools below. Come in late May when snowmelt pushes the volume to its peak, or in October when the surrounding maple forest detonates in color around the white water.",
-    amenities:["Vault Toilets","Pet Friendly","Hiking","Fishing","Stargazing"],
-    seasons:["Spring","Summer","Fall"], lat:46.4164, lng:-89.0764 }
+,
 
 ];
 
@@ -7043,16 +6737,6 @@ let savedIds = (() => {
   try { return new Set(JSON.parse(localStorage.getItem('cg_saved') || '[]')); }
   catch { return new Set(); }
 })();
-// RIDB/API state — persisted camp objects for API-sourced saved camps
-let savedCampsData = (() => {
-  try { return JSON.parse(localStorage.getItem('cg_saved_data') || '{}'); }
-  catch { return {}; }
-})();
-const apiCampsCache  = {};   // in-memory: facilityId (int) → camp object
-let apiSearchResults = null; // null = not searched, [] = no results, [...] = results
-let apiSearchQuery   = '';   // query that produced apiSearchResults
-let apiSearchLoading = false;
-
 let prevScreen      = 'home';
 let currentFilter   = 'all';
 let currentDetailId = null;
@@ -7305,7 +6989,7 @@ const PUBLIC_TYPES = ['National Park','State Park','Forest Service','BLM','Army 
 
 function campState(camp) {
   // loc format: "Place Name · State"
-  const parts = (camp.loc || '').split('·');
+  const parts = camp.loc.split('·');
   return parts[parts.length - 1].trim();
 }
 
@@ -7499,25 +7183,30 @@ async function loadWildfireData() {
   const cEl = document.getElementById('wf-count');
   const uEl = document.getElementById('wf-updated');
 
-  // Primary: NIFC IRWIN public layer (no auth required)
+  // Primary: NIFC ESRI (has POOState + acreage)
   try {
     const r = await fetch(
-      'https://services9.arcgis.com/RHVPKKiFTONKtxq3/arcgis/rest/services/USA_Wildfires_v1/FeatureServer/0/query' +
-      '?where=IncidentTypeCategory%3D%27WF%27' +
-      '&outFields=IncidentName,POOState,DailyAcres,FireDiscoveryDateTime' +
-      '&returnGeometry=true&inSR=4326&f=json&resultRecordCount=500',
-      { signal: AbortSignal.timeout(10000) }
+      'https://services3.arcgis.com/T4QMspbfLg3qTGWY/arcgis/rest/services/Active_Fires/FeatureServer/0/query' +
+      '?where=1%3D1&outFields=IncidentName,GISAcres,POOState,FireDiscoveryDateTime' +
+      '&geometry=-126,24,-65,50&geometryType=esriGeometryEnvelope&spatialRel=esriSpatialRelIntersects' +
+      '&inSR=4326&f=json&resultRecordCount=300',
+      { signal: AbortSignal.timeout(8000) }
     );
     const d = await r.json();
     if (d.features?.length) {
       const fires = [], stateMap = {};
       d.features.forEach(f => {
         const a = f.attributes || {};
-        const raw = a.POOState || '';
-        // POOState comes as "US-CA" — extract the 2-letter code
-        const state = raw.includes('-') ? raw.split('-').pop().toUpperCase() : (raw.length === 2 ? raw.toUpperCase() : null);
+        const raw = a.POOState;
+        const state = raw ? (WF_STATE_ABBR[raw] || (raw.length === 2 ? raw.toUpperCase() : null)) : null;
         let coords = null;
         if (f.geometry?.x != null) coords = [f.geometry.y, f.geometry.x];
+        else if (f.geometry?.rings) {
+          const pts = f.geometry.rings[0];
+          const lng = pts.reduce((s,p)=>s+p[0],0)/pts.length;
+          const lat = pts.reduce((s,p)=>s+p[1],0)/pts.length;
+          coords = [lat, lng];
+        }
         const ms = a.FireDiscoveryDateTime || 0;
         if (state) stateMap[state] = (stateMap[state]||0) + 1;
         fires.push({ title: a.IncidentName || 'Active Fire', state, coords, ms });
@@ -7529,7 +7218,7 @@ async function loadWildfireData() {
       wfCheckProximity(fires);
       return;
     }
-  } catch(e) {}
+  } catch {}
 
   // Fallback: NASA EONET
   try {
@@ -7545,7 +7234,6 @@ async function loadWildfireData() {
         const [lng,lat] = g.coordinates;
         return lat > 24.5 && lat < 49.5 && lng > -124.8 && lng < -66.9;
       });
-      if (!usEvts.length) throw new Error('no US events');
       const fires = [], stateMap = {};
       usEvts.forEach(e => {
         const g = e.geometry[e.geometry.length-1];
@@ -7555,17 +7243,15 @@ async function loadWildfireData() {
         if (state) stateMap[state] = (stateMap[state]||0) + 1;
         fires.push({ title: e.title, state, coords: [lat,lng], ms });
       });
-      if (cEl) cEl.textContent = usEvts.length;
+      if (cEl) cEl.textContent = usEvts.length || '0';
       if (uEl) { const t = new Date(); uEl.textContent = `Live · ${t.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}`; }
       renderWfGrid(stateMap);
       renderWfCards(fires);
       wfCheckProximity(fires);
       return;
     }
-  } catch(e) {}
+  } catch {}
 
-  // Both failed — reset flag so next visit retries
-  wfLoaded = false;
   if (cEl) cEl.textContent = '—';
   if (uEl) uEl.textContent = 'Unavailable';
   renderWfCards([]);
@@ -7581,7 +7267,15 @@ function go(toId, fromId) {
   if (toId === 'saved')      renderSaved();
   if (toId === 'profile')    renderProfile();
   if (toId === 'home')       initWildfireSection();
-  if (toId === 'trail' && typeof renderTrail === 'function') renderTrail();
+  if (toId === 'about') {
+    const cc = document.getElementById('about-camp-count');
+    if (cc) cc.textContent = CAMPS.length + '+';
+    const sc = document.getElementById('about-state-count');
+    if (sc) {
+      const states = new Set(CAMPS.map(c => (c.loc||'').split('·').pop().trim()).filter(Boolean));
+      sc.textContent = states.size;
+    }
+  }
   // Show global compass on results + saved screens only (home and map have their own; detail has CTA bar)
   const cg = document.getElementById('compass-global');
   if (cg) cg.classList.toggle('vis', toId === 'results' || toId === 'saved');
@@ -7800,11 +7494,12 @@ function handleSearchInput(val) {
     }
   } else {
     // Semantic scoring — rank all camps, show top matches
-    const scored = CAMPS
+    const allMatches = CAMPS
       .map(c => ({ c, s: semanticScore(c, val) }))
       .filter(x => x.s > 0)
-      .sort((a, b) => b.s - a.s)
-      .slice(0, 5);
+      .sort((a, b) => b.s - a.s);
+    const scored = allMatches.slice(0, 5);
+    const totalCount = allMatches.length;
 
     const concept = interpretQuery(val);
     const eyebrow = concept
@@ -7821,13 +7516,13 @@ function handleSearchInput(val) {
         ).join('') +
         `<div class="sug-item" onclick="submitSearch(${JSON.stringify(val)})" style="opacity:0.55; border-top: 1px solid rgba(255,255,255,0.06); margin-top: 4px; padding-top: 14px;">
           <div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="#ic-search"/></svg></div>
-          <div><div class="sug-name">See all results for "${val}"</div><div class="sug-sub">${scored.length < 5 ? scored.length : '5+'} matches found</div></div>
+          <div><div class="sug-name">See all results for "${val}"</div><div class="sug-sub">${totalCount} match${totalCount !== 1 ? 'es' : ''} found</div></div>
         </div>`;
     } else {
       html = `<div class="sug-eyebrow">No exact matches</div>
         <div class="sug-item" onclick="submitSearch(${JSON.stringify(val)})">
           <div class="sug-box"><svg width="17" height="17" style="color:var(--o);stroke:currentColor;fill:none;"><use href="#ic-search"/></svg></div>
-          <div><div class="sug-name">Search for "${val}"</div><div class="sug-sub">Show all <span id="sug-all-count"></span> campgrounds</div></div>
+          <div><div class="sug-name">Search for "${val}"</div><div class="sug-sub">Show all ${CAMPS.length} campgrounds</div></div>
         </div>
         <div class="sug-item" onclick="submitSearch('free remote BLM')" style="opacity:0.5;">
           <div class="sug-box"><svg width="17" height="17" style="color:rgba(255,255,255,0.52);stroke:currentColor;fill:none;"><use href="#ic-fire"/></svg></div>
@@ -7863,13 +7558,6 @@ async function submitSearch(query) {
   } else {
     searchQuery = query;
   }
-  // Reset filter state for each new search
-  currentFilter = 'all';
-  apiSearchResults = null;
-  apiSearchQuery   = '';
-  document.querySelectorAll('#results-filters .pill').forEach(p => p.classList.remove('on'));
-  const _ap = document.querySelector('#results-filters .pill');
-  if (_ap) _ap.classList.add('on');
   document.getElementById('results-input').value = searchQuery;
   go('results', 'search-overlay');
 }
@@ -7879,8 +7567,6 @@ function closeSearch() {
 }
 function clearSearch() {
   searchQuery = '';
-  apiSearchResults = null;
-  apiSearchQuery   = '';
   lastMinuteMode = false;
   document.getElementById('results-input').value = '';
 }
@@ -7910,20 +7596,11 @@ const TYPE_BLURBS = {
   'rv-ready':       { title: '🚐 RV-Ready with Hookups', desc: "Campgrounds with electrical hookups, water connections, or full-service RV pads. Pull through with your rig, plug in, and make yourself comfortable. Power and conveniences included." },
   'wifi':           { title: '📶 Wi-Fi Available', desc: "Campgrounds with on-site Wi-Fi — useful for remote workers, streaming campers, or staying in touch on longer trips. Coverage strength varies; don't expect a fiber connection in the backcountry." },
   'winter-open':    { title: '❄️ Open in Winter', desc: "Campgrounds accessible during the winter season — from Southern desert camps warm year-round, to ski-area sites and hardy Northern parks. Pack layers, check road conditions, and enjoy the crowds staying home." },
-  'free':           { title: '🪵 Free &amp; Dispersed Camping', desc: "No fees, no reservations, no check-in lines. BLM and National Forest dispersed camping puts you on public land with nothing between you and the landscape. Show up, camp anywhere that's legal and low-impact, and stay as long as regulations allow. Bring your own water, pack out everything, and leave the site cleaner than you found it." },
 };
 
 function setFilter(el, key) {
   lastMinuteMode = false; // exit last-minute mode when filter is changed
   currentFilter = key;
-  // Clear any active search so the filter shows the full unfiltered list for this type
-  if (searchQuery) {
-    searchQuery      = '';
-    apiSearchResults = null;
-    apiSearchQuery   = '';
-    const input = document.getElementById('results-input');
-    if (input) input.value = '';
-  }
   el.closest('.results-filters').querySelectorAll('.pill').forEach(p => p.classList.remove('on'));
   el.classList.add('on');
   // Update type blurb
@@ -7972,13 +7649,6 @@ function goFilter(key) {
   }, 50);
 }
 
-// Home pills just set filter and navigate
-function homeFilter(el, key) {
-  el.closest('.filter-scroll').querySelectorAll('.pill').forEach(p => p.classList.remove('on'));
-  el.classList.add('on');
-  currentFilter = key;
-}
-
 // Browse-grid experience tiles — semantic search, straight to results
 function goSearch(query) {
   searchQuery = query;
@@ -7989,20 +7659,19 @@ function goSearch(query) {
 
 function goFiltered(type) {
   currentFilter = type;
-  // Reset search so filter-only browse shows curated camps cleanly
-  searchQuery      = '';
-  apiSearchResults = null;
-  apiSearchQuery   = '';
-  document.getElementById('results-input').value = '';
+  // Sync the pill in results
   go('results', 'home');
-  // After render, highlight the matching pill by onclick attribute
+  // After render, highlight the right pill
   setTimeout(() => {
     const pills = document.querySelectorAll('#results-filters .pill');
     pills.forEach(p => p.classList.remove('on'));
-    const target = `'${type}'`;
-    const match = Array.from(pills).find(p => (p.getAttribute('onclick') || '').includes(target));
-    if (match) match.classList.add('on');
-    else if (pills[0]) pills[0].classList.add('on');
+    pills.forEach(p => {
+      const match = { 'State Park':'State parks','National Park':'National','Private':'Private','Glamping':'Glamping','RV Park':'RV Parks','all':'All types' };
+      if (p.textContent.trim() === (match[type] || 'All types')) p.classList.add('on');
+    });
+    if (!['State Park','National Park','Private','Glamping'].includes(type)) {
+      pills[0].classList.add('on');
+    }
   }, 10);
 }
 
@@ -8066,111 +7735,12 @@ function openLastMinute() {
   go('results', 'home');
 }
 
-// ─── RIDB / API HELPERS ──────────────────────────
-// Unified camp lookup: checks hardcoded CAMPS, live API cache, and saved data
-function lookupCamp(id) {
-  return CAMPS.find(c => c.id == id)
-      || apiCampsCache[id]  || apiCampsCache[+id]
-      || savedCampsData[id] || savedCampsData[+id]
-      || null;
-}
-function persistSavedData() {
-  try { localStorage.setItem('cg_saved_data', JSON.stringify(savedCampsData)); } catch {}
-}
-let _searchDebounce = null;
-function onResultsInputChange(val) {
-  val = (val || '').trim();
-  if (!val || val === searchQuery) return;
-  clearTimeout(_searchDebounce);
-  _searchDebounce = setTimeout(() => {
-    searchQuery = val;
-    currentFilter = 'all';
-    // Reset pill UI
-    document.querySelectorAll('#results-filters .pill').forEach(p => p.classList.remove('on'));
-    const allPill = document.querySelector('#results-filters .pill');
-    if (allPill) allPill.classList.add('on');
-    apiSearchResults = null;
-    apiSearchQuery   = '';
-    renderResults();
-  }, 450);
-}
-
-async function fetchApiSearch(query) {
-  if (apiSearchLoading) {
-    // If a different query is now active, let it wait and retry after current load
-    return;
-  }
-  apiSearchLoading = true;
-  renderResults(); // show loading state immediately
-  try {
-    const resp = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
-    if (!resp.ok) throw new Error('Search failed');
-    // If the user changed the search query while we were loading, discard stale response
-    if (query !== searchQuery) {
-      apiSearchLoading = false;
-      fetchApiSearch(searchQuery);
-      return;
-    }
-    const data = await resp.json();
-    apiSearchResults = data.results || [];
-    apiSearchQuery   = query;
-    apiSearchResults.forEach(c => { apiCampsCache[c.id] = c; });
-  } catch (err) {
-    console.error('RIDB search error:', err);
-    if (query === searchQuery) {
-      // API failed — fall back to local CAMPS text match so user sees something
-      apiSearchResults = _localTextSearch(query);
-      apiSearchQuery   = query;
-    }
-  }
-  apiSearchLoading = false;
-  renderResults();
-}
-
-// Local text search across hardcoded CAMPS as fallback when RIDB is unavailable.
-// Splits query into meaningful words and returns any camp that matches at least one.
-const _SEARCH_STOP = new Set(['camping','camp','campground','campgrounds','the','and','or','for','with','near','great','good','best','friendly','in','at','a','an','to','by']);
-function _localTextSearch(q) {
-  const words = q.toLowerCase().split(/\s+/).filter(w => w.length > 2 && !_SEARCH_STOP.has(w));
-  if (!words.length) return [];
-  return CAMPS.filter(c => {
-    const hay = [
-      c.name, c.loc, c.type, c.desc || '',
-      (c.amenities || []).join(' ')
-    ].join(' ').toLowerCase();
-    return words.some(w => hay.includes(w));
-  });
-}
-
 function getFilteredCamps() {
   const hasSearch = searchQuery && currentFilter !== 'nearby';
 
-  // Text searches go to RIDB API — return cached results or trigger fetch
-  if (hasSearch) {
-    if (apiSearchQuery === searchQuery && apiSearchResults !== null) {
-      // Merge RIDB results with any matching hardcoded camps (deduped by id)
-      const localMatches = _localTextSearch(searchQuery);
-      const ridbIds = new Set(apiSearchResults.map(c => c.id));
-      const merged = [...apiSearchResults, ...localMatches.filter(c => !ridbIds.has(c.id))];
-      if (currentFilter === 'all') return merged;
-      return merged.filter(c => {
-        const amen = c.amenities || [];
-        if (currentFilter === 'pet')           return amen.includes('Pet Friendly');
-        if (currentFilter === 'tent-friendly') return c.type !== 'RV Park';
-        if (currentFilter === 'rv-ready')      return c.type === 'RV Park' || amen.some(a => /hookup/i.test(a));
-        if (currentFilter === 'dark-sky')      return amen.includes('Stargazing');
-        if (currentFilter === 'wifi')          return amen.includes('WiFi');
-        if (currentFilter === 'water')         return amen.some(a => /swim|lake|river|beach|kayak/i.test(a));
-        if (currentFilter === 'free')          return c.price === 0 || (c.type === 'BLM' && c.price == null);
-        return c.type === currentFilter;
-      });
-    }
-    if (!apiSearchLoading) fetchApiSearch(searchQuery);
-    return null; // null = loading; renderResults shows spinner
-  }
-
   let list = CAMPS.filter(c => {
-    if (false) return semanticScore(c, searchQuery) > 0; // kept for future local search
+    // When there's a text search, include only camps with a positive semantic score
+    if (hasSearch) return semanticScore(c, searchQuery) > 0;
     if (currentFilter === 'all')    return true;
     if (currentFilter === 'pet')      return c.amenities.includes('Pet Friendly');
     if (currentFilter === 'water')    return hasWater(c);
@@ -8185,7 +7755,6 @@ function getFilteredCamps() {
         c.amenities.some(a => /hookup/i.test(a));
     if (currentFilter === 'wifi') return c.amenities.includes('WiFi');
     if (currentFilter === 'winter-open') return Array.isArray(c.seasons) && c.seasons.includes('Winter');
-    if (currentFilter === 'free') return c.price === 0;
     return c.type === currentFilter;
   });
 
@@ -8231,35 +7800,30 @@ function renderResults() {
       </div>`;
   } else {
     camps = getFilteredCamps();
-    if (camps === null) {
-      document.getElementById('results-count').textContent = 'Searching…';
-      document.getElementById('results-list').innerHTML =
-        '<div style="text-align:center;padding:60px 20px;color:rgba(255,255,255,0.35);font-size:14px;letter-spacing:.04em;">Searching campgrounds…</div>';
-      return;
-    }
     document.getElementById('results-count').textContent = `${camps.length} Campground${camps.length !== 1 ? 's' : ''}`;
   }
 
   if (camps.length === 0) {
+    const noResultsSub = searchQuery ? 'Try a different search or clear your filters.' : 'Try a different filter.';
     document.getElementById('results-list').innerHTML = `
       <div class="no-results">
         <div class="no-results-x"></div>
         <div class="no-results-title">No matches.</div>
-        <div class="no-results-sub">Try a different filter.</div>
+        <div class="no-results-sub">${noResultsSub}</div>
       </div>`;
     return;
   }
 
   document.getElementById('results-list').innerHTML = headerExtra + camps.map(c => `
-    <div class="camp-card" onclick="openDetail(${c.id})" role="button" tabindex="0" aria-label="${c.name}, ${c.loc}${c.rating?', '+c.rating+' stars':''}">
+    <div class="camp-card" onclick="openDetail(${c.id})" role="button" tabindex="0" aria-label="${c.name}, ${c.loc}, ${c.rating} stars, $${c.price} per night">
       <div class="card-box" aria-hidden="true">${glyph(TYPE_GLYPH[c.type]||'#ic-tent',30)}</div>
       <div class="card-body">
         <div class="card-type">${c.type}</div>
         <div class="card-name">${c.name}</div>
         <div class="card-loc">${c.loc}</div>
         <div class="card-foot">
-          <div class="card-stats">${c.rating?'★ '+c.rating+' &nbsp;·&nbsp; ':''}${c.avail!=null?c.avail+' open':''}${distLabel(c)}${fireChipHTML(getCampfireStatus(c))}<span class="wx-chip" data-cid="${c.id}"></span></div>
-          <div><div class="card-pnum">${c.price?'$'+c.price:'—'}</div><div class="card-punit">${c.price?'/ Night':''}</div></div>
+          <div class="card-stats">★ ${c.rating} &nbsp;·&nbsp; ${c.avail} open${distLabel(c)}${fireChipHTML(getCampfireStatus(c))}<span class="wx-chip" data-cid="${c.id}"></span></div>
+          <div><div class="card-pnum">$${c.price}</div><div class="card-punit">/ Night</div></div>
         </div>
       </div>
       <div class="card-chevron" aria-hidden="true"></div>
@@ -8271,7 +7835,7 @@ function renderResults() {
 
 // ─── RENDER SAVED ───────────────────────────────
 function renderSaved() {
-  const camps = [...savedIds].map(id => lookupCamp(id)).filter(Boolean);
+  const camps = CAMPS.filter(c => savedIds.has(c.id));
   document.getElementById('saved-count').textContent = `${camps.length} campground${camps.length !== 1 ? 's':''}`;
   if (camps.length === 0) {
     document.getElementById('saved-list').innerHTML = `
@@ -8281,12 +7845,8 @@ function renderSaved() {
         <div class="empty-sub">Tap the heart on any campground<br>to save it here.</div>
         <button class="empty-cta" onclick="go('results','saved')">Start Exploring</button>
       </div>`;
-    const shareBtn = document.getElementById('share-trip-btn');
-    if (shareBtn) shareBtn.style.display = 'none';
     return;
   }
-  const shareBtn = document.getElementById('share-trip-btn');
-  if (shareBtn) shareBtn.style.display = 'flex';
   document.getElementById('saved-list').innerHTML = camps.map(c => `
     <div class="saved-card" onclick="openDetail(${c.id})" role="button" tabindex="0" aria-label="${c.name}, ${c.loc}">
       <div class="saved-sat-thumb" style="background-image:url(${mapboxStatic(c.lat, c.lng, 144, 144, 11, 20, 45)})" aria-hidden="true"></div>
@@ -8294,7 +7854,7 @@ function renderSaved() {
         <div class="card-type">${c.type}</div>
         <div class="card-name">${c.name}</div>
         <div class="card-loc">${c.loc}</div>
-        <div class="card-stats" style="font-size:12px;color:rgba(255,255,255,0.5);">${c.rating!=null?'★ '+c.rating+' &nbsp;·&nbsp; ':''}${c.price!=null?'$'+c.price+' / night':'Free / Varies'}</div>
+        <div class="card-stats" style="font-size:12px;color:rgba(255,255,255,0.5);">★ ${c.rating} &nbsp;·&nbsp; $${c.price} / night</div>
       </div>
       <div class="unsave-btn" onclick="unsave(${c.id},event)" aria-label="Remove ${c.name} from saved" role="button"></div>
     </div>`).join('');
@@ -8432,152 +7992,6 @@ function updateBadges() {
   const n = savedIds.size;
   document.querySelectorAll('.badge').forEach(b => { b.textContent = n; b.classList.toggle('show', n > 0); });
 }
-
-// ── TRIP SHARING ─────────────────────────────────────────────
-
-function openTripShareSheet() {
-  const sheet = document.getElementById('trip-share-sheet');
-  // Reset to form state
-  document.getElementById('trip-share-form').style.display = '';
-  document.getElementById('trip-share-result').style.display = 'none';
-  document.getElementById('trip-name-input').value = '';
-  const genBtn = document.getElementById('trip-gen-btn');
-  if (genBtn) { genBtn.disabled = false; genBtn.textContent = 'Generate Link'; }
-  sheet.style.display = 'flex';
-}
-
-function closeTripShareSheet() {
-  document.getElementById('trip-share-sheet').style.display = 'none';
-}
-
-async function generateTripLink() {
-  const btn = document.getElementById('trip-gen-btn');
-  btn.disabled = true;
-  btn.textContent = 'Generating…';
-
-  const name    = (document.getElementById('trip-name-input').value || '').trim() || 'My Trip';
-  const campIds = [...savedIds];
-  // Include full camp objects so shared recipients can view them (works for RIDB camps too)
-  const camps   = campIds.map(id => {
-    const c = lookupCamp(id);
-    if (!c) return null;
-    return { id: c.id, name: c.name, loc: c.loc, type: c.type,
-             photo: c.photo || null, rating: c.rating, price: c.price, lat: c.lat, lng: c.lng };
-  }).filter(Boolean);
-
-  try {
-    const resp = await fetch('/api/trip', {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ name, campIds, camps }),
-    });
-    const data = await resp.json();
-    if (!resp.ok || !data.shortcode) throw new Error(data.error || 'Failed');
-
-    const link = `https://campgrounder.io/#trip-${data.shortcode}`;
-    document.getElementById('trip-link-display').value = link;
-    document.getElementById('trip-share-form').style.display = 'none';
-    document.getElementById('trip-share-result').style.display = '';
-  } catch (err) {
-    console.error('Trip link error:', err);
-    btn.disabled = false;
-    btn.textContent = 'Try Again';
-    showToast('Could not generate link — try again');
-  }
-}
-
-function copyTripLink() {
-  const input = document.getElementById('trip-link-display');
-  const btn   = document.getElementById('trip-copy-btn');
-  if (!input) return;
-  try {
-    navigator.clipboard.writeText(input.value).then(() => {
-      btn.textContent = 'Copied!';
-      setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
-    });
-  } catch {
-    input.select();
-    document.execCommand('copy');
-    btn.textContent = 'Copied!';
-    setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
-  }
-}
-
-async function loadSharedTrip(code) {
-  // Show shared screen with loading state
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById('shared').classList.add('active');
-  document.getElementById('shared-loading').style.display = 'flex';
-  document.getElementById('shared-list').style.display    = 'none';
-
-  try {
-    const resp = await fetch(`/api/trip?id=${encodeURIComponent(code)}`);
-    if (!resp.ok) throw new Error('not found');
-    const data = await resp.json();
-
-    const tripName = data.name || 'Shared Trip';
-    let camps;
-    if (data.camps && data.camps.length > 0) {
-      // New format: full camp objects embedded in trip payload
-      camps = data.camps;
-      camps.forEach(c => { if (c.id) apiCampsCache[c.id] = c; }); // cache for detail view
-    } else {
-      // Legacy format: only campIds, look up from local data
-      const campIds = (data.campIds || []).map(Number);
-      camps = campIds.map(id => lookupCamp(id)).filter(Boolean);
-    }
-
-    document.getElementById('shared-title').textContent = tripName;
-    document.getElementById('shared-sub').textContent   =
-      `${camps.length} campground${camps.length !== 1 ? 's' : ''} · shared trip`;
-
-    if (camps.length === 0) {
-      document.getElementById('shared-list').innerHTML = `
-        <div class="empty-state">
-          <div class="empty-title" style="margin-top:0">No camps found</div>
-          <div class="empty-sub">This trip's campgrounds may have been removed.</div>
-        </div>`;
-    } else {
-      document.getElementById('shared-list').innerHTML = camps.map(c => `
-        <div class="saved-card" onclick="openDetail(${c.id})" role="button" tabindex="0" aria-label="${c.name}, ${c.loc}">
-          <div class="saved-sat-thumb" style="background-image:url(${mapboxStatic(c.lat, c.lng, 144, 144, 11, 20, 45)})" aria-hidden="true"></div>
-          <div class="card-body" style="flex:1;">
-            <div class="card-type">${c.type}</div>
-            <div class="card-name">${c.name}</div>
-            <div class="card-loc">${c.loc}</div>
-            <div class="card-stats" style="font-size:12px;color:rgba(255,255,255,0.5);">${c.rating!=null?'★ '+c.rating+' &nbsp;·&nbsp; ':''}${c.price!=null?'$'+c.price+' / night':'Free / Varies'}</div>
-          </div>
-          <button class="share-trip-btn" style="flex-shrink:0;font-size:10px;padding:6px 10px;border-radius:6px;" onclick="event.stopPropagation();saveCampFromShared(${c.id})" id="save-shared-${c.id}">
-            ${savedIds.has(c.id) ? '✓ Saved' : '+ Save'}
-          </button>
-        </div>`).join('');
-    }
-
-    document.getElementById('shared-loading').style.display = 'none';
-    document.getElementById('shared-list').style.display    = '';
-
-  } catch (err) {
-    document.getElementById('shared-title').textContent = 'Trip Not Found';
-    document.getElementById('shared-sub').textContent   = 'This link may have expired';
-    document.getElementById('shared-loading').innerHTML = `
-      <div style="font-size:32px;margin-bottom:8px;">🏕️</div>
-      <div style="font-size:15px;font-weight:700;color:rgba(255,255,255,0.6);">Trip not found</div>
-      <div style="font-size:13px;color:rgba(255,255,255,0.3);margin-top:6px;">This link may have expired or been removed.</div>`;
-  }
-}
-
-function saveCampFromShared(id) {
-  savedIds.add(id);
-  // Persist camp data if it came from an API result (cached in loadSharedTrip)
-  const campObj = apiCampsCache[id] || apiCampsCache[+id];
-  if (campObj) { savedCampsData[id] = campObj; persistSavedData(); }
-  persistSaved();
-  updateBadges();
-  const btn = document.getElementById(`save-shared-${id}`);
-  if (btn) { btn.textContent = '✓ Saved'; btn.style.color = 'var(--o)'; btn.style.borderColor = 'var(--o)'; }
-  showToast('Saved  ＋');
-}
-
 function persistSaved() {
   try { localStorage.setItem('cg_saved', JSON.stringify([...savedIds])); } catch {}
 }
@@ -8600,29 +8014,15 @@ function toggleSave() {
     showToast('Saved  ＋');
   }
   persistSaved();
-  // Persist RIDB camp data so it survives page reload in the saved list
-  const _cd = apiCampsCache[currentDetailId] || apiCampsCache[+currentDetailId];
-  if (_cd) {
-    if (savedIds.has(currentDetailId)) { savedCampsData[currentDetailId] = _cd; }
-    else { delete savedCampsData[currentDetailId]; delete savedCampsData[+currentDetailId]; }
-    persistSavedData();
-  }
   updateBadges();
-  // Check if user has reached The Trail threshold
-  if (savedIds.has(currentDetailId) && typeof checkTrailDiscovery === 'function') {
-    setTimeout(checkTrailDiscovery, 800);
-  }
 }
 function unsave(id, e) {
-  e.stopPropagation();
-  savedIds.delete(id);
-  delete savedCampsData[id]; delete savedCampsData[+id];
-  persistSaved(); persistSavedData(); updateBadges(); renderSaved(); showToast('Removed');
+  e.stopPropagation(); savedIds.delete(id); persistSaved(); updateBadges(); renderSaved(); showToast('Removed');
 }
 
 function addToCalendar() {
   if (!currentDetailId) return;
-  const c = lookupCamp(currentDetailId);
+  const c = CAMPS.find(x => x.id === currentDetailId);
   if (!c) return;
 
   let startStr = checkInDate;
@@ -8885,35 +8285,117 @@ function openParkDetail(id) {
 
 // ─── OPEN DETAIL ────────────────────────────────
 function openDetail(id) {
+<<<<<<< HEAD
   // Route featured parks to premium screen
   if (getParkForCamp(id)) { openParkDetail(id); return; }
   const c = lookupCamp(id);
+=======
+  const c = CAMPS.find(x => x.id === id);
+>>>>>>> 3dee852f875f8bfa0d7d0f0470cb014cc3d23b9c
   if (!c) return;
-  const _activeNow = document.querySelector('.screen.active')?.id;
-  if (_activeNow !== 'detail') prevScreen = _activeNow || 'results';
+  prevScreen = document.querySelector('.screen.active')?.id || 'results';
   currentDetailId = id;
   history.replaceState(null, '', '#camp-' + id);
 
-  // Navigate first so the screen opens even if a render call below throws
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById('detail').classList.add('active');
-  document.getElementById('detail').scrollTop = 0;
-
+  // State-based hero photos via Lorem Picsum (picsum.photos) — free, no API key.
+  // IDs verified programmatically: flesh < 5%, nature+sky > 35%.
+  // Verified good IDs: 10, 15, 29, 57, 68, 82, 114, 253, 280, 390, 577
+  const U = 'https://picsum.photos/id/';
+  const Q = '/900/500';
+  const STATE_PHOTOS = {
+    // ── Pacific Northwest — lush forest, waterfall (ID 29 ✓) ───────────
+    'Washington':     '29',
+    'Oregon':         '29',
+    // ── California — open sky, water reflection (ID 280 ✓) ────────────
+    'California':     '280',
+    // ── Southwest Desert — rocky open landscape (ID 82 ✓) ─────────────
+    'Utah':           '82',
+    'Arizona':        '82',
+    'Nevada':         '82',
+    'New Mexico':     '82',
+    'Texas':          '82',
+    'South Dakota':   '82',
+    // ── Rocky Mountains — green peaks, big sky (ID 15 ✓) ──────────────
+    'Colorado':       '15',
+    'Wyoming':        '15',
+    'Montana':        '57',   // ID 57 ✓ replaces 219 (was portrait photo)
+    'Idaho':          '57',
+    // ── Alaska — open sky, dramatic (ID 10 ✓) ──────────────────────────
+    'Alaska':         '10',
+    // ── Great Plains — open sky landscape (ID 390 ✓) ───────────────────
+    'Nebraska':       '390',
+    'North Dakota':   '390',
+    'Kansas':         '390',
+    'Oklahoma':       '390',
+    'Iowa':           '390',
+    // ── Great Lakes — nature + sky (ID 114 ✓) ──────────────────────────
+    'Michigan':       '114',  // replaces 428 (was portrait photo)
+    'Wisconsin':      '114',
+    'Minnesota':      '114',  // replaces 336 (was suspect)
+    // ── Appalachian / Smoky — green mountain landscape (ID 15 ✓) ───────
+    'Tennessee':      '15',
+    'North Carolina': '15',
+    'Virginia':       '15',
+    'West Virginia':  '15',
+    // ── Southern Appalachian — dense green forest (ID 68 ✓) ────────────
+    'Georgia':        '68',
+    'Kentucky':       '68',
+    // ── Southern & Midwest Forest — green woodland (ID 68 ✓) ──────────
+    'Alabama':        '68',   // replaces 127 (was portrait photo)
+    'Arkansas':       '68',
+    'Missouri':       '68',
+    'Mississippi':    '68',
+    'Louisiana':      '68',
+    'South Carolina': '68',
+    'Illinois':       '68',
+    'Indiana':        '68',
+    'Ohio':           '15',
+    // ── Northeast — rocky coastal (ID 253 ✓) ───────────────────────────
+    'Maine':          '253',
+    'Massachusetts':  '253',
+    'Rhode Island':   '253',
+    'New Jersey':     '253',
+    'Delaware':       '253',
+    'New Hampshire':  '15',
+    'Vermont':        '15',
+    'New York':       '1542762933-ab3502717ce7',
+    'Pennsylvania':   '1542762933-ab3502717ce7',
+    'Maryland':       '253',
+    'Connecticut':    '15',
+    'New York':       '15',
+    'Pennsylvania':   '15',
+    // ── Florida — lush green (ID 577 ✓) ────────────────────────────────
+    'Florida':        '577',
+    // ── Hawaii — very green, tropical (ID 577 ✓) ───────────────────────
+    'Hawaii':         '577',
+  };
+  // Type-based fallback — all IDs verified as landscape photos
+  const TYPE_PHOTOS = {
+    'National Park':  '15',   // ✓ green peaks + sky
+    'State Park':     '15',   // ✓ green peaks + sky
+    'Forest Service': '29',   // ✓ forest waterfall
+    'BLM':            '82',   // ✓ rocky open landscape (replaces 64 portrait)
+    'Army Corps':     '114',  // ✓ nature + sky (replaces 428 portrait)
+    'Glamping':       '68',   // ✓ dense green forest (replaces 167 portrait)
+    'Private':        '68',   // ✓ dense green forest (replaces 127 portrait)
+    'RV Park':        '390',  // ✓ open plains landscape
+  };
+  const campState = (c.loc.split('·')[1] || '').trim();
+  const photoId = STATE_PHOTOS[campState] || TYPE_PHOTOS[c.type] || '15';
   const dHero = document.getElementById('d-hero');
-  // Use real RIDB photo when available; otherwise show abstract gradient (no misleading placeholder)
-  dHero.style.backgroundImage = c.photo
-    ? `url(${c.photo}), linear-gradient(160deg, var(--g2) 0%, var(--g0) 100%)`
-    : `linear-gradient(160deg, var(--g2) 0%, var(--g0) 100%)`;
+  // Use real RIDB photo when available, fall back to Picsum placeholder
+  const heroImg = c.photo || `${U}${photoId}${Q}`;
+  dHero.style.backgroundImage = `url(${heroImg}), linear-gradient(160deg, var(--g2) 0%, var(--g0) 100%)`;
   document.getElementById('d-glyph').innerHTML = '';
 
   document.getElementById('d-type').textContent    = c.type;
   document.getElementById('d-name').textContent    = c.name;
   document.getElementById('d-loc').textContent     = c.loc;
-  document.getElementById('d-rating').textContent  = c.rating != null ? c.rating : '—';
-  document.getElementById('d-reviews').textContent = c.reviews ? c.reviews.toLocaleString() + ' Reviews' : '';
-  document.getElementById('d-price').textContent   = c.price != null ? '$' + c.price : 'Varies';
-  document.getElementById('d-sites').textContent   = c.sites != null ? c.sites : '—';
-  document.getElementById('d-avail').textContent   = c.avail != null ? c.avail : '—';
+  document.getElementById('d-rating').textContent  = c.rating;
+  document.getElementById('d-reviews').textContent = c.reviews.toLocaleString() + ' Reviews';
+  document.getElementById('d-price').textContent   = '$' + c.price;
+  document.getElementById('d-sites').textContent   = c.sites;
+  document.getElementById('d-avail').textContent   = c.avail;
   document.getElementById('d-desc').textContent    = c.desc;
 
   // Distance stat — show only when user location is known
@@ -8929,13 +8411,13 @@ function openDetail(id) {
     statRow.classList.remove('has-dist');
   }
 
-  document.getElementById('d-amenities').innerHTML = (c.amenities || []).map(a =>
+  document.getElementById('d-amenities').innerHTML = c.amenities.map(a =>
     `<div class="amenity-cell">${glyph(AMEN_GLYPH[a]||'#ic-star',17,'rgba(255,255,255,0.7)')}<span class="amenity-lbl">${a}</span></div>`
   ).join('');
 
   const ALL_S = ['Spring','Summer','Fall','Winter'];
   document.getElementById('d-seasons').innerHTML = ALL_S.map(s =>
-    `<div class="season-chip ${(c.seasons||[]).includes(s)?'on':'off'}">${s}</div>`
+    `<div class="season-chip ${c.seasons.includes(s)?'on':'off'}">${s}</div>`
   ).join('');
 
   // Campfire status
@@ -8966,87 +8448,13 @@ function openDetail(id) {
   if (savedIds.has(id)) { svg.style.color='#E8481C'; btn.classList.add('saved'); }
   else                  { svg.style.color='rgba(255,255,255,0.7)'; btn.classList.remove('saved'); }
 
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('detail').classList.add('active');
+  document.getElementById('detail').scrollTop = 0;
+
   // Dismissible hints
   _showHint('hint-tripcard');
   _showHint('hint-rating');
-
-  // Reservation notify strip
-  resetNotifStrip();
-  const rd = RESERVATION_DATES[id];
-  const dateHint = document.getElementById('notif-date-hint');
-  if (dateHint) {
-    dateHint.textContent = rd
-      ? rd.note
-      : 'We\'ll email you before the reservation window opens';
-  }
-}
-
-// ─── RESERVATION REMINDERS ───────────────────────
-// Known reservation opening windows (estimated; update annually)
-const RESERVATION_DATES = {
-  1:   { date: 'rolling, ~5 months out', note: 'Yosemite books up same day — set a reminder' },
-  5:   { date: 'rolling, ~6 months out', note: 'Spots go fast in spring and fall' },
-  6:   { date: 'Jan 1 for summer season', note: 'Olympic books up early for July–Aug' },
-  10:  { date: 'Jan 1, 6 months rolling', note: 'Mather sells out within hours of opening' },
-  11:  { date: 'rolling, ~6 months out', note: 'Watchman fills weeks in advance' },
-  12:  { date: 'May 1 for summer season', note: 'Yellowstone sites go fast in spring' },
-  13:  { date: 'rolling, ~6 months out', note: 'Rocky Mountain books up quickly in summer' },
-  15:  { date: 'rolling, ~6 months out', note: 'Glacier sites sell out within days of opening' },
-  16:  { date: 'rolling, ~6 months out', note: 'Devil\'s Garden — one of the hardest to get' },
-  18:  { date: 'rolling, ~6 months out', note: 'Crater Lake fills fast in July–Aug' },
-  20:  { date: 'rolling, ~6 months out', note: 'Bryce books 2–3 months out in peak season' },
-  21:  { date: 'rolling, ~6 months out', note: 'Sequoia summer sites go quickly' },
-  173: { date: 'rolling, ~6 months out', note: 'Kalaloch oceanfront — extremely competitive' },
-  197: { date: 'rolling, ~6 months out', note: 'Blackwoods fills fast for summer weekends' },
-  347: { date: 'rolling, ~6 months out', note: 'Aspenglen — books out weeks in advance' },
-};
-
-function toggleNotifStrip() {
-  const strip = document.getElementById('notif-strip');
-  strip.classList.toggle('open');
-}
-
-function resetNotifStrip() {
-  const strip   = document.getElementById('notif-strip');
-  const success = document.getElementById('notif-success');
-  const submit  = document.getElementById('notif-submit');
-  const email   = document.getElementById('notif-email');
-  strip.classList.remove('open');
-  success.style.display = 'none';
-  submit.disabled = false;
-  submit.textContent = 'Notify Me';
-  if (email) email.value = '';
-}
-
-async function submitNotifEmail() {
-  const c = lookupCamp(currentDetailId);
-  if (!c) return;
-  const emailEl  = document.getElementById('notif-email');
-  const submitEl = document.getElementById('notif-submit');
-  const successEl = document.getElementById('notif-success');
-  const email = emailEl.value.trim();
-  if (!email || !email.includes('@')) { emailEl.focus(); return; }
-
-  submitEl.disabled = true;
-  submitEl.textContent = '…';
-
-  try {
-    await fetch('/api/notify', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email,
-        campId:   c.id,
-        campName: c.name,
-        campLoc:  c.loc,
-        date:     RESERVATION_DATES[c.id]?.date || null
-      })
-    });
-  } catch(e) { /* fail silently — UX should still succeed */ }
-
-  successEl.style.display = 'block';
-  submitEl.style.display  = 'none';
-  emailEl.style.display   = 'none';
 }
 
 // ─── SHARE CARD ──────────────────────────────────
@@ -9146,7 +8554,7 @@ function generateShareCard(c) {
   ctx.fillStyle = '#E8C21C';
   ctx.fillText('★', PAD, rY);
   ctx.fillStyle = '#FFFFFF';
-  ctx.fillText(' ' + (c.rating != null ? c.rating : '—'), PAD + 24, rY);
+  ctx.fillText(' ' + c.rating, PAD + 24, rY);
   ls('0.1em');
   ctx.font = '500 18px "Helvetica Neue",Helvetica,Arial,sans-serif';
   ctx.fillStyle = 'rgba(255,255,255,0.28)';
@@ -9162,9 +8570,9 @@ function generateShareCard(c) {
   const stH = 108;
   const colW = (W - PAD * 2) / 3;
   const stats = [
-    { val: c.price != null ? '$' + c.price : 'Varies', label: 'PER NIGHT',   color: O },
-    { val: c.sites != null ? c.sites : '—',            label: 'TOTAL SITES',  color: '#FFFFFF' },
-    { val: '★ ' + (c.rating != null ? c.rating : '—'), label: 'RATING',       color: '#E8C21C' },
+    { val: '$' + c.price, label: 'PER NIGHT',   color: O },
+    { val: c.sites,       label: 'TOTAL SITES',  color: '#FFFFFF' },
+    { val: '★ ' + c.rating, label: 'RATING',    color: '#E8C21C' },
   ];
   ctx.strokeStyle = 'rgba(232,72,28,0.3)';
   ctx.lineWidth = 1.5;
@@ -9262,7 +8670,7 @@ let _shareCanvas = null;
 
 async function shareCamp() {
   if (!currentDetailId) return;
-  const c = lookupCamp(currentDetailId);
+  const c = CAMPS.find(x => x.id === currentDetailId);
   if (!c) return;
   showToast('Building card…');
   await new Promise(r => setTimeout(r, 60));
@@ -9460,7 +8868,7 @@ function _tcSceneSVG(type) {
 
 function openTripCard() {
   if (!currentDetailId) return;
-  const c = lookupCamp(currentDetailId);
+  const c = CAMPS.find(x => x.id === currentDetailId);
   if (!c) return;
   _tcCamp = c;
 
@@ -9470,20 +8878,8 @@ function openTripCard() {
   // Info
   document.getElementById('tc-name').textContent = c.name;
   document.getElementById('tc-loc').textContent  = c.loc;
-  // Rating + sites sub-line
-  const metaEl = document.getElementById('tc-meta');
-  if (metaEl) {
-    const metaParts = [];
-    if (c.rating) metaParts.push(`★ ${c.rating}`);
-    if (c.sites)  metaParts.push(`${c.sites} sites`);
-    metaEl.textContent = metaParts.join('  ·  ');
-  }
   document.getElementById('tc-type').textContent = c.type;
   document.getElementById('tc-amenities').textContent = (c.amenities || []).slice(0,4).join(' · ');
-
-  // Price
-  const priceEl = document.getElementById('tc-price');
-  if (priceEl) priceEl.textContent = c.price != null ? `$${c.price}` : 'Free';
 
   // Dates: pre-fill from any stored check-in if available
   const today     = new Date();
@@ -9496,30 +8892,12 @@ function openTripCard() {
   tcUpdateNights();
 
   // Book link
-  const bookUrl = buildBookingUrl(c);
-  document.getElementById('tc-book-link').href = bookUrl;
+  document.getElementById('tc-book-link').href = buildBookingUrl(c);
 
-  // Share button label: native share on mobile, copy link on desktop
+  // Show native share button only if supported
   const shareBtn = document.getElementById('tc-share-btn');
-  shareBtn.textContent = navigator.share ? 'Share' : 'Copy Link';
-
-  // QR code linking to booking URL
-  const qrContainer = document.getElementById('tc-qr');
-  if (qrContainer) {
-    qrContainer.innerHTML = '';
-    const qrUrl = (bookUrl && bookUrl !== '#') ? bookUrl : 'https://campgrounder.io';
-    if (typeof QRCode !== 'undefined') {
-      try {
-        new QRCode(qrContainer, {
-          text: qrUrl,
-          width: 60,
-          height: 60,
-          colorDark: '#E8481C',
-          colorLight: '#0C1F15',
-          correctLevel: QRCode.CorrectLevel.M
-        });
-      } catch(e) { /* graceful skip */ }
-    }
+  if (navigator.share || navigator.canShare) {
+    shareBtn.style.display = 'flex';
   }
 
   // Show overlay
@@ -9561,41 +8939,25 @@ async function tcSave() {
 }
 
 async function tcShare() {
-  if (!_tcCamp) return;
-  if (navigator.share) {
-    showToast('Building card…');
-    await new Promise(r => setTimeout(r, 60));
-    const canvas = _tcBuildCanvas(_tcCamp);
-    const filename = (_tcCamp.name || 'camp').toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-trip-card.png';
-    canvas.toBlob(async blob => {
-      if (!blob) return;
-      try {
-        const file = new File([blob], filename, { type: 'image/png' });
-        await navigator.share({ files: [file], title: `My trip to ${_tcCamp.name}`, text: `Camping at ${_tcCamp.name} via Campgrounder.io` });
-      } catch(e) {
-        if (e.name !== 'AbortError') showToast('Share failed');
-      }
-    }, 'image/png');
-  } else {
-    // Desktop: copy booking URL
-    const url = buildBookingUrl(_tcCamp);
-    if (url && url !== '#') {
-      try {
-        await navigator.clipboard.writeText(url);
-        showToast('Booking link copied!');
-      } catch(e) { showToast('Copy failed'); }
-    } else {
-      try {
-        await navigator.clipboard.writeText(`https://campgrounder.io`);
-        showToast('Link copied!');
-      } catch(e) { showToast('Copy failed'); }
+  if (!_tcCamp || !navigator.share) return;
+  showToast('Building card…');
+  await new Promise(r => setTimeout(r, 60));
+  const canvas = _tcBuildCanvas(_tcCamp);
+  const filename = (_tcCamp.name || 'camp').toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-trip-card.png';
+  canvas.toBlob(async blob => {
+    if (!blob) return;
+    try {
+      const file = new File([blob], filename, { type: 'image/png' });
+      await navigator.share({ files: [file], title: `My trip to ${_tcCamp.name}`, text: `Camping at ${_tcCamp.name} via Campgrounder.io` });
+    } catch(e) {
+      if (e.name !== 'AbortError') showToast('Share failed');
     }
-  }
+  }, 'image/png');
 }
 
 function _tcBuildCanvas(c) {
-  // Card canvas: 800x1200 portrait
-  const W = 800, H = 1200;
+  // Card canvas: 800x1100 portrait
+  const W = 800, H = 1100;
   const pad = 6; // orange border padding
   const canvas = document.createElement('canvas');
   canvas.width = W; canvas.height = H;
@@ -9624,7 +8986,7 @@ function _tcBuildCanvas(c) {
   ctx.save();
   roundRect(pad, pad, W - pad*2, H - pad*2, r);
   ctx.strokeStyle = oc;
-  ctx.lineWidth = 4;
+  ctx.lineWidth = 8;
   ctx.stroke();
   ctx.restore();
 
@@ -9672,19 +9034,7 @@ function _tcBuildCanvas(c) {
   ctx.font = '400 24px "Helvetica Neue",Helvetica,Arial,sans-serif';
   ctx.fillStyle = sg;
   ctx.fillText(c.loc, ix, y);
-  y += 30;
-
-  // Rating + sites
-  const metaParts = [];
-  if (c.rating) metaParts.push(`★ ${c.rating}`);
-  if (c.sites)  metaParts.push(`${c.sites} sites`);
-  if (metaParts.length > 0) {
-    ctx.font = '400 22px "Helvetica Neue",Helvetica,Arial,sans-serif';
-    ctx.fillStyle = sg;
-    ctx.fillText(metaParts.join('   ·   '), ix, y);
-    y += 30;
-  }
-  y += 14;
+  y += 44;
 
   // Divider
   ctx.fillStyle = g2;
@@ -9722,21 +9072,18 @@ function _tcBuildCanvas(c) {
   ctx.fillRect(ix, y, iw, 1);
   y += 32;
 
-  // Nights + Type + Price
-  const col3W = iw / 3;
+  // Nights + Type
   ctx.font = '700 16px "Helvetica Neue",Helvetica,Arial,sans-serif';
   ctx.fillStyle = oc;
   ctx.letterSpacing = '0.12em';
   ctx.fillText('NIGHTS', ix, y);
-  ctx.fillText('TYPE', ix + col3W, y);
-  ctx.fillText('PER NIGHT', ix + col3W * 2, y);
+  ctx.fillText('TYPE', ix + colW, y);
   ctx.letterSpacing = '0';
   ctx.font = '800 38px "Helvetica Neue",Helvetica,Arial,sans-serif';
   ctx.fillStyle = wt;
   ctx.fillText(nights !== null ? String(nights) : '--', ix, y + 44);
   ctx.font = '700 24px "Helvetica Neue",Helvetica,Arial,sans-serif';
-  ctx.fillText(c.type, ix + col3W, y + 44);
-  ctx.fillText(c.price != null ? `$${c.price}` : 'Free', ix + col3W * 2, y + 44);
+  ctx.fillText(c.type, ix + colW, y + 44);
   y += 80;
 
   // Divider
@@ -9751,36 +9098,11 @@ function _tcBuildCanvas(c) {
   ctx.fillText(amenStr, ix, y);
   y += 60;
 
-  // Divider before footer
-  ctx.fillStyle = g2;
-  ctx.fillRect(ix, y, iw, 1);
-  y += 32;
-
-  // QR code (right side of footer)
-  const qrSrc = document.querySelector('#tc-qr canvas');
-  const qrSz = 100;
-  const qrX = W - ix - qrSz;
-  const qrY = y;
-  if (qrSrc) {
-    // Dark background patch behind QR
-    ctx.fillStyle = '#0C1F15';
-    ctx.fillRect(qrX - 4, qrY - 4, qrSz + 8, qrSz + 8);
-    ctx.drawImage(qrSrc, qrX, qrY, qrSz, qrSz);
-    // "SCAN TO BOOK" label
-    ctx.font = '600 13px "Helvetica Neue",Helvetica,Arial,sans-serif';
-    ctx.fillStyle = sg;
-    ctx.letterSpacing = '0.06em';
-    ctx.textAlign = 'right';
-    ctx.fillText('SCAN TO BOOK', W - ix, qrY + qrSz + 18);
-    ctx.textAlign = 'left';
-    ctx.letterSpacing = '0';
-  }
-
-  // CAMPGROUNDER.IO footer text (left side)
+  // Footer
   ctx.fillStyle = g2;
   ctx.font = '700 18px "Helvetica Neue",Helvetica,Arial,sans-serif';
   ctx.letterSpacing = '0.2em';
-  ctx.fillText('CAMPGROUNDER.IO', ix, H - 44);
+  ctx.fillText('CAMPGROUNDER.IO', ix, H - 40);
   ctx.letterSpacing = '0';
 
   ctx.restore(); // end card clip
@@ -9950,8 +9272,8 @@ function ratingDist(r) {
 
 function showReviewSheet() {
   if (!currentDetailId) return;
-  const c = lookupCamp(currentDetailId);
-  if (!c || c.rating == null) return;
+  const c = CAMPS.find(x => x.id === currentDetailId);
+  if (!c) return;
 
   const dist  = ratingDist(c.rating);
   const stars = ['★★★★★','★★★★☆','★★★☆☆','★★☆☆☆','★☆☆☆☆'];
@@ -10050,7 +9372,7 @@ function closeReviewSheet() {
 function shareDownloadCard() {
   closeShareSheet();
   if (!_shareCanvas || !currentDetailId) return;
-  const c = lookupCamp(currentDetailId);
+  const c = CAMPS.find(x => x.id === currentDetailId);
   const filename = (c?.name || 'camp').toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-campgrounder.png';
   downloadCard(_shareCanvas, filename);
   showToast('Card saved ↓');
@@ -10138,7 +9460,7 @@ function initMap() {
       <div style="margin-bottom:7px;">${glyph(TYPE_GLYPH[c.type]||'#ic-tent',18,'var(--o)')}</div>
       <div class="mini-type">${c.type}</div>
       <div class="mini-name">${c.name}</div>
-      <div class="mini-price">${c.price!=null?'$'+c.price:'Free'}<span> / night</span></div>
+      <div class="mini-price">$${c.price}<span> / night</span></div>
     </div>`).join('');
 
   setTimeout(() => lMap.invalidateSize(), 100);
@@ -10150,7 +9472,7 @@ function addMarker(c) {
     iconSize:[20,20], iconAnchor:[10,20], className:''
   });
   const price = L.divIcon({
-    html: `<div style="background:#E8481C;color:#fff;padding:4px 9px;font-family:Helvetica Neue,sans-serif;font-size:12px;font-weight:800;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,0.45);cursor:pointer;transform:translateX(-50%) translateY(-44px);">${c.price != null ? '$'+c.price : 'Free'}</div>`,
+    html: `<div style="background:#E8481C;color:#fff;padding:4px 9px;font-family:Helvetica Neue,sans-serif;font-size:12px;font-weight:800;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,0.45);cursor:pointer;transform:translateX(-50%) translateY(-44px);">$${c.price}</div>`,
     iconSize:[1,1], iconAnchor:[0,0], className:''
   });
   const pm = L.marker([c.lat,c.lng],{icon:pin  }).addTo(lMap).on('click',()=>openDetail(c.id));
@@ -10160,9 +9482,7 @@ function addMarker(c) {
 
 function updateMapMarkers() {
   if (!mapReady || !lMap) return;
-  const _fc = getFilteredCamps();
-  if (!_fc) return; // still loading API results
-  const visible = new Set(_fc.map(c => c.id));
+  const visible = new Set(getFilteredCamps().map(c => c.id));
   CAMPS.forEach(c => {
     const [pm, pr] = mapMarkerMap[c.id] || [];
     if (!pm) return;
@@ -10283,23 +9603,6 @@ if ('serviceWorker' in navigator) {
 // Initialize wildfire section on first page load (home is the default screen)
 setTimeout(initWildfireSection, 400);
 
-// Populate dynamic camp counts
-(function() {
-  const count = CAMPS.length;
-  const homeCount = document.getElementById('home-camp-count');
-  if (homeCount) homeCount.textContent = 'Thousands';
-  const sugCount = document.getElementById('sug-all-count');
-  if (sugCount) sugCount.textContent = count;
-})();
-
-// Hide iOS app banner if user already dismissed it
-(function() {
-  if (localStorage.getItem('cg_app_banner_dismissed')) {
-    const b = document.getElementById('app-banner');
-    if (b) b.style.display = 'none';
-  }
-})();
-
 // Handle deep-link shortcuts from manifest.json + hash-based camp links
 (function handleLaunchParams() {
   // Hash deep-links: campgrounder.io/#camp-42 opens that campground directly
@@ -10307,10 +9610,6 @@ setTimeout(initWildfireSection, 400);
   if (hash.startsWith('#camp-')) {
     const id = parseInt(hash.slice(6));
     if (!isNaN(id)) { requestAnimationFrame(() => openDetail(id)); return; }
-  }
-  if (hash.startsWith('#trip-')) {
-    const code = hash.slice(6).replace(/[^a-z0-9]/gi, '').slice(0, 20);
-    if (code) { requestAnimationFrame(() => loadSharedTrip(code)); return; }
   }
   const params = new URLSearchParams(window.location.search);
   const action = params.get('action');
@@ -10533,19 +9832,9 @@ function renderNearby(c) {
   const el = document.getElementById('d-nearby');
   if (!el) return;
 
-  // Can't compute nearby without coordinates
-  if (c.lat == null || c.lng == null) { el.style.display = 'none'; return; }
-
-  // Search both hardcoded camps and any cached RIDB camps for nearby
-  const allCamps = [...CAMPS, ...Object.values(apiCampsCache)];
-  const seen = new Set();
-  const nearby = allCamps
-    .filter(x => {
-      if (x.id == c.id || x.lat == null || x.lng == null) return false;
-      if (seen.has(x.id)) return false;
-      seen.add(x.id);
-      return true;
-    })
+  // Find closest camps (excluding self), sorted by straight-line distance
+  const nearby = CAMPS
+    .filter(x => x.id !== c.id)
     .map(x => ({ ...x, _mi: haversine(c.lat, c.lng, x.lat, x.lng) }))
     .sort((a, b) => a._mi - b._mi)
     .slice(0, 3);
@@ -10569,7 +9858,7 @@ function renderNearby(c) {
           </div>
           <div class="nearby-body">
             <div class="nearby-name">${n.name}</div>
-            <div class="nearby-meta">${n.type}${n.rating != null ? ' &nbsp;·&nbsp; ★ '+n.rating : ''}${n.price != null ? ' &nbsp;·&nbsp; $'+n.price+'/night' : ''}</div>
+            <div class="nearby-meta">${n.type} &nbsp;·&nbsp; ★ ${n.rating} &nbsp;·&nbsp; $${n.price}/night</div>
           </div>
           <div class="nearby-dist">${Math.round(n._mi)} mi</div>
         </div>`).join('')}
@@ -10583,45 +9872,45 @@ const amz = q => `https://www.amazon.com/s?k=${encodeURIComponent(q)}&tag=${TAG}
 // packKey = exact string used in the pack list; enables bidirectional sync
 const GEAR = {
   base: [
-    { brand:'Hydro Flask',   name:'32oz Wide Mouth',         packKey:'Water bottle (×2)',                          desc:'Keeps cold 24hrs, hot 12. The one everyone has for a reason.',              price:'~$45',  url: amz('hydro flask 32oz wide mouth') },
-    { brand:'Black Diamond', name:'Spot 400 Headlamp',       packKey:'Headlamp + spare batteries',                 desc:'Waterproof, rechargeable, 400 lumens. The benchmark.',                      price:'~$50',  url: amz('black diamond spot 400 headlamp') },
-    { brand:'Rumpl',         name:'Original Puffy Blanket',  packKey:null,                                         desc:'Packable, warm, and looks great around a fire.',                            price:'~$110', url: amz('rumpl original puffy blanket') },
+    { brand:'Hydro Flask',   name:'32oz Wide Mouth',         packKey:'Water bottle (×2)',                          desc:'Keeps cold 24hrs, hot 12. The one everyone has for a reason.',              url: amz('hydro flask 32oz wide mouth') },
+    { brand:'Black Diamond', name:'Spot 400 Headlamp',       packKey:'Headlamp + spare batteries',                 desc:'Waterproof, rechargeable, 400 lumens. The benchmark.',                      url: amz('black diamond spot 400 headlamp') },
+    { brand:'Rumpl',         name:'Original Puffy Blanket',  packKey:null,                                         desc:'Packable, warm, and looks great around a fire.',                            url: amz('rumpl original puffy blanket') },
   ],
   tent: [
-    { brand:'NEMO',          name:'Hornet OSMO 2P',          packKey:'Tent + rainfly + stakes',                    desc:'Ultralight double-wall tent. 2.1 lbs and genuinely livable.',               price:'~$450', url: amz('nemo hornet osmo 2p tent') },
-    { brand:'Therm-a-Rest',  name:'NeoAir XLite NXT',        packKey:'Sleeping pad',                               desc:'Best warmth-to-weight ratio in a sleeping pad. Full stop.',                 price:'~$220', url: amz('thermarest neoair xlite nxt sleeping pad') },
-    { brand:'MSR',           name:'PocketRocket 2',          packKey:'Camp stove + fuel',                          desc:'Boils water in 3.5 minutes. Fits in your palm.',                           price:'~$55',  url: amz('msr pocketrocket 2 stove') },
+    { brand:'NEMO',          name:'Hornet OSMO 2P',          packKey:'Tent + rainfly + stakes',                    desc:'Ultralight double-wall tent. 2.1 lbs and genuinely livable.',               url: amz('nemo hornet osmo 2p tent') },
+    { brand:'Therm-a-Rest',  name:'NeoAir XLite NXT',        packKey:'Sleeping pad',                               desc:'Best warmth-to-weight ratio in a sleeping pad. Full stop.',                 url: amz('thermarest neoair xlite nxt sleeping pad') },
+    { brand:'MSR',           name:'PocketRocket 2',          packKey:'Camp stove + fuel',                          desc:'Boils water in 3.5 minutes. Fits in your palm.',                           url: amz('msr pocketrocket 2 stove') },
   ],
   carCamping: [
-    { brand:'Snow Peak',     name:'Gigapower Stove',         packKey:'Camp stove + fuel',                          desc:'Japanese precision engineering. A beautiful object that performs.',          price:'~$65',  url: amz('snow peak gigapower stove') },
-    { brand:'Stanley',       name:'Adventure Cook Set',      packKey:'Cookware + utensils',                        desc:'Nested, tough, and built to outlast the trip.',                             price:'~$55',  url: amz('stanley adventure camp cook set') },
-    { brand:'Yeti',          name:'Tundra 45 Cooler',        packKey:'Cooler + ice',                               desc:'Bear-resistant and built forever. The serious car camping cooler.',          price:'~$350', url: amz('yeti tundra 45 cooler') },
+    { brand:'Snow Peak',     name:'Gigapower Stove',         packKey:'Camp stove + fuel',                          desc:'Japanese precision engineering. A beautiful object that performs.',          url: amz('snow peak gigapower stove') },
+    { brand:'Stanley',       name:'Adventure Cook Set',      packKey:'Cookware + utensils',                        desc:'Nested, tough, and built to outlast the trip.',                             url: amz('stanley adventure camp cook set') },
+    { brand:'Yeti',          name:'Tundra 45 Cooler',        packKey:'Cooler + ice',                               desc:'Bear-resistant and built forever. The serious car camping cooler.',          url: amz('yeti tundra 45 cooler') },
   ],
   glamping: [
-    { brand:'Snow Peak',     name:'Titanium Mug 450',        packKey:null,                                         desc:'The most beautiful camp mug ever made. Holds heat surprisingly well.',      price:'~$35',  url: amz('snow peak titanium single wall mug 450') },
-    { brand:'Rumpl',         name:'NanoLoft Blanket',        packKey:null,                                         desc:'Lighter than the Original. Equally perfect around a fire.',                 price:'~$95',  url: amz('rumpl nanoloft blanket') },
-    { brand:'Goal Zero',     name:'Yeti 200X Power Station', packKey:'Phone charger + cable',                      desc:'Compact, solar-ready, keeps everything charged off-grid.',                  price:'~$300', url: amz('goal zero yeti 200x power station') },
+    { brand:'Snow Peak',     name:'Titanium Mug 450',        packKey:null,                                         desc:'The most beautiful camp mug ever made. Holds heat surprisingly well.',      url: amz('snow peak titanium single wall mug 450') },
+    { brand:'Rumpl',         name:'NanoLoft Blanket',        packKey:null,                                         desc:'Lighter than the Original. Equally perfect around a fire.',                 url: amz('rumpl nanoloft blanket') },
+    { brand:'Goal Zero',     name:'Yeti 200X Power Station', packKey:'Phone charger + cable',                      desc:'Compact, solar-ready, keeps everything charged off-grid.',                  url: amz('goal zero yeti 200x power station') },
   ],
   dispersed: [
-    { brand:'Sawyer',        name:'Squeeze Water Filter',    packKey:'Water filter / purifier',                    desc:'Filter from any source. Lightweight and genuinely reliable.',               price:'~$40',  url: amz('sawyer squeeze water filter') },
-    { brand:'BearVault',     name:'BV500 Bear Canister',     packKey:'Bear canister (check local rules)',          desc:'Required in many wilderness areas. Clear lid so you find snacks fast.',     price:'~$85',  url: amz('bearvault bv500 bear canister') },
-    { brand:'Goal Zero',     name:'Venture 35 Solar Charger',packKey:'Phone charger + cable',                      desc:'Charges from the sun. Keeps your phone and headlamp alive off-grid.',     price:'~$120', url: amz('goal zero venture 35 solar charger') },
+    { brand:'Sawyer',        name:'Squeeze Water Filter',    packKey:'Water filter / purifier',                    desc:'Filter from any source. Lightweight and genuinely reliable.',               url: amz('sawyer squeeze water filter') },
+    { brand:'BearVault',     name:'BV500 Bear Canister',     packKey:'Bear canister (check local rules)',          desc:'Required in many wilderness areas. Clear lid so you find snacks fast.',     url: amz('bearvault bv500 bear canister') },
+    { brand:'Goal Zero',     name:'Venture 35 Solar Charger',packKey:'Phone charger + cable',                      desc:'Charges from the sun. Keeps your phone and headlamp alive off-grid.',     url: amz('goal zero venture 35 solar charger') },
   ],
   stargazing: [
-    { brand:'Black Diamond', name:'Astro 300-R Headlamp',    packKey:'Red-light headlamp (preserves night vision)',desc:'Red-light mode preserves your night vision. Essential for dark sky camps.', price:'~$45',  url: amz('black diamond astro 300 red headlamp') },
-    { brand:'Celestron',     name:'Nature DX 8x42 Binos',    packKey:'Star chart / app',                           desc:'Great for the Milky Way core and satellites. Excellent for wildlife too.',  price:'~$190', url: amz('celestron nature dx 8x42 binoculars') },
+    { brand:'Black Diamond', name:'Astro 300-R Headlamp',    packKey:'Red-light headlamp (preserves night vision)',desc:'Red-light mode preserves your night vision. Essential for dark sky camps.', url: amz('black diamond astro 300 red headlamp') },
+    { brand:'Celestron',     name:'Nature DX 8x42 Binos',    packKey:'Star chart / app',                           desc:'Great for the Milky Way core and satellites. Excellent for wildlife too.',  url: amz('celestron nature dx 8x42 binoculars') },
   ],
   fishing: [
-    { brand:'Plano',         name:'Guide Series Tackle Bag', packKey:'Rod + reel + tackle',                        desc:'Organized, waterproof, holds everything.',                                 price:'~$65',  url: amz('plano guide series tackle bag') },
-    { brand:'Yeti',          name:'Hopper M30 Soft Cooler',  packKey:'Cooler + ice',                               desc:'Keeps ice for days. Folds flat when empty.',                              price:'~$350', url: amz('yeti hopper m30 soft cooler') },
+    { brand:'Plano',         name:'Guide Series Tackle Bag', packKey:'Rod + reel + tackle',                        desc:'Organized, waterproof, holds everything.',                                 url: amz('plano guide series tackle bag') },
+    { brand:'Yeti',          name:'Hopper M30 Soft Cooler',  packKey:'Cooler + ice',                               desc:'Keeps ice for days. Folds flat when empty.',                              url: amz('yeti hopper m30 soft cooler') },
   ],
   water: [
-    { brand:'Sea to Summit', name:'Hydraulic Dry Bag',       packKey:'Dry bag',                                    desc:'Actually waterproof, not just water-resistant. The real thing.',            price:'~$55',  url: amz('sea to summit hydraulic dry bag') },
-    { brand:'NRS',           name:"Bill's Bag Dry Bag",      packKey:'Dry bag',                                    desc:"The kayaker's go-to. Durable, simple, bombproof.",                         price:'~$30',  url: amz('nrs bills bag dry bag') },
+    { brand:'Sea to Summit', name:'Hydraulic Dry Bag',       packKey:'Dry bag',                                    desc:'Actually waterproof, not just water-resistant. The real thing.',            url: amz('sea to summit hydraulic dry bag') },
+    { brand:'NRS',           name:"Bill's Bag Dry Bag",      packKey:'Dry bag',                                    desc:"The kayaker's go-to. Durable, simple, bombproof.",                         url: amz('nrs bills bag dry bag') },
   ],
   winter: [
-    { brand:'Therm-a-Rest',  name:'MondoKing 3D Pad',        packKey:'Sleeping pad',                               desc:'Maximum insulation from cold ground. Car camping winter essential.',        price:'~$130', url: amz('thermarest mondoking 3d sleeping pad') },
-    { brand:'Nalgene',       name:'Wide Mouth 32oz',          packKey:'Water bottle (×2)',                          desc:'Fill with boiling water at bedtime. Best foot warmer ever made.',          price:'~$15',  url: amz('nalgene wide mouth 32oz') },
+    { brand:'Therm-a-Rest',  name:'MondoKing 3D Pad',        packKey:'Sleeping pad',                               desc:'Maximum insulation from cold ground. Car camping winter essential.',        url: amz('thermarest mondoking 3d sleeping pad') },
+    { brand:'Nalgene',       name:'Wide Mouth 32oz',          packKey:'Water bottle (×2)',                          desc:'Fill with boiling water at bedtime. Best foot warmer ever made.',          url: amz('nalgene wide mouth 32oz') },
   ],
 };
 
@@ -10706,7 +9995,7 @@ function scrollToGearCard(packKey) {
 // ─── SMART PACK LIST ─────────────────────────────
 function generatePackList(c) {
   const items = [];
-  const has   = a => (c.amenities || []).includes(a);
+  const has   = a => c.amenities.includes(a);
   const txt   = (c.loc + ' ' + c.desc).toLowerCase();
 
   // Sleep
@@ -10745,7 +10034,7 @@ function generatePackList(c) {
 
   // Season / weather
   const month = checkInDate ? parseInt(checkInDate.split('-')[1]) : new Date().getMonth() + 1;
-  if (month <= 2 || month === 12 || (c.seasons || []).includes('Winter')) {
+  if (month <= 2 || month === 12 || c.seasons.includes('Winter')) {
     items.push('Insulated base layers', 'Fleece or puffy jacket', 'Beanie + gloves', 'Hand warmers', 'Winter sleeping bag');
   }
   if (month >= 6 && month <= 8) {
@@ -10810,7 +10099,7 @@ function renderPackList(c) {
               <div class="gear-brand">${g.brand}</div>
               <div class="gear-name">${g.name}</div>
               <div class="gear-desc">${g.desc}</div>
-              <div class="gear-shop"><span class="gear-price">${g.price || ''}</span>Shop on Amazon →</div>
+              <div class="gear-shop">Shop on Amazon →</div>
             </a>`).join('')}
         </div>
       </div>`;
@@ -10849,7 +10138,7 @@ function haversine(lat1, lon1, lat2, lon2) {
 }
 
 function calcDriveTime() {
-  const c = lookupCamp(currentDetailId);
+  const c = CAMPS.find(x => x.id === currentDetailId);
   if (!c) return;
   const body = document.getElementById('drive-body');
   body.innerHTML = '<div class="drive-calculating">Finding your location…</div>';
@@ -10923,7 +10212,7 @@ let _flyActive     = false;
 let _mapboxLoaded  = false;
 
 function openFlyover() {
-  const c = lookupCamp(currentDetailId);
+  const c = CAMPS.find(x => x.id === currentDetailId);
   if (!c) return;
 
   document.getElementById('flyover-name').textContent = c.name;
@@ -11040,11 +10329,9 @@ function _startOrbit() {
   }
   _flyAnimFrame = requestAnimationFrame(frame);
 
-  // Pause orbit while user is dragging; resume after they release
+  // Pause orbit while user is dragging
   _flyMap.on('mousedown',  () => { _flyActive = false; });
   _flyMap.on('touchstart', () => { _flyActive = false; });
-  _flyMap.on('mouseup',    () => { if (!_flyActive) { _flyActive = true; _startOrbit(); } });
-  _flyMap.on('touchend',   () => { if (!_flyActive) { _flyActive = true; _startOrbit(); } });
 }
 
 
@@ -11083,6 +10370,11 @@ function dismissWelcome() {
   }
   // Global event delegation — keyboard activation for dynamically rendered role=button divs
   document.addEventListener('keydown', e => {
+    // Escape closes the search overlay
+    if (e.key === 'Escape') {
+      const overlay = document.getElementById('search-overlay');
+      if (overlay && overlay.classList.contains('active')) { closeSearch(); return; }
+    }
     if (e.key !== 'Enter' && e.key !== ' ') return;
     const el = e.target;
     if (el.getAttribute('role') === 'button' && el.tagName !== 'BUTTON' && el.tagName !== 'A') {
@@ -11090,307 +10382,6 @@ function dismissWelcome() {
       el.click();
     }
   });
-})();
-
-/* ═══════════════════════════════════════════════════════════════
-   THE TRAIL  — terrain visualisation, fog of war, campfire markers
-═══════════════════════════════════════════════════════════════ */
-(function() {
-
-  /* ── Noise ── */
-  function N(x, y) {
-    let v = Math.sin(x*2.1+y*1.7)*0.5 + Math.sin(x*4.3-y*3.9+Math.cos(x*2))*0.25;
-    v += Math.sin(x*8.7+y*7.3)*0.125 + Math.sin(x*17.1-y*15.3)*0.063 + Math.sin(x*34.7+y*31.1)*0.031;
-    return (v+1)*0.5;
-  }
-  function WN(x, y) { return N(x+N(x+1.7,y+9.2)*0.8, y+N(x+8.3,y+2.8)*0.8); }
-
-  /* ── Terrain color ramp ── */
-  function terrainColor(h) {
-    const R=[[0,[10,13,10]],[0.15,[13,18,12]],[0.30,[18,24,16]],[0.45,[24,31,20]],
-             [0.60,[32,40,26]],[0.75,[42,50,33]],[0.88,[54,60,44]],[1.0,[68,68,56]]];
-    for (let i=1; i<R.length; i++) {
-      if (h<=R[i][0]) {
-        const t=(h-R[i-1][0])/(R[i][0]-R[i-1][0]), a=R[i-1][1], b=R[i][1];
-        return `rgb(${Math.round(a[0]+(b[0]-a[0])*t)},${Math.round(a[1]+(b[1]-a[1])*t)},${Math.round(a[2]+(b[2]-a[2])*t)})`;
-      }
-    }
-    return 'rgb(68,68,56)';
-  }
-
-  /* ── Draw terrain onto a canvas context ── */
-  function drawTerrain(ctx, W, H) {
-    const res=4, cols=Math.ceil(W/res), rows=Math.ceil(H/res);
-    const hm = new Float32Array(cols*rows);
-    for (let j=0;j<rows;j++) for (let i=0;i<cols;i++)
-      hm[j*cols+i] = WN(i/cols*3.5+0.5, j/rows*2.5+0.3);
-    for (let j=0;j<rows;j++) for (let i=0;i<cols;i++) {
-      ctx.fillStyle = terrainColor(hm[j*cols+i]);
-      ctx.fillRect(i*res, j*res, res+1, res+1);
-    }
-    for (let lv=0.10; lv<=0.95; lv+=0.05) {
-      ctx.beginPath(); ctx.lineWidth=0.4;
-      ctx.strokeStyle = (Math.round(lv*100)%25===0) ? 'rgba(190,162,95,0.13)' : 'rgba(190,162,95,0.05)';
-      for (let j=0;j<rows-1;j++) for (let i=0;i<cols-1;i++) {
-        const h00=hm[j*cols+i], h10=hm[j*cols+i+1], h01=hm[(j+1)*cols+i];
-        if ((h00>lv)!=(h10>lv)) { const tx=(i+(lv-h00)/(h10-h00))*res,ty=j*res; ctx.moveTo(tx,ty); ctx.lineTo(tx,ty+res); }
-        if ((h00>lv)!=(h01>lv)) { const tx=i*res,ty=(j+(lv-h00)/(h01-h00))*res; ctx.moveTo(tx,ty); ctx.lineTo(tx+res,ty); }
-      }
-      ctx.stroke();
-    }
-    const vg = ctx.createRadialGradient(W/2,H/2,Math.min(W,H)*0.05,W/2,H/2,Math.max(W,H)*0.85);
-    vg.addColorStop(0,'rgba(0,0,0,0)'); vg.addColorStop(1,'rgba(0,0,0,0.72)');
-    ctx.fillStyle=vg; ctx.fillRect(0,0,W,H);
-  }
-
-  /* ── Draw fog-of-war onto a fog context ── */
-  function drawFog(ctx, W, H, sites, nightMode) {
-    ctx.clearRect(0,0,W,H);
-    ctx.fillStyle = nightMode ? 'rgba(4,6,20,0.93)' : 'rgba(11,14,16,0.87)';
-    ctx.fillRect(0,0,W,H);
-    if (nightMode) {
-      for (let i=0;i<400;i++) {
-        ctx.beginPath(); ctx.arc(Math.random()*W, Math.random()*H, Math.random()*1.3, 0, 6.28);
-        ctx.fillStyle=`rgba(210,220,255,${(Math.random()*0.7+0.1).toFixed(2)})`; ctx.fill();
-      }
-    }
-    if (!sites.length) return;
-    ctx.globalCompositeOperation='destination-out';
-    sites.forEach(s => {
-      const px=s.px, py=s.py, r=Math.min(W,H)*0.13;
-      const g=ctx.createRadialGradient(px,py,0,px,py,r);
-      g.addColorStop(0,'rgba(0,0,0,0.96)'); g.addColorStop(0.4,'rgba(0,0,0,0.65)');
-      g.addColorStop(0.75,'rgba(0,0,0,0.25)'); g.addColorStop(1,'rgba(0,0,0,0)');
-      ctx.fillStyle=g; ctx.fillRect(px-r,py-r,r*2,r*2);
-    });
-    for (let i=0;i<sites.length-1;i++) {
-      const a=sites[i], b=sites[i+1];
-      for (let t=0;t<=1;t+=0.025) {
-        const px=(a.px+(b.px-a.px)*t), py=(a.py+(b.py-a.py)*t), r=Math.min(W,H)*0.025;
-        const g=ctx.createRadialGradient(px,py,0,px,py,r);
-        g.addColorStop(0,'rgba(0,0,0,0.22)'); g.addColorStop(1,'rgba(0,0,0,0)');
-        ctx.fillStyle=g; ctx.fillRect(px-r,py-r,r*2,r*2);
-      }
-    }
-    ctx.globalCompositeOperation='source-over';
-  }
-
-  /* ── Project real lat/lng → canvas pixel ── */
-  function project(lat, lng, W, H) {
-    const latMin=24, latMax=50, lngMin=-125, lngMax=-65;
-    const x = (lng-lngMin)/(lngMax-lngMin)*W;
-    const y = (1-(lat-latMin)/(latMax-latMin))*H;
-    return { px: Math.max(24, Math.min(W-24, x)), py: Math.max(24, Math.min(H-24, y)) };
-  }
-
-  /* ── Haversine distance (miles) ── */
-  function miles(lat1,lng1,lat2,lng2) {
-    const R=3959, dLat=(lat2-lat1)*Math.PI/180, dLng=(lng2-lng1)*Math.PI/180;
-    const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
-    return 2*R*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
-  }
-
-  /* ── Build site list from savedCampsData ── */
-  function buildSites(W, H) {
-    const sites = [];
-    Object.values(savedCampsData).forEach(c => {
-      if (c && typeof c.lat === 'number' && typeof c.lng === 'number') {
-        const p = project(c.lat, c.lng, W, H);
-        sites.push({ name: c.name||'', state: c.state||'', lat: c.lat, lng: c.lng, px: p.px, py: p.py });
-      }
-    });
-    return sites;
-  }
-
-  /* ═══ MAIN TRAIL SCREEN ═══ */
-  let trailW=0, trailH=0, trailSites=[], trailNight=false;
-  let trailTick=0, trailPulse=0, trailRAF=null, trailDirty=true;
-
-  window.renderTrail = function() {
-    const wrap = document.getElementById('trail');
-    if (!wrap) return;
-    trailW = wrap.offsetWidth; trailH = wrap.offsetHeight;
-
-    const cT = document.getElementById('trail-c-terrain');
-    const cF = document.getElementById('trail-c-fog');
-    const cA = document.getElementById('trail-c-anim');
-    [cT,cF,cA].forEach(c => { c.width=trailW; c.height=trailH; c.style.width=trailW+'px'; c.style.height=trailH+'px'; });
-
-    trailSites = buildSites(trailW, trailH);
-    drawTerrain(cT.getContext('2d'), trailW, trailH);
-    drawFog(cF.getContext('2d'), trailW, trailH, trailSites, trailNight);
-
-    // Update stats
-    document.getElementById('trail-stat-camps').textContent = trailSites.length || savedIds.size;
-    let totalMiles = 0;
-    for (let i=0;i<trailSites.length-1;i++) totalMiles += miles(trailSites[i].lat,trailSites[i].lng,trailSites[i+1].lat,trailSites[i+1].lng);
-    document.getElementById('trail-stat-miles').textContent = trailSites.length > 1 ? Math.round(totalMiles).toLocaleString() : '—';
-    const states = new Set(trailSites.map(s=>s.state).filter(Boolean));
-    document.getElementById('trail-stat-states').textContent = states.size || '—';
-
-    if (trailRAF) cancelAnimationFrame(trailRAF);
-    trailTick=0; trailPulse=0;
-    function trailLoop() {
-      const active = document.getElementById('trail').classList.contains('active');
-      if (!active) { trailRAF=null; return; }
-      trailTick+=0.016; trailPulse+=0.025;
-      const aCtx = cA.getContext('2d');
-      aCtx.clearRect(0,0,trailW,trailH);
-      // Route lines
-      for (let i=0;i<trailSites.length-1;i++) {
-        const s=trailSites[i], b=trailSites[i+1];
-        aCtx.save();
-        aCtx.strokeStyle='rgba(200,168,80,0.18)'; aCtx.lineWidth=3; aCtx.setLineDash([]);
-        aCtx.beginPath(); aCtx.moveTo(s.px,s.py); aCtx.lineTo(b.px,b.py); aCtx.stroke();
-        aCtx.strokeStyle='rgba(200,168,80,0.68)'; aCtx.lineWidth=1;
-        aCtx.setLineDash([5,10]); aCtx.lineDashOffset=-trailTick*15;
-        aCtx.beginPath(); aCtx.moveTo(s.px,s.py); aCtx.lineTo(b.px,b.py); aCtx.stroke();
-        aCtx.restore();
-      }
-      // Campfire markers
-      trailSites.forEach((s, idx) => {
-        const fl=0.88+Math.sin(trailPulse*2.1+idx*1.9)*0.07+Math.sin(trailPulse*5.3+idx*3.1)*0.04;
-        const g1=aCtx.createRadialGradient(s.px,s.py,0,s.px,s.py,24*fl);
-        g1.addColorStop(0,'rgba(255,155,55,0.48)'); g1.addColorStop(0.5,'rgba(255,110,30,0.14)'); g1.addColorStop(1,'rgba(0,0,0,0)');
-        aCtx.fillStyle=g1; aCtx.fillRect(s.px-24,s.py-24,48,48);
-        const g2=aCtx.createRadialGradient(s.px,s.py,0,s.px,s.py,8*fl);
-        g2.addColorStop(0,'rgba(255,225,145,0.95)'); g2.addColorStop(1,'rgba(255,120,40,0)');
-        aCtx.fillStyle=g2; aCtx.fillRect(s.px-8,s.py-8,16,16);
-        aCtx.beginPath(); aCtx.arc(s.px,s.py,3.2*fl,0,6.28);
-        aCtx.fillStyle='rgba(255,245,210,1)'; aCtx.fill();
-        // Label
-        if (s.name) {
-          const onR = s.px < trailW*0.75, lx = onR ? s.px+14 : s.px-14;
-          aCtx.save(); aCtx.textAlign = onR?'left':'right';
-          aCtx.font='bold 9px -apple-system,Helvetica Neue,sans-serif';
-          aCtx.fillStyle='rgba(200,168,80,0.85)'; aCtx.fillText(s.name.toUpperCase(), lx, s.py-13);
-          if (s.state) { aCtx.font='8px -apple-system,Helvetica Neue,sans-serif'; aCtx.fillStyle='rgba(244,240,232,0.45)'; aCtx.fillText(s.state, lx, s.py-2); }
-          aCtx.restore();
-        }
-      });
-      trailRAF = requestAnimationFrame(trailLoop);
-    }
-    trailRAF = requestAnimationFrame(trailLoop);
-  };
-
-  window.trailToggleNight = function() {
-    trailNight = !trailNight;
-    const btn = document.getElementById('trail-night-btn');
-    if (btn) btn.classList.toggle('on', trailNight);
-    const cF = document.getElementById('trail-c-fog');
-    if (cF) drawFog(cF.getContext('2d'), trailW, trailH, trailSites, trailNight);
-  };
-
-  window.trailShare = function() {
-    const url = 'https://campgrounder.io';
-    if (navigator.share) {
-      navigator.share({ title: 'My Trail — Campgrounder', text: 'My camping trail so far.', url }).catch(()=>{});
-    } else {
-      navigator.clipboard.writeText(url).then(()=>showToast('Link copied')).catch(()=>showToast('campgrounder.io'));
-    }
-  };
-
-  /* ═══ PROFILE ENTRY MINI-MAP ═══ */
-  function renderTrailEntry() {
-    const canvas = document.getElementById('trail-entry-canvas');
-    if (!canvas) return;
-    const W = canvas.offsetWidth || canvas.parentElement.offsetWidth || 320;
-    const H = 80;
-    canvas.width = W; canvas.height = H;
-    canvas.style.width = W+'px'; canvas.style.height = H+'px';
-    const ctx = canvas.getContext('2d');
-    drawTerrain(ctx, W, H);
-    // Slight amber overlay tint
-    ctx.fillStyle='rgba(200,168,80,0.06)'; ctx.fillRect(0,0,W,H);
-    // Soft fog — don't fully illuminate, just tease
-    ctx.fillStyle='rgba(11,14,16,0.72)'; ctx.fillRect(0,0,W,H);
-    // Tiny campfire dots for each saved camp (random positions — just decorative here)
-    const sites = buildSites(W, H);
-    sites.forEach(s => {
-      const g=ctx.createRadialGradient(s.px,s.py,0,s.px,s.py,10);
-      g.addColorStop(0,'rgba(255,155,55,0.6)'); g.addColorStop(1,'rgba(0,0,0,0)');
-      ctx.fillStyle=g; ctx.fillRect(s.px-10,s.py-10,20,20);
-      ctx.beginPath(); ctx.arc(s.px,s.py,2.5,0,6.28);
-      ctx.fillStyle='rgba(255,245,210,0.9)'; ctx.fill();
-    });
-  }
-
-  /* ═══ DISCOVERY OVERLAY ═══ */
-  window.checkTrailDiscovery = function() {
-    if (localStorage.getItem('cg_trail_discovered')) return;
-    if (savedIds.size < 5) return;
-    showTrailDiscovery();
-  };
-
-  function showTrailDiscovery() {
-    localStorage.setItem('cg_trail_discovered', '1');
-    const overlay = document.getElementById('trail-discover');
-    if (!overlay) return;
-    overlay.classList.add('visible');
-    const W = window.innerWidth, H = window.innerHeight;
-    const cT = document.getElementById('td-terrain');
-    const cF = document.getElementById('td-fog');
-    [cT,cF].forEach(c => { c.width=W; c.height=H; c.style.width=W+'px'; c.style.height=H+'px'; });
-    drawTerrain(cT.getContext('2d'), W, H);
-    const fCtx = cF.getContext('2d');
-    fCtx.fillStyle='rgba(6,8,10,0.96)'; fCtx.fillRect(0,0,W,H);
-    // Update sub-label
-    const sub = document.getElementById('td-sub');
-    if (sub) sub.textContent = savedIds.size + (savedIds.size===1?' camp':' camps') + ' saved';
-    // Build dots
-    const dotsEl = document.getElementById('td-dots');
-    if (dotsEl) {
-      dotsEl.innerHTML = '';
-      const count = Math.min(savedIds.size, 10);
-      for (let i=0;i<count;i++) {
-        const d = document.createElement('div');
-        d.className='td-dot'; d.style.animationDelay=(i*0.28).toFixed(2)+'s';
-        dotsEl.appendChild(d);
-      }
-    }
-    // Staged reveal
-    setTimeout(() => { const c=document.getElementById('td-content'); if(c) c.classList.add('visible'); }, 700);
-  }
-
-  window.trailDiscoverDismiss = function() {
-    const overlay = document.getElementById('trail-discover');
-    if (overlay) { overlay.style.opacity='0'; overlay.style.transition='opacity 0.6s ease'; setTimeout(()=>{ overlay.classList.remove('visible'); overlay.style.opacity=''; overlay.style.transition=''; }, 650); }
-    // Reveal profile entry point
-    const entry = document.getElementById('profile-trail-entry');
-    if (entry) entry.classList.add('discovered');
-    go('trail', document.querySelector('.screen.active')?.id || 'home');
-  };
-
-  /* ═══ HOOK INTO renderProfile ═══ */
-  const _origRenderProfile = window.renderProfile;
-  window.renderProfile = function() {
-    if (_origRenderProfile) _origRenderProfile();
-    const discovered = !!localStorage.getItem('cg_trail_discovered');
-    const entry = document.getElementById('profile-trail-entry');
-    if (entry) {
-      entry.classList.toggle('discovered', discovered);
-      // Defer until after layout so offsetWidth is available
-      if (discovered) requestAnimationFrame(() => setTimeout(renderTrailEntry, 0));
-    }
-  };
-
-  /* ═══ RE-RENDER ON ORIENTATION CHANGE / RESIZE ═══ */
-  let _trailResizeTimer = null;
-  window.addEventListener('resize', () => {
-    clearTimeout(_trailResizeTimer);
-    _trailResizeTimer = setTimeout(() => {
-      // Re-render Trail canvas if it's currently active
-      if (document.getElementById('trail')?.classList.contains('active')) {
-        renderTrail();
-      }
-      // Re-render mini-map if profile is active and discovered
-      if (document.getElementById('profile')?.classList.contains('active') &&
-          localStorage.getItem('cg_trail_discovered')) {
-        requestAnimationFrame(renderTrailEntry);
-      }
-    }, 150);
-  });
-
 })();
 </script>
 
@@ -11449,7 +10440,6 @@ function dismissWelcome() {
       <div class="tc-info">
         <div class="tc-camp-name" id="tc-name"></div>
         <div class="tc-camp-loc" id="tc-loc"></div>
-        <div class="tc-meta" id="tc-meta"></div>
         <div class="tc-divider"></div>
         <div class="tc-dates-row">
           <div class="tc-date-field">
@@ -11470,28 +10460,22 @@ function dismissWelcome() {
             <div class="tc-stat-label">Type</div>
             <div class="tc-type-pill" id="tc-type"></div>
           </div>
-          <div class="tc-stat">
-            <div class="tc-stat-label">Per Night</div>
-            <div class="tc-stat-value" id="tc-price">--</div>
-          </div>
         </div>
         <div class="tc-divider" style="margin-top:12px"></div>
         <div class="tc-amenities" id="tc-amenities"></div>
-        <div class="tc-footer-row">
-          <div class="tc-footer">CAMPGROUNDER.IO</div>
-          <div id="tc-qr" class="tc-qr"></div>
-        </div>
+        <div class="tc-footer">CAMPGROUNDER.IO</div>
       </div>
     </div>
     <div class="tc-actions">
       <button class="tc-btn-save" onclick="tcSave()">Save Image</button>
-      <button class="tc-btn-share" id="tc-share-btn" onclick="tcShare()">Share</button>
+      <button class="tc-btn-share" id="tc-share-btn" onclick="tcShare()" style="display:none">Share</button>
       <a class="tc-btn-book" id="tc-book-link" href="#" target="_blank" rel="noopener">Book Now</a>
     </div>
     <div class="tc-note">Set your dates, then save or share.</div>
   </div>
 </div>
 
+<<<<<<< HEAD
 
 <!-- ── TRIP SHARE SHEET ──────────────────────────── -->
 <div class="share-sheet" id="trip-share-sheet" style="display:none">
@@ -11838,5 +10822,7 @@ function dismissWelcome() {
 })();
 </script>
 
+=======
+>>>>>>> 3dee852f875f8bfa0d7d0f0470cb014cc3d23b9c
 </body>
 </html>
