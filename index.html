@@ -993,6 +993,8 @@ html, body {
 .view-toggle { display: flex; border: 1.5px solid var(--w2); }
 .vbtn { padding: 7px 16px; font-size: 12px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--w5); cursor: pointer; transition: all 0.15s; }
 .vbtn.on { background: var(--o); color: var(--w); }
+.results-filters-wrap { position: relative; }
+.results-filters-wrap::after { content: ''; position: absolute; top: 0; right: 0; width: 48px; height: 100%; background: linear-gradient(to right, transparent, var(--g0)); pointer-events: none; z-index: 2; }
 .results-filters { display: flex; gap: 8px; padding: 14px 24px 0; overflow-x: auto; scrollbar-width: none; }
 .results-filters::-webkit-scrollbar { display: none; }
 .results-filters::after { content: ''; display: block; min-width: 16px; flex-shrink: 0; }
@@ -1224,7 +1226,7 @@ html, body {
 .saved-card { display: flex; align-items: center; border-bottom: 1px solid rgba(232,72,28,0.18); border-left: 3px solid var(--o); cursor: pointer; padding: 16px 0 16px 14px; transition: background 0.16s; gap: 14px; }
 .saved-card:first-child { margin-top: 16px; border-top: 1px solid rgba(232,72,28,0.18); }
 .saved-card:hover { background: var(--w1); }
-.unsave-btn { width: 44px; height: 44px; border: 1.5px solid rgba(232,72,28,0.35); display: flex; align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer; position: relative; transition: all 0.15s; }
+.unsave-btn { width: 30px; height: 30px; border: 1.5px solid rgba(232,72,28,0.35); display: flex; align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer; position: relative; transition: all 0.15s; }
 .unsave-btn::before { content:''; position:absolute; width:12px; height:1.5px; background:var(--o); transform:rotate(45deg); }
 .unsave-btn::after  { content:''; position:absolute; width:1.5px; height:12px; background:var(--o); transform:rotate(45deg); }
 .unsave-btn:hover   { background: rgba(232,72,28,0.12); border-color: var(--o); }
@@ -1538,7 +1540,7 @@ html, body {
   aspect-ratio: 1;
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
-  font-size: 9px; font-weight: 900;
+  font-size: 6.5px; font-weight: 900;
   letter-spacing: 0.03em; text-transform: uppercase;
   color: transparent;
   border: 1px solid transparent;
@@ -2688,292 +2690,6 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
 .suggest-submit { width: 100%; padding: 14px; background: var(--o); border: none; color: white; font-family: inherit; font-size: 12px; font-weight: 900; letter-spacing: 0.22em; text-transform: uppercase; cursor: pointer; transition: background 0.15s; margin-top: 4px; }
 .suggest-submit:hover { background: #D03C12; }
 .suggest-note { font-size: 11px; color: rgba(255,255,255,0.28); text-align: center; margin-top: 10px; line-height: 1.6; }
-<<<<<<< HEAD
-
-/* ══ PREMIUM PARK SCREEN ═══════════════════════════════════════ */
-.pk-screen { overflow-y:auto; -webkit-overflow-scrolling:touch; background:var(--g0); }
-.pk-hero {
-  position:relative; height:62vh; min-height:320px; max-height:520px;
-  background-size:cover; background-position:center; flex-shrink:0;
-}
-.pk-hero-grad {
-  position:absolute; inset:0;
-  background:linear-gradient(to bottom, rgba(12,31,21,0.38) 0%, rgba(12,31,21,0) 40%, rgba(12,31,21,0.72) 75%, var(--g0) 100%);
-}
-.pk-topbar {
-  position:absolute; top:0; left:0; right:0;
-  display:flex; justify-content:space-between; align-items:center;
-  padding:calc(16px + env(safe-area-inset-top, 0px)) 18px 16px;
-  z-index:10;
-}
-.pk-hero-content {
-  position:absolute; bottom:0; left:0; right:0;
-  padding:0 22px 26px; z-index:5;
-}
-.pk-select-badge {
-  display:inline-flex; align-items:center; gap:6px;
-  background:rgba(232,72,28,0.15); border:1px solid rgba(232,72,28,0.4);
-  color:var(--o); font-size:9px; font-weight:800; letter-spacing:0.22em;
-  text-transform:uppercase; padding:5px 10px; margin-bottom:12px;
-}
-.pk-hero-park { font-size:32px; font-weight:200; color:#fff; letter-spacing:-0.5px; line-height:1.1; margin-bottom:8px; }
-.pk-hero-tagline { font-size:13px; color:rgba(255,255,255,0.58); line-height:1.6; font-style:italic; max-width:300px; }
-.pk-photo-strip {
-  display:flex; gap:8px; overflow-x:auto; padding:18px 22px 0;
-  scrollbar-width:none; -webkit-overflow-scrolling:touch;
-}
-.pk-photo-strip::-webkit-scrollbar { display:none; }
-.pk-photo { flex-shrink:0; width:160px; height:108px; object-fit:cover; border-radius:6px; background:var(--g2); }
-.pk-body { padding:22px 22px calc(100px + env(safe-area-inset-bottom,0px)); }
-.pk-camp-name { font-size:24px; font-weight:300; color:#fff; margin-bottom:4px; }
-.pk-loc { font-size:12px; color:rgba(255,255,255,0.42); letter-spacing:0.06em; margin-bottom:14px; }
-.pk-rating { display:flex; align-items:center; gap:8px; margin-bottom:20px; cursor:pointer; }
-.pk-rnum { font-size:15px; font-weight:700; color:#fff; }
-.pk-rstars { color:var(--o); font-size:13px; letter-spacing:1px; }
-.pk-rct { font-size:11px; color:rgba(255,255,255,0.38); }
-.pk-eyebrow {
-  font-size:9px; font-weight:800; letter-spacing:4px; text-transform:uppercase;
-  color:rgba(255,255,255,0.35); margin-bottom:12px; margin-top:28px;
-}
-.pk-narrative p { font-size:15px; color:rgba(255,255,255,0.72); line-height:1.8; margin:0 0 16px; font-weight:300; }
-.pk-park-stats {
-  display:flex; gap:0; margin:24px 0; border:1px solid rgba(255,255,255,0.07);
-}
-.pk-stat { flex:1; padding:14px 12px; text-align:center; border-right:1px solid rgba(255,255,255,0.07); }
-.pk-stat:last-child { border-right:none; }
-.pk-stat-val { font-size:15px; font-weight:600; color:#fff; margin-bottom:3px; }
-.pk-stat-lbl { font-size:9px; letter-spacing:0.12em; text-transform:uppercase; color:rgba(255,255,255,0.3); }
-.pk-best-site { padding:14px 0; border-bottom:1px solid rgba(255,255,255,0.06); }
-.pk-best-site:last-child { border-bottom:none; }
-.pk-best-site-name { font-size:13px; font-weight:600; color:#fff; margin-bottom:4px; }
-.pk-best-site-note { font-size:12px; color:rgba(255,255,255,0.44); line-height:1.6; }
-.pk-ntk-item { display:flex; gap:14px; padding:14px 0; border-bottom:1px solid rgba(255,255,255,0.06); }
-.pk-ntk-item:last-child { border-bottom:none; }
-.pk-ntk-icon { font-size:18px; color:rgba(255,255,255,0.3); flex-shrink:0; padding-top:2px; }
-.pk-ntk-title { font-size:13px; font-weight:600; color:#fff; margin-bottom:4px; }
-.pk-ntk-body { font-size:12px; color:rgba(255,255,255,0.44); line-height:1.7; }
-.pk-divider { height:1px; background:rgba(255,255,255,0.07); margin:24px 0 0; }
-.pk-amenity-grid { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:6px; }
-.pk-amenity { font-size:11px; color:rgba(255,255,255,0.55); background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.09); padding:6px 10px; }
-.pk-season-row { display:flex; gap:8px; flex-wrap:wrap; }
-.pk-season-pill { font-size:10px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; padding:5px 12px; background:rgba(30,61,42,0.8); border:1px solid rgba(255,255,255,0.1); color:rgba(255,255,255,0.55); }
-.pk-cta-bar {
-  position:fixed; bottom:0; left:0; right:0; z-index:80;
-  display:flex; align-items:center; gap:8px;
-  background:var(--g0); border-top:1px solid rgba(255,255,255,0.07);
-  padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));
-}
-.pk-cta-main {
-  flex:1; height:48px; background:var(--o); border:none; color:#fff;
-  font-family:inherit; font-size:11px; font-weight:900; letter-spacing:0.18em;
-  text-transform:uppercase; cursor:pointer; text-decoration:none;
-  display:flex; align-items:center; justify-content:center;
-}
-
-/* ── FIRST LIGHT ─────────────────────────────────────────────── */
-/* CTA bar button */
-.cta-fl {
-  display: flex; align-items: center; gap: 7px;
-  padding: 0 14px; height: 48px; flex-shrink: 0;
-  background: rgba(245,166,35,0.10); border: 1.5px solid rgba(245,166,35,0.4);
-  color: rgba(245,166,35,0.9); font-family: inherit;
-  font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
-  cursor: pointer; white-space: nowrap; transition: background 0.15s, border-color 0.15s;
-}
-.cta-fl:hover { background: rgba(245,166,35,0.18); border-color: rgba(245,166,35,0.7); }
-.cta-fl.set { background: rgba(245,166,35,0.18); border-color: rgba(245,166,35,0.85); color: rgba(245,166,35,1); }
-.cta-fl-icon { font-size: 14px; line-height: 1; }
-
-/* Date-picker sheet */
-.fl-sheet {
-  position: fixed; inset: 0; z-index: 600;
-  display: none; align-items: flex-end; justify-content: center;
-  background: rgba(0,0,0,0.72);
-}
-.fl-sheet.open { display: flex; }
-.fl-sheet-inner {
-  width: 100%; max-width: 520px;
-  background: var(--g1); border-top: 1px solid rgba(245,166,35,0.25);
-  padding: 28px 28px calc(28px + env(safe-area-inset-bottom, 0px));
-  animation: flSheetUp 0.28s cubic-bezier(0.22,1,0.36,1);
-}
-@keyframes flSheetUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-.fl-sheet-eyebrow { font-size: 9px; letter-spacing: 4px; text-transform: uppercase; color: rgba(245,166,35,0.65); margin-bottom: 8px; }
-.fl-sheet-title { font-size: 22px; font-weight: 300; color: #f4f0e8; margin-bottom: 6px; }
-.fl-sheet-sub { font-size: 12px; color: rgba(255,255,255,0.42); line-height: 1.6; margin-bottom: 22px; }
-.fl-urgency { font-size: 11px; color: rgba(245,166,35,0.75); background: rgba(245,166,35,0.08); border-left: 2px solid rgba(245,166,35,0.4); padding: 9px 12px; margin-bottom: 22px; line-height: 1.6; }
-.fl-date-row { display: flex; gap: 10px; margin-bottom: 18px; }
-.fl-date-field { flex: 1; display: flex; flex-direction: column; gap: 5px; }
-.fl-date-label { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.3); }
-.fl-date-input {
-  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
-  color: #f4f0e8; font-family: inherit; font-size: 16px; padding: 11px 12px;
-  outline: none; appearance: none; -webkit-appearance: none;
-  color-scheme: dark;
-}
-.fl-date-input:focus { border-color: rgba(245,166,35,0.5); }
-.fl-open-preview {
-  text-align: center; padding: 14px; margin-bottom: 18px;
-  background: rgba(245,166,35,0.06); border: 1px solid rgba(245,166,35,0.18);
-  display: none;
-}
-.fl-open-preview.visible { display: block; }
-.fl-open-label { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: rgba(245,166,35,0.55); margin-bottom: 5px; }
-.fl-open-date  { font-size: 20px; font-weight: 200; color: #f4f0e8; margin-bottom: 3px; }
-.fl-open-time  { font-size: 11px; color: rgba(245,166,35,0.7); }
-.fl-set-btn {
-  width: 100%; padding: 15px; background: rgba(245,166,35,0.85);
-  border: none; color: #0c0e10; font-family: inherit;
-  font-size: 11px; font-weight: 900; letter-spacing: 0.22em; text-transform: uppercase;
-  cursor: pointer; transition: background 0.15s;
-}
-.fl-set-btn:hover { background: rgba(245,166,35,1); }
-.fl-cancel { width: 100%; padding: 12px; background: none; border: none; color: rgba(255,255,255,0.3); font-family: inherit; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; margin-top: 8px; }
-
-/* Sunrise moment overlay */
-.fl-moment {
-  position: fixed; inset: 0; z-index: 700;
-  display: none; flex-direction: column; align-items: center; justify-content: flex-end;
-  pointer-events: none;
-}
-.fl-moment.visible { display: flex; }
-.fl-moment-glow {
-  position: absolute; bottom: 0; left: 0; right: 0;
-  height: 60%; background: radial-gradient(ellipse 80% 100% at 50% 100%, rgba(245,166,35,0.22) 0%, rgba(245,100,15,0.08) 50%, transparent 100%);
-  animation: flGlowIn 1.2s ease forwards;
-}
-.fl-moment-horizon {
-  position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(245,166,35,0.6), transparent);
-  animation: flGlowIn 0.8s ease forwards;
-}
-.fl-moment-card {
-  position: relative; z-index: 10; text-align: center;
-  padding: 32px 36px calc(52px + env(safe-area-inset-bottom, 0px));
-  animation: flCardUp 0.55s cubic-bezier(0.22,1,0.36,1) 0.2s both;
-}
-.fl-moment-icon { font-size: 32px; margin-bottom: 14px; }
-.fl-moment-title { font-size: 26px; font-weight: 200; color: #f4f0e8; margin-bottom: 6px; }
-.fl-moment-sub { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: rgba(245,166,35,0.7); margin-bottom: 18px; }
-.fl-moment-detail { font-size: 12px; color: rgba(244,240,232,0.5); line-height: 1.7; margin-bottom: 28px; }
-.fl-moment-dismiss { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.25); cursor: pointer; pointer-events: all; animation: flTap 2.2s ease-in-out 1.5s infinite; }
-@keyframes flGlowIn  { from { opacity: 0; } to { opacity: 1; } }
-@keyframes flCardUp  { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes flTap     { 0%,100% { opacity: .2; } 50% { opacity: .6; } }
-
-/* Saved list badge */
-.fl-badge {
-  display: none; align-items: center; gap: 4px;
-  margin-top: 5px; font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
-  color: rgba(245,166,35,0.75);
-}
-.fl-badge.visible { display: flex; }
-.fl-badge-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(245,166,35,0.75); flex-shrink: 0; }
-
-/* ── THE TRAIL ──────────────────────────────────────────────── */
-#trail { background: #0b0e10; overflow: hidden; }
-#trail canvas { position: absolute; top: 0; left: 0; display: block; }
-.trail-canvas-wrap { position: absolute; inset: 0; }
-.trail-header {
-  position: absolute; top: 0; left: 0; right: 0; z-index: 20;
-  padding: max(52px, calc(44px + env(safe-area-inset-top, 0px))) 22px 14px;
-  pointer-events: none;
-}
-.trail-wordmark {
-  font-size: 9px; letter-spacing: 5px; text-transform: uppercase;
-  color: rgba(200,168,95,0.5); margin-bottom: 7px;
-}
-.trail-title {
-  font-size: 28px; font-weight: 100; letter-spacing: 11px;
-  text-transform: uppercase; color: #f4f0e8;
-}
-.trail-stats {
-  position: absolute; bottom: 0; left: 0; right: 0; z-index: 20;
-  display: flex; align-items: stretch;
-  background: rgba(8,10,12,0.9);
-  border-top: 1px solid rgba(200,168,95,0.12);
-  padding: 14px 22px calc(14px + env(safe-area-inset-bottom, 0px));
-}
-.trail-stat { flex: 1; padding-right: 16px; border-right: 1px solid rgba(255,255,255,0.07); margin-right: 16px; }
-.trail-stat:last-of-type { border-right: none; margin-right: 0; }
-.trail-stat-lbl { font-size: 7px; letter-spacing: 3px; text-transform: uppercase; color: rgba(200,168,95,0.55); margin-bottom: 4px; }
-.trail-stat-num { font-size: 20px; font-weight: 100; color: #f4f0e8; line-height: 1; }
-.trail-share-btn {
-  flex-shrink: 0; align-self: center;
-  background: rgba(200,168,95,0.12); border: 1px solid rgba(200,168,95,0.32);
-  color: rgba(200,168,95,0.85); padding: 9px 15px;
-  font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
-  font-family: inherit; cursor: pointer; white-space: nowrap;
-}
-.trail-back {
-  position: absolute; top: max(16px, calc(10px + env(safe-area-inset-top, 0px)));
-  right: 18px; z-index: 30; pointer-events: all;
-}
-.trail-night-btn {
-  position: absolute; top: max(16px, calc(10px + env(safe-area-inset-top, 0px)));
-  left: 18px; z-index: 30; pointer-events: all;
-  background: rgba(0,0,0,0.45); border: 1px solid rgba(200,168,95,0.25);
-  color: rgba(200,168,95,0.65); padding: 7px 12px;
-  font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
-  font-family: inherit; cursor: pointer; transition: all 0.3s;
-}
-.trail-night-btn.on { background: rgba(200,168,95,0.18); border-color: rgba(200,168,95,0.55); color: rgba(200,168,95,1); }
-
-/* ── TRAIL DISCOVERY OVERLAY ────────────────────────────────── */
-#trail-discover {
-  position: fixed; inset: 0; z-index: 500;
-  display: none; flex-direction: column;
-  align-items: center; justify-content: center;
-  background: #060809; overflow: hidden;
-  cursor: pointer;
-}
-#trail-discover.visible { display: flex; }
-#trail-discover canvas { position: absolute; top: 0; left: 0; display: block; }
-.td-content {
-  position: relative; z-index: 10;
-  display: flex; flex-direction: column; align-items: center;
-  text-align: center; padding: 32px;
-  opacity: 0; transition: opacity 1.2s ease;
-}
-.td-content.visible { opacity: 1; }
-.td-headline {
-  font-size: clamp(26px, 7vw, 38px); font-weight: 100;
-  color: #f4f0e8; line-height: 1.45; margin-bottom: 14px; letter-spacing: 0.3px;
-}
-.td-sub {
-  font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
-  color: rgba(200,168,95,0.65); margin-bottom: 32px;
-}
-.td-dots { display: flex; gap: 10px; margin-bottom: 48px; }
-.td-dot {
-  width: 9px; height: 9px; border-radius: 50%;
-  background: rgba(255,160,60,0.9);
-  animation: tdDotGlow 2s ease-in-out infinite;
-}
-.td-tap { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: rgba(244,240,232,0.28); animation: tdTap 2.2s ease-in-out infinite; }
-@keyframes tdDotGlow { 0%,100%{box-shadow:0 0 4px 2px rgba(255,150,50,.35)} 50%{box-shadow:0 0 9px 5px rgba(255,150,50,.72)} }
-@keyframes tdTap { 0%,100%{opacity:.25} 50%{opacity:.65} }
-
-/* ── PROFILE TRAIL ENTRY ─────────────────────────────────────── */
-.profile-trail-entry {
-  display: none; margin: 0 22px 6px;
-  border: 1px solid rgba(200,168,95,0.22);
-  cursor: pointer; overflow: hidden; position: relative;
-  transition: border-color 0.18s;
-}
-.profile-trail-entry:hover { border-color: rgba(200,168,95,0.5); }
-.profile-trail-entry.discovered { display: block; }
-.trail-entry-canvas { display: block; width: 100%; height: 80px; }
-.trail-entry-label {
-  position: absolute; inset: 0; display: flex; align-items: center; justify-content: space-between;
-  padding: 0 18px; pointer-events: none;
-}
-.trail-entry-left { display: flex; flex-direction: column; gap: 3px; }
-.trail-entry-eyebrow { font-size: 8px; letter-spacing: 4px; text-transform: uppercase; color: rgba(200,168,95,0.6); }
-.trail-entry-name { font-size: 16px; font-weight: 100; letter-spacing: 6px; text-transform: uppercase; color: #f4f0e8; }
-.trail-entry-arrow { font-size: 14px; color: rgba(200,168,95,0.5); }
-=======
->>>>>>> 3dee852f875f8bfa0d7d0f0470cb014cc3d23b9c
 </style>
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
@@ -3163,7 +2879,7 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
   <!-- ── STATS BAR ──────────────────────────────── -->
   <div class="stats-bar">
     <div class="stats-cell">
-      <div class="stats-num" style="font-size:14px;letter-spacing:0.04em;">Hundreds &amp; Hundreds</div>
+      <div class="stats-num" style="font-size:14px;letter-spacing:0.04em;">1,000s+</div>
       <div class="stats-label">Handpicked Camps</div>
     </div>
     <div class="stats-cell">
@@ -3428,8 +3144,8 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
       <a href="https://www.producthunt.com/products/campgrounder-find-your-perfect-campsite?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-campgrounder-find-your-perfect-campsite" target="_blank" rel="noopener noreferrer"><img alt="Campgrounder- Find Your Perfect Campsite - Clean, design-forward campground finder app! | Product Hunt" width="250" height="54" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1167043&theme=light&t=1780967451203"></a>
       <a href="https://peerpush.com/p/campgrounder" target="_blank" rel="noopener"><img src="https://peerpush.com/p/campgrounder/badge.png" alt="Campgrounder on PeerPush" style="width:230px;height:54px;object-fit:contain;"></a>
     </div>
-    🌲 Born in the Pacific Northwest
-    <a href="presskit_mockup.html" target="_blank" style="display:inline-block;margin-top:12px;font-size:15px;font-weight:900;letter-spacing:0.2em;color:var(--o);text-decoration:none;text-transform:uppercase;padding:8px 18px;border:1.5px solid rgba(232,72,28,0.4);transition:background 0.15s,border-color 0.15s;" onmouseover="this.style.background='rgba(232,72,28,0.1)';this.style.borderColor='var(--o)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(232,72,28,0.4)'">Press Kit →</a>
+    🌲 Born in Northern Michigan
+    <a href="/presskit" target="_blank" style="display:inline-block;margin-top:12px;font-size:15px;font-weight:900;letter-spacing:0.2em;color:var(--o);text-decoration:none;text-transform:uppercase;padding:8px 18px;border:1.5px solid rgba(232,72,28,0.4);transition:background 0.15s,border-color 0.15s;" onmouseover="this.style.background='rgba(232,72,28,0.1)';this.style.borderColor='var(--o)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(232,72,28,0.4)'">Press Kit →</a>
     <a href="https://mossandfog.com/media/" target="_blank" rel="noopener noreferrer" style="display:block;margin-top:14px;font-size:12px;font-weight:800;letter-spacing:0.16em;color:rgba(255,255,255,0.5);text-decoration:none;text-transform:uppercase;transition:color 0.15s;" onmouseover="this.style.color='rgba(255,255,255,0.9)'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Part of the Moss and Fog Media Family →</a>
     <a href="#" onclick="go('about','home');return false;" style="display:block;margin-top:8px;font-size:12px;font-weight:900;letter-spacing:0.22em;color:rgba(255,255,255,0.25);text-decoration:none;text-transform:uppercase;transition:color 0.15s;" onmouseover="this.style.color='rgba(255,255,255,0.55)'" onmouseout="this.style.color='rgba(255,255,255,0.25)'">About →</a>
     <a href="#" onclick="go('privacy','home');return false;" style="display:block;margin-top:6px;font-size:11px;font-weight:700;letter-spacing:0.18em;color:rgba(255,255,255,0.14);text-decoration:none;text-transform:uppercase;transition:color 0.15s;" onmouseover="this.style.color='rgba(255,255,255,0.38)'" onmouseout="this.style.color='rgba(255,255,255,0.14)'">Privacy Policy</a>
@@ -3492,13 +3208,14 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
   <div class="results-meta">
     <div class="results-count" id="results-count">8 Campgrounds</div>
     <div style="display:flex;align-items:center;gap:8px;">
-      <div class="date-badge" id="date-badge" onclick="openSearch()" title="Edit dates" style="display:none;"></div>
+      <div class="date-badge" id="date-badge" onclick="goBack()" style="display:none;"></div>
       <div class="view-toggle">
         <div class="vbtn on" id="vbtn-list" onclick="setView('list')">List</div>
         <div class="vbtn"    id="vbtn-map"  onclick="setView('map')">Map</div>
       </div>
     </div>
   </div>
+  <div class="results-filters-wrap">
   <div class="results-filters" id="results-filters">
     <div class="pill on" onclick="setFilter(this,'all')">All types</div>
     <div class="pill"    onclick="setFilter(this,'National Park')">National Parks</div>
@@ -3521,14 +3238,15 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
     <div class="pill"    onclick="setFilter(this,'wifi')">📶 Has WiFi</div>
     <div class="pill"    onclick="setFilter(this,'winter-open')">❄️ Open in Winter</div>
   </div>
+  </div><!-- end .results-filters-wrap -->
   <div class="type-blurb" id="type-blurb">
     <div class="type-blurb-title" id="type-blurb-title"></div>
     <div class="type-blurb-desc"  id="type-blurb-desc"></div>
   </div>
   <div class="results-scroll" id="results-list"></div>
   <nav class="bnav">
-    <div class="ntab" onclick="go('home','results')"><svg><use href="#ic-home"/></svg>Explore</div>
-    <div class="ntab on" onclick="setView('map')"><svg><use href="#ic-map"/></svg>Map</div>
+    <div class="ntab on" onclick="go('home','results')"><svg><use href="#ic-home"/></svg>Explore</div>
+    <div class="ntab" onclick="setView('map')"><svg><use href="#ic-map"/></svg>Map</div>
     <div class="ntab" id="saved-tab-results" onclick="go('saved','results')">
       <svg><use href="#ic-heart"/></svg>Saved<span class="badge" id="badge-results"></span>
     </div>
@@ -3840,12 +3558,12 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
     <!-- Stats row -->
     <div class="about-stats">
       <div class="about-stat">
-        <div class="about-stat-num" id="about-camp-count">351+</div>
+        <div class="about-stat-num">325</div>
         <div class="about-stat-label">Campgrounds</div>
       </div>
       <div class="about-stat">
-        <div class="about-stat-num" id="about-state-count">42</div>
-        <div class="about-stat-label">States &amp; Provinces</div>
+        <div class="about-stat-num">42</div>
+        <div class="about-stat-label">States</div>
       </div>
       <div class="about-stat">
         <div class="about-stat-num">8</div>
@@ -3935,7 +3653,7 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
     </div>
 
     <!-- Partners CTA -->
-    <div class="about-partners-cta" onclick="go('partners','about')" role="button" tabindex="0">
+    <div class="about-partners-cta" onclick="go('partners','profile')" role="button" tabindex="0">
       <div class="about-partners-cta-inner">
         <div class="about-partners-cta-label">Work with us</div>
         <div class="about-partners-cta-sub">Sponsorships · press · affiliate · content</div>
@@ -4348,119 +4066,6 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
   </div>
 </div>
 
-<<<<<<< HEAD
-<!-- ══════════════════════════════════════
-  PREMIUM PARK DETAIL
-══════════════════════════════════════ -->
-<div class="screen pk-screen" id="park-detail">
-  <div class="pk-hero" id="pk-hero">
-    <div class="pk-hero-grad"></div>
-    <div class="pk-topbar">
-      <div class="topbar-btn xbtn is-close" onclick="goBack()" aria-label="Go back" role="button"></div>
-      <div style="display:flex;gap:8px;">
-        <div class="topbar-btn" id="pk-save-btn" onclick="toggleSave()" aria-label="Save campground" role="button">
-          <svg id="pk-save-svg" width="17" height="17" style="color:rgba(255,255,255,0.7);stroke:currentColor;fill:none;" aria-hidden="true"><use href="#ic-heart"/></svg>
-        </div>
-      </div>
-    </div>
-    <div class="pk-hero-content">
-      <div class="pk-select-badge">⬡ Campgrounder Select</div>
-      <div class="pk-hero-park" id="pk-park-name">Yosemite National Park</div>
-      <div class="pk-hero-tagline" id="pk-tagline">The valley that defined American wilderness.</div>
-    </div>
-  </div>
-
-  <div class="pk-photo-strip" id="pk-photo-strip"></div>
-
-  <div class="pk-body">
-    <div class="pk-eyebrow" style="margin-top:20px;">Campground</div>
-    <div class="pk-camp-name" id="pk-camp-name">Yosemite Valley</div>
-    <div class="pk-loc" id="pk-loc">Yosemite NP · California</div>
-    <div class="pk-rating" id="pk-rating-row" onclick="showReviewSheet()" role="button" aria-label="View reviews" tabindex="0">
-      <div class="pk-rnum" id="pk-rating">4.8</div>
-      <div class="pk-rstars" aria-hidden="true">★★★★★</div>
-      <div class="pk-rct" id="pk-reviews">1,240 reviews</div>
-    </div>
-
-    <div class="stat-row">
-      <div class="stat-box"><div class="stat-val" id="pk-price" style="color:var(--o);">$35</div><div class="stat-lbl">Per night</div></div>
-      <div class="stat-box"><div class="stat-val" id="pk-sites">240</div><div class="stat-lbl">Sites</div></div>
-      <div class="stat-box"><div class="stat-val" id="pk-avail">12</div><div class="stat-lbl">Typical open</div></div>
-    </div>
-
-    <div class="pk-eyebrow">The Park</div>
-    <div class="pk-narrative" id="pk-narrative"></div>
-
-    <div class="pk-park-stats" id="pk-park-stats"></div>
-
-    <div class="pk-eyebrow">Best Sites</div>
-    <div id="pk-best-sites"></div>
-
-    <div class="pk-eyebrow">Need to Know</div>
-    <div id="pk-need-to-know"></div>
-
-    <div class="pk-divider"></div>
-    <div class="pk-eyebrow">Amenities</div>
-    <div class="pk-amenity-grid" id="pk-amenities"></div>
-
-    <div class="pk-divider"></div>
-    <div class="pk-eyebrow">Season</div>
-    <div class="pk-season-row" id="pk-seasons"></div>
-  </div>
-
-  <div class="pk-cta-bar">
-    <a class="pk-cta-main" id="pk-cta-link" href="#" target="_blank" rel="noopener">Check Availability →</a>
-    <button class="cta-fl" id="pk-fl-btn" onclick="showFirstLight()" aria-label="Set First Light reminder" data-tooltip="Remind me when reservations open">
-      <span class="cta-fl-icon">🌅</span>First Light
-    </button>
-    <div class="cta-sq" onclick="shareCamp()" data-tooltip="Share" aria-label="Share campground" role="button">
-      <svg width="17" height="17" style="color:rgba(255,255,255,0.6);stroke:currentColor;fill:none;" aria-hidden="true"><use href="#ic-share"/></svg>
-    </div>
-  </div>
-</div>
-
-<!-- ── FIRST LIGHT DATE SHEET ──────────────────────── -->
-<div class="fl-sheet" id="fl-sheet" onclick="flSheetClickOut(event)">
-  <div class="fl-sheet-inner">
-    <div class="fl-sheet-eyebrow">First Light</div>
-    <div class="fl-sheet-title" id="fl-sheet-name">Set your reminder</div>
-    <div class="fl-sheet-sub">When are you planning to camp? Campgrounder will remind you the morning reservations open — with a direct link to book.</div>
-    <div class="fl-urgency" id="fl-urgency">Recreation.gov opens at <strong>10am ET / 7am PT</strong>. Popular sites fill in under 2 minutes. Your reminder fires at <strong>6:55am your time</strong> — 5 minutes before the window opens.</div>
-    <div class="fl-date-row">
-      <div class="fl-date-field">
-        <label class="fl-date-label" for="fl-checkin">Check-in</label>
-        <input class="fl-date-input" type="date" id="fl-checkin" onchange="flUpdatePreview()">
-      </div>
-      <div class="fl-date-field">
-        <label class="fl-date-label" for="fl-checkout">Check-out</label>
-        <input class="fl-date-input" type="date" id="fl-checkout" onchange="flUpdatePreview()">
-      </div>
-    </div>
-    <div class="fl-open-preview" id="fl-open-preview">
-      <div class="fl-open-label">Reservations open</div>
-      <div class="fl-open-date" id="fl-open-date">—</div>
-      <div class="fl-open-time" id="fl-open-time">Reminder fires at 6:55am your local time</div>
-    </div>
-    <button class="fl-set-btn" id="fl-set-btn" onclick="setFirstLight()" disabled>Set First Light Reminder</button>
-    <button class="fl-cancel" onclick="flSheetClose()">Cancel</button>
-  </div>
-</div>
-
-<!-- ── FIRST LIGHT MOMENT ──────────────────────────── -->
-<div class="fl-moment" id="fl-moment">
-  <div class="fl-moment-glow"></div>
-  <div class="fl-moment-horizon"></div>
-  <div class="fl-moment-card">
-    <div class="fl-moment-icon">🌅</div>
-    <div class="fl-moment-title">First Light is set.</div>
-    <div class="fl-moment-sub" id="fl-moment-sub">Reminder added</div>
-    <div class="fl-moment-detail" id="fl-moment-detail">Your calendar will wake you at 6:55am — 5 minutes before reservations open.</div>
-    <div class="fl-moment-dismiss" onclick="flMomentDismiss()">tap to continue</div>
-  </div>
-</div>
-
-=======
->>>>>>> 3dee852f875f8bfa0d7d0f0470cb014cc3d23b9c
 <!-- ── 3D FLYOVER OVERLAY ─────────────────────────── -->
 <div id="flyover-overlay">
   <div id="flyover-map"></div>
@@ -5452,7 +5057,7 @@ const CAMPS = [
 
   { id:155, name:"Lake Hartwell — Twin Lakes",     loc:"Anderson · South Carolina",
     type:"Army Corps", price:28, sites:102, avail:45, rating:4.7, reviews:530,
-    desc:"A massive 56,000-acre reservoir on the Georgia-South Carolina border with 962 miles of shoreline — more than Lake Michigan. Camp here, fish for catfish and crappie, and watch Clemson fans congregate on football weekends.",
+    desc:"A massive 56,000-acre reservoir on the Georgia-South Carolina border with 962 miles of shoreline — one of the largest man-made lakes in the Southeast. Camp here, fish for catfish and crappie, and watch Clemson fans congregate on football weekends.",
     amenities:["Hot Showers","Electric Hookups","Swimming","Boat Launch","Fishing","Pet Friendly"],
     seasons:["Spring","Summer","Fall"], lat:34.4787, lng:-82.8293, ridb_id:"251648" },
 
@@ -7267,15 +6872,6 @@ function go(toId, fromId) {
   if (toId === 'saved')      renderSaved();
   if (toId === 'profile')    renderProfile();
   if (toId === 'home')       initWildfireSection();
-  if (toId === 'about') {
-    const cc = document.getElementById('about-camp-count');
-    if (cc) cc.textContent = CAMPS.length + '+';
-    const sc = document.getElementById('about-state-count');
-    if (sc) {
-      const states = new Set(CAMPS.map(c => (c.loc||'').split('·').pop().trim()).filter(Boolean));
-      sc.textContent = states.size;
-    }
-  }
   // Show global compass on results + saved screens only (home and map have their own; detail has CTA bar)
   const cg = document.getElementById('compass-global');
   if (cg) cg.classList.toggle('vis', toId === 'results' || toId === 'saved');
@@ -7496,7 +7092,7 @@ function handleSearchInput(val) {
     // Semantic scoring — rank all camps, show top matches
     const allMatches = CAMPS
       .map(c => ({ c, s: semanticScore(c, val) }))
-      .filter(x => x.s > 0)
+      .filter(x => x.s > 4)
       .sort((a, b) => b.s - a.s);
     const scored = allMatches.slice(0, 5);
     const totalCount = allMatches.length;
@@ -7557,9 +7153,17 @@ async function submitSearch(query) {
     } catch(e) { searchQuery = query; }
   } else {
     searchQuery = query;
+    // Text search takes over — reset type filter so pills don't look active but inactive
+    currentFilter = 'all';
   }
   document.getElementById('results-input').value = searchQuery;
   go('results', 'search-overlay');
+  // Reset pill visual state after navigation so no pill looks "on" during a text search
+  setTimeout(() => {
+    const pills = document.querySelectorAll('#results-filters .pill');
+    pills.forEach(p => p.classList.remove('on'));
+    if (pills[0]) pills[0].classList.add('on');
+  }, 60);
 }
 function closeSearch() {
   document.getElementById('search-overlay').classList.remove('active');
@@ -7647,6 +7251,13 @@ function goFilter(key) {
     const match = pills && Array.from(pills).find(p => (p.getAttribute('onclick') || '').includes("'" + key + "'"));
     if (match) match.classList.add('on'); else if (pills[0]) pills[0].classList.add('on');
   }, 50);
+}
+
+// Home pills just set filter and navigate
+function homeFilter(el, key) {
+  el.closest('.filter-scroll').querySelectorAll('.pill').forEach(p => p.classList.remove('on'));
+  el.classList.add('on');
+  currentFilter = key;
 }
 
 // Browse-grid experience tiles — semantic search, straight to results
@@ -7739,8 +7350,10 @@ function getFilteredCamps() {
   const hasSearch = searchQuery && currentFilter !== 'nearby';
 
   let list = CAMPS.filter(c => {
-    // When there's a text search, include only camps with a positive semantic score
-    if (hasSearch) return semanticScore(c, searchQuery) > 0;
+    // When there's a text search, require a meaningful score (>4) to filter out
+    // false positives from incidental description mentions (e.g. "Lake Michigan"
+    // appearing in a South Carolina campground description)
+    if (hasSearch) return semanticScore(c, searchQuery) > 4;
     if (currentFilter === 'all')    return true;
     if (currentFilter === 'pet')      return c.amenities.includes('Pet Friendly');
     if (currentFilter === 'water')    return hasWater(c);
@@ -8078,220 +7691,9 @@ function showToast(msg) {
   t._tid = setTimeout(() => t.classList.remove('show'), 2100);
 }
 
-// ═══ FEATURED PARKS ══════════════════════════════════════════════
-const FEATURED_PARKS = {
-  yosemite: {
-    parkName:'Yosemite National Park', tagline:'The valley that defined American wilderness.',
-    established:1890, acres:'748,000', elevation:'2,000–13,114 ft',
-    narrative:[
-      'There is no preparing for Yosemite Valley. The moment the walls close in — El Capitan rising 3,000 feet on your left, Half Dome appearing at the far end — something shifts. You understand, immediately, why John Muir called this place a temple.',
-      'The campgrounds put you inside the scene. The Merced River runs cold and clear through the valley floor. Deer move through camp at dusk. At night, granite walls catch the last light and hold it longer than seems possible.'
-    ],
-    bestSites:[
-      { name:'Upper Pines', note:'Closest to the trailheads. Walk to Mirror Lake, Snow Creek, or the Valley Loop.' },
-      { name:'Lower Pines', note:'Right on the Merced. Meadow views, Half Dome on the horizon.' },
-      { name:'North Pines', note:'Quietest of the three. River access and easy access to the stables.' }
-    ],
-    needToKnow:[
-      { icon:'ti-calendar', title:'Reservations', body:'Yosemite Valley campgrounds book within minutes of release — 5 months in advance on recreation.gov. Set a First Light reminder.' },
-      { icon:'ti-car', title:'Valley traffic', body:'In summer, a reservation is required to drive into the valley. Arrive early or use the free valley shuttle.' },
-      { icon:'ti-shield', title:'Bear boxes', body:'All food must be stored in the provided bear lockers. Bears in Yosemite are bold and experienced.' },
-      { icon:'ti-sun', title:'Best window', body:'Late May and September hit the sweet spot — wildflowers or fall color, thinner crowds, cooler temperatures.' }
-    ],
-    photos:[
-      'https://cdn.recreation.gov/public/2019/06/04/19/13/234756_e6ba02a6-2a48-4716-b1cd-64bf18d0edd3_1440.webp',
-      'https://images.unsplash.com/photo-1472396961693-142e6e269027?w=600&q=80',
-      'https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=600&q=80'
-    ],
-    campIds:[1]
-  },
-  yellowstone: {
-    parkName:'Yellowstone National Park', tagline:"Earth's largest active volcanic system. Also: your campsite.",
-    established:1872, acres:'2,219,791', elevation:'5,282–11,358 ft',
-    narrative:[
-      "Yellowstone is not subtle. The ground hisses and bubbles. Geysers erupt on schedule. Bison cross the road — your road — as if you are the inconvenience, which here, you are. The park predates everything.",
-      "Camping at Madison puts you at the center of the thermal basin. The Firehole River runs warm enough to swim in some stretches. Wolves have been spotted from the campground. The night sky, this far from any city, is extraordinary."
-    ],
-    bestSites:[
-      { name:'Madison Campground', note:'The best base for geyser country. Old Faithful is 16 miles south.' },
-      { name:'Grant Village', note:'On the shore of Yellowstone Lake. Fishing access, thermal features nearby.' },
-      { name:'Slough Creek', note:'Remote and rugged. Prime wolf-watching in Lamar Valley.' }
-    ],
-    needToKnow:[
-      { icon:'ti-calendar', title:'Reservations', body:'Madison books fast. Reservations open on recreation.gov in mid-January for the following summer.' },
-      { icon:'ti-paw-filled', title:'Wildlife distance', body:'Stay 100 yards from bears and wolves, 25 yards from bison and elk. These are not suggestions.' },
-      { icon:'ti-flame', title:'Thermal features', body:'Stay on boardwalks. The thin crust around hot springs has collapsed under visitors. There is no trail beneath some of these pools.' },
-      { icon:'ti-cloud-snow', title:'Season', body:'Most campgrounds open May through October. September brings fewer crowds and active elk ruts.' }
-    ],
-    photos:[
-      'https://cdn.recreation.gov/public/2024/02/28/20/02/10169448_e9418dab-c103-419a-96c4-bc356c84afbd_700.webp',
-      'https://images.unsplash.com/photo-1504701954957-2010ec3bcec1?w=600&q=80',
-      'https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?w=600&q=80'
-    ],
-    campIds:[12]
-  },
-  grandcanyon: {
-    parkName:'Grand Canyon National Park', tagline:'One mile deep. Two billion years old. Nothing compares.',
-    established:1919, acres:'1,217,262', elevation:'2,480–8,803 ft',
-    narrative:[
-      'The Grand Canyon does something strange to your sense of scale. You know intellectually that it is 277 miles long and a mile deep, but standing at the rim — or better, waking up beside it — those numbers collapse into something less like information and more like humility.',
-      'Mather Campground sits steps from the South Rim. At dawn, before the tour buses arrive, you walk to the edge and watch the canyon fill with light from the bottom up. The Colorado River, 5,000 feet below, is the width of a thread.'
-    ],
-    bestSites:[
-      { name:'Mather Campground', note:'Walking distance to the rim and all South Rim facilities.' },
-      { name:'Desert View', note:'First-come, first-served. 25 miles east of the village — worth it for the solitude.' },
-      { name:'Bright Angel (inner canyon)', note:'For backpackers only. Permit required; apply 4 months in advance.' }
-    ],
-    needToKnow:[
-      { icon:'ti-calendar', title:'Reservations', body:'Mather books far in advance. Some walk-up sites exist — arrive very early. Desert View is first-come.' },
-      { icon:'ti-droplet', title:'Water on trails', body:'The canyon heats up fast. Rangers close Bright Angel trail midday in summer. Carry more water than you think you need.' },
-      { icon:'ti-walk', title:'Rim to river', body:"It takes twice as long to hike out as it does to hike in. Many rescues involve people who didn't account for this." },
-      { icon:'ti-moon', title:'Dark skies', body:'The South Rim is an International Dark Sky Park. Ranger-led astronomy programs run most evenings in summer.' }
-    ],
-    photos:[
-      'https://cdn.recreation.gov/public/2023/06/23/14/31/232490_eb417bcd-69ca-4135-a5e4-0a46bc7fbc43_1440.webp',
-      'https://images.unsplash.com/photo-1615729947596-a598e5de0ab3?w=600&q=80',
-      'https://images.unsplash.com/photo-1474044159687-1ee9f3a51722?w=600&q=80'
-    ],
-    campIds:[10]
-  },
-  zion: {
-    parkName:'Zion National Park', tagline:'Sandstone walls rise 2,000 feet. The river runs at your feet.',
-    established:1919, acres:'147,244', elevation:'3,666–8,726 ft',
-    narrative:[
-      "Zion is intimate in a way that surprises people who have only seen photographs. The canyon is narrow — sometimes just 20 feet wide at the bottom. The walls press close. The Virgin River, which carved all of this over millions of years, still runs through it.",
-      "Watchman Campground sits at the canyon's entrance, where the walls begin their climb. Cottonwood trees line the river. At dusk, the sandstone turns shades of red and orange that have no names in English. In the morning, deer cross right through camp."
-    ],
-    bestSites:[
-      { name:'Watchman Campground', note:'Electric hookups available. Steps from the visitor center and canyon shuttle.' },
-      { name:'South Campground', note:'Walk-up only, tent sites. Quieter and shadier than Watchman.' },
-      { name:'Lava Point (primitive)', note:'Remote, high-elevation, first-come. Elk and stars. No water.' }
-    ],
-    needToKnow:[
-      { icon:'ti-calendar', title:'Permits', body:'Angels Landing requires a permit — one of the most sought-after in the NPS. Apply through recreation.gov.' },
-      { icon:'ti-bus', title:'Shuttle system', body:'Private vehicles are not permitted in Zion Canyon in season. The free park shuttle runs from the visitor center up-canyon.' },
-      { icon:'ti-droplet', title:'Flash floods', body:'The Narrows closes without warning when storms hit — sometimes 50 miles away. Check flash flood forecasts every morning.' },
-      { icon:'ti-moon-stars', title:'Best season', body:'April–May and September–October offer the best conditions. Summer is peak season and peak heat in the canyon bottom.' }
-    ],
-    photos:[
-      'https://cdn.recreation.gov/public/2018/08/23/15/20/232445_d2305230-89ab-4df8-bf53-e6c0e214f1c2_700.webp',
-      'https://images.unsplash.com/photo-1509316785289-025f5b846b35?w=600&q=80',
-      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80'
-    ],
-    campIds:[11]
-  }
-};
-
-function getParkForCamp(id) {
-  return Object.values(FEATURED_PARKS).find(p => p.campIds.includes(Number(id))) || null;
-}
-
-function openParkDetail(id) {
-  const c = lookupCamp(id);
-  const park = getParkForCamp(id);
-  if (!c || !park) { openDetail(id); return; }
-
-  const _activeNow = document.querySelector('.screen.active')?.id;
-  if (_activeNow !== 'park-detail') prevScreen = _activeNow || 'results';
-  currentDetailId = id;
-  history.replaceState(null, '', '#camp-' + id);
-
-  // Hero
-  const hero = document.getElementById('pk-hero');
-  if (hero) hero.style.backgroundImage = c.photo
-    ? `url(${c.photo}), linear-gradient(160deg, var(--g2) 0%, var(--g0) 100%)`
-    : `linear-gradient(160deg, var(--g2) 0%, var(--g0) 100%)`;
-
-  document.getElementById('pk-park-name').textContent = park.parkName;
-  document.getElementById('pk-tagline').textContent = park.tagline;
-
-  // Photo strip
-  const strip = document.getElementById('pk-photo-strip');
-  strip.innerHTML = park.photos.map(url =>
-    `<img class="pk-photo" src="${url}" alt="" loading="lazy" onerror="this.style.display='none'">`
-  ).join('');
-
-  // Camp identity
-  document.getElementById('pk-camp-name').textContent = c.name;
-  document.getElementById('pk-loc').textContent = c.loc;
-  document.getElementById('pk-rating').textContent = c.rating || '—';
-  document.getElementById('pk-reviews').textContent = c.reviews ? `${c.reviews.toLocaleString()} reviews` : '';
-  document.getElementById('pk-price').textContent = c.price ? `$${c.price}` : '—';
-  document.getElementById('pk-sites').textContent = c.sites || '—';
-  document.getElementById('pk-avail').textContent = c.avail || '—';
-
-  // Booking CTA
-  const link = document.getElementById('pk-cta-link');
-  if (link) link.href = c.ridb_id
-    ? `https://www.recreation.gov/camping/campgrounds/${c.ridb_id}`
-    : (c.bookUrl || '#');
-
-  // Narrative
-  document.getElementById('pk-narrative').innerHTML =
-    park.narrative.map(p => `<p>${p}</p>`).join('');
-
-  // Park stats
-  document.getElementById('pk-park-stats').innerHTML = `
-    <div class="pk-stat"><div class="pk-stat-val">${park.established}</div><div class="pk-stat-lbl">Established</div></div>
-    <div class="pk-stat"><div class="pk-stat-val">${park.acres}</div><div class="pk-stat-lbl">Acres</div></div>
-    <div class="pk-stat"><div class="pk-stat-val">${park.elevation}</div><div class="pk-stat-lbl">Elevation</div></div>`;
-
-  // Best sites
-  document.getElementById('pk-best-sites').innerHTML =
-    park.bestSites.map(s => `
-      <div class="pk-best-site">
-        <div class="pk-best-site-name">${s.name}</div>
-        <div class="pk-best-site-note">${s.note}</div>
-      </div>`).join('');
-
-  // Need to know
-  document.getElementById('pk-need-to-know').innerHTML =
-    park.needToKnow.map(n => `
-      <div class="pk-ntk-item">
-        <div class="pk-ntk-icon"><i class="ti ${n.icon}" aria-hidden="true"></i></div>
-        <div><div class="pk-ntk-title">${n.title}</div><div class="pk-ntk-body">${n.body}</div></div>
-      </div>`).join('');
-
-  // Amenities
-  document.getElementById('pk-amenities').innerHTML =
-    (c.amenities || []).map(a => `<div class="pk-amenity">${a}</div>`).join('');
-
-  // Seasons
-  document.getElementById('pk-seasons').innerHTML =
-    (c.seasons || []).map(s => `<div class="pk-season-pill">${s}</div>`).join('');
-
-  // Save button
-  const saved = JSON.parse(localStorage.getItem('cg_saved') || '[]');
-  const isSaved = saved.includes(Number(id)) || saved.includes(String(id));
-  const saveSvg = document.getElementById('pk-save-svg');
-  if (saveSvg) saveSvg.style.fill = isSaved ? 'var(--o)' : 'none';
-
-  // First Light button
-  const flBtn = document.getElementById('pk-fl-btn');
-  if (flBtn) {
-    const isSet = !!flData[id];
-    flBtn.classList.toggle('set', isSet);
-    flBtn.innerHTML = isSet
-      ? `<span class="cta-fl-icon">🌅</span>First Light ✓`
-      : `<span class="cta-fl-icon">🌅</span>First Light`;
-  }
-
-  // Navigate
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  const screen = document.getElementById('park-detail');
-  screen.classList.add('active');
-  screen.scrollTop = 0;
-}
-
 // ─── OPEN DETAIL ────────────────────────────────
 function openDetail(id) {
-<<<<<<< HEAD
-  // Route featured parks to premium screen
-  if (getParkForCamp(id)) { openParkDetail(id); return; }
-  const c = lookupCamp(id);
-=======
   const c = CAMPS.find(x => x.id === id);
->>>>>>> 3dee852f875f8bfa0d7d0f0470cb014cc3d23b9c
   if (!c) return;
   prevScreen = document.querySelector('.screen.active')?.id || 'results';
   currentDetailId = id;
@@ -10475,354 +9877,5 @@ function dismissWelcome() {
   </div>
 </div>
 
-<<<<<<< HEAD
-
-<!-- ── TRIP SHARE SHEET ──────────────────────────── -->
-<div class="share-sheet" id="trip-share-sheet" style="display:none">
-  <div class="share-sheet-bg" onclick="closeTripShareSheet()"></div>
-  <div class="share-sheet-panel">
-    <div class="share-sheet-title">Share Your Trip</div>
-    <div id="trip-share-form">
-      <div style="margin-bottom:14px;">
-        <label style="display:block;font-size:11px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:8px;">Trip Name (optional)</label>
-        <input type="text" id="trip-name-input" class="notif-email" placeholder="e.g. Olympic Coast 2025" maxlength="80" style="width:100%;box-sizing:border-box;">
-      </div>
-      <button class="notif-submit" id="trip-gen-btn" style="width:100%;padding:13px;font-size:12px;border-radius:8px;" onclick="generateTripLink()">Generate Link</button>
-    </div>
-    <div id="trip-share-result" style="display:none;margin-top:4px;">
-      <div style="font-size:11px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:8px;">Your trip link</div>
-      <div style="display:flex;gap:8px;">
-        <input type="text" id="trip-link-display" readonly style="flex:1;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:10px 12px;font-size:16px;font-family:monospace;color:rgba(255,255,255,0.7);min-width:0;">
-        <button class="notif-submit" id="trip-copy-btn" style="flex-shrink:0;border-radius:8px;" onclick="copyTripLink()">Copy</button>
-      </div>
-      <div style="margin-top:10px;font-size:11px;color:rgba(255,255,255,0.28);line-height:1.65;">Anyone with this link can view your trip and save camps to their list. Link expires in 180 days.</div>
-    </div>
-    <button class="share-sheet-cancel" onclick="closeTripShareSheet()" style="margin-top:12px;">Close</button>
-  </div>
-</div>
-
-
-<!-- QR code generation for Trip Cards -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-<script>
-/* ═══════════════════════════════════════════════════════════════
-   FIRST LIGHT  — smart reservation-window reminders
-   ICS calendar drop + 6:55am timing + direct booking URL
-═══════════════════════════════════════════════════════════════ */
-(function() {
-
-  /* ── LocalStorage ── */
-  let flData = {};
-  try { flData = JSON.parse(localStorage.getItem('cg_firstlight') || '{}'); } catch(e) {}
-  function persistFL() { try { localStorage.setItem('cg_firstlight', JSON.stringify(flData)); } catch(e) {} }
-
-  /* ── Urgency copy by campground popularity tier ──
-     Rough heuristic: national parks = hot, everything else = normal */
-  const HOT_KEYWORDS = ['yosemite','zion','yellowstone','grand canyon','glacier','olympic',
-    'smoky','acadia','grand teton','rocky mountain','arches','bryce','canyonlands','crater lake',
-    'joshua tree','death valley','mount rainier','shenandoah','everglades','hot springs'];
-
-  function isHotSite(name) {
-    const n = (name||'').toLowerCase();
-    return HOT_KEYWORDS.some(k => n.includes(k));
-  }
-
-  function urgencyText(name, ridb_id) {
-    if (isHotSite(name)) {
-      return `⚠️ <strong>${name.split(',')[0]}</strong> fills in under 2 minutes. Recreation.gov opens at <strong>10am ET / 7am PT</strong>. Your reminder fires at <strong>6:55am your local time</strong> — 5 minutes before the window opens.`;
-    }
-    if (ridb_id) {
-      return `Recreation.gov opens reservations at <strong>10am ET / 7am PT</strong>. Your reminder fires at <strong>6:55am your local time</strong> — 5 minutes before the window opens.`;
-    }
-    return `Most campgrounds open reservations <strong>6 months ahead</strong>. Your reminder fires the morning the window opens so you're ready to book.`;
-  }
-
-  /* ── Calculate reservation opening date ──
-     Recreation.gov (RIDB): exactly 6 calendar months before check-in.
-     Others: 6 months as a safe default. */
-  function openingDate(checkInDateStr) {
-    const d = new Date(checkInDateStr + 'T12:00:00');
-    d.setMonth(d.getMonth() - 6);
-    return d;
-  }
-
-  /* ── Format date nicely ── */
-  function fmtDate(d) {
-    return d.toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric', year:'numeric' });
-  }
-  function fmtDateShort(d) {
-    return d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
-  }
-  function icsDate(d) {
-    const y = d.getFullYear(), m = String(d.getMonth()+1).padStart(2,'0'), day = String(d.getDate()).padStart(2,'0');
-    return `${y}${m}${day}`;
-  }
-  function icsDateTime(d) {
-    const y = d.getFullYear(), m = String(d.getMonth()+1).padStart(2,'0'), day = String(d.getDate()).padStart(2,'0');
-    return `${y}${m}${day}T065500`;  // 6:55am local — 5 min before 7am PT window
-  }
-
-  /* ── Build the ICS string ── */
-  function buildICS(camp, openDate, checkInStr, checkOutStr) {
-    const bookURL = camp.ridb_id
-      ? `https://www.recreation.gov/camping/campgrounds/${camp.ridb_id}`
-      : `https://campgrounder.io`;
-    const hot = isHotSite(camp.name);
-    const urgency = hot
-      ? `${camp.name} fills fast — you have a narrow window. Book immediately when this alarm fires.`
-      : `Reservations open today. Book now to secure your spot.`;
-
-    const dtStart = icsDateTime(openDate);
-    const dtDate  = icsDate(openDate);
-    const nowStamp = new Date().toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';
-
-    return [
-      'BEGIN:VCALENDAR',
-      'VERSION:2.0',
-      'PRODID:-//Campgrounder//First Light//EN',
-      'CALSCALE:GREGORIAN',
-      'METHOD:PUBLISH',
-      'BEGIN:VEVENT',
-      `DTSTART;TZID=America/Los_Angeles:${dtStart}`,
-      `DTEND;TZID=America/Los_Angeles:${icsDateTime(new Date(openDate.getTime() + 3600000))}`,
-      `DTSTAMP:${nowStamp}`,
-      `SUMMARY:🌅 ${camp.name} — Reservations open today`,
-      `DESCRIPTION:${urgency}\\n\\nCamp dates: ${checkInStr} → ${checkOutStr}\\n\\nBook now: ${bookURL}\\n\\nSet by Campgrounder First Light`,
-      `URL:${bookURL}`,
-      `LOCATION:${camp.loc || camp.name}`,
-      'BEGIN:VALARM',
-      'ACTION:DISPLAY',
-      'TRIGGER:PT0S',
-      `DESCRIPTION:🌅 ${camp.name} reservations open now — book immediately`,
-      'END:VALARM',
-      'END:VEVENT',
-      'END:VCALENDAR'
-    ].join('\r\n');
-  }
-
-  /* ── Download the ICS file ── */
-  function downloadICS(ics, filename) {
-    // Skip ICS blob download on native — WKWebView blocks it; native notification handles the reminder
-    if (window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform()) return;
-    try {
-      const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
-      const url  = URL.createObjectURL(blob);
-      const a    = document.createElement('a');
-      a.href = url; a.download = filename; a.style.display = 'none';
-      document.body.appendChild(a); a.click();
-      setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1500);
-    } catch(e) { /* ignore — moment overlay still confirms the reminder */ }
-  }
-
-  /* ── Capacitor local notification (native app only) ── */
-  async function scheduleNativeNotification(camp, openDate) {
-    try {
-      if (window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform()) {
-        const { LocalNotifications } = window.Capacitor.Plugins || {};
-        if (!LocalNotifications) return;
-        // Request permission first — required on iOS
-        const perm = await LocalNotifications.requestPermissions();
-        if (perm.display !== 'granted') return;
-        const fireAt = new Date(openDate);
-        fireAt.setHours(6, 55, 0, 0);
-        await LocalNotifications.schedule({ notifications: [{
-          id: Math.abs(hashCode(camp.name)) % 100000,
-          title: `🌅 ${camp.name} — Reservations open today`,
-          body: `Book now. ${isHotSite(camp.name) ? 'Sites fill in under 2 minutes.' : 'Secure your spot.'}`,
-          schedule: { at: fireAt },
-          extra: { url: camp.ridb_id ? `https://www.recreation.gov/camping/campgrounds/${camp.ridb_id}` : 'https://campgrounder.io' }
-        }]});
-      }
-    } catch(e) { /* graceful — web doesn't have Capacitor */ }
-  }
-  function hashCode(s) { let h=0; for(let i=0;i<s.length;i++) h=Math.imul(31,h)+s.charCodeAt(i)|0; return h; }
-
-  /* ═══ UI FUNCTIONS ═══ */
-
-  /* Open the date picker sheet */
-  window.showFirstLight = function() {
-    const camp = currentDetailId !== null ? lookupCamp(currentDetailId) : null;
-    if (!camp) return;
-
-    // Update sheet header + urgency
-    const nameEl = document.getElementById('fl-sheet-name');
-    if (nameEl) nameEl.textContent = camp.name;
-    const urgEl = document.getElementById('fl-urgency');
-    if (urgEl) urgEl.innerHTML = urgencyText(camp.name, camp.ridb_id);
-
-    // Pre-fill dates if check-in/out already set from detail screen
-    const ciEl = document.getElementById('fl-checkin');
-    const coEl = document.getElementById('fl-checkout');
-    if (ciEl && checkInDate)  ciEl.value = checkInDate;
-    if (coEl && checkOutDate) coEl.value = checkOutDate;
-
-    // If already set, show the existing reminder date
-    if (flData[currentDetailId]) {
-      const existing = flData[currentDetailId];
-      const oDate = new Date(existing.openDate + 'T12:00:00');
-      const prevEl = document.getElementById('fl-open-preview');
-      const dateEl = document.getElementById('fl-open-date');
-      const timeEl = document.getElementById('fl-open-time');
-      if (prevEl && dateEl) {
-        prevEl.classList.add('visible');
-        dateEl.textContent = fmtDate(oDate);
-        if (timeEl) timeEl.textContent = 'Reminder already set · tap to update';
-      }
-      const btn = document.getElementById('fl-set-btn');
-      if (btn) { btn.textContent = 'Update Reminder'; btn.disabled = false; }
-    }
-
-    // Open sheet
-    const sheet = document.getElementById('fl-sheet');
-    if (sheet) sheet.classList.add('open');
-
-    // Update preview if dates already filled
-    flUpdatePreview();
-  };
-
-  /* Sheet click-outside to close */
-  window.flSheetClickOut = function(e) {
-    if (e.target.id === 'fl-sheet') flSheetClose();
-  };
-  window.flSheetClose = function() {
-    const sheet = document.getElementById('fl-sheet');
-    if (sheet) sheet.classList.remove('open');
-    // Reset
-    const btn = document.getElementById('fl-set-btn');
-    if (btn) { btn.textContent = 'Set First Light Reminder'; btn.disabled = true; }
-    const prev = document.getElementById('fl-open-preview');
-    if (prev) prev.classList.remove('visible');
-  };
-
-  /* Update the opening date preview as user changes dates */
-  window.flUpdatePreview = function() {
-    const ci = document.getElementById('fl-checkin')?.value;
-    const co = document.getElementById('fl-checkout')?.value;
-    const prev = document.getElementById('fl-open-preview');
-    const dateEl = document.getElementById('fl-open-date');
-    const timeEl = document.getElementById('fl-open-time');
-    const btn  = document.getElementById('fl-set-btn');
-    if (!ci) { if (prev) prev.classList.remove('visible'); if (btn) btn.disabled = true; return; }
-
-    const oDate = openingDate(ci);
-    const today = new Date(); today.setHours(0,0,0,0);
-    if (oDate < today) {
-      if (dateEl) dateEl.textContent = 'Opening date has passed';
-      if (timeEl) timeEl.textContent = 'Choose a future camping date';
-      if (prev) prev.classList.add('visible');
-      if (btn) btn.disabled = true;
-      return;
-    }
-
-    if (prev) prev.classList.add('visible');
-    if (dateEl) dateEl.textContent = fmtDate(oDate);
-    if (timeEl) timeEl.textContent = 'Your reminder fires at 6:55am local time';
-    if (btn) { btn.disabled = false; btn.textContent = 'Set First Light Reminder'; }
-  };
-
-  /* Confirm — generate ICS + download + show moment */
-  window.setFirstLight = function() {
-    const camp = currentDetailId !== null ? lookupCamp(currentDetailId) : null;
-    if (!camp) return;
-    const ci = document.getElementById('fl-checkin')?.value;
-    const co = document.getElementById('fl-checkout')?.value || ci;
-    if (!ci) return;
-
-    const oDate = openingDate(ci);
-    const ics   = buildICS(camp, oDate, ci, co);
-    const slug  = (camp.name || 'camp').toLowerCase().replace(/[^a-z0-9]+/g,'-').slice(0,30);
-    downloadICS(ics, `first-light-${slug}.ics`);
-
-    // Schedule native notification if in Capacitor
-    scheduleNativeNotification(camp, oDate);
-
-    // Persist
-    flData[currentDetailId] = { campName: camp.name, campId: currentDetailId, openDate: icsDate(oDate), checkIn: ci, checkOut: co };
-    persistFL();
-
-    // Close sheet
-    flSheetClose();
-
-    // Show the moment
-    const sub    = document.getElementById('fl-moment-sub');
-    const detail = document.getElementById('fl-moment-detail');
-    if (sub)    sub.textContent    = fmtDateShort(oDate) + ' at 6:55am';
-    if (detail) detail.textContent = isHotSite(camp.name)
-      ? `${camp.name} fills fast. You'll be ready the moment the window opens.`
-      : `Your calendar will wake you 5 minutes before ${camp.name} opens for booking.`;
-
-    const moment = document.getElementById('fl-moment');
-    if (moment) {
-      moment.classList.add('visible');
-      moment.style.pointerEvents = 'all';
-      setTimeout(() => { if (document.getElementById('fl-moment').classList.contains('visible')) flMomentDismiss(); }, 6000);
-    }
-
-    // Update CTA button state
-    updateFLBtn();
-  };
-
-  window.flMomentDismiss = function() {
-    const moment = document.getElementById('fl-moment');
-    if (moment) {
-      moment.style.opacity = '0';
-      moment.style.transition = 'opacity 0.5s ease';
-      setTimeout(() => {
-        moment.classList.remove('visible');
-        moment.style.opacity = ''; moment.style.transition = '';
-        moment.style.pointerEvents = '';
-      }, 520);
-    }
-  };
-
-  /* Update the CTA button appearance based on whether reminder is set */
-  function updateFLBtn() {
-    const isSet = currentDetailId !== null && !!flData[currentDetailId];
-    ['fl-btn','pk-fl-btn'].forEach(id => {
-      const btn = document.getElementById(id);
-      if (!btn) return;
-      btn.classList.toggle('set', isSet);
-      btn.innerHTML = isSet
-        ? `<span class="cta-fl-icon">🌅</span>First Light ✓`
-        : `<span class="cta-fl-icon">🌅</span>First Light`;
-    });
-  }
-
-  /* Hook into openDetail to update button state */
-  const _origOpenDetail = window.openDetail;
-  window.openDetail = function(id) {
-    if (_origOpenDetail) _origOpenDetail(id);
-    setTimeout(updateFLBtn, 80);
-  };
-
-  /* ═══ SAVED LIST BADGES ═══ */
-  const _origRenderSaved = window.renderSaved;
-  window.renderSaved = function() {
-    if (_origRenderSaved) _origRenderSaved();
-    // Inject FL badges into rendered saved cards
-    Object.keys(flData).forEach(id => {
-      const data = flData[id];
-      if (!data) return;
-      const card = document.querySelector(`.saved-card[onclick*="openDetail(${id})"] .card-stats`);
-      if (!card) return;
-      const existing = card.parentElement.querySelector('.fl-badge');
-      if (existing) return;
-      const oDate = new Date(data.openDate.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3') + 'T12:00:00');
-      const today = new Date(); today.setHours(0,0,0,0);
-      const isToday = oDate.toDateString() === today.toDateString();
-      const isPast  = oDate < today;
-      const badge = document.createElement('div');
-      badge.className = 'fl-badge visible';
-      badge.innerHTML = `<div class="fl-badge-dot"></div>${isToday ? '🌅 Opens today!' : isPast ? '🌅 Window passed' : `🌅 Opens ${fmtDateShort(oDate)}`}`;
-      card.parentElement.appendChild(badge);
-    });
-  };
-
-})();
-</script>
-
-=======
->>>>>>> 3dee852f875f8bfa0d7d0f0470cb014cc3d23b9c
 </body>
 </html>
