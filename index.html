@@ -2135,6 +2135,84 @@ html, body {
   display: flex; margin-bottom: 32px;
   border: 1.5px solid var(--line); overflow: hidden;
 }
+/* ── SUN TIMES WIDGET ── */
+.sun-widget {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+.sun-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px;
+  padding: 14px 16px 12px;
+}
+.sun-card-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  margin-bottom: 10px;
+}
+.sun-time-main {
+  font-size: 23px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: rgba(255,255,255,0.92);
+  line-height: 1;
+}
+.sun-ampm {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.38);
+  margin-left: 3px;
+  letter-spacing: 0.04em;
+}
+.sun-golden {
+  font-size: 11px;
+  color: rgba(232,130,40,0.65);
+  margin-top: 6px;
+  letter-spacing: 0.02em;
+}
+.sun-daylen {
+  font-size: 11px;
+  color: rgba(255,255,255,0.25);
+  text-align: center;
+  margin-top: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.sun-arc-wrap {
+  margin: 12px 0 2px;
+  position: relative;
+  height: 4px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 2px;
+  overflow: visible;
+}
+.sun-arc-fill {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  background: linear-gradient(90deg, rgba(232,130,40,0.5), rgba(255,200,80,0.7));
+  border-radius: 2px;
+  transition: width 0.6s ease;
+}
+.sun-arc-dot {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px; height: 10px;
+  background: #FFB830;
+  border-radius: 50%;
+  box-shadow: 0 0 6px rgba(255,180,48,0.8);
+}
+
 .forecast-day {
   flex: 1; padding: 16px 4px 14px; text-align: center;
   border-right: 1.5px solid var(--line);
