@@ -2741,6 +2741,86 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
 .suggest-submit:hover { background: #D03C12; }
 .suggest-note { font-size: 11px; color: rgba(255,255,255,0.28); text-align: center; margin-top: 10px; line-height: 1.6; }
 
+/* ══ PREMIUM PARK SCREEN ═══════════════════════════════════════ */
+.pk-screen { overflow-y:auto; -webkit-overflow-scrolling:touch; background:var(--g0); }
+.pk-hero {
+  position:relative; height:62vh; min-height:320px; max-height:520px;
+  background-size:cover; background-position:center; flex-shrink:0;
+}
+.pk-hero-grad {
+  position:absolute; inset:0;
+  background:linear-gradient(to bottom, rgba(12,31,21,0.38) 0%, rgba(12,31,21,0) 40%, rgba(12,31,21,0.72) 75%, var(--g0) 100%);
+}
+.pk-topbar {
+  position:absolute; top:0; left:0; right:0;
+  display:flex; justify-content:space-between; align-items:center;
+  padding:calc(16px + env(safe-area-inset-top, 0px)) 18px 16px;
+  z-index:10;
+}
+.pk-hero-content {
+  position:absolute; bottom:0; left:0; right:0;
+  padding:0 22px 26px; z-index:5;
+}
+.pk-select-badge {
+  display:inline-flex; align-items:center; gap:6px;
+  background:rgba(232,72,28,0.15); border:1px solid rgba(232,72,28,0.4);
+  color:var(--o); font-size:9px; font-weight:800; letter-spacing:0.22em;
+  text-transform:uppercase; padding:5px 10px; margin-bottom:12px;
+}
+.pk-hero-park { font-size:32px; font-weight:200; color:#fff; letter-spacing:-0.5px; line-height:1.1; margin-bottom:8px; }
+.pk-hero-tagline { font-size:13px; color:rgba(255,255,255,0.58); line-height:1.6; font-style:italic; max-width:300px; }
+.pk-photo-strip {
+  display:flex; gap:8px; overflow-x:auto; padding:18px 22px 0;
+  scrollbar-width:none; -webkit-overflow-scrolling:touch;
+}
+.pk-photo-strip::-webkit-scrollbar { display:none; }
+.pk-photo { flex-shrink:0; width:160px; height:108px; object-fit:cover; border-radius:6px; background:var(--g2); }
+.pk-body { padding:22px 22px calc(100px + env(safe-area-inset-bottom,0px)); }
+.pk-camp-name { font-size:24px; font-weight:300; color:#fff; margin-bottom:4px; }
+.pk-loc { font-size:12px; color:rgba(255,255,255,0.42); letter-spacing:0.06em; margin-bottom:14px; }
+.pk-rating { display:flex; align-items:center; gap:8px; margin-bottom:20px; cursor:pointer; }
+.pk-rnum { font-size:15px; font-weight:700; color:#fff; }
+.pk-rstars { color:var(--o); font-size:13px; letter-spacing:1px; }
+.pk-rct { font-size:11px; color:rgba(255,255,255,0.38); }
+.pk-eyebrow {
+  font-size:9px; font-weight:800; letter-spacing:4px; text-transform:uppercase;
+  color:rgba(255,255,255,0.35); margin-bottom:12px; margin-top:28px;
+}
+.pk-narrative p { font-size:15px; color:rgba(255,255,255,0.72); line-height:1.8; margin:0 0 16px; font-weight:300; }
+.pk-park-stats {
+  display:flex; gap:0; margin:24px 0; border:1px solid rgba(255,255,255,0.07);
+}
+.pk-stat { flex:1; padding:14px 12px; text-align:center; border-right:1px solid rgba(255,255,255,0.07); }
+.pk-stat:last-child { border-right:none; }
+.pk-stat-val { font-size:15px; font-weight:600; color:#fff; margin-bottom:3px; }
+.pk-stat-lbl { font-size:9px; letter-spacing:0.12em; text-transform:uppercase; color:rgba(255,255,255,0.3); }
+.pk-best-site { padding:14px 0; border-bottom:1px solid rgba(255,255,255,0.06); }
+.pk-best-site:last-child { border-bottom:none; }
+.pk-best-site-name { font-size:13px; font-weight:600; color:#fff; margin-bottom:4px; }
+.pk-best-site-note { font-size:12px; color:rgba(255,255,255,0.44); line-height:1.6; }
+.pk-ntk-item { display:flex; gap:14px; padding:14px 0; border-bottom:1px solid rgba(255,255,255,0.06); }
+.pk-ntk-item:last-child { border-bottom:none; }
+.pk-ntk-icon { font-size:18px; color:rgba(255,255,255,0.3); flex-shrink:0; padding-top:2px; }
+.pk-ntk-title { font-size:13px; font-weight:600; color:#fff; margin-bottom:4px; }
+.pk-ntk-body { font-size:12px; color:rgba(255,255,255,0.44); line-height:1.7; }
+.pk-divider { height:1px; background:rgba(255,255,255,0.07); margin:24px 0 0; }
+.pk-amenity-grid { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:6px; }
+.pk-amenity { font-size:11px; color:rgba(255,255,255,0.55); background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.09); padding:6px 10px; }
+.pk-season-row { display:flex; gap:8px; flex-wrap:wrap; }
+.pk-season-pill { font-size:10px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; padding:5px 12px; background:rgba(30,61,42,0.8); border:1px solid rgba(255,255,255,0.1); color:rgba(255,255,255,0.55); }
+.pk-cta-bar {
+  position:fixed; bottom:0; left:0; right:0; z-index:80;
+  display:flex; align-items:center; gap:8px;
+  background:var(--g0); border-top:1px solid rgba(255,255,255,0.07);
+  padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));
+}
+.pk-cta-main {
+  flex:1; height:48px; background:var(--o); border:none; color:#fff;
+  font-family:inherit; font-size:11px; font-weight:900; letter-spacing:0.18em;
+  text-transform:uppercase; cursor:pointer; text-decoration:none;
+  display:flex; align-items:center; justify-content:center;
+}
+
 /* ── FIRST LIGHT ─────────────────────────────────────────────── */
 /* CTA bar button */
 .cta-fl {
@@ -4447,6 +4527,76 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
     <div class="cta-sq-tc" onclick="openTripCard()" title="My Trip Card" data-tooltip="Trip Card" aria-label="Create trip card" role="button" tabindex="0">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3H8"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
     </div>
+    <div class="cta-sq" onclick="shareCamp()" data-tooltip="Share" aria-label="Share campground" role="button">
+      <svg width="17" height="17" style="color:rgba(255,255,255,0.6);stroke:currentColor;fill:none;" aria-hidden="true"><use href="#ic-share"/></svg>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  PREMIUM PARK DETAIL
+══════════════════════════════════════ -->
+<div class="screen pk-screen" id="park-detail">
+  <div class="pk-hero" id="pk-hero">
+    <div class="pk-hero-grad"></div>
+    <div class="pk-topbar">
+      <div class="topbar-btn xbtn is-close" onclick="goBack()" aria-label="Go back" role="button"></div>
+      <div style="display:flex;gap:8px;">
+        <div class="topbar-btn" id="pk-save-btn" onclick="toggleSave()" aria-label="Save campground" role="button">
+          <svg id="pk-save-svg" width="17" height="17" style="color:rgba(255,255,255,0.7);stroke:currentColor;fill:none;" aria-hidden="true"><use href="#ic-heart"/></svg>
+        </div>
+      </div>
+    </div>
+    <div class="pk-hero-content">
+      <div class="pk-select-badge">⬡ Campgrounder Select</div>
+      <div class="pk-hero-park" id="pk-park-name">Yosemite National Park</div>
+      <div class="pk-hero-tagline" id="pk-tagline">The valley that defined American wilderness.</div>
+    </div>
+  </div>
+
+  <div class="pk-photo-strip" id="pk-photo-strip"></div>
+
+  <div class="pk-body">
+    <div class="pk-eyebrow" style="margin-top:20px;">Campground</div>
+    <div class="pk-camp-name" id="pk-camp-name">Yosemite Valley</div>
+    <div class="pk-loc" id="pk-loc">Yosemite NP · California</div>
+    <div class="pk-rating" id="pk-rating-row" onclick="showReviewSheet()" role="button" aria-label="View reviews" tabindex="0">
+      <div class="pk-rnum" id="pk-rating">4.8</div>
+      <div class="pk-rstars" aria-hidden="true">★★★★★</div>
+      <div class="pk-rct" id="pk-reviews">1,240 reviews</div>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-box"><div class="stat-val" id="pk-price" style="color:var(--o);">$35</div><div class="stat-lbl">Per night</div></div>
+      <div class="stat-box"><div class="stat-val" id="pk-sites">240</div><div class="stat-lbl">Sites</div></div>
+      <div class="stat-box"><div class="stat-val" id="pk-avail">12</div><div class="stat-lbl">Typical open</div></div>
+    </div>
+
+    <div class="pk-eyebrow">The Park</div>
+    <div class="pk-narrative" id="pk-narrative"></div>
+
+    <div class="pk-park-stats" id="pk-park-stats"></div>
+
+    <div class="pk-eyebrow">Best Sites</div>
+    <div id="pk-best-sites"></div>
+
+    <div class="pk-eyebrow">Need to Know</div>
+    <div id="pk-need-to-know"></div>
+
+    <div class="pk-divider"></div>
+    <div class="pk-eyebrow">Amenities</div>
+    <div class="pk-amenity-grid" id="pk-amenities"></div>
+
+    <div class="pk-divider"></div>
+    <div class="pk-eyebrow">Season</div>
+    <div class="pk-season-row" id="pk-seasons"></div>
+  </div>
+
+  <div class="pk-cta-bar">
+    <a class="pk-cta-main" id="pk-cta-link" href="#" target="_blank" rel="noopener">Check Availability →</a>
+    <button class="cta-fl" id="pk-fl-btn" onclick="showFirstLight()" aria-label="Set First Light reminder" data-tooltip="Remind me when reservations open">
+      <span class="cta-fl-icon">🌅</span>First Light
+    </button>
     <div class="cta-sq" onclick="shareCamp()" data-tooltip="Share" aria-label="Share campground" role="button">
       <svg width="17" height="17" style="color:rgba(255,255,255,0.6);stroke:currentColor;fill:none;" aria-hidden="true"><use href="#ic-share"/></svg>
     </div>
@@ -8528,8 +8678,215 @@ function showToast(msg) {
   t._tid = setTimeout(() => t.classList.remove('show'), 2100);
 }
 
+// ═══ FEATURED PARKS ══════════════════════════════════════════════
+const FEATURED_PARKS = {
+  yosemite: {
+    parkName:'Yosemite National Park', tagline:'The valley that defined American wilderness.',
+    established:1890, acres:'748,000', elevation:'2,000–13,114 ft',
+    narrative:[
+      'There is no preparing for Yosemite Valley. The moment the walls close in — El Capitan rising 3,000 feet on your left, Half Dome appearing at the far end — something shifts. You understand, immediately, why John Muir called this place a temple.',
+      'The campgrounds put you inside the scene. The Merced River runs cold and clear through the valley floor. Deer move through camp at dusk. At night, granite walls catch the last light and hold it longer than seems possible.'
+    ],
+    bestSites:[
+      { name:'Upper Pines', note:'Closest to the trailheads. Walk to Mirror Lake, Snow Creek, or the Valley Loop.' },
+      { name:'Lower Pines', note:'Right on the Merced. Meadow views, Half Dome on the horizon.' },
+      { name:'North Pines', note:'Quietest of the three. River access and easy access to the stables.' }
+    ],
+    needToKnow:[
+      { icon:'ti-calendar', title:'Reservations', body:'Yosemite Valley campgrounds book within minutes of release — 5 months in advance on recreation.gov. Set a First Light reminder.' },
+      { icon:'ti-car', title:'Valley traffic', body:'In summer, a reservation is required to drive into the valley. Arrive early or use the free valley shuttle.' },
+      { icon:'ti-shield', title:'Bear boxes', body:'All food must be stored in the provided bear lockers. Bears in Yosemite are bold and experienced.' },
+      { icon:'ti-sun', title:'Best window', body:'Late May and September hit the sweet spot — wildflowers or fall color, thinner crowds, cooler temperatures.' }
+    ],
+    photos:[
+      'https://cdn.recreation.gov/public/2019/06/04/19/13/234756_e6ba02a6-2a48-4716-b1cd-64bf18d0edd3_1440.webp',
+      'https://images.unsplash.com/photo-1472396961693-142e6e269027?w=600&q=80',
+      'https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=600&q=80'
+    ],
+    campIds:[1]
+  },
+  yellowstone: {
+    parkName:'Yellowstone National Park', tagline:"Earth's largest active volcanic system. Also: your campsite.",
+    established:1872, acres:'2,219,791', elevation:'5,282–11,358 ft',
+    narrative:[
+      "Yellowstone is not subtle. The ground hisses and bubbles. Geysers erupt on schedule. Bison cross the road — your road — as if you are the inconvenience, which here, you are. The park predates everything.",
+      "Camping at Madison puts you at the center of the thermal basin. The Firehole River runs warm enough to swim in some stretches. Wolves have been spotted from the campground. The night sky, this far from any city, is extraordinary."
+    ],
+    bestSites:[
+      { name:'Madison Campground', note:'The best base for geyser country. Old Faithful is 16 miles south.' },
+      { name:'Grant Village', note:'On the shore of Yellowstone Lake. Fishing access, thermal features nearby.' },
+      { name:'Slough Creek', note:'Remote and rugged. Prime wolf-watching in Lamar Valley.' }
+    ],
+    needToKnow:[
+      { icon:'ti-calendar', title:'Reservations', body:'Madison books fast. Reservations open on recreation.gov in mid-January for the following summer.' },
+      { icon:'ti-paw-filled', title:'Wildlife distance', body:'Stay 100 yards from bears and wolves, 25 yards from bison and elk. These are not suggestions.' },
+      { icon:'ti-flame', title:'Thermal features', body:'Stay on boardwalks. The thin crust around hot springs has collapsed under visitors. There is no trail beneath some of these pools.' },
+      { icon:'ti-cloud-snow', title:'Season', body:'Most campgrounds open May through October. September brings fewer crowds and active elk ruts.' }
+    ],
+    photos:[
+      'https://cdn.recreation.gov/public/2024/02/28/20/02/10169448_e9418dab-c103-419a-96c4-bc356c84afbd_700.webp',
+      'https://images.unsplash.com/photo-1504701954957-2010ec3bcec1?w=600&q=80',
+      'https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?w=600&q=80'
+    ],
+    campIds:[12]
+  },
+  grandcanyon: {
+    parkName:'Grand Canyon National Park', tagline:'One mile deep. Two billion years old. Nothing compares.',
+    established:1919, acres:'1,217,262', elevation:'2,480–8,803 ft',
+    narrative:[
+      'The Grand Canyon does something strange to your sense of scale. You know intellectually that it is 277 miles long and a mile deep, but standing at the rim — or better, waking up beside it — those numbers collapse into something less like information and more like humility.',
+      'Mather Campground sits steps from the South Rim. At dawn, before the tour buses arrive, you walk to the edge and watch the canyon fill with light from the bottom up. The Colorado River, 5,000 feet below, is the width of a thread.'
+    ],
+    bestSites:[
+      { name:'Mather Campground', note:'Walking distance to the rim and all South Rim facilities.' },
+      { name:'Desert View', note:'First-come, first-served. 25 miles east of the village — worth it for the solitude.' },
+      { name:'Bright Angel (inner canyon)', note:'For backpackers only. Permit required; apply 4 months in advance.' }
+    ],
+    needToKnow:[
+      { icon:'ti-calendar', title:'Reservations', body:'Mather books far in advance. Some walk-up sites exist — arrive very early. Desert View is first-come.' },
+      { icon:'ti-droplet', title:'Water on trails', body:'The canyon heats up fast. Rangers close Bright Angel trail midday in summer. Carry more water than you think you need.' },
+      { icon:'ti-walk', title:'Rim to river', body:"It takes twice as long to hike out as it does to hike in. Many rescues involve people who didn't account for this." },
+      { icon:'ti-moon', title:'Dark skies', body:'The South Rim is an International Dark Sky Park. Ranger-led astronomy programs run most evenings in summer.' }
+    ],
+    photos:[
+      'https://cdn.recreation.gov/public/2023/06/23/14/31/232490_eb417bcd-69ca-4135-a5e4-0a46bc7fbc43_1440.webp',
+      'https://images.unsplash.com/photo-1615729947596-a598e5de0ab3?w=600&q=80',
+      'https://images.unsplash.com/photo-1474044159687-1ee9f3a51722?w=600&q=80'
+    ],
+    campIds:[10]
+  },
+  zion: {
+    parkName:'Zion National Park', tagline:'Sandstone walls rise 2,000 feet. The river runs at your feet.',
+    established:1919, acres:'147,244', elevation:'3,666–8,726 ft',
+    narrative:[
+      "Zion is intimate in a way that surprises people who have only seen photographs. The canyon is narrow — sometimes just 20 feet wide at the bottom. The walls press close. The Virgin River, which carved all of this over millions of years, still runs through it.",
+      "Watchman Campground sits at the canyon's entrance, where the walls begin their climb. Cottonwood trees line the river. At dusk, the sandstone turns shades of red and orange that have no names in English. In the morning, deer cross right through camp."
+    ],
+    bestSites:[
+      { name:'Watchman Campground', note:'Electric hookups available. Steps from the visitor center and canyon shuttle.' },
+      { name:'South Campground', note:'Walk-up only, tent sites. Quieter and shadier than Watchman.' },
+      { name:'Lava Point (primitive)', note:'Remote, high-elevation, first-come. Elk and stars. No water.' }
+    ],
+    needToKnow:[
+      { icon:'ti-calendar', title:'Permits', body:'Angels Landing requires a permit — one of the most sought-after in the NPS. Apply through recreation.gov.' },
+      { icon:'ti-bus', title:'Shuttle system', body:'Private vehicles are not permitted in Zion Canyon in season. The free park shuttle runs from the visitor center up-canyon.' },
+      { icon:'ti-droplet', title:'Flash floods', body:'The Narrows closes without warning when storms hit — sometimes 50 miles away. Check flash flood forecasts every morning.' },
+      { icon:'ti-moon-stars', title:'Best season', body:'April–May and September–October offer the best conditions. Summer is peak season and peak heat in the canyon bottom.' }
+    ],
+    photos:[
+      'https://cdn.recreation.gov/public/2018/08/23/15/20/232445_d2305230-89ab-4df8-bf53-e6c0e214f1c2_700.webp',
+      'https://images.unsplash.com/photo-1509316785289-025f5b846b35?w=600&q=80',
+      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80'
+    ],
+    campIds:[11]
+  }
+};
+
+function getParkForCamp(id) {
+  return Object.values(FEATURED_PARKS).find(p => p.campIds.includes(Number(id))) || null;
+}
+
+function openParkDetail(id) {
+  const c = lookupCamp(id);
+  const park = getParkForCamp(id);
+  if (!c || !park) { openDetail(id); return; }
+
+  const _activeNow = document.querySelector('.screen.active')?.id;
+  if (_activeNow !== 'park-detail') prevScreen = _activeNow || 'results';
+  currentDetailId = id;
+  history.replaceState(null, '', '#camp-' + id);
+
+  // Hero
+  const hero = document.getElementById('pk-hero');
+  if (hero) hero.style.backgroundImage = c.photo
+    ? `url(${c.photo}), linear-gradient(160deg, var(--g2) 0%, var(--g0) 100%)`
+    : `linear-gradient(160deg, var(--g2) 0%, var(--g0) 100%)`;
+
+  document.getElementById('pk-park-name').textContent = park.parkName;
+  document.getElementById('pk-tagline').textContent = park.tagline;
+
+  // Photo strip
+  const strip = document.getElementById('pk-photo-strip');
+  strip.innerHTML = park.photos.map(url =>
+    `<img class="pk-photo" src="${url}" alt="" loading="lazy" onerror="this.style.display='none'">`
+  ).join('');
+
+  // Camp identity
+  document.getElementById('pk-camp-name').textContent = c.name;
+  document.getElementById('pk-loc').textContent = c.loc;
+  document.getElementById('pk-rating').textContent = c.rating || '—';
+  document.getElementById('pk-reviews').textContent = c.reviews ? `${c.reviews.toLocaleString()} reviews` : '';
+  document.getElementById('pk-price').textContent = c.price ? `$${c.price}` : '—';
+  document.getElementById('pk-sites').textContent = c.sites || '—';
+  document.getElementById('pk-avail').textContent = c.avail || '—';
+
+  // Booking CTA
+  const link = document.getElementById('pk-cta-link');
+  if (link) link.href = c.ridb_id
+    ? `https://www.recreation.gov/camping/campgrounds/${c.ridb_id}`
+    : (c.bookUrl || '#');
+
+  // Narrative
+  document.getElementById('pk-narrative').innerHTML =
+    park.narrative.map(p => `<p>${p}</p>`).join('');
+
+  // Park stats
+  document.getElementById('pk-park-stats').innerHTML = `
+    <div class="pk-stat"><div class="pk-stat-val">${park.established}</div><div class="pk-stat-lbl">Established</div></div>
+    <div class="pk-stat"><div class="pk-stat-val">${park.acres}</div><div class="pk-stat-lbl">Acres</div></div>
+    <div class="pk-stat"><div class="pk-stat-val">${park.elevation}</div><div class="pk-stat-lbl">Elevation</div></div>`;
+
+  // Best sites
+  document.getElementById('pk-best-sites').innerHTML =
+    park.bestSites.map(s => `
+      <div class="pk-best-site">
+        <div class="pk-best-site-name">${s.name}</div>
+        <div class="pk-best-site-note">${s.note}</div>
+      </div>`).join('');
+
+  // Need to know
+  document.getElementById('pk-need-to-know').innerHTML =
+    park.needToKnow.map(n => `
+      <div class="pk-ntk-item">
+        <div class="pk-ntk-icon"><i class="ti ${n.icon}" aria-hidden="true"></i></div>
+        <div><div class="pk-ntk-title">${n.title}</div><div class="pk-ntk-body">${n.body}</div></div>
+      </div>`).join('');
+
+  // Amenities
+  document.getElementById('pk-amenities').innerHTML =
+    (c.amenities || []).map(a => `<div class="pk-amenity">${a}</div>`).join('');
+
+  // Seasons
+  document.getElementById('pk-seasons').innerHTML =
+    (c.seasons || []).map(s => `<div class="pk-season-pill">${s}</div>`).join('');
+
+  // Save button
+  const saved = JSON.parse(localStorage.getItem('cg_saved') || '[]');
+  const isSaved = saved.includes(Number(id)) || saved.includes(String(id));
+  const saveSvg = document.getElementById('pk-save-svg');
+  if (saveSvg) saveSvg.style.fill = isSaved ? 'var(--o)' : 'none';
+
+  // First Light button
+  const flBtn = document.getElementById('pk-fl-btn');
+  if (flBtn) {
+    const isSet = !!flData[id];
+    flBtn.classList.toggle('set', isSet);
+    flBtn.innerHTML = isSet
+      ? `<span class="cta-fl-icon">🌅</span>First Light ✓`
+      : `<span class="cta-fl-icon">🌅</span>First Light`;
+  }
+
+  // Navigate
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const screen = document.getElementById('park-detail');
+  screen.classList.add('active');
+  screen.scrollTop = 0;
+}
+
 // ─── OPEN DETAIL ────────────────────────────────
 function openDetail(id) {
+  // Route featured parks to premium screen
+  if (getParkForCamp(id)) { openParkDetail(id); return; }
   const c = lookupCamp(id);
   if (!c) return;
   const _activeNow = document.querySelector('.screen.active')?.id;
@@ -11437,13 +11794,15 @@ function dismissWelcome() {
 
   /* Update the CTA button appearance based on whether reminder is set */
   function updateFLBtn() {
-    const btn = document.getElementById('fl-btn');
-    if (!btn) return;
     const isSet = currentDetailId !== null && !!flData[currentDetailId];
-    btn.classList.toggle('set', isSet);
-    btn.innerHTML = isSet
-      ? `<span class="cta-fl-icon">🌅</span>First Light ✓`
-      : `<span class="cta-fl-icon">🌅</span>First Light`;
+    ['fl-btn','pk-fl-btn'].forEach(id => {
+      const btn = document.getElementById(id);
+      if (!btn) return;
+      btn.classList.toggle('set', isSet);
+      btn.innerHTML = isSet
+        ? `<span class="cta-fl-icon">🌅</span>First Light ✓`
+        : `<span class="cta-fl-icon">🌅</span>First Light`;
+    });
   }
 
   /* Hook into openDetail to update button state */
