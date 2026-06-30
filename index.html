@@ -2235,81 +2235,35 @@ html, body {
   border: 1.5px solid var(--line); overflow: hidden;
 }
 /* ── SUN TIMES WIDGET ── */
-.sun-widget {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 4px;
-}
-.sun-card {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 12px;
-  padding: 14px 16px 12px;
-}
-.sun-card-label {
+/* Sun widget — arc clock layout */
+.sun-row {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.35);
-  margin-bottom: 10px;
+  margin-bottom: 6px;
 }
-.sun-time-main {
-  font-size: 23px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: rgba(255,255,255,0.92);
-  line-height: 1;
+.sun-time-item { flex: 0 0 auto; }
+.sun-time-item.sun-right { text-align: right; }
+.sun-time-label {
+  font-size: 9px; font-weight: 900; letter-spacing: 0.2em;
+  text-transform: uppercase; color: rgba(255,255,255,0.32);
+  margin-bottom: 3px;
+}
+.sun-time-val {
+  font-size: 17px; font-weight: 700; letter-spacing: -0.02em;
+  color: rgba(255,255,255,0.9); line-height: 1;
+  white-space: nowrap;
 }
 .sun-ampm {
-  font-size: 12px;
-  font-weight: 600;
-  color: rgba(255,255,255,0.38);
-  margin-left: 3px;
-  letter-spacing: 0.04em;
+  font-size: 10px; font-weight: 600;
+  color: rgba(255,255,255,0.35); margin-left: 2px;
 }
-.sun-golden {
-  font-size: 11px;
-  color: rgba(232,130,40,0.65);
-  margin-top: 6px;
-  letter-spacing: 0.02em;
-}
+.sun-arc-svg { flex: 1; display: block; overflow: visible; }
 .sun-daylen {
-  font-size: 11px;
-  color: rgba(255,255,255,0.25);
-  text-align: center;
-  margin-top: 10px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-weight: 700;
-}
-.sun-arc-wrap {
-  margin: 12px 0 2px;
-  position: relative;
-  height: 4px;
-  background: rgba(255,255,255,0.06);
-  border-radius: 2px;
-  overflow: visible;
-}
-.sun-arc-fill {
-  position: absolute;
-  left: 0; top: 0; bottom: 0;
-  background: linear-gradient(90deg, rgba(232,130,40,0.5), rgba(255,200,80,0.7));
-  border-radius: 2px;
-  transition: width 0.6s ease;
-}
-.sun-arc-dot {
-  position: absolute;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 10px; height: 10px;
-  background: #FFB830;
-  border-radius: 50%;
-  box-shadow: 0 0 6px rgba(255,180,48,0.8);
+  font-size: 10px; font-weight: 700;
+  color: rgba(255,255,255,0.22);
+  text-align: center; letter-spacing: 0.1em;
+  text-transform: uppercase; margin-top: 2px;
 }
 
 .forecast-day {
@@ -4417,7 +4371,7 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
     <div class="d-eyebrow" id="d-wx-eyebrow" style="display:none;">Forecast</div>
     <div class="forecast-strip" id="d-forecast" style="display:none;"></div>
     <div class="d-divider"></div>
-    <div class="d-eyebrow">Sun</div>
+    <div class="d-eyebrow">Golden Hours</div>
     <div id="d-sun-widget"></div>
     <div class="d-divider"></div>
     <div class="d-eyebrow">Connectivity</div>
@@ -7033,30 +6987,54 @@ function renderSunWidget(camp) {
   const s = calcSunTimes(camp.lat, camp.lng);
   if (!s) { el.innerHTML = ''; return; }
 
-  const pct = Math.round(s.progress * 100);
+  // Arc geometry — semicircle, horizon at bottom
+  const cx = 60, cy = 56, r = 46;
+  const lx = cx - r, ly = cy; // left = sunrise
+  const rx = cx + r, ry = cy; // right = sunset
+  const pct = Math.max(0, Math.min(1, s.progress));
+
+  // Current sun position on the arc
+  const θ = Math.PI * (1 - pct);
+  const dotX = +(cx + r * Math.cos(θ)).toFixed(1);
+  const dotY = +(cy - r * Math.sin(θ)).toFixed(1);
+
+  // Full background arc — two quarter arcs to avoid SVG 180° ambiguity
+  const bgPath = `M ${lx},${ly} A ${r},${r} 0 0 0 ${cx},${cy - r} A ${r},${r} 0 0 0 ${rx},${ry}`;
+
+  // Progress arc from sunrise to current position
+  let progressPath = '';
+  if (pct > 0.002 && pct < 0.998) {
+    const la = pct > 0.5 ? 1 : 0;
+    progressPath = `M ${lx},${ly} A ${r},${r} 0 ${la} 0 ${dotX},${dotY}`;
+  } else if (pct >= 0.998) {
+    progressPath = bgPath; // full arc at/after sunset
+  }
+
+  const showDot = s.isDay && pct > 0.002 && pct < 0.998;
 
   el.innerHTML = `
-    <div class="sun-widget">
-      <div class="sun-card">
-        <div class="sun-card-label">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,180,60,0.7)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/><line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/></svg>
-          Sunrise
-        </div>
-        <div class="sun-time-main">${s.rise.time}<span class="sun-ampm">${s.rise.ampm}</span></div>
+    <div class="sun-row">
+      <div class="sun-time-item">
+        <div class="sun-time-label">Sunrise</div>
+        <div class="sun-time-val">${s.rise.time}<span class="sun-ampm">${s.rise.ampm}</span></div>
       </div>
-      <div class="sun-card">
-        <div class="sun-card-label">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,140,40,0.7)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/><line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/></svg>
-          Sunset
-        </div>
-        <div class="sun-time-main">${s.set.time}<span class="sun-ampm">${s.set.ampm}</span></div>
+      <svg class="sun-arc-svg" viewBox="0 0 120 62" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <line x1="${lx}" y1="${ly}" x2="${rx}" y2="${ry}" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+        <path d="${bgPath}" stroke="rgba(255,255,255,0.09)" stroke-width="1.5" stroke-dasharray="2.5 3.5"/>
+        ${progressPath ? `<path d="${progressPath}" stroke="rgba(232,150,40,0.75)" stroke-width="2" stroke-linecap="round"/>` : ''}
+        <circle cx="${lx}" cy="${ly}" r="2.5" fill="rgba(232,140,40,0.55)"/>
+        <circle cx="${rx}" cy="${ry}" r="2.5" fill="rgba(232,140,40,0.25)"/>
+        ${showDot ? `
+        <circle cx="${dotX}" cy="${dotY}" r="6" fill="rgba(255,190,50,0.15)"/>
+        <circle cx="${dotX}" cy="${dotY}" r="3.5" fill="rgba(255,200,60,0.92)"/>
+        ` : ''}
+      </svg>
+      <div class="sun-time-item sun-right">
+        <div class="sun-time-label">Sunset</div>
+        <div class="sun-time-val">${s.set.time}<span class="sun-ampm">${s.set.ampm}</span></div>
       </div>
     </div>
-    <div class="sun-arc-wrap">
-      <div class="sun-arc-fill" style="width:${pct}%"></div>
-      ${s.isDay ? `<div class="sun-arc-dot" style="left:${pct}%"></div>` : ''}
-    </div>
-    <div class="sun-daylen">${s.dayLen}</div>`;
+    <div class="sun-daylen">${s.dayLen} of daylight</div>`;
 }
 
 // Populate the 5-day forecast strip in the detail view
