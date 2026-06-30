@@ -62,6 +62,7 @@
 </script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <!--
   MAP PROVIDER NOTE:
   Currently using ESRI World Dark Gray (free, no API key required).
@@ -1674,6 +1675,104 @@ html, body {
   -webkit-tap-highlight-color: transparent;
 }
 .about-link:hover, .about-link:active { color: rgba(232,72,28,0.8); }
+
+/* ══════════════════════════════════════════════
+   TRIP CARDS / PASSPORT
+══════════════════════════════════════════════ */
+.passport-section { padding: 0 0 8px; }
+.passport-label {
+  font-size: 11px; font-weight: 900; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--o);
+  padding: 28px 0 14px;
+}
+.passport-empty {
+  padding: 28px 20px; text-align: center;
+  border: 1.5px dashed rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.3);
+  font-size: 13px; line-height: 1.6;
+}
+.passport-empty strong { display: block; font-size: 15px; margin-bottom: 4px; color: rgba(255,255,255,0.45); }
+.passport-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+}
+/* Individual trip card — passport / boarding-pass aesthetic */
+.trip-card {
+  background: var(--g1);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-left: 3px solid var(--o);
+  padding: 13px 11px 11px;
+  position: relative; overflow: hidden;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color 0.15s;
+  min-height: 148px;
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+.trip-card:active { border-color: var(--o); background: rgba(30,61,42,0.9); }
+.trip-card-type {
+  font-size: 9px; font-weight: 900; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--o);
+  margin-bottom: 5px;
+}
+.trip-card-name {
+  font-size: 13px; font-weight: 800; letter-spacing: -0.02em;
+  line-height: 1.15; color: var(--w);
+  margin-bottom: 4px;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.trip-card-loc {
+  font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: rgba(255,255,255,0.38); margin-bottom: 10px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.trip-card-foot {
+  display: flex; justify-content: space-between; align-items: flex-end;
+}
+.trip-card-date {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.35); text-transform: uppercase;
+}
+.trip-card-qr {
+  width: 52px; height: 52px; flex-shrink: 0;
+  background: #f5f0e8;
+  display: flex; align-items: center; justify-content: center;
+}
+.trip-card-qr canvas, .trip-card-qr img { width: 52px !important; height: 52px !important; display: block; }
+/* Rubber-stamp "VISITED" watermark */
+.trip-card-stamp {
+  position: absolute; top: 50%; right: -8px;
+  transform: translateY(-50%) rotate(-28deg);
+  font-size: 9px; font-weight: 900; letter-spacing: 0.28em;
+  color: rgba(232,72,28,0.13);
+  text-transform: uppercase; pointer-events: none;
+  white-space: nowrap;
+  border: 1.5px solid rgba(232,72,28,0.13);
+  padding: 2px 5px;
+}
+
+/* Stamp button in detail topbar */
+.stamp-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px;
+  border: 1.5px solid rgba(255,255,255,0.15);
+  cursor: pointer; transition: all 0.2s;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+}
+.stamp-btn.stamped {
+  border-color: var(--o);
+  background: rgba(232,72,28,0.15);
+}
+.stamp-btn.stamped svg { color: var(--o) !important; }
+/* Stamp flash animation */
+@keyframes stampFlash {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(1.35); }
+  60%  { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+.stamp-btn.flash { animation: stampFlash 0.35s ease; }
 
 /* ══════════════════════════════════════════════
    ABOUT SCREEN
@@ -3815,6 +3914,12 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
       </div>
     </div>
 
+    <!-- ── PASSPORT ─────────────────────────── -->
+    <div class="passport-section">
+      <div class="passport-label">Passport</div>
+      <div id="passport-grid" class="passport-grid"></div>
+    </div>
+
     <div class="profile-footer">Campgrounder · Built for the wild</div>
     <div class="about-link" onclick="go('about','profile')">About Campgrounder →</div>
 
@@ -4258,6 +4363,11 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
     <div class="d-topbar">
       <div class="topbar-btn xbtn is-close" onclick="goBack()" aria-label="Go back" role="button"></div>
       <div style="display:flex;gap:8px;">
+        <div class="stamp-btn" id="stamp-btn" onclick="toggleStamp()" aria-label="Mark as visited" role="button" title="Mark as visited">
+          <svg id="stamp-svg" width="16" height="16" viewBox="0 0 24 24" style="color:rgba(255,255,255,0.6);stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;" aria-hidden="true">
+            <path d="M20 6L9 17l-5-5"/>
+          </svg>
+        </div>
 <div class="topbar-btn" id="save-btn" onclick="toggleSave()" aria-label="Save campground" role="button">
           <svg id="save-svg" width="17" height="17" style="color:rgba(255,255,255,0.7);stroke:currentColor;fill:none;" aria-hidden="true"><use href="#ic-heart"/></svg>
         </div>
@@ -7278,7 +7388,7 @@ function go(toId, fromId) {
   if (toId === 'map-screen') initMap();
   if (toId === 'results')    renderResults();
   if (toId === 'saved')      renderSaved();
-  if (toId === 'profile')    renderProfile();
+  if (toId === 'profile')    { renderProfile(); renderPassport(); }
   if (toId === 'home')       initWildfireSection();
   // Show global compass on results + saved screens only (home and map have their own; detail has CTA bar)
   const cg = document.getElementById('compass-global');
@@ -8041,6 +8151,117 @@ function unsave(id, e) {
   e.stopPropagation(); savedIds.delete(id); persistSaved(); updateBadges(); renderSaved(); showToast('Removed');
 }
 
+// ── TRIP CARDS / PASSPORT ────────────────────────────────
+let tripIds = (() => {
+  try { return new Set(JSON.parse(localStorage.getItem('cg_trips_ids') || '[]')); }
+  catch { return new Set(); }
+})();
+
+function getTrips() {
+  try { return JSON.parse(localStorage.getItem('cg_trips') || '[]'); }
+  catch { return []; }
+}
+
+function persistTrips(trips) {
+  try {
+    localStorage.setItem('cg_trips', JSON.stringify(trips));
+    localStorage.setItem('cg_trips_ids', JSON.stringify([...tripIds]));
+  } catch {}
+}
+
+function toggleStamp() {
+  if (currentDetailId === null) return;
+  const c = CAMPS.find(x => x.id === currentDetailId);
+  if (!c) return;
+
+  const btn = document.getElementById('stamp-btn');
+  btn.classList.add('flash');
+  btn.addEventListener('animationend', () => btn.classList.remove('flash'), {once:true});
+
+  let trips = getTrips();
+
+  if (tripIds.has(currentDetailId)) {
+    // Un-stamp: remove from trips
+    tripIds.delete(currentDetailId);
+    trips = trips.filter(t => t.id !== currentDetailId);
+    btn.classList.remove('stamped');
+    showToast('Removed from passport');
+  } else {
+    // Stamp: add to trips
+    tripIds.add(currentDetailId);
+    const today = new Date();
+    const dateStr = today.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    trips.unshift({
+      id: currentDetailId,
+      name: c.name,
+      loc: c.loc,
+      type: c.type,
+      date: dateStr,
+      ts: Date.now()
+    });
+    btn.classList.add('stamped');
+    showToast('Added to passport ✓');
+  }
+
+  persistTrips(trips);
+}
+
+function updateStampBtn() {
+  const btn = document.getElementById('stamp-btn');
+  if (!btn) return;
+  if (tripIds.has(currentDetailId)) {
+    btn.classList.add('stamped');
+  } else {
+    btn.classList.remove('stamped');
+  }
+}
+
+function renderPassport() {
+  const grid = document.getElementById('passport-grid');
+  if (!grid) return;
+  const trips = getTrips();
+
+  if (!trips.length) {
+    grid.innerHTML = '<div class="passport-empty" style="grid-column:1/-1"><strong>No trips yet</strong>Open a camp listing and tap ✓ to stamp your passport</div>';
+    return;
+  }
+
+  grid.innerHTML = trips.map(t => `
+    <div class="trip-card" onclick="openDetail(${t.id})" role="button">
+      <div>
+        <div class="trip-card-type">${t.type}</div>
+        <div class="trip-card-name">${t.name}</div>
+        <div class="trip-card-loc">${t.loc}</div>
+      </div>
+      <div class="trip-card-foot">
+        <div class="trip-card-date">${t.date}</div>
+        <div class="trip-card-qr" id="qr-${t.id}"></div>
+      </div>
+      <div class="trip-card-stamp">VISITED</div>
+    </div>
+  `).join('');
+
+  // Generate QR codes after DOM is painted
+  requestAnimationFrame(() => {
+    trips.forEach(t => {
+      const el = document.getElementById('qr-' + t.id);
+      if (!el || el.children.length > 0) return; // already rendered
+      try {
+        new QRCode(el, {
+          text: 'https://campgrounder.io/#camp-' + t.id,
+          width: 52, height: 52,
+          colorDark: '#0C1F15',
+          colorLight: '#f5f0e8',
+          correctLevel: QRCode.CorrectLevel.M
+        });
+      } catch(e) {
+        // QRCode lib not loaded yet — show fallback
+        el.innerHTML = '<div style="font-size:8px;color:#0C1F15;text-align:center;padding:4px;line-height:1.2;">QR<br>#' + t.id + '</div>';
+      }
+    });
+  });
+}
+
 function addToCalendar() {
   if (!currentDetailId) return;
   const c = CAMPS.find(x => x.id === currentDetailId);
@@ -8258,6 +8479,9 @@ function openDetail(id) {
   const btn = document.getElementById('save-btn');
   if (savedIds.has(id)) { svg.style.color='#E8481C'; btn.classList.add('saved'); }
   else                  { svg.style.color='rgba(255,255,255,0.7)'; btn.classList.remove('saved'); }
+
+  // Stamp button state
+  updateStampBtn();
 
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('detail').classList.add('active');
