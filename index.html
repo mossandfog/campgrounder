@@ -111,7 +111,7 @@ html, body {
   background: var(--g0);
 }
 .screen.active {
-  opacity: 1; pointer-events: all; transform: translateY(0); z-index: 10;
+  opacity: 1; pointer-events: auto; transform: translateY(0); z-index: 10;
   visibility: visible;
   transition: opacity 0.22s ease, transform 0.22s ease, visibility 0s linear 0s;
 }
@@ -135,7 +135,7 @@ html, body {
 .xbtn:hover   { border-color: var(--o); background: rgba(232,72,28,0.07); }
 .xbtn:hover::before, .xbtn:hover::after { background: var(--o); }
 .xbtn.is-close { transform: rotate(45deg); }
-.xbtn.dark-bg  { background: rgba(12,31,21,0.88); backdrop-filter: blur(12px); }
+.xbtn.dark-bg  { background: rgba(12,31,21,0.88); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
 
 /* ── PILLS ────────────────────────────────────── */
 .pill {
@@ -1010,7 +1010,7 @@ html, body {
 .results-filters { display: flex; gap: 8px; padding: 14px 24px 0; overflow-x: auto; scrollbar-width: none; }
 .results-filters::-webkit-scrollbar { display: none; }
 .results-filters::after { content: ''; display: block; min-width: 16px; flex-shrink: 0; }
-.results-scroll { flex: 1; overflow-y: auto; padding: 0 24px 32px; display: flex; flex-direction: column; scrollbar-width: thin; scrollbar-color: rgba(232,72,28,0.2) transparent; }
+.results-scroll { flex: 1; overflow-y: auto; padding: 0 24px 32px; display: flex; flex-direction: column; min-height: 0; scrollbar-width: thin; scrollbar-color: rgba(232,72,28,0.2) transparent; }
 
 /* Type description blurb */
 .type-blurb { padding: 18px 24px 16px; border-bottom: 1px solid var(--line); display: none; }
@@ -1121,7 +1121,7 @@ html, body {
 .compass-btn {
   position: absolute; right: 18px; z-index: 500;
   width: 44px; height: 44px;
-  background: rgba(12,31,21,0.92); backdrop-filter: blur(12px);
+  background: rgba(12,31,21,0.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
   border: 1.5px solid var(--w2);
   display: flex; align-items: center; justify-content: center;
   cursor: pointer; transition: border-color 0.16s, background 0.16s;
@@ -1177,13 +1177,13 @@ html, body {
 .compass-global {
   position: fixed; bottom: calc(84px + var(--safe-bot)); right: 18px; z-index: 9999;
   width: 44px; height: 44px;
-  background: rgba(12,31,21,0.92); backdrop-filter: blur(12px);
+  background: rgba(12,31,21,0.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
   border: 1.5px solid var(--w2);
   display: flex; align-items: center; justify-content: center;
   cursor: pointer; transition: border-color 0.16s, background 0.16s, opacity 0.2s;
   opacity: 0; pointer-events: none;
 }
-.compass-global.vis { opacity: 1; pointer-events: all; }
+.compass-global.vis { opacity: 1; pointer-events: auto; }
 .compass-global:hover { border-color: var(--o); background: rgba(232,72,28,0.1); }
 .compass-global.locating { border-color: var(--o); animation: compassSpin 1s linear infinite; }
 
@@ -2000,7 +2000,7 @@ html, body {
 /* Gradient: taller on photo hero so the fade into content feels seamless */
 .d-hero-grad  { position: absolute; bottom: 0; left: 0; right: 0; height: 180px; background: linear-gradient(to top, var(--g0) 30%, transparent); z-index: 2; }
 .d-topbar     { position: absolute; top: var(--top-pad); left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 0 22px; z-index: 20; }
-.topbar-btn   { width: 40px; height: 40px; background: rgba(0,0,0,0.45); backdrop-filter: blur(10px); border: 1.5px solid var(--w2); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.16s; }
+.topbar-btn   { width: 40px; height: 40px; background: rgba(0,0,0,0.45); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1.5px solid var(--w2); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.16s; }
 .topbar-btn:hover { border-color: var(--o); }
 .topbar-btn.saved svg { color: var(--o) !important; }
 
@@ -2891,7 +2891,7 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
 }
 #torch-drawer.open {
   transform: translateY(0);
-  pointer-events: all;
+  pointer-events: auto;
 }
 #torch-backdrop {
   display: none;
@@ -7378,17 +7378,8 @@ async function loadWildfireData() {
 // ─── NAVIGATION ─────────────────────────────────
 function go(toId, fromId) {
   prevScreen = fromId || document.querySelector('.screen.active')?.id || 'home';
-  // Force visibility hidden on all screens immediately — belt-and-suspenders for Safari
-  // (pointer-events:none alone is unreliable on fixed full-screen elements in WebKit)
-  document.querySelectorAll('.screen').forEach(s => {
-    s.classList.remove('active');
-    s.style.visibility = 'hidden';
-    s.style.pointerEvents = 'none';
-  });
-  const _target = document.getElementById(toId);
-  _target.style.visibility = '';
-  _target.style.pointerEvents = '';
-  _target.classList.add('active');
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(toId).classList.add('active');
   if (toId === 'map-screen') initMap();
   if (toId === 'results')    renderResults();
   if (toId === 'saved')      renderSaved();
@@ -10414,19 +10405,19 @@ function _startOrbit() {
 
 // ── WELCOME MODAL ────────────────────────────────────
 (function() {
-  if (!localStorage.getItem('cg_welcomed')) {
-    const overlay = document.getElementById('welcome-overlay');
-    if (overlay) {
-      overlay.style.display = 'flex';
+  try {
+    if (!localStorage.getItem('cg_welcomed')) {
+      const overlay = document.getElementById('welcome-overlay');
+      if (overlay) { overlay.style.display = 'flex'; }
     }
-  }
+  } catch(e) {}
 })();
 
 function dismissWelcome() {
   const overlay = document.getElementById('welcome-overlay');
   if (!overlay) return;
   overlay.classList.add('out');
-  localStorage.setItem('cg_welcomed', '1');
+  try { localStorage.setItem('cg_welcomed', '1'); } catch(e) {}
   setTimeout(() => { overlay.style.display = 'none'; overlay.classList.remove('out'); }, 240);
 }
 
