@@ -104,12 +104,17 @@ html, body {
   position: fixed; inset: 0;
   display: flex; flex-direction: column;
   opacity: 0; pointer-events: none;
-  transition: opacity 0.22s ease, transform 0.22s ease;
+  visibility: hidden; /* Safari fix: pointer-events:none alone unreliable on fixed full-screen elements */
+  transition: opacity 0.22s ease, transform 0.22s ease, visibility 0s linear 0.22s;
   transform: translateY(8px);
   overflow: hidden;
   background: var(--g0);
 }
-.screen.active { opacity: 1; pointer-events: all; transform: translateY(0); z-index: 10; }
+.screen.active {
+  opacity: 1; pointer-events: all; transform: translateY(0); z-index: 10;
+  visibility: visible;
+  transition: opacity 0.22s ease, transform 0.22s ease, visibility 0s linear 0s;
+}
 
 /* ── PLUS / X BUTTONS ────────────────────────── */
 .xbtn {
