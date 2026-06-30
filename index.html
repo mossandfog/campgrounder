@@ -799,6 +799,9 @@ html, body {
   background: var(--g1);
   cursor: pointer;
   transition: background 0.16s;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none; -webkit-user-select: none;
 }
 .featured-card:hover { background: rgba(232,72,28,0.07); }
 .featured-badge {
@@ -980,6 +983,9 @@ html, body {
   display: flex; align-items: center; gap: 16px;
   padding: 14px 24px; border-bottom: 1px solid rgba(255,255,255,0.05);
   cursor: pointer; transition: background 0.14s;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none; -webkit-user-select: none;
 }
 .sug-item:hover { background: var(--w1); }
 .sug-box { width: 36px; height: 36px; border: 1.5px solid var(--w2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
@@ -1028,6 +1034,9 @@ html, body {
   display: flex; align-items: center;
   border-bottom: 1px solid rgba(255,255,255,0.07);
   cursor: pointer; padding: 28px 0; transition: background 0.16s; gap: 18px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none; -webkit-user-select: none;
 }
 .camp-card:first-child { border-top: 1px solid rgba(255,255,255,0.07); margin-top: 10px; }
 .camp-card:hover { background: var(--w1); margin: 0 -12px; padding: 26px 12px; }
@@ -1187,7 +1196,7 @@ html, body {
 .drawer-label { font-size: 12px; font-weight: 800; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.62); }
 .drawer-scroll { display: flex; overflow-x: auto; scrollbar-width: none; }
 .drawer-scroll::-webkit-scrollbar { display: none; }
-.mini-card { min-width: 168px; flex-shrink: 0; border-right: 1.5px solid var(--line); padding: 0 16px 4px 0; cursor: pointer; transition: opacity 0.15s; }
+.mini-card { min-width: 168px; flex-shrink: 0; border-right: 1.5px solid var(--line); padding: 0 16px 4px 0; cursor: pointer; transition: opacity 0.15s; touch-action: manipulation; -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none; }
 .mini-card+.mini-card { padding-left: 16px; }
 .mini-card:last-child { border-right: none; }
 .mini-card:hover { opacity: 0.72; }
@@ -1229,7 +1238,7 @@ html, body {
 .empty-cta   { padding: 14px 28px; border: 1.5px solid var(--o); color: var(--o); font-size: 12px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; cursor: pointer; background: transparent; transition: all 0.18s; font-family: inherit; }
 .empty-cta:hover { background: var(--o); color: white; }
 
-.saved-card { display: flex; align-items: center; border-bottom: 1px solid rgba(232,72,28,0.18); border-left: 3px solid var(--o); cursor: pointer; padding: 16px 0 16px 14px; transition: background 0.16s; gap: 14px; }
+.saved-card { display: flex; align-items: center; border-bottom: 1px solid rgba(232,72,28,0.18); border-left: 3px solid var(--o); cursor: pointer; padding: 16px 0 16px 14px; transition: background 0.16s; gap: 14px; touch-action: manipulation; -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none; }
 .saved-card:first-child { margin-top: 16px; border-top: 1px solid rgba(232,72,28,0.18); }
 .saved-card:hover { background: var(--w1); }
 .unsave-btn { width: 30px; height: 30px; border: 1.5px solid rgba(232,72,28,0.35); display: flex; align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer; position: relative; transition: all 0.15s; }
@@ -2735,6 +2744,9 @@ html, body {
   display: flex; align-items: center; gap: 12px;
   padding: 13px 0; border-bottom: 1px solid rgba(255,255,255,0.06);
   cursor: pointer; transition: opacity 0.15s;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none; -webkit-user-select: none;
 }
 .nearby-card:last-child { border-bottom: none; }
 .nearby-card:active { opacity: 0.65; }
