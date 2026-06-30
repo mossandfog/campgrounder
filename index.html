@@ -7378,8 +7378,17 @@ async function loadWildfireData() {
 // ─── NAVIGATION ─────────────────────────────────
 function go(toId, fromId) {
   prevScreen = fromId || document.querySelector('.screen.active')?.id || 'home';
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(toId).classList.add('active');
+  // Force visibility hidden on all screens immediately — belt-and-suspenders for Safari
+  // (pointer-events:none alone is unreliable on fixed full-screen elements in WebKit)
+  document.querySelectorAll('.screen').forEach(s => {
+    s.classList.remove('active');
+    s.style.visibility = 'hidden';
+    s.style.pointerEvents = 'none';
+  });
+  const _target = document.getElementById(toId);
+  _target.style.visibility = '';
+  _target.style.pointerEvents = '';
+  _target.classList.add('active');
   if (toId === 'map-screen') initMap();
   if (toId === 'results')    renderResults();
   if (toId === 'saved')      renderSaved();
