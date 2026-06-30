@@ -3,6 +3,10 @@
   "outputDirectory": ".",
   "cleanUrls": true,
   "trailingSlash": false,
+  "rewrites": [
+    { "source": "/about", "destination": "/index.html" },
+    { "source": "/campgrounds/:slug", "destination": "/index.html" }
+  ],
   "headers": [
     {
       "source": "/llms.txt",

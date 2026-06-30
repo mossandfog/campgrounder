@@ -3920,15 +3920,15 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
     <!-- Stats row -->
     <div class="about-stats">
       <div class="about-stat">
-        <div class="about-stat-num">325</div>
+        <div class="about-stat-num">1,000+</div>
         <div class="about-stat-label">Campgrounds</div>
       </div>
       <div class="about-stat">
-        <div class="about-stat-num">42</div>
+        <div class="about-stat-num">50+</div>
         <div class="about-stat-label">States</div>
       </div>
       <div class="about-stat">
-        <div class="about-stat-num">8</div>
+        <div class="about-stat-num">9</div>
         <div class="about-stat-label">Categories</div>
       </div>
       <div class="about-stat">
@@ -7373,6 +7373,9 @@ function go(toId, fromId) {
   if (toId === 'saved')      renderSaved();
   if (toId === 'profile')    { renderProfile(); renderPassport(); }
   if (toId === 'home')       initWildfireSection();
+  // Update URL to reflect current screen
+  if (toId === 'about')      history.replaceState(null, '', '/about');
+  else if (toId === 'home')  history.replaceState(null, '', '/');
   // Show global compass on results + saved screens only (home and map have their own; detail has CTA bar)
   const cg = document.getElementById('compass-global');
   if (cg) cg.classList.toggle('vis', toId === 'results' || toId === 'saved');
@@ -8231,7 +8234,7 @@ function renderPassport() {
       if (!el || el.children.length > 0) return; // already rendered
       try {
         new QRCode(el, {
-          text: 'https://campgrounder.io/#camp-' + t.id,
+          text: 'https://campgrounder.io' + campPathUrl(t),
           width: 52, height: 52,
           colorDark: '#0C1F15',
           colorLight: '#f5f0e8',
@@ -8268,7 +8271,7 @@ function addToCalendar() {
   const endFmt   = endDt.toISOString().slice(0, 10).replace(/-/g, '');
 
   const loc = (c.loc || '').replace('·', ',').trim();
-  const url = `https://campgrounder.io/#camp-${c.id}`;
+  const url = `https://campgrounder.io${campPathUrl(c)}`;
 
   const ics = [
     'BEGIN:VCALENDAR',
@@ -8309,7 +8312,7 @@ function openDetail(id) {
   if (!c) return;
   prevScreen = document.querySelector('.screen.active')?.id || 'results';
   currentDetailId = id;
-  history.replaceState(null, '', '#camp-' + id);
+  history.replaceState(null, '', campPathUrl(c));
 
   // State-based hero photos via Lorem Picsum (picsum.photos) — free, no API key.
   // IDs verified programmatically: flesh < 5%, nature+sky > 35%.
@@ -8644,7 +8647,7 @@ function generateShareCard(c) {
   // ── Deep-link badge
   const botH = 130;
   const botY = H - botH;
-  const campUrl = `campgrounder.io/#camp-${c.id}`;
+  const campUrl = `campgrounder.io${campPathUrl(c)}`;
   ls('0.08em');
   ctx.font = '600 17px "Helvetica Neue",Helvetica,Arial,sans-serif';
   const linkTxtW = ctx.measureText(campUrl).width;
@@ -8694,7 +8697,7 @@ async function shareCamp() {
   await new Promise(r => setTimeout(r, 60));
   _shareCanvas = generateShareCard(c);
   // Show share sheet
-  const campUrl = `https://campgrounder.io/#camp-${c.id}`;
+  const campUrl = `https://campgrounder.io${campPathUrl(c)}`;
   const filename = (c.name || 'camp').toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-campgrounder.png';
   const sheet = document.createElement('div');
   sheet.className = 'share-sheet';
@@ -9619,15 +9622,50 @@ if ('serviceWorker' in navigator) {
 }
 
 // Initialize wildfire section on first page load (home is the default screen)
+
+// ─── SLUG HELPERS ────────────────────────────────────────────────────────────
+// Converts a camp name to a URL slug: "Yosemite Valley" → "yosemite-valley"
+function toSlug(name) {
+  return name.toLowerCase()
+    .replace(/[\u2018\u2019']/g, '')   // remove apostrophes
+    .replace(/[^a-z0-9]+/g, '-')          // non-alphanumeric → hyphens
+    .replace(/^-|-$/g, '');               // trim leading/trailing hyphens
+}
+function findCampBySlug(slug) {
+  return CAMPS.find(c => toSlug(c.name) === slug);
+}
+function campPathUrl(c) {
+  return '/campgrounds/' + toSlug(c.name);
+}
+
 setTimeout(initWildfireSection, 400);
 
 // Handle deep-link shortcuts from manifest.json + hash-based camp links
 (function handleLaunchParams() {
-  // Hash deep-links: campgrounder.io/#camp-42 opens that campground directly
+  // Slug-based deep links: campgrounder.io/campgrounds/yosemite-valley
+  const path = window.location.pathname;
+  if (path.startsWith('/campgrounds/')) {
+    const slug = path.slice('/campgrounds/'.length);
+    const slugCamp = findCampBySlug(slug);
+    if (slugCamp) { requestAnimationFrame(() => openDetail(slugCamp.id)); return; }
+  }
+  // About deep link: campgrounder.io/about
+  if (path === '/about') {
+    requestAnimationFrame(() => go('about', 'home'));
+    return;
+  }
+  // Legacy hash deep-links: campgrounder.io/#camp-42 (redirects to slug URL)
   const hash = window.location.hash;
   if (hash.startsWith('#camp-')) {
     const id = parseInt(hash.slice(6));
-    if (!isNaN(id)) { requestAnimationFrame(() => openDetail(id)); return; }
+    if (!isNaN(id)) {
+      const legacyCamp = CAMPS.find(c => c.id === id);
+      if (legacyCamp) {
+        history.replaceState(null, '', campPathUrl(legacyCamp));
+        requestAnimationFrame(() => openDetail(id));
+        return;
+      }
+    }
   }
   const params = new URLSearchParams(window.location.search);
   const action = params.get('action');
@@ -10531,7 +10569,7 @@ function dismissWelcome() {
         <div class="wm-geo-wide"></div>
       </div>
       <div class="wm-headline">Find<br>your<br><span class="wm-o">camp.</span></div>
-      <div class="wm-sub">Hundreds of handpicked sites &amp; counting</div>
+      <div class="wm-sub">Thousands of handpicked sites &amp; counting</div>
       <div class="wm-rule"></div>
       <div class="wm-props">
         <div class="wm-prop">
