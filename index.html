@@ -6721,7 +6721,7 @@ function calcSunTimes(lat, lng) {
     RA = (RA + Math.floor(L / 90) * 90 - Math.floor(RA / 90) * 90) / 15;
     const sinDec = 0.39782 * Math.sin(L * rad);
     const cosDec = Math.cos(Math.asin(sinDec));
-    const cosH   = (Math.cos(0.8333 * rad) - sinDec * Math.sin(lat * rad)) / (cosDec * Math.cos(lat * rad));
+    const cosH   = (Math.cos(90.8333 * rad) - sinDec * Math.sin(lat * rad)) / (cosDec * Math.cos(lat * rad));
     if (cosH < -1 || cosH > 1) return null;
     const H  = rising ? (360 - Math.acos(cosH) / rad) / 15 : Math.acos(cosH) / rad / 15;
     const UT = ((H + RA - 0.06571 * t - 6.622 - lngHour) % 24 + 24) % 24;
