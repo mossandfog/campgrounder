@@ -2378,6 +2378,49 @@ html, body {
 .cta-sq:hover { border-color: var(--o); }
 
 /* ── TRIP CARD MODAL ─────────────────────────────── */
+/* ── TRIP CARD: open animation, mode badge, visited stamp ── */
+@keyframes tcCardIn {
+  0%   { opacity: 0; transform: translateY(28px) scale(0.90) rotateX(11deg); }
+  55%  { opacity: 1; transform: translateY(-5px) scale(1.015) rotateX(-2deg); }
+  100% { opacity: 1; transform: translateY(0) scale(1) rotateX(0deg); }
+}
+@keyframes tcContentIn { from { opacity: 0; transform: translateY(9px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes tcStampIn {
+  0%   { opacity: 0; transform: scale(2.5) rotate(-26deg); }
+  65%  { opacity: 0.95; transform: scale(0.86) rotate(-11deg); }
+  100% { opacity: 0.92; transform: scale(1) rotate(-13deg); }
+}
+.tc-overlay-inner { perspective: 1100px; }
+.tc-card-wrap.tc-anim { animation: tcCardIn 0.62s cubic-bezier(0.34, 1.42, 0.5, 1) both; transform-origin: center bottom; }
+.tc-card-wrap.tc-anim .tc-info > * { opacity: 0; animation: tcContentIn 0.4s ease both; }
+.tc-card-wrap.tc-anim .tc-info > *:nth-child(1) { animation-delay: 0.20s; }
+.tc-card-wrap.tc-anim .tc-info > *:nth-child(2) { animation-delay: 0.26s; }
+.tc-card-wrap.tc-anim .tc-info > *:nth-child(3) { animation-delay: 0.31s; }
+.tc-card-wrap.tc-anim .tc-info > *:nth-child(4) { animation-delay: 0.36s; }
+.tc-card-wrap.tc-anim .tc-info > *:nth-child(5) { animation-delay: 0.41s; }
+.tc-card-wrap.tc-anim .tc-info > *:nth-child(6) { animation-delay: 0.46s; }
+.tc-card-wrap.tc-anim .tc-info > *:nth-child(n+7) { animation-delay: 0.50s; }
+.tc-card-wrap.tc-anim #tc-stamp { animation: tcStampIn 0.5s cubic-bezier(0.3, 1.5, 0.5, 1) 0.42s both; }
+.tc-mode {
+  display: inline-block; font-size: 10px; font-weight: 800; letter-spacing: 0.14em;
+  text-transform: uppercase; padding: 4px 11px; border-radius: 999px;
+  background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.75); margin-bottom: 11px;
+}
+.tc-mode-visited  { background: rgba(232,72,28,0.16); color: #ff8a5c; }
+.tc-mode-wishlist { background: rgba(255,255,255,0.1);  color: #ffffff; }
+.tc-stamp {
+  position: absolute; top: 14px; right: 14px; z-index: 4;
+  font-size: 13px; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase;
+  color: #ff6a3d; border: 2.5px solid #ff6a3d; border-radius: 8px; padding: 5px 10px;
+  transform: rotate(-13deg); opacity: 0.92; pointer-events: none;
+  box-shadow: inset 0 0 0 1px rgba(255,106,61,0.35);
+}
+@media (prefers-reduced-motion: reduce) {
+  .tc-card-wrap.tc-anim,
+  .tc-card-wrap.tc-anim .tc-info > *,
+  .tc-card-wrap.tc-anim #tc-stamp { animation: none; opacity: 1; transform: none; }
+}
+
 .tc-overlay {
   position: fixed; inset: 0; z-index: 300;
   background: rgba(8,18,12,0.92);
@@ -4239,14 +4282,11 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
     <div id="d-nearby"></div>
   </div>
   <div class="hint-strip hint-tripcard" id="hint-tripcard" style="display:none">
-    <span>Tap the card icon to make a shareable trip card</span>
+    <span>Tap ✓ Been there or ♡ Wishlist to make a shareable trip card</span>
     <button class="hint-x" onclick="dismissHint('hint-tripcard')" aria-label="Dismiss">×</button>
   </div>
   <div class="d-cta-bar">
     <a class="cta-main" id="d-cta-link" href="#" target="_blank" rel="noopener">Check Availability →</a>
-    <div class="cta-sq-tc" onclick="openTripCard()" title="My Trip Card" aria-label="Create trip card" role="button" tabindex="0">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3H8"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
-    </div>
     <div class="cta-sq" onclick="openCalendarCard()" title="Add to Calendar" aria-label="Add to Calendar" role="button">
       <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
     </div>
@@ -7995,6 +8035,8 @@ function toggleSave() {
   }
   persistSaved();
   updateBadges();
+  // Just added to wishlist → show the trip card in wishlist mode
+  if (savedIds.has(currentDetailId)) openTripCard('wishlist');
 }
 function unsave(id, e) {
   e.stopPropagation(); savedIds.delete(id); persistSaved(); updateBadges(); renderSaved(); showToast('Removed');
@@ -8053,6 +8095,8 @@ function toggleStamp() {
   }
 
   persistTrips(trips);
+  // Just stamped as visited → celebrate with the trip card
+  if (tripIds.has(currentDetailId)) openTripCard('visited');
 }
 
 function updateStampBtn() {
@@ -8861,7 +8905,7 @@ function _tcSceneSVG(type) {
   </svg>`;
 }
 
-function openTripCard() {
+function openTripCard(mode) {
   if (!currentDetailId) return;
   const c = CAMPS.find(x => x.id === currentDetailId);
   if (!c) return;
@@ -8895,11 +8939,34 @@ function openTripCard() {
     shareBtn.style.display = 'flex';
   }
 
-  // Show overlay
+  // Mode badge + stamp — reflects whether the user chose "Been there" or "Wishlist"
+  const modeEl  = document.getElementById('tc-mode');
+  const stampEl = document.getElementById('tc-stamp');
+  const stamped = tripIds.has(c.id);
+  if (mode === 'visited' || (!mode && stamped)) {
+    const t = getTrips().find(x => x.id === c.id);
+    modeEl.textContent = t ? `Visited · ${t.date}` : 'Visited';
+    modeEl.className = 'tc-mode tc-mode-visited';
+    stampEl.style.display = 'flex';
+  } else if (mode === 'wishlist' || (!mode && savedIds.has(c.id))) {
+    modeEl.textContent = 'On my wishlist';
+    modeEl.className = 'tc-mode tc-mode-wishlist';
+    stampEl.style.display = 'none';
+  } else {
+    modeEl.textContent = 'My trip card';
+    modeEl.className = 'tc-mode';
+    stampEl.style.display = 'none';
+  }
+
+  // Show overlay + play the open animation
   const overlay = document.getElementById('tc-overlay');
   overlay.style.display = 'flex';
   overlay.scrollTop = 0;
   document.body.style.overflow = 'hidden';
+  const card = document.getElementById('tc-card');
+  card.classList.remove('tc-anim');
+  void card.offsetWidth;              // reflow so the animation restarts every open
+  card.classList.add('tc-anim');
 }
 
 function closeTripCard() {
@@ -10467,8 +10534,10 @@ function dismissWelcome() {
     </div>
     <div class="tc-card-wrap" id="tc-card">
       <div class="tc-scene" id="tc-scene"></div>
+      <div class="tc-stamp" id="tc-stamp" style="display:none" aria-hidden="true">Visited</div>
       <div class="tc-scene-divider"></div>
       <div class="tc-info">
+        <div class="tc-mode" id="tc-mode"></div>
         <div class="tc-camp-name" id="tc-name"></div>
         <div class="tc-camp-loc" id="tc-loc"></div>
         <div class="tc-divider"></div>
