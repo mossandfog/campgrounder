@@ -3,13 +3,15 @@
   "appName": "Campgrounder",
   "webDir": "www",
   "server": {
+    "url": "https://campgrounder.io",
+    "cleartext": false,
     "androidScheme": "https"
   },
   "ios": {
     "contentInset": "always",
     "backgroundColor": "#0C1F15",
     "scrollEnabled": false,
-    "limitsNavigationsToAppBoundDomains": true,
+    "limitsNavigationsToAppBoundDomains": false,
     "preferredContentMode": "mobile"
   },
   "android": {
