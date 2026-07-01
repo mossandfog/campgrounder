@@ -7179,7 +7179,7 @@ function go(toId, fromId) {
   const cg = document.getElementById('compass-global');
   if (cg) cg.classList.toggle('vis', toId === 'results' || toId === 'saved');
 }
-function goBack() { go(prevScreen || 'home', null); history.replaceState(null, '', window.location.pathname + window.location.search); }
+function goBack() { let _t = prevScreen || 'home'; if (_t === document.querySelector('.screen.active')?.id) _t = 'results'; go(_t, null); history.replaceState(null, '', window.location.pathname + window.location.search); }
 
 let searchQuery = '';
 
@@ -8109,7 +8109,8 @@ function showToast(msg) {
 function openDetail(id) {
   const c = CAMPS.find(x => x.id === id);
   if (!c) return;
-  prevScreen = document.querySelector('.screen.active')?.id || 'results';
+  const _active = document.querySelector('.screen.active')?.id || 'results';
+  if (_active !== 'detail') prevScreen = _active;   // keep origin list across camp→camp hops so Close always exits
   currentDetailId = id;
   history.replaceState(null, '', campPathUrl(c));
 
