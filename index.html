@@ -62,6 +62,7 @@
 </script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <!--
   MAP PROVIDER NOTE:
@@ -1994,6 +1995,25 @@ html, body {
 ══════════════════════════════════════════════ */
 #detail { overflow: hidden; display: flex; flex-direction: column; }
 /* ── ADD TO CALENDAR CARD ─────────────────────── */
+/* ── ACCOUNT / SYNC CARD (profile) ── */
+.auth-box { margin: 6px 0 24px; padding: 16px 18px; background: var(--g1); border: 1px solid rgba(232,72,28,0.22); border-radius: 14px; }
+.auth-title { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 4px; letter-spacing: 0.01em; }
+.auth-sub { font-size: 12.5px; line-height: 1.45; color: rgba(255,255,255,0.55); margin-bottom: 13px; }
+.auth-row { display: flex; gap: 8px; }
+.auth-input { flex: 1; min-width: 0; background: var(--g2); border: 1px solid rgba(255,255,255,0.16); color: #fff; border-radius: 10px; padding: 10px 12px; font-size: 15px; font-family: inherit; }
+.auth-input::placeholder { color: rgba(255,255,255,0.35); }
+.auth-input:focus { outline: none; border-color: var(--o); }
+.auth-btn { flex-shrink: 0; background: var(--o); border: 1.5px solid var(--o); color: #fff; border-radius: 10px; padding: 10px 16px; font-size: 14px; font-weight: 700; font-family: inherit; cursor: pointer; transition: background 0.15s; }
+.auth-btn:hover { background: #ff5a2a; }
+.auth-btn.ghost { background: transparent; color: rgba(255,255,255,0.8); border-color: var(--w2); }
+.auth-btn.ghost:hover { border-color: var(--o); }
+.auth-msg { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 10px; min-height: 14px; }
+.auth-msg.ok { color: #7fd88f; }
+.auth-row-between { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.auth-status { display: flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 600; color: #fff; }
+.auth-dot { width: 8px; height: 8px; border-radius: 50%; background: #43c463; box-shadow: 0 0 0 3px rgba(67,196,99,0.18); flex-shrink: 0; }
+.auth-email { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 3px; word-break: break-all; }
+
 #cal-overlay { position: fixed; inset: 0; z-index: 320; background: rgba(6,15,10,0.72); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); display: none; align-items: flex-end; justify-content: center; }
 #cal-overlay.open { display: flex; }
 #cal-card { width: 100%; max-width: 440px; box-sizing: border-box; background: var(--g1); border-top: 1px solid rgba(232,72,28,0.3); border-radius: 20px 20px 0 0; padding: 20px 22px calc(22px + env(safe-area-inset-bottom, 0px)); box-shadow: 0 -12px 40px rgba(0,0,0,0.5); }
@@ -3559,6 +3579,9 @@ button:focus-visible, a:focus-visible, [role="button"]:focus-visible,
       </div>
       <div class="profile-since" id="profile-since"></div>
     </div>
+
+    <!-- Account / cloud sync -->
+    <div class="auth-box" id="auth-box"></div>
 
     <!-- Your Vibe -->
     <div class="profile-section-label">Your Vibe</div>
@@ -7948,6 +7971,7 @@ function saveProfile() {
     }
     flashSaved();
   } catch(e) {}
+  if (typeof cgPush === 'function') cgPush();
 }
 
 function toggleVibe(key, el) {
@@ -8012,8 +8036,125 @@ function updateBadges() {
   const n = savedIds.size;
   document.querySelectorAll('.badge').forEach(b => { b.textContent = n; b.classList.toggle('show', n > 0); });
 }
+// ─── ACCOUNTS + CLOUD SYNC (Supabase) ───────────────────────
+const SB_URL  = 'https://mabqfmedrgleijkntyls.supabase.co';
+const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hYnFmbWVkcmdsZWlqa250eWxzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI5MzA3OTUsImV4cCI6MjA5ODUwNjc5NX0.vFkQaXobibMxISNx_GAHwIKzG_clO0VHOdvYvj2FhFY';
+let sb = null, cgUser = null, _cgPushT = null;
+
+(function initSupabase() {
+  try {
+    if (window.supabase && window.supabase.createClient) {
+      sb = window.supabase.createClient(SB_URL, SB_ANON, { auth: { persistSession: true, detectSessionInUrl: true, autoRefreshToken: true } });
+      sb.auth.onAuthStateChange((event, session) => {
+        cgUser = session ? session.user : null;
+        updateAuthUI();
+        if (event === 'SIGNED_IN' && cgUser) { showToast('Signed in ✓'); cgPull(); }
+      });
+      sb.auth.getSession().then(({ data }) => {
+        cgUser = (data && data.session) ? data.session.user : null;
+        updateAuthUI();
+        if (cgUser) cgPull();
+      });
+    }
+  } catch (e) { /* sync unavailable — app still works locally */ }
+  updateAuthUI();
+})();
+
+function updateAuthUI() {
+  const box = document.getElementById('auth-box');
+  if (!box) return;
+  if (!sb) { box.style.display = 'none'; return; }
+  box.style.display = 'block';
+  if (cgUser) {
+    box.innerHTML =
+      '<div class="auth-row-between">' +
+        '<div><div class="auth-status"><span class="auth-dot"></span>Synced across your devices</div>' +
+        '<div class="auth-email">' + (cgUser.email || '') + '</div></div>' +
+        '<button class="auth-btn ghost" onclick="cgSignOut()">Sign out</button>' +
+      '</div>';
+  } else {
+    box.innerHTML =
+      '<div class="auth-title">Save across devices</div>' +
+      '<div class="auth-sub">Sign in and your saved spots + passport follow you to any phone or browser.</div>' +
+      '<div class="auth-row">' +
+        '<input id="auth-email" class="auth-input" type="email" inputmode="email" placeholder="you@email.com" autocomplete="email" spellcheck="false">' +
+        '<button class="auth-btn" onclick="cgSendLink()">Send link</button>' +
+      '</div>' +
+      '<div class="auth-msg" id="auth-msg"></div>';
+  }
+}
+
+async function cgSendLink() {
+  const email = (document.getElementById('auth-email') && document.getElementById('auth-email').value || '').trim();
+  const msg = document.getElementById('auth-msg');
+  if (!email || email.indexOf('@') < 1) { if (msg) msg.textContent = 'Enter a valid email.'; return; }
+  if (!sb) { if (msg) msg.textContent = 'Sync is unavailable right now.'; return; }
+  if (msg) { msg.textContent = 'Sending…'; msg.className = 'auth-msg'; }
+  try {
+    const { error } = await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: window.location.origin } });
+    if (msg) { msg.textContent = error ? ('Couldn’t send: ' + error.message) : '✓ Check your email for the sign-in link'; msg.className = 'auth-msg' + (error ? '' : ' ok'); }
+  } catch (e) { if (msg) msg.textContent = 'Something went wrong. Try again.'; }
+}
+
+async function cgSignOut() {
+  try { if (sb) await sb.auth.signOut(); } catch (e) {}
+  cgUser = null; updateAuthUI(); showToast('Signed out');
+}
+
+// Pull cloud data on sign-in and MERGE with whatever is already on this device — nothing is lost
+async function cgPull() {
+  if (!sb || !cgUser) return;
+  let cloud = {};
+  try {
+    const { data } = await sb.from('profiles').select('*').eq('id', cgUser.id).maybeSingle();
+    cloud = data || {};
+  } catch (e) { return; }
+  const cloudSaved = Array.isArray(cloud.saved) ? cloud.saved : [];
+  savedIds = new Set([...savedIds, ...cloudSaved]);
+  persistSaved();
+  const tmap = new Map();
+  [...(Array.isArray(cloud.trips) ? cloud.trips : []), ...getTrips()].forEach(t => { if (t && t.id != null) tmap.set(t.id, t); });
+  const mergedTrips = [...tmap.values()].sort((a, b) => (b.ts || 0) - (a.ts || 0));
+  tripIds = new Set(mergedTrips.map(t => t.id));
+  persistTrips(mergedTrips);
+  const setIf = (k, v) => { try { if (v && !localStorage.getItem(k)) localStorage.setItem(k, v); } catch (e) {} };
+  setIf('cg_profile_name', cloud.name);
+  setIf('cg_profile_bio', cloud.bio);
+  setIf('cg_profile_vibes', cloud.vibes);
+  setIf('cg_profile_outfit', cloud.outfit);
+  setIf('cg_profile_since', cloud.since);
+  try { loadProfile(); } catch (e) {}
+  try { updateBadges(); } catch (e) {}
+  try { if (typeof renderSaved === 'function') renderSaved(); } catch (e) {}
+  try { if (typeof renderPassport === 'function') renderPassport(); } catch (e) {}
+  cgPush(true);
+}
+
+// Push local state up to the cloud (debounced) when signed in
+function cgPush(immediate) {
+  if (!sb || !cgUser) return;
+  clearTimeout(_cgPushT);
+  const run = async () => {
+    try {
+      await sb.from('profiles').upsert({
+        id: cgUser.id,
+        name:   localStorage.getItem('cg_profile_name')   || null,
+        bio:    localStorage.getItem('cg_profile_bio')    || null,
+        vibes:  localStorage.getItem('cg_profile_vibes')  || '[]',
+        outfit: localStorage.getItem('cg_profile_outfit') || '[]',
+        since:  localStorage.getItem('cg_profile_since')  || null,
+        saved:  [...savedIds],
+        trips:  getTrips(),
+        updated_at: new Date().toISOString(),
+      });
+    } catch (e) { /* offline/transient — resyncs on next change */ }
+  };
+  if (immediate) run(); else _cgPushT = setTimeout(run, 1200);
+}
+
 function persistSaved() {
   try { localStorage.setItem('cg_saved', JSON.stringify([...savedIds])); } catch {}
+  cgPush();
 }
 
 function toggleSave() {
@@ -8058,6 +8199,7 @@ function persistTrips(trips) {
     localStorage.setItem('cg_trips', JSON.stringify(trips));
     localStorage.setItem('cg_trips_ids', JSON.stringify([...tripIds]));
   } catch {}
+  cgPush();
 }
 
 function toggleStamp() {
